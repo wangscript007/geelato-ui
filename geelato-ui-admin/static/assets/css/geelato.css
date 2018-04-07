@@ -1,0 +1,280 @@
+:root {
+  --xg-layout-header-height: 3.2em;
+  --xg-layout-header-title-height: 1.59em;
+  --xg-layout-footer-height: 1.5em;
+  --xg-layout-content-nav-width: 1.6em;
+  --xg-layout-content-subnav-width: 20em;
+  --xg-ele-hover-color: #cccccc;
+  --xg-ele-color: #ececec;
+  --xg-ele-line-color: #dddddd;
+  --xg-ele-title-bg-color: #EBEBEB;
+  --xg-ele-content-bg-color: #f8f8f8;
+  --xg-1-24: 4.16%
+}
+
+/*=============gl-form start=============*/
+.gl-form {
+  width: 100%;
+  /*background-color: var(--xg-ele-line-color);*/
+}
+
+.gl-form, table, tr, td {
+  margin: 0px;
+  pardding: 0px;
+}
+
+.gl-form td {
+  border: 1px solid var(--xg-ele-line-color);
+  line-height: 2em;
+}
+
+.gl-form caption {
+  line-height: 2em;
+  padding-left: 2em;
+  font-weight: bold;
+  color: black;
+}
+
+/*.gl-form td, caption {*/
+/*line-height: 2em;*/
+/*}*/
+
+.gl-form td.btn-group {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.gl-form td.btn-group.center {
+  text-align: center !important;
+}
+
+.gl-form td.btn-group.right {
+  text-align: right !important;
+}
+
+.gl-form td.btn-group.left {
+  text-align: left !important;
+}
+
+.gl-form td:nth-child(2n+1) {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 1em;
+  background-color: var(--xg-ele-title-bg-color);
+}
+
+.gl-form td:nth-child(2n+1).invert {
+  background-color: var(--xg-ele-content-bg-color) !important;
+}
+
+.gl-form td:nth-child(2n) {
+  padding-left: 0.25em;
+  background-color: var(--xg-ele-content-bg-color);
+}
+
+.gl-form td:nth-child(2n).invert {
+  background-color: var(--xg-ele-title-bg-color) !important;
+}
+
+.gl-form.xg-col-24 td {
+  width: calc(var(--xg-1-24) * 1);
+}
+
+.gl-form.xg-col-24 td[colspan="2"] {
+  width: calc(var(--xg-1-24) * 2);
+}
+
+.gl-form.xg-col-24 td[colspan="3"] {
+  width: calc(var(--xg-1-24) * 3);
+}
+
+.gl-form.xg-col-24 td[colspan="4"] {
+  width: calc(var(--xg-1-24) * 4);
+}
+
+.gl-form.xg-col-24 td[colspan="5"] {
+  width: calc(var(--xg-1-24) * 5);
+}
+
+.gl-form.xg-col-24 td[colspan="6"] {
+  width: calc(var(--xg-1-24) * 6);
+}
+
+.gl-form.xg-col-24 td[colspan="7"] {
+  width: calc(var(--xg-1-24) * 7);
+}
+
+.gl-form.xg-col-24 td[colspan="8"] {
+  width: calc(var(--xg-1-24) * 8);
+}
+
+.gl-form.xg-col-24 td[colspan="9"] {
+  width: calc(var(--xg-1-24) * 9);
+}
+
+.gl-form.xg-col-24 td[colspan="10"] {
+  width: calc(var(--xg-1-24) * 10);
+}
+
+.gl-form.xg-col-24 td[colspan="11"] {
+  width: calc(var(--xg-1-24) * 11);
+}
+
+.gl-form.xg-col-24 td[colspan="12"] {
+  width: calc(var(--xg-1-24) * 12);
+}
+
+.gl-form.xg-col-24 td[colspan="13"] {
+  width: calc(var(--xg-1-24) * 13);
+}
+
+.gl-form.xg-col-24 td[colspan="14"] {
+  width: calc(var(--xg-1-24) * 14);
+}
+
+.gl-form.xg-col-24 td[colspan="15"] {
+  width: calc(var(--xg-1-24) * 15);
+}
+
+.gl-form.xg-col-24 td[colspan="16"] {
+  width: calc(var(--xg-1-24) * 16);
+}
+
+.gl-form.xg-col-24 td[colspan="17"] {
+  width: calc(var(--xg-1-24) * 17);
+}
+
+.gl-form.xg-col-24 td[colspan="18"] {
+  width: calc(var(--xg-1-24) * 18);
+}
+
+.gl-form.xg-col-24 td[colspan="19"] {
+  width: calc(var(--xg-1-24) * 19);
+}
+
+.gl-form.xg-col-24 td[colspan="20"] {
+  width: calc(var(--xg-1-24) * 19);
+}
+
+.gl-form.xg-col-24 td[colspan="21"] {
+  width: calc(var(--xg-1-24) * 21);
+}
+
+.gl-form.xg-col-24 td[colspan="22"] {
+  width: calc(var(--xg-1-24) * 22);
+}
+
+.gl-form.xg-col-24 td[colspan="23"] {
+  width: calc(var(--xg-1-24) * 23);
+}
+
+.gl-form.xg-col-24 td[colspan="24"] {
+  width: 100%;
+  text-align: left;
+}
+
+.gl-form.xg-col-24.xg-append tr:first-child td {
+  border-top: 0px;
+}
+
+.gl-form caption {
+  background-color: var(--xg-ele-title-bg-color);
+}
+
+/*.gl-form .field {*/
+/*background-color: #c4fafc !important;*/
+/*}*/
+
+.gl-form td {
+  padding: 0.125em;
+}
+
+.gl-form td textarea, .gl-form td input:not([type=checkbox]):not([type=button]) {
+  width: 90%;
+}
+
+/*.gl-form .form-group {*/
+/*!*重置form-group的值*!*/
+/*margin-bottom: 0px !important;*/
+/*}*/
+
+/*.gl-form .mt-checkbox-list, .mt-radio-list {*/
+/*padding: 6px 0 0 0;*/
+/*}*/
+
+/*compact*/
+.gl-form.compact td {
+  padding: 0 0.68em;
+  line-height: 1.68em;
+}
+
+.gl-form.type-blank {
+
+}
+
+.gl-form.type-blank td {
+  text-align: left;
+  background-color: white;
+  padding: 0;
+}
+
+/*=============gl-form end=============*/
+
+.gl-utils-line-no {
+  -webkit-box-shadow: 0 0 0px;
+  box-shadow: 0 0 0px;
+  border: 0px;
+}
+
+.gl-utils-no-mp {
+  margin: 0;
+  padding: 0;
+}
+
+.gl-page-content-wrapper {
+  margin: 0;
+  padding: 2em;
+}
+
+div {
+  -webkit-box-shadow: 0 0px 0px 0 rgba(34, 36, 38, .15) !important;
+  box-shadow: 0 0px 0px 0 rgba(34, 36, 38, .15) !important;
+}
+
+.gl-header {
+}
+
+.gl-header.menu {
+  margin-bottom: 0;
+}
+
+.gl-header.menu > .gl-title.item {
+  margin: 0;
+  padding: 0;
+}
+
+.gl-size-mini.item {
+  margin: 0 0.2em !important;
+  padding: 0 0.2em !important;
+}
+
+.gl-size-small.item {
+  margin: 0 !important;
+  padding: 0.5em !important;
+}
+
+/*****reset*****/
+table {
+  border-collapse: collapse;
+  border-spacing: 1px
+}
+
+.ui.calendar table {
+  width: auto;
+  border-spacing: 0;
+}
+
+.ui.calendar table td {
+  margin: 2px;
+  padding: 2px;
+}

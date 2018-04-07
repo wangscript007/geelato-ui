@@ -1,0 +1,152 @@
+{
+  "id": "728849433022202549",
+  "extendId": "728849430790832820",
+  "code": "",
+  "component": {
+    "template": {
+      "jQuery321085525672281472591": {
+        "events": {
+          "mouseover": [
+            {
+              "type": "mouseover",
+              "origType": "mouseenter",
+              "data": null,
+              "guid": 366,
+              "namespace": ""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "opts": {
+    "elements": {
+      "zsgxBWWT": {
+        "data": {
+          "name": "单行",
+          "field": "",
+          "defaultValue": "",
+          "placeholder": "",
+          "local": [],
+          "remote": []
+        },
+        "facade": {
+          "icons": [],
+          "format": "",
+          "display": ""
+        },
+        "rule": {
+          "required": {
+            "value": true,
+            "active": true
+          }
+        },
+        "auth": {
+          "role": "",
+          "permission": ""
+        }
+      },
+      "xPQQsHXF": {
+        "data": {
+          "name": "单行",
+          "field": "",
+          "defaultValue": "",
+          "placeholder": "",
+          "local": [],
+          "remote": []
+        },
+        "facade": {
+          "icons": [],
+          "format": "",
+          "display": ""
+        },
+        "rule": {
+          "required": {
+            "value": true,
+            "active": true
+          }
+        },
+        "auth": {
+          "role": "",
+          "permission": ""
+        }
+      },
+      "YVG27Tic": {
+        "data": {
+          "name": "单行",
+          "field": "",
+          "defaultValue": "",
+          "placeholder": "",
+          "local": [],
+          "remote": []
+        },
+        "facade": {
+          "icons": [],
+          "format": "",
+          "display": ""
+        },
+        "rule": {
+          "required": {
+            "value": true,
+            "active": true
+          }
+        },
+        "auth": {
+          "role": "",
+          "permission": ""
+        }
+      },
+      "la1RZRw6": {
+        "data": {
+          "name": "单行",
+          "field": "",
+          "defaultValue": "",
+          "placeholder": "",
+          "local": [],
+          "remote": []
+        },
+        "facade": {
+          "icons": [],
+          "format": "",
+          "display": ""
+        },
+        "rule": {
+          "required": {
+            "value": true,
+            "active": true
+          }
+        },
+        "auth": {
+          "role": "",
+          "permission": ""
+        }
+      },
+      "jopOzJzW": {
+        "data": {
+          "name": "单行",
+          "field": "",
+          "defaultValue": "",
+          "placeholder": "",
+          "local": [],
+          "remote": []
+        },
+        "facade": {
+          "icons": [],
+          "format": "",
+          "display": ""
+        },
+        "rule": {
+          "required": {
+            "value": true,
+            "active": true
+          }
+        },
+        "auth": {
+          "role": "",
+          "permission": ""
+        }
+      }
+    }
+  },
+  "params": {}
+}

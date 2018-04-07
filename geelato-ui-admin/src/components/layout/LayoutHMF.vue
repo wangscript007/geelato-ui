@@ -1,0 +1,175 @@
+<template>
+  <div>
+    <div :style="header">
+      <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode"
+                   @changeColor="$_changeColor"></page-header>
+    </div>
+    <div class="gl-layout-sidebar" :style="sidebar">
+      <page-sidebar :mode="mode" :size="sidebar.size" :height="sidebar.height" :width="sidebar.width"
+                    :headerHeight="sidebar.headerHeight"></page-sidebar>
+    </div>
+    <div :style="content" style="position: absolute;overflow-x: auto">
+      <!--<page-content></page-content>-->
+      <router-view></router-view>
+    </div>
+    <div v-show="footDisplay" class="teal" :style="footer" style="position: absolute;bottom: 0;width: 100%">
+      <page-footer :mode="mode" :height="footer.height"></page-footer>
+    </div>
+  </div>
+</template>
+<script>
+  import config from '../../common/config'
+  import PageHeader from './PageHeader.vue'
+  import PageSidebar from './PageSidebar.vue'
+  import PageContent from './PageContent.vue'
+  import PageFooter from './PageFooter.vue'
+  import utils from '../../common/utils'
+
+  export default {
+    data () {
+      return {
+        mode: 0,
+        header: {},
+        footer: {},
+        sidebar: {},
+        content: {},
+        isMax: false,
+        defaultValue: config.layout
+      }
+    },
+    computed: {
+      footDisplay: function () {
+        let maxH = config.layout.footer.maxHeight
+        if (!maxH || maxH === '0' || maxH === '0px') {
+          return false
+        }
+        return true
+      }
+    },
+    created () {
+//      let user = this.$GL.isLogged()
+//      if (user) {
+//        console.debug('isLogged true')
+//        this.$store.commit(types.LOGIN, user)
+//      } else {
+//        console.debug('isLogged false')
+//        this.$router.push('/login')
+//      }
+    },
+    mounted () {
+      let thisVue = this
+      this.resizeMinContent()
+      // 获取sidebar内容的
+
+      $(window).resize(function () {
+        this.content = {}
+        if (thisVue.isMax) {
+          thisVue.resizeMaxContent()
+        } else {
+          thisVue.resizeMinContent()
+        }
+      })
+      thisVue.$_initUiComponent()
+      $(this.$el).find(this.selector().sidebarToggle).click(function () {
+        thisVue.toggle()
+      })
+    },
+    methods: {
+      selector () {
+        return {
+          sidebarToggle: '.gl-layout-sidebar-toggle',
+          sidebar: '.gl-layout-sidebar'
+        }
+      },
+      $_initUiComponent () {
+        $('.ui.dropdown').dropdown()
+        $('.ui.accordion').accordion()
+      },
+      convertToNumber (heightOrWidth) {
+        if (!heightOrWidth) return 0
+        return heightOrWidth.replace('px', '')
+      },
+      toggle () {
+        this.isMax = !this.isMax
+        if (this.isMax) {
+          this.resizeMaxContent()
+        } else {
+          this.resizeMinContent()
+        }
+      },
+      // hide sidebar
+      resizeMaxContent () {
+        this.reset()
+        this.sidebar.width = this.defaultValue.sidebar.minWidth
+        this.sidebar.size = 'min'
+        this.sidebar.display = 'none'
+        this.header.height = this.defaultValue.header.minHeight
+        this.footer.height = this.defaultValue.footer.minHeight
+        this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+        this.isMax = true
+        this.refresh()
+      },
+      resizeMinContent () {
+        this.reset()
+        // 取消依赖子内容进行自动调整最大化窗口的功能
+//        if (this.defaultValue.sidebar.adjustWidthBySub) {
+//          this.sidebar.width = $(this.$el).find(this.selector().sidebar).children().eq(0).width() + 2 + 'px'
+//        } else {
+//          this.sidebar.width = this.defaultValue.sidebar.maxWidth
+//        }
+        this.sidebar.width = this.defaultValue.sidebar.maxWidth
+        this.sidebar.size = 'max'
+        this.sidebar.display = 'block'
+        this.header.height = this.defaultValue.header.maxHeight
+        this.footer.height = this.defaultValue.footer.maxHeight
+        this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+        this.isMax = false
+        this.refresh()
+      },
+      reset () {
+        // 注意重置content，刷新content的大小才有效
+        this.content = {}
+//        this.content.float = 'left'
+        this.sidebar.float = 'left'
+//        this.sidebar['background-color'] = this.$GL.ui.theme.color.background
+        for (let index in this.$GL.ui.theme.colors) {
+          let item = this.$GL.ui.theme.colors[index]
+          if (Object.keys(item)[0] === this.$GL.ui.theme.color.primary) {
+            this.sidebar['background-color'] = utils.hex2Rgb(item[this.$GL.ui.theme.color.primary], '0.30')
+            console.log(this.sidebar['background-color'])
+          }
+        }
+      },
+      /**
+       * 浏览器窗口的尺寸
+       * IE、Chrome、FireFox、Opera以及Safari
+       *  window.innerHeight   浏览器内部高度
+       *  window.innerWidth    浏览器内部宽度
+       *  对于IE 5 6 7 8 版本
+       *  document.documentElement.clientHeight
+       * document.documentElement.clientWidth
+       * 或者
+       * document.body.clientHeight
+       * document.body.clientWidth
+       */
+      refresh () {
+        let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+        let winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+        this.content.height = (winHeight - this.convertToNumber(this.header.height) - this.convertToNumber(this.footer.height) - 0) + 'px'
+        this.content['max-height'] = this.content.height
+        this.content.width = (winWidth - this.convertToNumber(this.sidebar.width) - 0) + 'px'
+        this.sidebar.height = this.content.height
+      },
+      changeLayoutMode (value) {
+        this.$emit('changeLayoutMode', value)
+      },
+      $_changeColor (value, oldValue) {
+        this.$emit('changeColor', value, oldValue)
+      }
+    },
+    components: {PageHeader, PageSidebar, PageContent, PageFooter}
+  }
+</script>
+
+<style>
+</style>

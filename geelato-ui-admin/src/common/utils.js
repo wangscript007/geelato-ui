@@ -1,0 +1,213 @@
+import CryptoJS from 'crypto-js'
+
+let utils = {}
+/**
+ * param({k1: {k2: {k3: 'value'}}}), output: k1.k2.k3=value
+ * param({k1: 'value'}, 'p')), output:p.k1=value
+ * param({k1: [{kk1: 'vv1'}, {kk2: 'vv2'}]}, 'p')), output:p.k1[0].kk1=vv1&p.k1[1].kk2=vv2
+ * @param param
+ * @param prefix
+ * @returns {string}
+ */
+utils.param = function (param, prefix) {
+  var str = ''
+  if (param instanceof Array || param instanceof Object) {
+    for (let k in param) {
+      var subPrefix = prefix ? (prefix + (param instanceof Array ? '[' + k + ']' : '.' + k)) : k
+      str += '&' + utils.param(param[k], subPrefix)
+    }
+  } else {
+    if ('string|number|boolean'.indexOf(typeof param) !== -1) {
+      str += '&' + prefix + '=' + encodeURIComponent(param)
+    } else {
+      // undefined  RegExp func
+    }
+  }
+  return str.substr(1)
+}
+
+utils.trim = function (str) {
+  return str.replace(/(^\s*)|(\s*$)/g, '')
+}
+
+utils.join = function (objectAry, propertyName, separator) {
+  let stringAry = new Array(objectAry.length)
+  for (let i in objectAry) {
+    stringAry[i] = objectAry[i][propertyName]
+  }
+  return stringAry.join(separator)
+}
+/**
+ * 'false' -> false ,'0' -> false
+ * @param v
+ * @returns {boolean}
+ */
+utils.toBoolean = function (v) {
+  if (typeof v === 'string' && 'false|0'.indexOf(utils.trim(v.toLowerCase())) !== -1) {
+    return false
+  } else {
+    return !!v
+  }
+}
+
+utils.uuid = function (len, radix) {
+  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  var uuid = []
+  var i
+  radix = radix || chars.length
+
+  if (len) {
+    // Compact form
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix]
+  } else {
+    // rfc4122, version 4 form
+    var r
+
+    // rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+    uuid[14] = '4'
+
+    // Fill in random data.  At i==19 set the high bits of clock sequence as
+    // per rfc4122, sec. 4.1.5
+    for (i = 0; i < 36; i++) {
+      if (!uuid[i]) {
+        r = 0 | Math.random() * 16
+        uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r]
+      }
+    }
+  }
+
+  return uuid.join('')
+}
+
+/**
+ * 替换对象中的变量，若字符串以“js:”开头，则还需执行(eval)
+ * @param obj e.g. js:@.id > 0，变量标识：“@.”
+ * @param keyValues 基本数据类型键值对
+ * @returns {*} 如上示例，当id=1jf ,结果为执行1>0即true
+ */
+utils.invoke = function (obj, keyValues) {
+  let keyword = '@.'
+  let jsFlag = 'js:'
+  var objCopy
+  if (typeof obj === 'string') {
+    let expression = obj
+    if (expression.startsWith(jsFlag)) {
+      return utils.eval(expression.replace(jsFlag, '').replace(/@\./g, '$ctx.'), keyValues)
+    } else {
+      if (expression.indexOf(keyword) !== -1) {
+        return utils.eval(expression.replace(/@\./g, '$ctx.'), keyValues)
+        // return utils.compileString(expression, keyValues)
+      } else {
+        return expression
+      }
+    }
+  } else if (typeof obj === 'object') {
+    objCopy = {}
+    $.extend(true, objCopy, obj)
+    for (var i in objCopy) {
+      console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
+      objCopy[i] = utils.invoke(objCopy[i], keyValues)
+    }
+    return objCopy
+  }
+  return obj
+}
+
+/**
+ * 依据上下文信息，编译字符串
+ * @param expression
+ * @returns {*}
+ */
+utils.compileString = function (expression, $ctx) {
+  let Fn = Function
+  console.log(new Fn('$ctx', 'return "' + expression + '"'))
+  return new Fn('$ctx', 'return "' + expression + '"')($ctx)
+}
+
+/**
+ * 直接执行eval，代码检查工具eslintrc，提示有误，改该此方法
+ * @param expression
+ * @returns {*}
+ */
+utils.eval = function (expression, $ctx) {
+  let Fn = Function
+  return new Fn('$ctx', 'return ' + expression)($ctx)
+}
+
+/**
+ * 基于sessionStorage存储
+ * @param key
+ * @param json 默认返回{}
+ */
+utils.session = function (key, json) {
+  if (arguments.length === 2) {
+    if (json) {
+      sessionStorage.setItem(key, JSON.stringify(json))
+    } else {
+      sessionStorage.removeItem(key)
+    }
+  } else if (arguments.length === 1) {
+    let value = sessionStorage.getItem(key)
+    if (value) {
+      return JSON.parse(value)
+    } else {
+      return {}
+    }
+  } else {
+    console.error('参数不正确。')
+  }
+}
+
+/**
+ *
+ * @param hex 16进制
+ * @param alpha 透明度，默认为1，即不透明
+ * @returns {string}
+ */
+utils.hex2Rgb = function (hex, alpha) {
+  var alphaLocal = alpha || 1
+  var sColor = hex.toLowerCase()
+  // 十六进制颜色值的正则表达式
+  var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+  // 如果是16进制颜色
+  if (sColor && reg.test(sColor)) {
+    if (sColor.length === 4) {
+      var sColorNew = '#'
+      for (var i = 1; i < 4; i += 1) {
+        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
+      }
+      sColor = sColorNew
+    }
+    // 处理六位的颜色值
+    var sColorChange = []
+    for (var j = 1; j < 7; j += 2) {
+      sColorChange.push(parseInt('0x' + sColor.slice(j, j + 2)))
+    }
+    return 'RGBA(' + sColorChange.join(',') + ',' + alphaLocal + ')'
+  }
+  return sColor
+}
+
+/**
+ * 数组指定列去重，返回去重后的列对象
+ * @param arr 数组
+ * @param col
+ */
+utils.distinct = function (arr, col) {
+  let resultArray = arr.reduce(function (result, item) {
+    if (item[col] in result) {
+    } else {
+      result[item[col]] = item[col]
+    }
+    return result
+  }, {})
+  return resultArray
+}
+
+utils.CryptoJS = CryptoJS
+window.utils = utils
+// let content = utils.CryptoJS.enc.Utf8.parse(str)
+// let b64content = utils.CryptoJS.enc.Base64.stringify(content)
+// utils.CryptoJS.enc.Base64.parse(b64content).toString(utils.CryptoJS.enc.Utf8)
+export default utils

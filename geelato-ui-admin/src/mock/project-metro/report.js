@@ -1,0 +1,38 @@
+let report = {}
+
+report.quota = [
+  {wp: '北京路站', name: '连续墙', unit: '幅', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '底板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '中板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '顶板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '导墙', unit: 'm', target: '2000', current: '390', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '旋喷桩', unit: '根', target: '69', current: '21', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '钻孔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '搅拌桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '立柱', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '抗拔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '北京路站', name: '开挖量', unit: 'm3', target: '3092', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '连续墙', unit: '幅', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '底板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '中板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '顶板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '导墙', unit: 'm', target: '2000', current: '390', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '旋喷桩', unit: '根', target: '69', current: '21', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '钻孔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '搅拌桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '立柱', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '抗拔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '火车东站', name: '开挖量', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '连续墙', unit: '幅', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '底板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '中板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '顶板', unit: '段', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '导墙', unit: 'm', target: '2000', current: '390', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '旋喷桩', unit: '根', target: '69', current: '21', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '钻孔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '搅拌桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '立柱', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '抗拔桩', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'},
+  {wp: '中央公园站', name: '开挖量', unit: '根', target: '608', current: '30', status: 'green', y: '2018', m: '2'}
+]
+export default report
