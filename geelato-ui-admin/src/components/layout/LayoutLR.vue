@@ -24,6 +24,7 @@
   import PageSidebar from './PageSidebar.vue'
   import PageContent from './PageContent.vue'
   import PageFooter from './PageFooter.vue'
+  import utils from '../../common/utils'
 
   export default {
     data () {
@@ -124,24 +125,13 @@
 //        this.content.float = 'left'
         this.sidebar.float = 'left'
         // background: '#2185d0'
-//        console.log('this.$GL.ui.theme.color.primary>', this.$GL.ui.theme.color.primary)
-//        console.log('this.$GL.ui.theme.colors>', this.$GL.ui.theme.colors)
-        for (let index in this.$GL.ui.theme.colors) {
-          let item = this.$GL.ui.theme.colors[index]
-          if (Object.keys(item)[0] === this.$GL.ui.theme.color.primary) {
-            this.sidebar['background-color'] = item[this.$GL.ui.theme.color.primary]
+        for (let key in this.$GL.ui.colorHex) {
+          let hex = this.$GL.ui.colorHex[key]
+          console.log(hex)
+          if (key === this.$GL.ui.color.primary) {
+            this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
           }
         }
-//        switch (this.$GL.ui.theme.color.primary) {
-//          case 'blue':
-//            this.sidebar['background-color'] = '#2185d0'
-//            break
-//          case 'teal':
-//            this.sidebar['background-color'] = '#00b5ad'
-//            break
-//          default:
-//            this.sidebar['background-color'] = '#00b5ad'
-//        }
       },
       /**
        * 浏览器窗口的尺寸

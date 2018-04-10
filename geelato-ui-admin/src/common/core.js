@@ -351,7 +351,8 @@ let core = {
         $('.ui.sidebar.gl-msg .message').removeClass(type)
       }
     },
-    theme: config.theme
+    color: config.color,
+    colorHex: config.colorHex
   },
   security: {
     login (user, remember, success) {

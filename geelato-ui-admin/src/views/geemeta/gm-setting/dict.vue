@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-  import entityNames from '../../../common/entities'
+  import entityNames from '../../../pages/entities'
 
   export default {
     props: {

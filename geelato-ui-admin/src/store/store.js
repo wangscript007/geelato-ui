@@ -11,7 +11,11 @@ export default new Vuex.Store({
       // 页面上方展示的信息，可为HTML格式
       headerTitle: ''
     },
+    // 当前正在浏览的项目
     currentProject: {},
+    // 最新浏览的项目
+    lastProjects: [],
+    // 当前用户信息
     user: {}
   },
   mutations: {
@@ -27,6 +31,14 @@ export default new Vuex.Store({
     },
     [types.CHANGE_PROJECT]: (state, data) => {
       state.currentProject = data
+      for (var i in state.lastProjects) {
+        let project = state.lastProjects[i]
+        if (project.name === data.name) {
+          // TODO 改成id
+          return
+        }
+      }
+      state.lastProjects.push(data)
     },
     [types.CHANGE_HEADER_TITLE]: (state, data) => {
       state.platform.headerTitle = data

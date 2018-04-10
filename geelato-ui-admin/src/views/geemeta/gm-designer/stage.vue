@@ -422,27 +422,27 @@
             <div class="default text">Saved Contacts</div>
             <div class="menu">
               <div class="item" data-value="jenny" data-text="Jenny">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Jenny Hess
               </div>
               <div class="item" data-value="elliot" data-text="Elliot">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Elliot Fu
               </div>
               <div class="item" data-value="stevie" data-text="Stevie">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Stevie Feliciano
               </div>
               <div class="item" data-value="christian" data-text="Christian">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Christian
               </div>
               <div class="item" data-value="matt" data-text="Matt">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Matt
               </div>
               <div class="item" data-value="justen" data-text="Justen">
-                <img class="ui mini avatar image" src="/static/assets/images/avatar/small/geelato.jpg">
+                <img class="ui mini avatar image" src="/static/images/avatar/small/geelato.jpg">
                 Justen Kitsune
               </div>
             </div>

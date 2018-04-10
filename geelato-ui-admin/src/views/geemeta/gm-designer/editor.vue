@@ -104,7 +104,7 @@
   //  import utils from '../../../common/utils'
   import designerStore from '../../../components/designer/DesignerStoreInstance'
   //  import PageInfo from '../../../common/PageInfo'
-  import entityNames from '../../../common/entities'
+  import entityNames from '../../../pages/entities'
   import EditingPageDefinition from '../../../pages/EditingPageDefinition'
   //  import FileHtml5 from './file-template/html5'
 

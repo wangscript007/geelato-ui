@@ -63,7 +63,6 @@
     props: {},
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         quotas: testData.report.quota,
         activeYear: '2016',
         years: [2016, 2017, 2018],

@@ -52,7 +52,7 @@
           <div class="content">
 
             <div class="ui top attached segment" style="padding: 5px">
-              <div class="ui mini button" :class="$GL.ui.theme.color.primary">导入</div>
+              <div class="ui mini button" :class="$GL.ui.color.primary">导入</div>
             </div>
             <div class="ui attached segment" style="padding: 1px">
               <gl-table :columns="taskData.columns" :data-source="taskData.dataSource"></gl-table>

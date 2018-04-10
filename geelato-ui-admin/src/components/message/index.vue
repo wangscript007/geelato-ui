@@ -1,6 +1,6 @@
 <template>
   <div class="ui icon message" :class="type">
-    <i class="inbox icon"></i>
+    <i class="info icon"></i>
     <i class="close icon"></i>
     <div class="content">
       <div class="header">
@@ -28,7 +28,7 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary
+        theme: this.$GL.ui.color.primary
       }
     },
     mounted () {

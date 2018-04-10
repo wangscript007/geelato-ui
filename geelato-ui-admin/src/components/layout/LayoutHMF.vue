@@ -131,11 +131,11 @@
         this.content = {}
 //        this.content.float = 'left'
         this.sidebar.float = 'left'
-//        this.sidebar['background-color'] = this.$GL.ui.theme.color.background
-        for (let index in this.$GL.ui.theme.colors) {
-          let item = this.$GL.ui.theme.colors[index]
-          if (Object.keys(item)[0] === this.$GL.ui.theme.color.primary) {
-            this.sidebar['background-color'] = utils.hex2Rgb(item[this.$GL.ui.theme.color.primary], '0.30')
+//        this.sidebar['background-color'] = this.$GL.ui.color.background
+        for (let key in this.$GL.ui.colorHex) {
+          let hex = this.$GL.ui.colorHex[key]
+          if (key === this.$GL.ui.color.primary) {
+            this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
             console.log(this.sidebar['background-color'])
           }
         }

@@ -65,7 +65,6 @@
     props: {},
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         planWorkPoint: testData.plan.workPoint,
         activeYear: '',
         years: [2016, 2017, 2018]

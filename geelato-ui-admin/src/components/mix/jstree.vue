@@ -12,7 +12,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         types: {
           default: {
             icon: 'fa fa-folder icon-state-warning icon-lg'

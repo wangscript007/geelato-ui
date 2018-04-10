@@ -5,7 +5,7 @@
 </template>
 <script>
   //  import utils from '../../common/utils'
-  import entityNames from '../../common/entities'
+  import entityNames from '../../pages/entities'
 
   export default {
     props: {

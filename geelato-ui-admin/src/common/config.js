@@ -40,11 +40,13 @@ class Config {
       {
         title: '土建工程',
         code: 'tjgc',
+        index: '/#/m/project-metro/info/select-project',
         html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-metro/info/select-project">选择项目</a></div>',
         menu: [
           {
             title: '项目信息管理',
             items: [
+              {title: '使用指引', href: '/#/m/project-metro/info/guide'},
               {title: '项目信息', href: '/#/m/project-metro/info/project-info'}
             ]
           },
@@ -84,6 +86,50 @@ class Config {
             title: '设备材料管理',
             items: [
               {title: '......', href: '/#/m/project-metro/material/info'}
+            ]
+          },
+          {
+            title: '项目报表视图',
+            items: [
+              {title: '项目总体视图', href: '/#/m/project-metro/report/project-index'},
+              {title: '项目指标报表', href: '/#/m/project-metro/report/project-quota'},
+              {title: '其它定制报表', href: '/#/m/project-metro/report/project-custom'}
+            ]
+          }
+        ],
+        active: true
+      },
+      {
+        title: 'IT项目',
+        code: 'xxhxm',
+        index: '/#/m/project-metro/info/select-project',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-metro/info/select-project">选择项目</a></div>',
+        menu: [
+          {
+            title: '项目信息管理',
+            items: [
+              {title: '使用指引', href: '/#/m/project-metro/info/guide'},
+              {title: '项目信息', href: '/#/m/project-metro/info/project-info'}
+            ]
+          },
+          {
+            title: '项目进度管理',
+            items: [
+              {title: '项目计划配置', href: '/#/m/project-metro/schedule/monthly-plan-config'},
+              {title: '月度计划执行', href: '/#/m/project-metro/schedule/monthly-plan-execution'},
+              {title: '任务执行跟踪', href: '/#/m/project/task'},
+              {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
+              {title: '指标管理', href: '/#/m/project-metro/task/quota'},
+              {title: '重大工期变更', href: '/#/m/project-metro/task/quota'}
+            ]
+          },
+          {
+            title: '项目合同管理',
+            items: [
+              {title: '合同信息', href: '/#/m/project-metro/contract/info'},
+              {title: '合同计量', href: '/#/m/project-metro/contract/measurement'},
+              {title: '合同支付', href: '/#/m/project-metro/contract/payment'},
+              {title: '合同变更', href: '/#/m/project-metro/contract/change'}
             ]
           },
           {
@@ -147,16 +193,16 @@ class Config {
       apiMetaSave: 'http://localhost:8080/api/meta/save',
       apiMetaDelete: 'http://localhost:8080/api/meta/delete'
     }
-    this.theme = {
-      color: {
-        primary: 'blue',
-        secondary: 'teal',
-        positive: 'teal',
-        negative: 'red'
-        // background: '#FFE8E6', rgba(0, 181, 173, 0.15)
-        // background: '#2185d0' // 'rgba(230, 230, 230, 0.35)'
-      },
-      colors: [{blue: '#2185d0'}, {teal: '#00b5ad'}, {red: '#db2828'}, {orange: '#fe9a76'}, {black: '#000000'}, {pink: '#FF1493'}]
+    this.color = {
+      primary: 'blue',
+      secondary: 'teal',
+      positive: 'teal',
+      negative: 'red'
+      // background: '#FFE8E6', rgba(0, 181, 173, 0.15)
+      // background: '#2185d0' // 'rgba(230, 230, 230, 0.35)'
+    }
+    this.colorHex = {
+      blue: '#2185d0', teal: '#00b5ad', red: '#db2828', orange: '#fe9a76', black: '#000000', pink: '#FF1493'
     }
     this.layout = {
       logo: {width: '130px'},

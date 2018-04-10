@@ -10,7 +10,6 @@
     props: {},
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 关闭tips
@@ -20,7 +19,7 @@
         config: {
           ui: {
             entity: 'prj_task_type',
-            title: '任务类型',
+            title: '计划类型',
             query: {show: true},
             toolbar: {
               dropdown: {actions: []}

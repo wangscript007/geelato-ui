@@ -3,7 +3,9 @@
   注意：加载的页面，需存放于本page.vue所在目录下
 -->
 <template>
-  <page-loader :code="code" :query="query"></page-loader>
+  <div class="gl-page-content-wrapper">
+    <page-loader :code="code" :query="query"></page-loader>
+  </div>
 </template>
 <script>
   import PageLoader from '../../components/page/page-loader.vue'

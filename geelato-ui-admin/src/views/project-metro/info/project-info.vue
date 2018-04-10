@@ -66,7 +66,7 @@
   </div>
 </template>
 <script>
-  import entityNames from '../../../common/entities'
+  import entityNames from '../../../pages/entities'
   import Sui from '../../../components/sui/index.vue'
   import PageLoader from '../../../components/page/page-loader.vue'
   import testData from '../../../mock/project-metro/index'
@@ -82,7 +82,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         entityName: entityNames.project.projectInfo,
         model: {},
         lines: testData.metroLine

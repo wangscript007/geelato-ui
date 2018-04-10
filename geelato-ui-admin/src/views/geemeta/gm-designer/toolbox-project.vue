@@ -6,7 +6,7 @@
 <script>
   //  import dndHandler from '../../../common/dndHandler'
   //  import toolbar from './toolbar'
-  import entityNames from '../../../common/entities'
+  import entityNames from '../../../pages/entities'
   import core from '../../../common/core'
   //  import utils from '../../../common/utils'
 

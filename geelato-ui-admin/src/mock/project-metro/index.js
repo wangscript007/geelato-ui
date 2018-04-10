@@ -10,7 +10,7 @@ data.metroLine = [
 ]
 
 data.metroSegment = [
-  {name: '土建施工1标', code: 'TJ001', metroLine: 'L011'},
+  {name: '土建施工1标', code: 'TJ001', metroLine: 'L011', inited: false},
   {name: '土建施工2标', code: 'TJ002', metroLine: 'L011'},
   {name: '土建施工3标', code: 'TJ003', metroLine: 'L011'},
   {name: '土建施工4标', code: 'TJ004', metroLine: 'L011'},
@@ -43,7 +43,7 @@ data.metroSegment = [
 data.plan = {}
 data.plan.workPoint = [
   {
-    name: '火车东站',
+    name: '火车东站工点月度计划',
     lastUpdateAt: '2018-01-02 18:03 ',
     y: 2018,
     m1: {taskSetCode: 'UIDTEIOS', updateAt: '2018-02-02'},
@@ -60,7 +60,7 @@ data.plan.workPoint = [
     m12: ''
   },
   {
-    name: '北京路站',
+    name: '北京路站工点月度计划',
     lastUpdateAt: '2018-03-02 15:03 ',
     y: 2018,
     m1: {active: false},
@@ -77,7 +77,7 @@ data.plan.workPoint = [
     m12: ''
   },
   {
-    name: '中央公园站',
+    name: '中央公园站工点月度计划',
     lastUpdateAt: '2018-01-05 10:03 ',
     y: 2018,
     m1: {taskSetCode: 'NXHDYQIA', updateAt: '2018-02-02'},
@@ -96,6 +96,8 @@ data.plan.workPoint = [
 ]
 
 data.report = report
+
+data.unit = [{name: '中铁三局'}, {name: '中铁三局'}, {name: '中铁三局'}, {name: '中铁三局'}]
 
 // 设置数据关联关系，将标段设置到线路中
 for (var lineIndex in data.metroLine) {

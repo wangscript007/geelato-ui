@@ -79,7 +79,7 @@
         <div class="ui divided small items">
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
               <h4 class="ui teal header">
@@ -237,7 +237,7 @@
           </div>
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
               <h4 class="ui teal header">Veronika Ossi</h4>
@@ -248,7 +248,7 @@
           </div>
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
               <h4 class="ui teal header">Jenny Hess</h4>
@@ -266,13 +266,13 @@
       </div>
     </div>
     <div v-if="pageStage==='editing'" class="task-form">
-      <task-form></task-form>
+      <!--<task-form></task-form>-->
     </div>
   </div>
 </template>
 <script>
-  import taskForm from './form'
-  import entityNames from '../../../common/entities'
+//  import taskForm from './form'
+  import entityNames from '../../../pages/entities'
 
   export default {
     data () {
@@ -461,7 +461,7 @@
       }
 
     },
-    components: {taskForm}
+    components: {}
   }
 </script>
 <style>

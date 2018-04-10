@@ -16,12 +16,12 @@
       </div>
     </div>
     <div class="sixteen wide column">
-      <button class="ui mini button" @click="$_save" :class="theme">保存</button>
+      <button class="ui mini button" @click="$_save" :class="$GL.ui.color.primary">保存</button>
     </div>
   </div>
 </template>
 <script>
-  import entityNames from '../../../common/entities'
+  import entityNames from '../../../pages/entities'
 
   export default {
     props: {
@@ -34,7 +34,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         entityName: entityNames.project.projectInfo,
         model: {}
       }

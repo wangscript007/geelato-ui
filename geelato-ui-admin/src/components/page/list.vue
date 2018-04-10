@@ -7,7 +7,7 @@
         </div>
         <div class="ui right secondary mini menu">
           <div class="item">
-            <button class="ui mini button" :class="theme">添加</button>&nbsp;
+            <button class="ui mini button" :class="$GL.ui.color.primary">添加</button>&nbsp;
           </div>
         </div>
       </div>
@@ -44,11 +44,11 @@
         </div>
         <div class="ui right secondary  borderless mini menu">
           <div v-if="opts.ui.toolbar.dropdown" class="item">
-            <button class="ui mini button" :class="theme">保存</button>&nbsp;
+            <button class="ui mini button" :class="$GL.ui.color.primary">保存</button>&nbsp;
             <!--<button class="ui mini button">删除</button>&nbsp;-->
             <!--<button class="ui mini button">导出</button>-->
             <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
-              <button class="ui mini button" :class="theme" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
             </template>
             <!--<div class="ui teal mini buttons">-->
             <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em">操作</div>-->
@@ -76,7 +76,7 @@
         <div class="content active">
           <form class="ui mini form">
             <div class="field">
-              <label>任务类型</label>
+              <label>计划类型</label>
               <input type="text" name="first-name" placeholder="">
             </div>
             <div class="field">
@@ -147,6 +147,18 @@
         </div>
         <div class="title">
           <i class="dropdown icon"></i>
+          关联里程碑
+        </div>
+        <div class="content active">
+          <sui type="checkbox" selector="ui checkbox">
+            <div class="ui checkbox">
+              <input type="checkbox" tabindex="0" class="hidden" checked>
+              <label>是否强制要求关联里程碑</label>
+            </div>
+          </sui>
+        </div>
+        <div class="title">
+          <i class="dropdown icon"></i>
           默认流程
         </div>
         <div class="content active">
@@ -165,6 +177,7 @@
 </template>
 <script>
   import utils from '../../common/utils'
+  import Sui from '../../components/sui/index'
 
   export default {
     props: {
@@ -178,7 +191,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 关闭tips
@@ -308,7 +320,7 @@
         }
       }
     },
-    components: {}
+    components: {Sui}
   }
 </script>
 <style scoped>

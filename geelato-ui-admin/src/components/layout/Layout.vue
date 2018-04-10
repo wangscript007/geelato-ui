@@ -20,8 +20,8 @@
       let layout = utils.session('geelato.config.layout')
       let mode = layout && layout.mode !== undefined ? layout.mode : config.layout.mode
       let color = utils.session('geelato.config.color')
-      this.$GL.ui.theme.color.primary = color && color.primary ? color.primary : this.$GL.ui.theme.color.primary
-//      console.log('this.$GL.ui.theme.color.primary>', this.$GL.ui.theme.color.primary)
+      this.$GL.ui.color.primary = color && color.primary ? color.primary : this.$GL.ui.color.primary
+//      console.log('this.$GL.ui.color.primary>', this.$GL.ui.color.primary)
       this.$_changeLayoutMode(mode)
     },
     mounted () {

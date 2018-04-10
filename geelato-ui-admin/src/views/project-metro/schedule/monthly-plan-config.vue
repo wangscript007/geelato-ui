@@ -1,6 +1,6 @@
 <template>
   <div class="gl-page-content-wrapper">
-    <layout-lr title="计划列表" :leftActions="leftActions" :rightActions="rightActions">
+    <layout-lr title="计划列表" rightTitle="计划配置" :leftActions="leftActions" :rightActions="rightActions">
       <div slot="left">
         <div class="ui middle aligned divided  selection list">
           <div class="item">
@@ -17,6 +17,13 @@
       <div slot="right">
         <sui type="accordion" selector=".ui.accordion" :opts="{exclusive: false}">
           <div class="ui accordion">
+            <div class="title active">
+              <i class="dropdown icon"></i>
+              里程碑任务
+            </div>
+            <div class="content active">
+              选择总工期策划（另一个计划文件）的部分任务，作为本计划的计划关键里程碑任务
+            </div>
             <div class="title active">
               <i class="dropdown icon"></i>
               填报时间设置

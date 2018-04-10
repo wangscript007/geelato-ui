@@ -4,7 +4,7 @@
     <div class="ui vertical small menu" :class="minSideBarClass" :style="{width:width}" v-show="size==='min'">
       <div class="ui item dropdown" :style="{width:logoWidth,height:headerHeight}" v-if="isShowLogo()">
         <div class="text">
-          <img class="ui avatar image" src="../../../static/assets/images/logo/48x48.png">
+          <img class="ui avatar image" src="../../../static/images/logo/48x48.png">
         </div>
       </div>
       <div v-for="subMenu in menu" class="ui left pointing dropdown link item" :title="subMenu.title"
@@ -20,13 +20,13 @@
          v-show="size==='max'">
       <div class="ui item dropdown" :style="{width:logoWidth,height:headerHeight}" v-if="isShowLogo()">
         <div class="text">
-          <img class="ui avatar image" src="../../../static/assets/images/logo/48x48.png">
+          <img class="ui avatar image" src="../../../static/images/logo/48x48.png">
           <span style="font-weight: bold;font-size: 1.25em;margin-left: -13px;">eelato</span>
         </div>
       </div>
       <!--提示配置菜单-->
       <div class="ui error message" v-if="!menu||menu.length===0">
-        未配置菜单，请到/src/api/config.js中配置
+        未配置菜单，请到/src/common/config.js中配置
       </div>
       <div v-html="html"></div>
       <div v-for="(subMenu,menuItemIndex) in menu" class="item" v-if="size==='max'">
@@ -86,7 +86,7 @@
 //    },
     created: function () {
 //      let layout = utils.session('geelato.config.layout')
-      this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$GL.ui.theme.color.primary : ''
+      this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$GL.ui.color.primary : ''
 
       // 从配置中读取默认active的菜单
       for (var i in config.modules) {

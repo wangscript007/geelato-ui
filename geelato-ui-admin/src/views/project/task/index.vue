@@ -4,8 +4,8 @@
       <div class="sixteen wide column task-topbar">
         <div class="ui mini menu">
           <a class="item">
-            <!--<div class="ui icon button" :class="theme" @click="$_edit('','bug')"><i class="plus icon"></i>创建</div>-->
-            <div class="ui icon dropdown mini button" :class="theme"><i class="plus icon"></i>创建
+            <!--<div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','bug')"><i class="plus icon"></i>创建</div>-->
+            <div class="ui icon dropdown mini button" :class="$GL.ui.color.primary"><i class="plus icon"></i>创建
               <div class="mini menu">
                 <div class="header">
                   <i class="tags icon"></i>
@@ -40,7 +40,7 @@
           </div>
           <div class="right menu">
             <div class="item">
-              <div class="ui button" :class="theme">报告</div>
+              <div class="ui button" :class="$GL.ui.color.primary">报告</div>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@
               </div>
             </div>
             <div class="item">
-              <div class="ui button" :class="theme">设置</div>
+              <div class="ui button" :class="$GL.ui.color.primary">设置</div>
             </div>
           </div>
         </div>
@@ -146,7 +146,7 @@
         <div class="ui divided small items">
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
               <h4 class="ui teal header">
@@ -162,8 +162,8 @@
               <div class="task-action">
                 <div style="float: right;display: inline-block">
                   <div class="ui inline basic icon mini button">
-                    <i class="comment outline icon" :class="theme" title="评论"></i>&nbsp;
-                    <i class="expand icon" :class="theme" title="展开"></i>
+                    <i class="comment outline icon" :class="$GL.ui.color.primary" title="评论"></i>&nbsp;
+                    <i class="expand icon" :class="$GL.ui.color.primary" title="展开"></i>
                     <!--<i class="teal compress icon" title="收缩"></i>-->
                   </div>
                 </div>
@@ -304,10 +304,10 @@
           </div>
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
-              <h4 class="ui header" :class="theme">Veronika Ossi</h4>
+              <h4 class="ui header" :class="$GL.ui.color.primary">Veronika Ossi</h4>
               <div class="description">
                 <p></p>
               </div>
@@ -315,10 +315,10 @@
           </div>
           <div class="item">
             <div class="ui mini image">
-              <img src="/static/assets/images/avatar/large/jenny.jpg">
+              <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
-              <h4 class="ui header" :class="theme">Jenny Hess</h4>
+              <h4 class="ui header" :class="$GL.ui.color.primary">Jenny Hess</h4>
               <div class="description">
                 <p></p>
               </div>
@@ -333,7 +333,7 @@
       </div>
     </div>
     <div v-if="pageStage==='editing'" class="task-form">
-      <task-form></task-form>
+      <!--<task-form></task-form>-->
     </div>
     <div v-if="pageStage==='taskSet'" class="task-set">
       <task-set></task-set>
@@ -341,13 +341,12 @@
   </div>
 </template>
 <script>
-  import taskForm from './form'
+//  import taskForm from './form'
   import taskSet from './task-set'
 
   export default {
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 页面状态 editing querying taskSet
@@ -406,7 +405,7 @@
         this.pageStage = 'querying'
       }
     },
-    components: {taskForm, taskSet}
+    components: {taskSet}
   }
 </script>
 <style>

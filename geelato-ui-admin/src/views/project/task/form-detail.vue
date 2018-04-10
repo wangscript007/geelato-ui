@@ -68,12 +68,12 @@
       </table>
     </div>
     <div class="sixteen wide column">
-      <button class="ui mini button" :class="theme" @click="$_save">保存</button>
+      <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_save">保存</button>
     </div>
   </div>
 </template>
 <script>
-  import entityNames from '../../../common/entities.js'
+  import entityNames from '../../../pages/entities.js'
   import 'tui-editor/dist/tui-editor.css'
   import 'tui-editor/dist/tui-editor-contents.css'
   import TuiEditor from 'tui-editor'
@@ -81,7 +81,6 @@
   export default {
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 页面状态

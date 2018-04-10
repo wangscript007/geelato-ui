@@ -39,7 +39,6 @@
     props: {},
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         leftActions: [{

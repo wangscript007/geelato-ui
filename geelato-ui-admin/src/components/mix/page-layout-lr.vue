@@ -8,9 +8,9 @@
         <div class="ui right secondary mini menu">
           <div v-if="leftActions" class="item">
             <template v-for="(item, index) in leftActions">
-              <button class="ui mini button" :class="theme" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
             </template>
-            <!--<button class="ui mini button" :class="theme">添加</button>&nbsp;-->
+            <!--<button class="ui mini button" :class="$GL.ui.color.primary">添加</button>&nbsp;-->
           </div>
         </div>
       </div>
@@ -25,11 +25,12 @@
           <i class="sidebar icon"></i>
         </a>
         <div class="item gl-title" style="font-weight: bold">
+          {{rightTitle}}
         </div>
         <div class="ui right secondary  borderless mini menu">
           <div v-if="rightActions" class="item">
             <template v-for="(item, index) in rightActions">
-              <button class="ui mini button" :class="theme" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
             </template>
           </div>
         </div>
@@ -47,6 +48,9 @@
       title: {
         type: String
       },
+      rightTitle: {
+        type: String
+      },
       leftActions: {
         type: Array
       },
@@ -56,7 +60,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false
         // 关闭tips

@@ -38,8 +38,8 @@
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
-              <button class="ui mini button" :class="theme" @click="$_submit">查询</button>&nbsp;
-              <button class="ui mini button" :class="theme" @click="reset">重置</button>
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_submit">查询</button>&nbsp;
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="reset">重置</button>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
             <!--<button class="ui mini button">删除</button>&nbsp;-->
             <!--<button class="ui mini button">导出</button>-->
             <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
-              <button class="ui mini button" :class="theme" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
             </template>
             <!--<div class="ui teal mini buttons">-->
             <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em">操作</div>-->
@@ -106,13 +106,13 @@
               <label></label>
             </div>
             <div v-if="opts.ui.mode==='select'">
-              <div class="ui mini buttons" :class="theme">
+              <div class="ui mini buttons" :class="$GL.ui.color.primary">
                 <div class="ui button" @click="$_selectRow(rowItem)">点选</div>
               </div>
             </div>
           </td>
           <td>
-            <div class="ui mini buttons" :class="theme">
+            <div class="ui mini buttons" :class="$GL.ui.color.primary">
               <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em"></div>-->
               <div class="ui floating dropdown icon button">
                 <i class="dropdown icon"></i>
@@ -159,7 +159,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 关闭tips

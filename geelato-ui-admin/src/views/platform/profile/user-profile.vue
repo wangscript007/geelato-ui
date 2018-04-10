@@ -5,7 +5,7 @@
       <div class="ui segment">
         <div class="ui card">
           <div class="ui image">
-            <img src="/static/assets/images/avatar/large/jenny.jpg" class="visible content">
+            <img src="/static/images/avatar/large/jenny.jpg" class="visible content">
           </div>
           <div class="content">
             <a class="header">超级管理员</a>
@@ -61,7 +61,7 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary
+        theme: this.$GL.ui.color.primary
       }
     },
     mounted: function () {

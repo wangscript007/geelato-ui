@@ -19,9 +19,9 @@
               </div>
             </div>
             <div class="item">
-              <div class="ui button" :class="theme">新增</div>
+              <div class="ui button" :class="$GL.ui.color.primary">新增</div>
               &nbsp;
-              <div class="ui button" :class="theme">保存</div>
+              <div class="ui button" :class="$GL.ui.color.primary">保存</div>
             </div>
           </div>
         </div>
@@ -30,7 +30,8 @@
           <h2 class="ui header"><select>
             <option selected>2018</option>
             <option>2017</option>
-          </select>年年度任务</h2>
+          </select>年年度任务
+          </h2>
         </div>
       </div>
       <div class="ten wide column task-list-result">
@@ -46,7 +47,7 @@
             <div class="two fields">
               <div class="field">
                 <label>标题</label>
-                <input type="text" name="title"  placeholder="标题">
+                <input type="text" name="title" placeholder="标题">
               </div>
             </div>
             <div class="field">
@@ -86,13 +87,12 @@
   </div>
 </template>
 <script>
-  import taskForm from './form'
+  //  import taskForm from './form'
   import GlTable from '../../../components/collections/table/index'
 
   export default {
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         // 最大时，不展示查询区
         isMax: false,
         // 页面状态
@@ -189,7 +189,7 @@
         this.pageStage = 'querying'
       }
     },
-    components: {taskForm, GlTable}
+    components: {GlTable}
   }
 </script>
 <style>

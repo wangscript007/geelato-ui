@@ -3,11 +3,9 @@
   注意：加载的页面，需存放于本page.vue所在目录下
 -->
 <template>
-  <div class="gl-page-content-wrapper">
-    <component v-bind:is="currentView" :opts="pageCfg.opts" :query="queryString">
-      <!-- 组件在 vm.currentview 变化时改变！ -->
-    </component>
-  </div>
+  <component v-bind:is="currentView" :opts="pageCfg.opts" :query="queryString">
+    <!-- 组件在 vm.currentview 变化时改变！ -->
+  </component>
 </template>
 <script>
   export default {
@@ -76,7 +74,4 @@
 </script>
 <!-- 添加 'scoped' 属性，使该CSS只应用于本vue。 -->
 <style>
-  .gl-page-content-wrapper {
-
-  }
 </style>

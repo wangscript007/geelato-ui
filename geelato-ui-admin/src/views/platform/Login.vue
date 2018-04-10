@@ -1,6 +1,6 @@
 <template>
   <div class="ui middle aligned center aligned grid">
-    <div class="column" style="padding-top: 5em;width: 24em">
+    <div class="login column" style="padding-top: 5em;width: 24em">
       <form class="ui large form login-form">
         <div class="ui top attached segment " style="background-color: rgba(255, 255, 255, 0.2)">
           <!--<h2 class="ui image header" style="height: 200px;color: white;font-size: 1.75em;text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">-->
@@ -11,7 +11,8 @@
           <!--</div>-->
           <!--</h2>-->
           <br/>
-          <i class="massive google icon" style="color: white;text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2)"
+          <i class="massive google icon" style="text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2)"
+             :style="'color:'+$GL.ui.colorHex[$GL.ui.color.primary]"
              aria-readonly="true"></i>
           <br/>
         </div>
@@ -54,7 +55,7 @@
     computed: {
       color: function () {
         let color = utils.session('geelato.config.color')
-        return color && color.primary ? color.primary : this.$GL.ui.theme.color.primary
+        return color && color.primary ? color.primary : this.$GL.ui.color.primary
       }
     },
     created () {
@@ -130,7 +131,7 @@
     margin-top: -100px;
   }
 
-  .column {
+  .login.column {
     max-width: 450px;
   }
 </style>

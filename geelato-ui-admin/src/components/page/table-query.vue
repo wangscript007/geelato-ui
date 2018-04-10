@@ -42,8 +42,8 @@
       <div class="item">
       </div>
       <div class="right item">
-        <button class="ui mini button" :class="theme" @click="$_submit" @keyup.enter="$_submit">查询</button>&nbsp;
-        <button class="ui mini button" :class="theme" @click="reset">重置</button>
+        <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</button>&nbsp;
+        <button class="ui mini button" :class="$GL.ui.color.primary" @click="reset">重置</button>
       </div>
     </div>
   </form>
@@ -64,7 +64,6 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.theme.color.primary,
         model: {},
         defaultValue: {},
         dict: {
