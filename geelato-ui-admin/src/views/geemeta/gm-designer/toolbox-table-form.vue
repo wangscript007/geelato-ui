@@ -13,7 +13,7 @@
           <div class="dnd-content" data-meta="{type:'table'}">
             <form role="form">
               <div class="form-body">
-                <table class="gl-form xg-col-24">
+                <table class="gl-form gl-col-24">
                   <tbody class="dnd-target" data-dnd-allow="tr">
                   <tr class="dnd-content" data-meta="{type:'tr'}">
                     <td colspan="24">&nbsp;

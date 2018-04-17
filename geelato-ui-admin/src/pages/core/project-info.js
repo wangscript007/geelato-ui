@@ -1,15 +1,44 @@
+import * as C from '../../pages/constants'
+import ENTITY from '../../pages/entities'
+import GridPage from '../../pages/core/GridPage'
+import Table from '../../pages/core/Table'
+import Action from '../../pages/core/Action'
+
 class ProjectCfg {
   constructor () {
+    let page = new GridPage('prj-mtr-project-info-list', '/components/page/table')
+    page.mode(C.MODE_PAGE.select)
+    page.title('项目信息')
+    page.entity(ENTITY.project.projectInfo)
+    page.table(
+      new Table().p('1,10').order('name|+')
+        .select({field: 'id', title: '选择', type: 'checkbox'})
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .dropdown('操作', [
+          new Action({
+            title: '详细',
+            click: C.CLICK.modal,
+            modal: {
+              type: C.TYPE_MODAL.page,
+              value: 'sys_role_list_detail',
+              query: {}
+            }
+          }),
+          new Action({})
+        ])
+    )
     this.pageCfgs = [
       // 项目管理
       {
-        code: 'prj_project_info_list',
+        code: 'prj-mtr-project-info-list',
         component: '/components/page/table',
         opts: {
           ui: {
-            mode: 'select',
+            mode: C.MODE_PAGE.select,
             title: '项目信息',
-            entity: 'prj_project_info',
+            entity: ENTITY.project.projectInfo,
             query: {
               // 是否隐藏整个查询区域
               show: true,
@@ -22,11 +51,11 @@ class ProjectCfg {
                 // 可用于查询的字段
                 fields: [
                   // cop：比较操作符，eq：等于；default：默认值
-                  {field: 'name', title: '名称', cop: 'eq', type: 'string', defalut: '张', placeholder: ''},
+                  {field: 'name', title: '名称', cop: C.COP.contains, type: C.TYPE_FIELD.string, defalut: '张'},
                   // cop：比较操作符，contains：包含；lop：逻辑操作符，or：或者
-                  {field: 'code', title: '编码', cop: 'contains', type: 'string', lop: 'or'},
+                  {field: 'code', title: '编码', cop: C.COP.contains, type: C.TYPE_FIELD.string, lop: C.LOP.or},
                   // and：并且
-                  {field: 'description', title: '描述', cop: 'contains', type: 'string', lop: 'and'}
+                  {field: 'description', title: '描述', cop: C.COP.contains, type: C.TYPE_FIELD.string, lop: C.LOP.and}
                 ]
               }
             },
@@ -38,22 +67,22 @@ class ProjectCfg {
                 actions: [
                   {
                     title: '创建',
-                    click: 'modal',
-                    modal: {title: '项目信息', type: 'href', value: '/views/project/info/project_info.vue'}
+                    click: C.CLICK.modal,
+                    modal: {title: '项目信息', type: C.TYPE_MODAL.href, value: '/views/project-metro/info/project_info.vue'}
                   },
-                  {title: '删除', click: 'delete', confirm: '确定删除？'},
+                  {title: '删除', click: C.CLICK.delete, confirm: '确定删除？'},
                   // 弹出页面提示导出多少条记录
-                  {title: '导出EXCEL', click: 'xls'},
+                  {title: '导出EXCEL', click: C.CLICK.xls},
                   // 弹出页面提示导出多少条记录
-                  {title: '导出PDF', click: 'pdf'},
+                  {title: '导出PDF', click: C.CLICK.pdf},
                   // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                  {title: '打印', click: 'print'}
+                  {title: '打印', click: C.CLICK.print}
                 ]
               }
             },
             tips: {
               // 展示位置：header|footer|none，当为none或空时，则不展示。
-              display: 'none',
+              display: C.DISPLAY.none,
               // 提示内容，html格式
               html: '<div>这是提示内容<div>'
             },
@@ -67,25 +96,25 @@ class ProjectCfg {
                 actions: [
                   {
                     title: '详细',
-                    click: 'modal',
+                    click: C.CLICK.modal,
                     modal: {
-                      type: 'page',
+                      type: C.TYPE_MODAL.page,
                       value: 'sys_role_list_detail',
                       query: {}
                     }
                   },
                   {
                     title: '修改',
-                    click: 'modal',
+                    click: C.CLICK.modal,
                     modal: {
                       title: '项目信息',
-                      type: 'href',
+                      type: C.TYPE_MODAL.href,
                       value: '/views/project/info/project_info.vue',
                       data: {id: '@.id', name: '@.name'}
                     },
                     hidden: 'js:@.id < 0'
                   },
-                  {title: '删除', click: 'delete', hidden: 'js:@.id > 0', confirm: '确定删除？'},
+                  {title: '删除', click: C.CLICK.delete, hidden: 'js:@.id > 0', confirm: '确定删除？'},
                   {title: '直接调用js', click: 'js:alert(\'aaaa\')'}]
               },
               columns: [

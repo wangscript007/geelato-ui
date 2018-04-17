@@ -2,8 +2,8 @@
   <div>
     <table class="gl-table">
       <thead>
-      <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
-      <th v-for="col in columns">{{col.title}}</th>
+      <th :style="seqThStyle"></th>
+      <th v-for="col in columns" :style="{width:col.width}">{{col.title}}</th>
       </thead>
       <tbody>
       <gl-row v-for="item in treeDataSource" :key="item.seq" :columns="columns" :rowData="item.value"
@@ -11,6 +11,11 @@
               @closeRow="$_closeRow"
               @openRow="$_openRow"
       ></gl-row>
+      <tr>
+        <td>
+          <button class="ui mini button" :class="$GL.ui.color.primary" style="line-height: 0.5em;width: 2em;padding: 0.5em;margin: 0">+</button>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -26,6 +31,7 @@
     },
     data () {
       return {
+        seqThStyle: {width: '2em'},
         columnMap: {},
         treeDataSource: [],
         cfg: {}
@@ -70,6 +76,7 @@
         }
         // TODO
         this.treeDataSource = items
+        this.seqThStyle = {width: items.length.toString().length + 'em'}
       },
       $_closeRow (rowItem) {
         console.log('closeRow>', rowItem)

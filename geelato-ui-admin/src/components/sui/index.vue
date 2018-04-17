@@ -39,6 +39,7 @@
     methods: {
       $_init: function () {
         let theVue = this
+//        theVue.exclusive = true
         $(this.$el).find(this.selector)[theVue.type](theVue.opts)
       }
     },

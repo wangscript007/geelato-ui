@@ -7,14 +7,25 @@ import router from './router'
 import store from './store/store'
 import core from './common/core.js'
 import cfg from './common/config.js'
+import data from './mock/data.js'
+import projectConfig from './common/project/config.js'
+import Sui from './components/sui/index.vue'
+import Message from './components/message/index.vue'
+import LayoutLr from './components/mix/page-layout-lr'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$GL = core
 Vue.prototype.$CFG = cfg
-// geelato.init({
-//   router: router
-// })
+Vue.prototype.$TD = data
+
+Vue.component('sui', Sui)
+Vue.component('message', Message)
+Vue.component('layoutLr', LayoutLr)
+// 测试演示的数据
+data.setStore(store)
+// 项目管理平台配置
+projectConfig.setStore(store)
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,34 +1,45 @@
+import Column from './Column'
+
 class Table {
   constructor () {
-    this.name = 'table'
+    this.$ = {}
     this.columns = []
   }
 
   p (p) {
-    this.p = p
+    this.$.p = p
     return this
   }
 
   order (order) {
-    this.order = order
+    this.$.order = order
+    return this
+  }
+
+  select (select) {
+    this.$.select = select
+    return this
+  }
+
+  dropdown (title, actions) {
     return this
   }
 
   /**
-   * @param column
+   * @param field
+   * @param title
+   * @param type
+   * @param visible
+   * @param format
    * @returns {Table}
    */
-  addColumn (column) {
-    this.columns.push(column)
+  addColumn (field, title, type, visible, format) {
+    this.columns.push(new Column(field, title, type, visible, format))
     return this
   }
 
-  $value () {
-    return {
-      p: this.p,
-      order: this.order,
-      columns: this.columns
-    }
+  value () {
+    return this.$
   }
 }
 

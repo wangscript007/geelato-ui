@@ -1,0 +1,476 @@
+<template>
+  <div class="gl-page-content-wrapper">
+    <div v-if="!currentPlan.name">
+      <h4>&nbsp;&nbsp;&nbsp;&nbsp;选择计划</h4>
+      <div class="ui fitted divider">
+      </div>
+      <div class="ui middle aligned divided selection ordered list">
+        <div class="item" v-for="item in plan.items">
+          <div class="description" @click="currentPlan=item">{{item.name}}</div>
+        </div>
+      </div>
+    </div>
+    <layout-lr v-if="currentPlan.name" :title="currentPlan.name" rightTitle="任务详情" :min="{left:10,right:6}"
+               :max="{left:5,right:11}" @toggle="$_mixAndMaxList">
+      <div slot="left">
+        <gl-table :columns="taskData.columns" :data-source="taskData.dataSource"></gl-table>
+      </div>
+      <div slot="rightAction">
+        <div class="item" style="padding-top: 0;padding-bottom: 0">
+          <sui type="dropdown" selector=".ui.dropdown">
+            <div class="ui mini buttons" :class="$GL.ui.color.primary">
+              <div class="ui  mini button">导入</div>
+              <div class="ui floating dropdown icon mini button">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <a class="item">Excel文件</a>
+                  <a class="item">Project文件</a>
+                  <a class="item">在线模板库</a>
+                </div>
+              </div>
+            </div>
+          </sui>
+          &nbsp;
+          <sui type="dropdown" selector=".ui.dropdown">
+            <div class="ui mini buttons" :class="$GL.ui.color.primary">
+              <div class="ui button">发布</div>
+              <div class="ui floating dropdown icon button">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <a class="item">保存当前版本并发布</a>
+                  <a class="item">另存为新版本并发布</a>
+                </div>
+              </div>
+            </div>
+          </sui>
+        </div>
+      </div>
+      <div slot="right">
+        <sui type="tab" selector=".menu .item">
+          <div class="ui top attached tabular pointing secondary fruit menu">
+            <a class="active item" data-tab="first">任务信息</a>
+            <a class="item" data-tab="second">更多填报项</a>
+            <a class="item" data-tab="third">任务动态</a>
+          </div>
+          <div class="ui bottom attached active tab segment" data-tab="first">
+            <sui type="accordion" selector=".ui.accordion" :opts="{exclusive: 'false'}">
+              <div class="ui fluid accordion">
+                <div class="title active">
+                  <i class="dropdown icon"></i>
+                  任务信息
+                </div>
+                <div class="content active">
+                  <table class="ui mini form gl-form gl-col-24">
+                    <tbody>
+                    <tr>
+                      <td colspan="8">名称</td>
+                      <td colspan="16">
+                        <input type="text" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">优先级</td>
+                      <td colspan="16">
+                        <input type="text" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">状态</td>
+                      <td colspan="16">
+                        <input type="text" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">百分比</td>
+                      <td colspan="16">
+                        <input type="text" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">描述</td>
+                      <td colspan="16">
+                        <textarea rows="4"></textarea>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="title active">
+                  <i class="dropdown icon"></i>
+                  任务成果
+                </div>
+                <div class="content active">
+                  <a class="ui basic mini button" :class="$GL.ui.color.primary" title="添加该任务需交付的成果">添加成果</a>
+                  <div class="ui divider">
+                  </div>
+                  <div class="ui fluid action input">
+                    <input type="text" placeholder="上传需求分析报告">
+                    <button class="ui button">浏览...</button>
+                  </div>
+                  <!--<a class="ui label">-->
+                  <!--需求分析报告-->
+                  <!--<i class="delete icon"></i>-->
+                  <!--</a>-->
+                </div>
+                <div class="title active">
+                  <i class="dropdown icon"></i>
+                  任务指标
+                </div>
+                <div class="content active">
+                  <button class="ui basic mini button" :class="$GL.ui.color.primary">添加指标</button>
+                  <div class="ui divider">
+                  </div>
+                  <table class="ui form gl-form gl-col-24">
+                    <tbody>
+                    <tr>
+                      <td colspan="6">流程数</td>
+                      <td colspan="9">
+                        <input type="text" value="0">
+                      </td>
+                      <td colspan="9">
+                        <input type="text" value="36">
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <div class="ui message">
+                    若总量未明确，建议填写一个预估总量。
+                  </div>
+                </div>
+              </div>
+            </sui>
+          </div>
+          <div class="ui bottom attached tab segment" data-tab="second">
+            <sui type="accordion" selector=".ui.accordion" :opts="{exclusive: 'false'}">
+              <div class="ui fluid accordion">
+                <div class="title active">
+                  <i class="dropdown icon"></i>
+                  任务检查项
+                </div>
+                <div class="content active">
+                  <table class="ui mini form gl-form gl-col-24">
+                    <tbody>
+                    <tr>
+                      <td colspan="8">检查项一</td>
+                      <td colspan="16">
+                        <input type="checkbox" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">检查项二</td>
+                      <td colspan="16">
+                        <input type="checkbox" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">检查项三</td>
+                      <td colspan="16">
+                        <input type="checkbox" value="">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8">检查项四</td>
+                      <td colspan="16">
+                        <input type="checkbox" value="">
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="title active">
+                  <i class="dropdown icon"></i>
+                  专项填报
+                </div>
+                <div class="content active">
+                  <div class="ui fluid action input">
+                    <input type="text" placeholder="选择一个到多个专用表单">
+                    <button class="ui button">选择</button>
+                  </div>
+                  <br/>
+                  <div class="ui fluid action input">
+                    <input type="text" placeholder="选择表单的上报流程">
+                    <button class="ui button">选择</button>
+                  </div>
+                </div>
+              </div>
+            </sui>
+          </div>
+          <div class="ui bottom attached tab segment" data-tab="third">
+            <div class="ui toggle checkbox" @click="isCommentOnly=!isCommentOnly">
+              <input type="checkbox" name="public">
+              <label>只看评论动态信息</label>
+            </div>
+            <div class="ui feed">
+              <div class="event" v-if="!isCommentOnly">
+                <div class="label">
+                  <i class="user circle huge icon"></i>
+                </div>
+                <div class="content">
+                  <div class="summary">
+                    <a class="user">
+                      张三
+                    </a> 修改进度60%为80%
+                    <div class="date">
+                      1 小时前
+                    </div>
+                  </div>
+                  <!--<div class="meta">-->
+                  <!--<a class="like">-->
+                  <!--<i class="like icon"></i> 4 Likes-->
+                  <!--</a>-->
+                  <!--</div>-->
+                </div>
+              </div>
+              <div class="event" v-if="!isCommentOnly">
+                <div class="label">
+                  <i class="user circle huge icon"></i>
+                </div>
+                <div class="content">
+                  <div class="summary">
+                    <a class="user">
+                      张三
+                    </a> 修改进度30%为60%
+                    <div class="date">
+                      2018-03-05 15:15
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event">
+                <div class="label">
+                  <i class="user circle huge icon"></i>
+                </div>
+                <div class="content">
+                  <div class="summary">
+                    <a class="user">
+                      张三
+                    </a> 添加评论：明天需协调王工参与讨论，明确会议时间。
+                    <div class="date">
+                      2018-03-02 11:12
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event" v-if="!isCommentOnly">
+                <div class="label">
+                  <i class="user circle huge icon"></i>
+                </div>
+                <div class="content">
+                  <div class="summary">
+                    <a class="user">
+                      张三
+                    </a> 修改进度20%为30%
+                    <div class="date">
+                      2018-03-04 17:19
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="event" v-if="!isCommentOnly">
+                <div class="label">
+                  <i class="user circle huge icon"></i>
+                </div>
+                <div class="content">
+                  <div class="summary">
+                    <a class="user">
+                      张三
+                    </a> 修改进度0%为20%
+                    <div class="date">
+                      2018-03-02 11:12
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sui>
+      </div>
+    </layout-lr>
+  </div>
+</template>
+<script>
+  import GlTable from '../../../components/collections/table/index'
+  import mockData from '../../../mock/data'
+  import prjCfg from '../../../common/project/config'
+
+  export default {
+    data () {
+      return {
+        // 任务列表
+        taskData: {
+          columns: [
+//            {field: 'id', title: 'ID', type: 'string'},
+//            {field: 'pid', title: '父ID', type: 'string'},
+//            {field: 'level', title: '层级', type: 'string'},
+            {field: 'name', title: '任务名称', type: 'string', format: '', editable: true},
+            {field: 'res', title: '资源', type: 'string', format: '', editable: true},
+            {field: 'planFinishDate', title: '计划完成时间', type: 'string', format: ''}
+          ],
+          dataSource: [
+            {id: '100000000', pid: '', level: 1, name: '启动阶段。', res: '张三', planFinishDate: '2018-3-26'},
+            {
+              id: '100000001',
+              pid: '100000000',
+              level: 2,
+              name: '启动前准备',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {
+              id: '100000001',
+              pid: '100000000',
+              level: 2,
+              name: '项目启动会',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {id: '100000003', pid: '', level: 1, name: '需求阶段。', res: '张三', planFinishDate: '2018-3-26'},
+            {
+              id: '100000004',
+              pid: '100000003',
+              level: 2,
+              name: '需求调研问卷编写',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {
+              id: '100000005',
+              pid: '100000003',
+              level: 2,
+              name: '需求调研',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {
+              id: '100000006',
+              pid: '100000003',
+              level: 2,
+              name: '需求分析报告编写',
+              res: '王五',
+              planFinishDate: '2018-3-26'
+            },
+            {id: '100000000', pid: '', level: 1, name: '设计阶段。', res: '张三', planFinishDate: '2018-3-26'},
+            {id: '100000000', pid: '', level: 1, name: '开发阶段。', res: '张三', planFinishDate: '2018-3-26'},
+            {id: '100000000', pid: '', level: 1, name: '上线试运行阶段。', res: '张三', planFinishDate: '2018-3-26'},
+            {id: '100000000', pid: '', level: 1, name: '验收及质保阶段。', res: '张三', planFinishDate: '2018-3-26'}
+          ]
+        },
+        currentPlan: {
+          id: this.$route.query.id,
+          name: this.$route.query.name
+        },
+        isCommentOnly: false
+      }
+    },
+    computed: {
+      projectConfig: function () {
+        return prjCfg.get(this.$route.query.module)
+      },
+      projectGroups: function () {
+        return mockData.get(this.$route.query.module).projectGroups
+      },
+      plan: function () {
+        return mockData.get(this.$route.query.module).plan
+      }
+    },
+    mounted: function () {
+      console.log(this.$route)
+      this.$_initUi()
+    },
+    methods: {
+      $_initUi: function () {
+        this.$_initProjects()
+      },
+      $_toggleSidebar () {
+        this.isMax = !this.isMax
+      },
+      $_initProjects () {
+        this.$GL.data.queryByGql()
+        let types = {
+          default: {
+            icon: 'fa fa-folder icon-state-warning icon-lg'
+          },
+          root: {
+            icon: 'fa fa-folder icon-state-default icon-lg'
+          }
+        }
+        let $projectTree = $(this.$el).find('.task-projects')
+        let projectTreeData = [{
+          id: 0,
+          text: '项目',
+          type: 'root'
+        }]
+        $projectTree.jstree({
+          core: {
+            themes: {
+              responsive: false
+            },
+            data: projectTreeData
+          },
+          types: types,
+          plugins: ['types']
+        })
+      },
+      $_save () {
+        this.$_query()
+      },
+      $_edit (id, type, to) {
+        this.pageStage = 'editing'
+      },
+      $_query () {
+        this.pageStage = 'querying'
+      },
+      $_mixAndMaxList () {
+        if (this.taskData.columns.length === 1) {
+          this.taskData.columns = [
+            {field: 'name', title: '任务名称', type: 'string', format: '', editable: true},
+            {field: 'res', title: '资源', type: 'string', format: '', editable: true},
+            {field: 'planFinishDate', title: '计划完成时间', type: 'string', format: ''}]
+        } else {
+          this.taskData.columns = [{field: 'name', title: '任务名称', type: 'string', format: '', editable: true}]
+        }
+      }
+    },
+    components: {GlTable}
+  }
+</script>
+<style>
+
+  .items > .item .image > img {
+    /*width: 50% !important;*/
+    /*height: 80%;*/
+  }
+
+  .task-topbar.sixteen.wide.column {
+    padding-bottom: 0 !important;
+  }
+
+  .items > .item > .content > .task-action {
+    margin-top: 0.5em;
+  }
+
+  .items > .item .task-datetime {
+    font-size: 0.8em;
+    font-weight: bold;
+    float: right;
+    margin-right: 1em;
+    display: inline-block;
+  }
+
+  .items > .item > .content > .task-action .mini.button {
+    padding: 0.35em 0.6em 0.35em;
+  }
+
+  .items > .item > .content > .description {
+    font-size: 0.9em !important;
+  }
+
+  .menu.task-list-toolbar {
+    border: 0;
+  }
+
+  /*.task-list-area > .ui.divider {*/
+  /*padding: 0;*/
+  /*margin: 0;*/
+  /*}*/
+</style>

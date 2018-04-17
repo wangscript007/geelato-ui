@@ -127,7 +127,6 @@
         // background: '#2185d0'
         for (let key in this.$GL.ui.colorHex) {
           let hex = this.$GL.ui.colorHex[key]
-          console.log(hex)
           if (key === this.$GL.ui.color.primary) {
             this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
           }

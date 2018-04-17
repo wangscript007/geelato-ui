@@ -8,46 +8,13 @@
           <a class="item" data-tab="third">项目人员</a>
         </div>
         <div class="ui bottom attached active tab segment" data-tab="first">
-          <table class="ui small form gl-form">
-            <caption>&nbsp;</caption>
-            <tbody>
-            <tr>
-              <td>项目名称</td>
-              <td><input type="text"></td>
-              <td>所属线路</td>
-              <td>
-                <sui type="dropdown" selector=".ui.dropdown">
-                  <div class="ui selection dropdown">
-                    <input type="hidden" name="gender">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">{{lines&&lines.length>0?lines[0].name:''}}</div>
-                    <div class="menu">
-                      <div class="item" v-for="line in lines" :data-value="line.code">{{line.name}}</div>
-                    </div>
-                  </div>
-                </sui>
-              </td>
-            </tr>
-            <tr>
-              <td>合同编号</td>
-              <td><input type="text"></td>
-              <td></td>
-              <td>
-              </td>
-            </tr>
-            <tr>
-              <td>概述</td>
-              <td colspan="3"><textarea rows="4"></textarea></td>
-            </tr>
-            </tbody>
-            <tfoot></tfoot>
-          </table>
+          <project-info-base></project-info-base>
         </div>
         <div class="ui bottom attached tab segment" data-tab="second">
-          <page-loader :code="'prj-mtr-project-info-list'" :query="{em:'prj-project'}"></page-loader>
+          <page-loader code="prj_project_unit_list" :query="{em:'prj_project_unit'}"></page-loader>
         </div>
         <div class="ui bottom attached tab segment" data-tab="third">
-          <page-loader :code="'prj-mtr-project-info-list'" :query="{em:'prj-project'}"></page-loader>
+          <page-loader code="prj_project_member_list" :query="{em:'prj_project_member'}"></page-loader>
         </div>
       </sui>
     </div>
@@ -57,7 +24,8 @@
   import entityNames from '../../../pages/entities'
   import Sui from '../../../components/sui/index.vue'
   import PageLoader from '../../../components/page/page-loader.vue'
-  import testData from '../../../mock/project-metro/index'
+  import testData from '../../../mock/project/project-metro/index'
+  import ProjectInfoBase from '../../project-base/info/project-info-base.vue'
 
   export default {
     props: {
@@ -72,7 +40,7 @@
       return {
         entityName: entityNames.project.projectInfo,
         model: {},
-        lines: testData.metroLine
+        lines: testData.projectGroups
       }
     },
     mounted: function () {
@@ -106,7 +74,7 @@
         })
       }
     },
-    components: {Sui, PageLoader}
+    components: {Sui, PageLoader, ProjectInfoBase}
   }
 </script>
 <style>

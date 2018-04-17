@@ -59,8 +59,10 @@
         <a class="item modules-selector"><i class="ellipsis vertical icon"></i></a>
         <div class="ui flowing popup top left transition hidden">
           <div class="ui three column divided left aligned grid" style="max-width: 390px">
-            <div class="column" v-for="item in modules">
-              <div class="ui button" @click="$_changeModule(item)">{{item.title}}</div>
+            <div class="column" v-for="item in modules" style="padding:0.125em">
+              <div class="ui button" @click="$_changeModule(item)" style="width: 9em">
+                {{item.title}}
+              </div>
             </div>
           </div>
         </div>
@@ -71,6 +73,7 @@
 
 <script>
   import config from '../../common/config'
+  import utils from '../../common/utils'
   import * as types from '../../store/types'
   import Sui from '../../components/sui/index.vue'
 
@@ -81,7 +84,6 @@
     },
     data () {
       return {
-//        colors: this.$GL.ui.colors,
         color: this.$GL.ui.color.primary,
         user: this.$GL.security.profile().user,
         logoWidth: config.layout.logo.width,
@@ -96,6 +98,17 @@
     },
     created: function () {
       this.headerClass = this.mode === 1 ? '' : 'inverted ' + this.$GL.ui.color.primary
+      // 首次加载切换到角色的默认模块
+      // TODO 改从当前用户信息中获取
+      let currentRole = 'admin'
+      for (var m in this.modules) {
+        var module = this.modules[m]
+        console.log(module, config.defaultModule[currentRole])
+        if (module.code === config.defaultModule[currentRole]) {
+          this.$_changeModule(module)
+          break
+        }
+      }
     },
     mounted: function () {
     },
@@ -110,8 +123,12 @@
         // 更改模块首页面
         if (module.index) {
           // 如将：'/#/m/project-metro/info/select-project',改为'/m/project-metro/info/select-project',
-          let path = module.index.replace('/#', '').replace('#', '')
+          var path = module.index.replace('/#', '').replace('#', '')
+//          path = path + '?' + 'module=' + module.code + '&t=' + utils.uuid(16)
+          this.$store.commit(types.ROUTE_VIEW_KEY, utils.uuid(16))
           this.$router.push(path)
+        } else {
+          console.error('未配置模块[' + module.title + ']首页面！')
         }
       },
       $_changeColor: function (newColor) {

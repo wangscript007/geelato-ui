@@ -10,7 +10,7 @@
     </div>
     <div :style="content" style="position: absolute;overflow-x: auto">
       <!--<page-content></page-content>-->
-      <router-view></router-view>
+      <router-view :key="key"></router-view>
     </div>
     <div v-show="footDisplay" class="teal" :style="footer" style="position: absolute;bottom: 0;width: 100%">
       <page-footer :mode="mode" :height="footer.height"></page-footer>
@@ -44,6 +44,9 @@
           return false
         }
         return true
+      },
+      key: function () {
+        return this.$store.state.platform.routeViewKey
       }
     },
     created () {

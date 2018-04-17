@@ -4,12 +4,12 @@
  * 注册为：
  * {
  *  path:'project-metro/info/select-project',
- *  component: resolve => require(['../views/project-metro/info/select-project.vue'], resolve)
+ *  component: resolve => require(['../views/project-base/info/select-project.vue'], resolve)
  * }
  *
  * @type {[string]}
  */
 let hrefs = [
-  '/#/m/project-metro/info/select-project'
+  '/#/m/project-base/info/select-project'
 ]
 export default hrefs

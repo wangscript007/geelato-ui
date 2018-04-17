@@ -7,7 +7,7 @@
       <h5 class="ui header" style="padding-left: 1em">最近浏览的项目</h5>
       <div class="ui mini segment">
         <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in $store.state.lastProjects"
-             @click="$_changeSegment(project)" :title="project.metroLine">
+             @click="$_changeProject(project)" :title="project.metroLine">
           {{project.name}}
         </div>
       </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="ui fitted divider"></div>
       <div class="ui segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="segment in segments" @click="$_changeSegment(segment)">
+        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in projects" @click="$_changeProject(segment)">
           {{segment.name}}
         </div>
       </div>
@@ -42,7 +42,7 @@
 </template>
 <script>
   import Message from '../../../components/message/index.vue'
-  import testData from '../../../mock/project-metro/index'
+  import testData from '../../../mock/project/project-metro/index'
   import * as types from '../../../store/types'
 
   export default {
@@ -56,8 +56,8 @@
     },
     data () {
       return {
-        lines: testData.metroLine,
-        segments: [],
+        lines: testData.projectGroups,
+        projects: [],
         currentLine: {}
       }
     },
@@ -66,9 +66,9 @@
     methods: {
       $_changeLine (line) {
         this.currentLine = line
-        this.segments = line.segments
+        this.projects = line.projects
       },
-      $_changeSegment (segment) {
+      $_changeProject (segment) {
         this.$store.commit(types.CHANGE_PROJECT, segment)
         this.$store.commit(types.CHANGE_HEADER_TITLE, '<div style="font-weight: bold">当前项目：' + this.currentLine.shortName + '>' +
           segment.name + '</div>'

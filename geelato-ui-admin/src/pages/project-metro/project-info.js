@@ -1,18 +1,34 @@
 import * as C from '../../pages/constants'
 import ENTITY from '../../pages/entities'
 import GridPage from '../../pages/core/GridPage'
-import Column from '../../pages/core/Column'
+import Table from '../../pages/core/Table'
+import Action from '../../pages/core/Action'
 
 class ProjectCfg {
   constructor () {
-    let page = new GridPage()
-    page.code('prj-mtr-project-info-list').component('/components/page/table')
-    page.mode(C.MODE_PAGE.select).title('项目信息')
+    let page = new GridPage('prj-mtr-project-info-list', '/components/page/table')
+    page.mode(C.MODE_PAGE.select)
+    page.title('项目信息')
     page.entity(ENTITY.project.projectInfo)
-    // page.newTable().addColumn(new Column().title('序号').field('id').visible(false).format(''))
-    page.newTable().addColumn(new Column('name', '名称', C.TYPE_COLUMN.string, false, ''))
-    //   .addColumn(new Column(''))
-    console.log('page>>>', page.value())
+    page.table(
+      new Table().p('1,10').order('name|+')
+        .select({field: 'id', title: '选择', type: 'checkbox'})
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .addColumn('name', '名称', C.TYPE_COLUMN.string, false, '')
+        .dropdown('操作', [
+          new Action({
+            title: '详细',
+            click: C.CLICK.modal,
+            modal: {
+              type: C.TYPE_MODAL.page,
+              value: 'sys_role_list_detail',
+              query: {}
+            }
+          }),
+          new Action({})
+        ])
+    )
     this.pageCfgs = [
       // 项目管理
       {

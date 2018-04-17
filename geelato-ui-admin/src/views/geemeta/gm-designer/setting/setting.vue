@@ -6,7 +6,7 @@
       <a class="item" data-tab="designer-tab-setting-ds">数据源</a>
     </div>
     <div class="ui bottom attached tab tab-content segment active" data-tab="designer-tab-setting-page">
-      <table class="ui mini form gl-form compact xg-col-24">
+      <table class="ui mini form gl-form compact gl-col-24">
         <tbody>
         <tr v-if="editingPage">
           <td colspan="8" title="页面编码。">页面编码<i class="fa fa-question-circle"></i></td>

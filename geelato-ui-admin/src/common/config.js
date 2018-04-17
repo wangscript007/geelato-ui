@@ -5,18 +5,45 @@ class Config {
   constructor () {
     this.modules = [
       {
-        title: '项目中心',
+        title: '新线项目中心',
         code: 'xmzx',
         html: '',
         menu: [{
           title: '项目总体信息',
           class: 'fa fa-connectdevelop',
           items: [
-            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'}
+            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'},
+            {title: '我的任务', href: '/#/m/project-base/task/project-list'}
           ]
         }]
       },
-      {title: '新线规划', code: 'xxgh', html: ''},
+      {
+        title: '新线规划',
+        code: 'xxgh',
+        index: '/#/m/project-base/info/select-project',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/info/select-project">选择项目</a></div>',
+        menu: [
+          {
+            title: '项目信息管理',
+            items: [
+              {title: '使用指引', href: '/#/m/project-metro/info/guide'},
+              {title: '项目信息', href: '/#/m/project-metro/info/project-info'}
+            ]
+          },
+          {
+            title: '建设规划',
+            items: [
+              {title: '工可任务', href: '/#/m/project-metro/schedule/monthly-plan-config'},
+              {title: '工可任务执行', href: '/#/m/project-metro/schedule/monthly-plan-execution'},
+              {title: '任务执行跟踪', href: '/#/m/project/task'},
+              {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
+              {title: '指标管理', href: '/#/m/project-metro/task/quota'},
+              {title: '重大工期变更', href: '/#/m/project-metro/task/quota'}
+            ]
+          }
+        ],
+        active: true
+      },
       {
         title: '机电工程', code: 'jdgc'
       },
@@ -40,8 +67,8 @@ class Config {
       {
         title: '土建工程',
         code: 'tjgc',
-        index: '/#/m/project-metro/info/select-project',
-        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-metro/info/select-project">选择项目</a></div>',
+        index: '/#/m/project-base/info/select-project?module=tjgc',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/info/select-project?module=tjgc">选择项目</a></div>',
         menu: [
           {
             title: '项目信息管理',
@@ -100,36 +127,58 @@ class Config {
         active: true
       },
       {
+        title: 'IT项目中心',
+        code: 'itxmzx',
+        index: '/#/m/project-base/center/index?module=itxmzx',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/center/index?module=itxm">首页</a></div>',
+        menu: [{
+          title: '项目总体信息',
+          class: 'fa fa-connectdevelop',
+          items: [
+            {title: '项目总体视图', href: '/#/m/project-base/center/index'},
+            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'},
+            {title: '我的任务', href: '/#/m/project-base/task/project-list'}
+          ]
+        }],
+        active: true
+      },
+      {
         title: 'IT项目',
-        code: 'xxhxm',
-        index: '/#/m/project-metro/info/select-project',
-        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-metro/info/select-project">选择项目</a></div>',
+        code: 'itxm',
+        index: '/#/m/project-base/info/select-project?module=itxm',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/info/select-project?module=itxm">选择项目</a></div>',
         menu: [
           {
             title: '项目信息管理',
             items: [
-              {title: '使用指引', href: '/#/m/project-metro/info/guide'},
-              {title: '项目信息', href: '/#/m/project-metro/info/project-info'}
+              {title: '项目信息', href: '/#/m/project-it/info/project-info'}
             ]
           },
           {
             title: '项目进度管理',
             items: [
-              {title: '项目计划配置', href: '/#/m/project-metro/schedule/monthly-plan-config'},
-              {title: '月度计划执行', href: '/#/m/project-metro/schedule/monthly-plan-execution'},
+              {title: '计划文件配置', href: '/#/m/project-base/schedule/plan-config'},
+              {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task'},
+              {title: '月度计划执行', href: '/#/m/project-base/schedule/plan-execution'},
               {title: '任务执行跟踪', href: '/#/m/project/task'},
-              {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
-              {title: '指标管理', href: '/#/m/project-metro/task/quota'},
-              {title: '重大工期变更', href: '/#/m/project-metro/task/quota'}
+              {title: '任务标准库配置', href: '/#/m/project-it/task/task-standard'},
+              {title: '指标标准管理', href: '/#/m/project-base/quota/quota-config'},
+              {title: '成果标准管理', href: '/#/m/project-base/achievement/achievement-config'}
+            ]
+          },
+          {
+            title: '项目投资管理',
+            items: [
+              {title: '项目投资情况', href: '/#/m/project-base/invest/index'}
             ]
           },
           {
             title: '项目合同管理',
             items: [
-              {title: '合同信息', href: '/#/m/project-metro/contract/info'},
-              {title: '合同计量', href: '/#/m/project-metro/contract/measurement'},
-              {title: '合同支付', href: '/#/m/project-metro/contract/payment'},
-              {title: '合同变更', href: '/#/m/project-metro/contract/change'}
+              {title: '合同信息', href: '/#/m/project-it/contract/info'},
+              {title: '合同计量', href: '/#/m/project-it/contract/measurement'},
+              {title: '合同支付', href: '/#/m/project-base/contract/payment'},
+              {title: '合同变更', href: '/#/m/project-it/contract/change'}
             ]
           },
           {
@@ -150,7 +199,8 @@ class Config {
           {
             title: '实施配置',
             items: [
-              {title: '任务类型配置', href: '/#/m/project-metro/task/type-config'}
+              {title: '任务类型配置', href: '/#/m/project-metro/task/type-config'},
+              {title: '任务导航流程图', href: '/#/m/project-metro/task/flow-config'}
             ]
           },
           {
@@ -185,6 +235,11 @@ class Config {
           }]
       }
     ]
+    // 角色的默认首模块
+    this.defaultModule = {
+      admin: 'xmzx'
+    }
+
     this.url = {
       root: 'http://localhost:8080',
       api: 'http://localhost:8080/api',

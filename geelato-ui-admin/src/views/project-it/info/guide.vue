@@ -14,7 +14,7 @@
   import Sui from '../../../components/sui/index.vue'
   import PageLoader from '../../../components/page/page-loader.vue'
   import Message from '../../../components/message/index.vue'
-  import testData from '../../../mock/project-metro/index'
+  import testData from '../../../mock/project/project-metro/index'
 
   export default {
     props: {
@@ -29,7 +29,7 @@
       return {
         entityName: entityNames.project.projectInfo,
         model: {},
-        lines: testData.metroLine
+        lines: testData.projectGroups
       }
     },
     mounted: function () {

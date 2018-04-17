@@ -1,5 +1,5 @@
 <template>
-  <td class="gl-cell" @click="$_click">
+  <td class="gl-cell" @click="$_click" :style="{width:width}">
     <template v-if="field==='name'">
       <div class="treeNodeFlag" :style="{width: treeNodeFlagWidth}" @click="$_treeNodeClick">{{treeNodeFlag}}</div>
     </template>

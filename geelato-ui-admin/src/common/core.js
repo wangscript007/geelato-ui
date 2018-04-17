@@ -355,60 +355,100 @@ let core = {
     colorHex: config.colorHex
   },
   security: {
-    login (user, remember, success) {
-      return $.ajax(config.url.root + '/api/sys/auth/login?remember=' + remember, {
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        processData: false,
-        data: user,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-          core.ui.showMsg('账号或密码不正确！', 'error')
+    loginDemo (user, remember, success) {
+      success({
+        'sysConfig': [{
+          'creator': 1,
+          'code': 'START_APP',
+          'businessUnit': null,
+          'description': '平台启动时触发的应用',
+          'updateAt': '2018-04-14T23:57:15.000+0000',
+          'dept': null,
+          'createAt': '2018-04-14T23:57:15.000+0000',
+          'updater': 1,
+          'checkStatus': 0,
+          'name': '平台启动应用',
+          'id': 1,
+          'value': 'dev',
+          'seq': 1
+        }],
+        'user': {
+          'id': 1,
+          'createAt': '2018-04-14T23:57:15.000+0000',
+          'updateAt': '2018-04-14T23:57:15.000+0000',
+          'creator': 1,
+          'updater': 1,
+          'checkStatus': 0,
+          'businessUnit': null,
+          'dept': null,
+          'name': '超级管理员',
+          'loginName': 'super_admin',
+          'password': '',
+          'salt': '',
+          'avatar': null,
+          'description': null,
+          'plainPassword': ''
         },
-        success: success
+        'userConfig': []
       })
     },
+    login (user, remember, success) {
+      core.security.loginDemo(user, remember, success)
+      // return $.ajax(config.url.root + '/api/sys/auth/login?remember=' + remember, {
+      //   type: 'POST',
+      //   dataType: 'json',
+      //   contentType: 'application/json',
+      //   processData: false,
+      //   data: user,
+      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
+      //     core.ui.showMsg('账号或密码不正确！', 'error')
+      //   },
+      //   success: success
+      // })
+    },
     logout () {
-      $.ajax(config.url.root + '/api/sys/auth/logout', {
-        // type: 'POST',
-        // dataType: 'json',
-        // contentType: 'application/json',
-        // processData: false,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-          core.ui.showMsg('暂时不能注销！', 'warning')
-        },
-        success: function (data) {
-          console.debug('request end>>', data)
-          core.security.profile(null)
-          router.push('/login')
-          // var reloadURL = 'index.html' + window.location.search
-          // window.location.replace(reloadURL, true)
-        }
-      })
+      router.push('/login')
+      // $.ajax(config.url.root + '/api/sys/auth/logout', {
+      //   // type: 'POST',
+      //   // dataType: 'json',
+      //   // contentType: 'application/json',
+      //   // processData: false,
+      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
+      //     core.ui.showMsg('暂时不能注销！', 'warning')
+      //   },
+      //   success: function (data) {
+      //     console.debug('request end>>', data)
+      //     core.security.profile(null)
+      //     router.push('/login')
+      //     // var reloadURL = 'index.html' + window.location.search
+      //     // window.location.replace(reloadURL, true)
+      //   }
+      // })
     },
     /**
      * 同步方法，验证是否已登录
      * @returns {boolean} true or false
      */
     isLogged () {
-      let result = false
-      let self = this
-      $.ajax(config.url.root + '/api/sys/auth/isLogged', {
-        async: false,
-        // dataType: 'json',
-        // contentType: 'application/json',
-        // processData: false,
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-          self.showMsg('暂未能检查是否已登录！')
-        },
-        success: function (data) {
-          if (data) {
-            result = true
-          }
-          console.log('isLogged success')
-        }
-      })
-      return result
+      return false
+      // let result = false
+      // let self = this
+      // $.ajax(config.url.root + '/api/sys/auth/isLogged', {
+      //   async: false,
+      //   // dataType: 'json',
+      //   // contentType: 'application/json',
+      //   // processData: false,
+      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
+      //     self.showMsg('暂未能检查是否已登录！')
+      //   },
+      //   success: function (data) {
+      //     if (data) {
+      //       result = true
+      //     }
+      //     console.log('isLogged success')
+      //   }
+      // })
+      // return result
     },
     profile (jsonProflie) {
       if (jsonProflie) {

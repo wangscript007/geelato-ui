@@ -54,11 +54,17 @@ Vue.use(VueRouter)
 let moduleRoutes = [
   {path: 'page/:moduleName/:pageCode', component: page},
   // {path: 'p/:moduleName/:pageCode', component: pageContainer},
-  {path: 'platform/profile/user-profile', component: resolve => require(['../views/platform/profile/user-profile.vue'], resolve)},
+  {
+    path: 'platform/profile/user-profile',
+    component: resolve => require(['../views/platform/profile/user-profile.vue'], resolve)
+  },
   {path: 'designer', component: resolve => require(['../views/geemeta/gm-designer/editor.vue'], resolve)},
   {path: 'preview/:pageCode', component: resolve => require(['../views/geemeta/gm-designer/preview.vue'], resolve)},
-  {path: 'project/task', component: resolve => require(['../views/project/task/index.vue'], resolve)},
-  {path: 'project/requirement', component: resolve => require(['../views/project/requirement/index.vue'], resolve)},
+  {path: 'project/task', component: resolve => require(['../views/project-base/task/index.vue'], resolve)},
+  {
+    path: 'project/requirement',
+    component: resolve => require(['../views/project-base/requirement/index.vue'], resolve)
+  },
   {path: 'geelato-ui/table', component: resolve => require(['../views/platform/ui/table.vue'], resolve)}
   // {
   //   path: 'project-metro/info/select-project',
@@ -129,7 +135,6 @@ router.beforeEach((to, from, next) => {
   //     }
   //   }
   // }
-
   if (to.matched.some(r => r.meta.requireAuth)) {
     if (GL.security.profile().user) {
       next()

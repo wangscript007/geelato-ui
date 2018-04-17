@@ -7,9 +7,15 @@ export default new Vuex.Store({
   state: {
     // 平台的一些配置信息
     platform: {
+      // 用于刷新路由
+      routeViewKey: '1',
       currentModule: {},
       // 页面上方展示的信息，可为HTML格式
       headerTitle: ''
+    },
+    project: {
+      current: {},
+      last: []
     },
     // 当前正在浏览的项目
     currentProject: {},
@@ -19,6 +25,9 @@ export default new Vuex.Store({
     user: {}
   },
   mutations: {
+    [types.ROUTE_VIEW_KEY]: (state, data) => {
+      state.platform.routeViewKey = data
+    },
     [types.LOGIN]: (state, data) => {
       // localStorage.user = JSON.stringify(data.user)
       state.user = data.user

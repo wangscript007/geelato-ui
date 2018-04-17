@@ -42,7 +42,7 @@
 </template>
 <script>
   import Message from '../../../components/message/index.vue'
-  import testData from '../../../mock/project-metro/index'
+  import testData from '../../../mock/project/project-metro/index'
 
   export default {
     props: {
@@ -55,8 +55,8 @@
     },
     data () {
       return {
-        lines: testData.metroLine,
-        segments: []
+        lines: testData.projectGroups,
+        projects: []
       }
     },
     mounted: function () {
@@ -64,7 +64,7 @@
     methods: {
       $_changeLine (line) {
         console.log(line)
-        this.segments = line.segments
+        this.projects = line.projects
       }
     },
     components: {Message}

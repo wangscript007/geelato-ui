@@ -8,7 +8,7 @@
     <div v-if="editingElement.content&&current.selector.data" class="ui accordion item">
       <div class="title active">数据</div>
       <div class="content active">
-        <table class="ui mini form gl-form compact xg-col-24">
+        <table class="ui mini form gl-form compact gl-col-24">
           <tbody>
           <tr v-if="current.selector.data.name">
             <td colspan="8" title="页面展示的字段名称。">名称<i class="fa fa-question-circle"></i></td>
@@ -39,7 +39,7 @@
     <div v-if="editingElement.content&&current.selector.facade" class="ui accordion item">
       <div class="title active">外观</div>
       <div class="content active">
-        <table class="ui mini form gl-form compact xg-col-24">
+        <table class="ui mini form gl-form compact gl-col-24">
           <tbody>
           <tr v-if="current.selector.facade.format">
             <td colspan="8" title="format">格式</td>
@@ -73,7 +73,7 @@
     <div v-if="editingElement.content&&current.selector.rule" class="ui accordion item">
       <div class="title active">规则</div>
       <div class="content active">
-        <table class="ui mini form gl-form compact xg-col-24">
+        <table class="ui mini form gl-form compact gl-col-24">
           <tbody>
           <tr v-if="current.selector.rule.required&&current.selector.rule.required.active">
             <td colspan="8">必填</td>
@@ -92,7 +92,7 @@
          class="ui accordion item">
       <div class="title">权限</div>
       <div class="content">
-        <table class="ui mini form gl-form compact xg-col-24">
+        <table class="ui mini form gl-form compact gl-col-24">
           <tbody>
           <tr v-if="current.selector.auth.role">
             <td colspan="8">显示给</td>

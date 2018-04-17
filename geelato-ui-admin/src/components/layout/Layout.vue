@@ -7,6 +7,7 @@
 <script>
   import config from '../../common/config'
   import utils from '../../common/utils'
+  import * as session from '../../common/session'
 
   export default {
     data () {
@@ -17,11 +18,10 @@
         console.log('isLogged>', false)
 //        window.location.replace('/')
       }
-      let layout = utils.session('geelato.config.layout')
+      let layout = utils.session(session.GEELATO_CONFIG_LAYOUT)
       let mode = layout && layout.mode !== undefined ? layout.mode : config.layout.mode
-      let color = utils.session('geelato.config.color')
+      let color = utils.session(session.GEELATO_CONFIG_COLOR)
       this.$GL.ui.color.primary = color && color.primary ? color.primary : this.$GL.ui.color.primary
-//      console.log('this.$GL.ui.color.primary>', this.$GL.ui.color.primary)
       this.$_changeLayoutMode(mode)
     },
     mounted () {
@@ -39,7 +39,7 @@
           thisVue.currentView = resolve => require(['./LayoutHMF.vue'], resolve)
         }
         config.layout.mode = mode
-        utils.session('geelato.config.layout', config.layout)
+        utils.session(session.GEELATO_CONFIG_LAYOUT, config.layout)
       },
       $_changeLayoutModeAndReload (mode) {
         this.$_changeLayoutMode(mode)
@@ -47,7 +47,7 @@
 //        this.$router.push('/')
       },
       $_changeColorAndReload (value, oldValue) {
-        utils.session('geelato.config.color', {primary: value})
+        utils.session(session.GEELATO_CONFIG_COLOR, {primary: value})
         window.location.reload()
       }
     },

@@ -16,7 +16,7 @@
             <div class="tab-pane stage-ui active" id="tab-designer" style="background-color: #2aa198">
               <form role="form">
                 <div class="form-body">
-                  <table class="gl-form xg-col-24" data-drag-target="append" data-drag-allow="layout"
+                  <table class="gl-form gl-col-24" data-drag-target="append" data-drag-allow="layout"
                          data-drag-sortable>
                   </table>
                 </div>

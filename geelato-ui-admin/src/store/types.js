@@ -2,6 +2,8 @@
  * vuex types
  */
 
+export const ROUTE_VIEW_KEY = 'route_view_key'
+
 export const LOGIN = 'login'
 
 export const LOGOUT = 'logout'

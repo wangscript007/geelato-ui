@@ -76,104 +76,104 @@
   background-color: var(--gl-ele-title-bg-color) !important;
 }
 
-.gl-form.xg-col-24 td {
+.gl-form.gl-col-24 td, .gl-form.gl-col-24 th {
   width: calc(var(--gl-1-24) * 1);
 }
 
-.gl-form.xg-col-24 td[colspan="2"] {
+.gl-form.gl-col-24 td[colspan="2"], .gl-form.gl-col-24 th[colspan="2"] {
   width: calc(var(--gl-1-24) * 2);
 }
 
-.gl-form.xg-col-24 td[colspan="3"] {
+.gl-form.gl-col-24 td[colspan="3"], .gl-form.gl-col-24 th[colspan="3"] {
   width: calc(var(--gl-1-24) * 3);
 }
 
-.gl-form.xg-col-24 td[colspan="4"] {
+.gl-form.gl-col-24 td[colspan="4"], .gl-form.gl-col-24 th[colspan="4"] {
   width: calc(var(--gl-1-24) * 4);
 }
 
-.gl-form.xg-col-24 td[colspan="5"] {
+.gl-form.gl-col-24 td[colspan="5"], .gl-form.gl-col-24 th[colspan="5"] {
   width: calc(var(--gl-1-24) * 5);
 }
 
-.gl-form.xg-col-24 td[colspan="6"] {
+.gl-form.gl-col-24 td[colspan="6"], .gl-form.gl-col-24 th[colspan="6"] {
   width: calc(var(--gl-1-24) * 6);
 }
 
-.gl-form.xg-col-24 td[colspan="7"] {
+.gl-form.gl-col-24 td[colspan="7"], .gl-form.gl-col-24 th[colspan="7"] {
   width: calc(var(--gl-1-24) * 7);
 }
 
-.gl-form.xg-col-24 td[colspan="8"] {
+.gl-form.gl-col-24 td[colspan="8"], .gl-form.gl-col-24 th[colspan="8"] {
   width: calc(var(--gl-1-24) * 8);
 }
 
-.gl-form.xg-col-24 td[colspan="9"] {
+.gl-form.gl-col-24 td[colspan="9"], .gl-form.gl-col-24 th[colspan="9"] {
   width: calc(var(--gl-1-24) * 9);
 }
 
-.gl-form.xg-col-24 td[colspan="10"] {
+.gl-form.gl-col-24 td[colspan="10"], .gl-form.gl-col-24 th[colspan="10"] {
   width: calc(var(--gl-1-24) * 10);
 }
 
-.gl-form.xg-col-24 td[colspan="11"] {
+.gl-form.gl-col-24 td[colspan="11"], .gl-form.gl-col-24 th[colspan="11"] {
   width: calc(var(--gl-1-24) * 11);
 }
 
-.gl-form.xg-col-24 td[colspan="12"] {
+.gl-form.gl-col-24 td[colspan="12"], .gl-form.gl-col-24 th[colspan="12"] {
   width: calc(var(--gl-1-24) * 12);
 }
 
-.gl-form.xg-col-24 td[colspan="13"] {
+.gl-form.gl-col-24 td[colspan="13"], .gl-form.gl-col-24 th[colspan="13"] {
   width: calc(var(--gl-1-24) * 13);
 }
 
-.gl-form.xg-col-24 td[colspan="14"] {
+.gl-form.gl-col-24 td[colspan="14"], .gl-form.gl-col-24 th[colspan="14"] {
   width: calc(var(--gl-1-24) * 14);
 }
 
-.gl-form.xg-col-24 td[colspan="15"] {
+.gl-form.gl-col-24 td[colspan="15"], .gl-form.gl-col-24 th[colspan="15"] {
   width: calc(var(--gl-1-24) * 15);
 }
 
-.gl-form.xg-col-24 td[colspan="16"] {
+.gl-form.gl-col-24 td[colspan="16"], .gl-form.gl-col-24 th[colspan="16"] {
   width: calc(var(--gl-1-24) * 16);
 }
 
-.gl-form.xg-col-24 td[colspan="17"] {
+.gl-form.gl-col-24 td[colspan="17"], .gl-form.gl-col-24 th[colspan="17"] {
   width: calc(var(--gl-1-24) * 17);
 }
 
-.gl-form.xg-col-24 td[colspan="18"] {
+.gl-form.gl-col-24 td[colspan="18"], .gl-form.gl-col-24 th[colspan="18"] {
   width: calc(var(--gl-1-24) * 18);
 }
 
-.gl-form.xg-col-24 td[colspan="19"] {
+.gl-form.gl-col-24 td[colspan="19"], .gl-form.gl-col-24 th[colspan="19"] {
   width: calc(var(--gl-1-24) * 19);
 }
 
-.gl-form.xg-col-24 td[colspan="20"] {
+.gl-form.gl-col-24 td[colspan="20"], .gl-form.gl-col-24 th[colspan="20"] {
   width: calc(var(--gl-1-24) * 19);
 }
 
-.gl-form.xg-col-24 td[colspan="21"] {
+.gl-form.gl-col-24 td[colspan="21"], .gl-form.gl-col-24 th[colspan="21"] {
   width: calc(var(--gl-1-24) * 21);
 }
 
-.gl-form.xg-col-24 td[colspan="22"] {
+.gl-form.gl-col-24 td[colspan="22"], .gl-form.gl-col-24 th[colspan="22"] {
   width: calc(var(--gl-1-24) * 22);
 }
 
-.gl-form.xg-col-24 td[colspan="23"] {
+.gl-form.gl-col-24 td[colspan="23"], .gl-form.gl-col-24 th[colspan="23"] {
   width: calc(var(--gl-1-24) * 23);
 }
 
-.gl-form.xg-col-24 td[colspan="24"] {
+.gl-form.gl-col-24 td[colspan="24"], .gl-form.gl-col-24 th[colspan="24"] {
   width: 100%;
   text-align: left;
 }
 
-.gl-form.xg-col-24.xg-append tr:first-child td {
+.gl-form.gl-col-24.xg-append tr:first-child td {
   border-top: 0px;
 }
 
@@ -185,7 +185,7 @@
 /*background-color: #c4fafc !important;*/
 /*}*/
 
-.gl-form td {
+.gl-form td, .gl-form th {
   padding: 0.125em;
 }
 
@@ -261,6 +261,10 @@ div {
 .gl-size-small.item {
   margin: 0 !important;
   padding: 0.5em !important;
+}
+
+.gl-hidden {
+  display: none !important;
 }
 
 /*****reset*****/

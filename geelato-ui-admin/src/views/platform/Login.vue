@@ -42,6 +42,7 @@
 
 <script>
   import utils from '../../common/utils'
+  import * as session from '../../common/session'
 
   //  import * as types from '../store/types'
   export default {
@@ -54,7 +55,7 @@
     },
     computed: {
       color: function () {
-        let color = utils.session('geelato.config.color')
+        let color = utils.session(session.GEELATO_CONFIG_COLOR)
         return color && color.primary ? color.primary : this.$GL.ui.color.primary
       }
     },
@@ -102,7 +103,7 @@
         user = user.replace('@loginName', thisVue.loginName)
         user = user.replace('@password', thisVue.password)
         thisVue.$GL.security.login(user, thisVue.remember, function (data) {
-          console.debug('success....login....', data)
+          console.log('success....login....', data)
           thisVue.$GL.security.profile(data)
           // 改用了$GL存储状态数据，不用$store
           // thisVue.$store.commit(types.LOGIN, data)

@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-  import testData from '../../../mock/project-metro/index'
+  import testData from '../../../mock/project/project-metro/index'
   import QuotaItem from './project-quota-item.vue'
   import utils from '../../../common/utils'
 
