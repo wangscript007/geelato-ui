@@ -98,6 +98,10 @@
     border: 1px solid #d8d8d8;
   }
 
+  table.gl-table tr td:first-child {
+    cursor: default;
+  }
+
   table.gl-table td:first-child, table.gl-table th {
     background-color: #eeeeee;
     text-align: center;

@@ -5,8 +5,8 @@
         <i class="window minimize grey icon" aria-disabled="true" title="无需上报"></i>
       </template>
       <template v-else>
-        <i v-if="m.taskSetCode" class="eye icon" @click="$_uploadPlan(m)"></i>
-        <i v-if="!m.taskSetCode" class="arrow up icon" @click="$_uploadPlan(m)"></i>
+        <i v-if="m.taskSetCode" class="eye icon" @click="$_uploadPlan"></i>
+        <i v-if="!m.taskSetCode" class="arrow up icon" @click="$_uploadPlan"></i>
       </template>
     </template>
   </td>
@@ -38,8 +38,8 @@
       }
     },
     methods: {
-      $_uploadPlan (month) {
-        console.log('month>', month)
+      $_uploadPlan () {
+        this.$emit('upload')
       }
     },
     components: {}
@@ -49,6 +49,7 @@
   td:not(:first-of-type) {
     text-align: center !important;
   }
+
   .icon:not(.grey) {
     cursor: pointer;
   }

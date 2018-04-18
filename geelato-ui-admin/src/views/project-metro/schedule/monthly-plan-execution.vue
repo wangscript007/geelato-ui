@@ -84,7 +84,7 @@
         console.log('month>', month)
       }
     },
-    components: {TdItem}
+    components: {PlanItem: TdItem}
   }
 </script>
 <style scoped>

@@ -7,7 +7,7 @@ import router from './router'
 import store from './store/store'
 import core from './common/core.js'
 import cfg from './common/config.js'
-import data from './mock/data.js'
+import mockData from './mock/data.js'
 import projectConfig from './common/project/config.js'
 import Sui from './components/sui/index.vue'
 import Message from './components/message/index.vue'
@@ -17,13 +17,13 @@ Vue.config.productionTip = false
 
 Vue.prototype.$GL = core
 Vue.prototype.$CFG = cfg
-Vue.prototype.$TD = data
+Vue.prototype.$mockData = mockData
 
 Vue.component('sui', Sui)
 Vue.component('message', Message)
 Vue.component('layoutLr', LayoutLr)
 // 测试演示的数据
-data.setStore(store)
+mockData.setStore(store)
 // 项目管理平台配置
 projectConfig.setStore(store)
 

@@ -18,9 +18,9 @@
         <message header="说明" v-if="planYearMonth">
           当前为月度计划，对该月度计划任务项的删除及增加，不会影响计划的基准版本的任务信息。
         </message>
-        <!--<message header="说明" v-if="!planYearMonth">-->
-        <!--当前为基准版本计划，对该计划任务项的删除及增加，不会影响月度计划的基准版本的任务信息。-->
-        <!--</message>-->
+        <message header="说明" v-if="!planYearMonth">
+          当前为基准版本计划，对该计划任务项的删除及增加，不会影响月度计划的基准版本的任务信息。
+        </message>
         <gl-table :columns="taskData.columns" :data-source="taskData.dataSource"></gl-table>
       </div>
       <div slot="rightAction">
@@ -359,7 +359,7 @@
         return this.$route.query.year && this.$route.query.month ? this.$route.query.year + '年' + this.$route.query.month + '月' : ''
       },
       title: function () {
-        return this.currentPlan.name + this.planYearMonth ? '（' + this.planYearMonth + ')' : ''
+        return this.currentPlan.name + '（' + (this.planYearMonth || '基准版本WBS') + '）'
       }
     },
     mounted: function () {
