@@ -1,5 +1,5 @@
 /**
- * vuex types
+ *
  */
 
 export const GEELATO_CONFIG_LAYOUT = 'geelato.config.layout'

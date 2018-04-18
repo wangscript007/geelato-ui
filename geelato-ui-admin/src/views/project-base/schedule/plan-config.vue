@@ -93,7 +93,6 @@
   </div>
 </template>
 <script>
-  import LayoutLr from '../../../components/mix/page-layout-lr'
   import Jstree from '../../../components/mix/jstree'
   import GlTable from '../../../components/collections/table/index'
   import mockData from '../../../mock/data'
@@ -206,7 +205,7 @@
         }
       }
     },
-    components: {LayoutLr, Jstree, GlTable}
+    components: {Jstree, GlTable}
   }
 </script>
 <style scoped>

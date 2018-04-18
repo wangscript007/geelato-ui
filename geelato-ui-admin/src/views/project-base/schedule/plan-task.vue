@@ -359,7 +359,7 @@
         return this.$route.query.year && this.$route.query.month ? this.$route.query.year + '年' + this.$route.query.month + '月' : ''
       },
       title: function () {
-        return this.currentPlan.name + this.planYearMonth ? '（' + this.planYearMonth + ')' : ''
+        return this.currentPlan.name + (this.planYearMonth ? '（' + this.planYearMonth + ')' : '')
       }
     },
     mounted: function () {
