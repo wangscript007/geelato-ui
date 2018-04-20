@@ -3,7 +3,7 @@
   注意：加载的页面，需存放于本page.vue所在目录下
 -->
 <template>
-  <component v-bind:is="currentView" :opts="pageCfg.opts" :query="queryString">
+  <component :is="currentView" :opts="pageCfg.opts" :query="queryString">
     <!-- 组件在 vm.currentview 变化时改变！ -->
   </component>
 </template>

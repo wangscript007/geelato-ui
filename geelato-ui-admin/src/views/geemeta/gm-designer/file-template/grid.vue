@@ -519,7 +519,7 @@
         // 初始化操作按钮
         $(self.$el).find('#btn_new').click(function () {
           self.modalView = require('../file-template-support/tab-view.vue')
-          $(self.$el).find('.modal').modal()
+          $(self.$el).find('.modal').modal({closable: false})
         })
       },
       _genGql (queryData) {

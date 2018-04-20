@@ -24,21 +24,21 @@ class Config {
         html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/info/select-project">选择项目</a></div>',
         menu: [
           {
-            title: '项目信息管理',
+            title: '工程信息管理',
             items: [
-              {title: '使用指引', href: '/#/m/project-metro/info/guide'},
-              {title: '项目信息', href: '/#/m/project-metro/info/project-info'}
+              {title: '线路信息', href: '/#/m/project-it/info/line'},
+              {title: '项目信息', href: '/#/m/project-it/info/project-info'}
             ]
           },
           {
-            title: '建设规划',
+            title: '工作事项管理',
             items: [
-              {title: '工可任务', href: '/#/m/project-metro/schedule/monthly-plan-config'},
-              {title: '工可任务执行', href: '/#/m/project-metro/schedule/monthly-plan-execution'},
-              {title: '任务执行跟踪', href: '/#/m/project/task'},
-              {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
-              {title: '指标管理', href: '/#/m/project-metro/task/quota'},
-              {title: '重大工期变更', href: '/#/m/project-metro/task/quota'}
+              {title: '计划文件配置', href: '/#/m/project-base/schedule/plan-config'},
+              {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task-flow'},
+              {title: '任务执行跟踪', href: '/#/m/project-base/task/index'},
+              {title: '任务标准库配置', href: '/#/m/project-it/task/task-standard'},
+              {title: '指标标准管理', href: '/#/m/project-base/quota/quota-config'},
+              {title: '成果标准管理', href: '/#/m/project-base/achievement/achievement-config'}
             ]
           }
         ],
@@ -241,13 +241,14 @@ class Config {
     }
 
     this.url = {
-      root: 'http://localhost:8080',
-      api: 'http://localhost:8080/api',
-      apiMetaList: 'http://localhost:8080/api/meta/list',
-      apiMetaMultiList: 'http://localhost:8080/api/meta/multiList',
-      apiMetaSave: 'http://localhost:8080/api/meta/save',
-      apiMetaDelete: 'http://localhost:8080/api/meta/delete'
+      root: 'http://localhost:8080'
     }
+    this.url.api = this.url.root + '/api'
+    this.url.apiMetaList = this.url.api + '/meta/list'
+    this.url.apiMetaMultiList = this.url.api + '/meta/multiList'
+    this.url.apiMetaSave = this.url.api + '/meta/save'
+    this.url.apiMetaDelete = this.url.api + '/meta/delete'
+
     this.color = {
       primary: 'blue',
       secondary: 'teal',

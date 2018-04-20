@@ -37,7 +37,38 @@ class SecurityCfg {
                 ]
               }
             },
-            toolbar: {create: {}},
+            toolbar: {
+              title: '',
+              dropdown: {
+                title: '',
+                actions: [
+                  {
+                    title: '创建',
+                    click: 'modal',
+                    modal: {
+                      title: '用户信息',
+                      type: 'href',
+                      value: '/components/page/table-form.vue',
+                      opts: {
+                        entityName: 'sys_user',
+                        fields: 'id,name,loginName,description',
+                        layout: [
+                          [{id: [3, 5]}, {loginName: [3, 5]}, {name: [3, 5]}],
+                          [{description: [3, 21]}]
+                        ]
+                      }
+                    }
+                  },
+                  {title: '删除', click: 'delete', confirm: '确定删除？'},
+                  // 弹出页面提示导出多少条记录
+                  {title: '导出EXCEL', click: 'xls'},
+                  // 弹出页面提示导出多少条记录
+                  {title: '导出PDF', click: 'pdf'},
+                  // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
+                  {title: '打印', click: 'print'}
+                ]
+              }
+            },
             info: '',
             table: {
               select: {field: 'id', title: '', type: 'checkbox'},
@@ -45,7 +76,7 @@ class SecurityCfg {
                 title: '操作',
                 action: [{title: '修改', click: 'open', disable: ':id > 0'}, {title: '修改2', click: 'open'}, {
                   title: '详细',
-                  click: 'javascript:alert(\'aaaa\')'
+                  click: 'js:alert(\'aaaa\')'
                 }, {title: '修改3', click: 'open'}]
               },
               columns: [

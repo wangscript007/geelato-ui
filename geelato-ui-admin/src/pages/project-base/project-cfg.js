@@ -21,11 +21,8 @@ class ProjectCfg {
               mix: {
                 // 可用于查询的字段
                 fields: [
-                  // cop：比较操作符，eq：等于；default：默认值
                   {field: 'name', title: '名称', cop: 'eq', type: 'string', defalut: '张', placeholder: ''},
-                  // cop：比较操作符，contains：包含；lop：逻辑操作符，or：或者
                   {field: 'code', title: '编码', cop: 'contains', type: 'string', lop: 'or'},
-                  // and：并且
                   {field: 'description', title: '描述', cop: 'contains', type: 'string', lop: 'and'}
                 ]
               }
@@ -39,7 +36,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '项目信息', type: 'href', value: '/views/project-base/info/project-info.vue'}
+                    modal: {title: '项目信息', type: 'href', value: '/components/page/table-form.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'},
                   // 弹出页面提示导出多少条记录
@@ -144,7 +141,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '单位信息', type: 'href', value: '/views/project-base/info/project-unit.vue'}
+                    modal: {title: '单位信息', type: 'href', value: '/components/page/table-form.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'},
                   // 弹出页面提示导出多少条记录
@@ -250,7 +247,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '人员信息', type: 'href', value: '/views/project-base/info/project-member.vue'}
+                    modal: {title: '人员信息', type: 'href', value: '/components/page/table-form.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'},
                   // 弹出页面提示导出多少条记录

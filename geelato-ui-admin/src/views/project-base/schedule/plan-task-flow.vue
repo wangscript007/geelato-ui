@@ -12,16 +12,11 @@
       </div>
     </div>
     <!--已选择计划之后，展示计划执行、配置的管理页面-->
-    <layout-lr v-if="currentPlan.name" :title="title" rightTitle="任务详情" :min="{left:10,right:6}"
-               :max="{left:5,right:11}" @toggle="$_mixAndMaxList">
+    <layout-lr v-if="currentPlan.name" :title="title" rightTitle="任务详情" :min="{left:6,right:10}"
+               :max="{left:0,right:16}" @toggle="$_mixAndMaxList">
       <div slot="left">
-        <message header="说明" v-if="planYearMonth">
-          当前为月度计划，对该月度计划任务项的删除及增加，不会影响计划的基准版本的任务信息。
-        </message>
-        <!--<message header="说明" v-if="!planYearMonth">-->
-        <!--当前为基准版本计划，对该计划任务项的删除及增加，不会影响月度计划的基准版本的任务信息。-->
-        <!--</message>-->
-        <gl-table :columns="taskData.columns" :data-source="taskData.dataSource"></gl-table>
+        TODO 这里是一个流程图，点击流程图的节点，在该节点上方弹层展示该节点下的子任务清单，及当前节点的状态信息。
+        点击子任务清单下的任一项，则在右边展示任务的详情。若只有一个子任务时，不弹层直接在右方打开。
       </div>
       <div slot="rightAction">
         <div class="item" style="padding-top: 0;padding-bottom: 0">

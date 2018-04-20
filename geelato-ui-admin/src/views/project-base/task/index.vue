@@ -34,7 +34,7 @@
           </a>
           <div class="item" style="width: 85%">
             <div class="ui icon input" style="width: 100%">
-              <input type="text" placeholder="Search..." style="width: 100%">
+              <input type="text" placeholder="输入任务名称..." style="width: 100%">
               <i class="search icon"></i>
             </div>
           </div>
@@ -49,17 +49,27 @@
         <div class="ui accordion">
           <div class="title active">
             <i class="dropdown icon"></i>
-            任务集合
+            计划及临时任务
           </div>
           <div class="content active">
-            <div class="task-projects-XXXX">
+            <div class="ui middle aligned selection animated list">
+              <div class="item" @click="currentPlan={}">
+                <div class="description" :class="{header:!currentPlan.id}">
+                  机动任务（非计划）
+                </div>
+              </div>
+              <div class="item" v-for="item in plan.items" @click="currentPlan=item">
+                <div class="description" :class="{header:currentPlan.id===item.id}">
+                  {{item.name}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="ui accordion">
           <div class="title active">
             <i class="dropdown icon"></i>
-            周期任务
+            计划周期
           </div>
           <div class="content active">
             <div class="task-tags">
@@ -72,20 +82,16 @@
               <div>1周 2周 3周 4周</div>
             </div>
           </div>
-          <div class="title">
+        </div>
+        <div class="ui accordion">
+          <div class="title active">
             <i class="dropdown icon"></i>
-            标签
+            任务属性
           </div>
-          <div class="content">
+          <div class="content active">
             <div class="task-tags">
-            </div>
-          </div>
-          <div class="title">
-            <i class="dropdown icon"></i>
-            过滤器
-          </div>
-          <div class="content">
-            <div class="task-filters">
+              <label class="ui label">我的收藏</label>
+              <label class="ui label">临时任务</label>
             </div>
           </div>
         </div>
@@ -125,8 +131,8 @@
               单行视图 <i class="dropdown icon"></i>
               <div class="menu">
                 <a class="item">单行视图</a>
-                <a class="item">多行视图</a>
-                <a class="item">详情视图</a>
+                <a class="item">树型视图</a>
+                <!--<a class="item">详情视图</a>-->
               </div>
             </div>
             <div class="ui dropdown item">
@@ -341,16 +347,28 @@
   </div>
 </template>
 <script>
-//  import taskForm from './form'
+  //  import taskForm from './form'
   import taskSet from './task-set'
 
   export default {
     data () {
       return {
+        currentPlan: {},
         // 最大时，不展示查询区
         isMax: false,
         // 页面状态 editing querying taskSet
         pageStage: 'querying'
+      }
+    },
+    computed: {
+//      projectConfig: function () {
+//        return prjCfg.get(this.$route.query.module)
+//      },
+      projectGroups: function () {
+        return this.$mockData.get(this.$route.query.module).projectGroups
+      },
+      plan: function () {
+        return this.$mockData.get(this.$route.query.module).plan
       }
     },
     mounted: function () {

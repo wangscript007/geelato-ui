@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-  import testData from '../../../mock/project/project-metro/index'
+  import testData from '../../../mock/project/project-metro/tjgc'
   import TdItem from './plan-work-point-item.vue'
 
   export default {

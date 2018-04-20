@@ -1,6 +1,13 @@
 /**************************************
  * 重置第三方插件的样式
  *************************************/
+/********* semantic ui *************/
+.ui.table thead th {
+  padding-top: 0.62857143em;
+  padding-bottom: 0.62857143em;
+}
+
+
 /********* Jstree *************/
 .jstree-default .jstree-clicked {
   border: 0;

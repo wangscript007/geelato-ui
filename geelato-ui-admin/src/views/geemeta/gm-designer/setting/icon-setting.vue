@@ -865,7 +865,7 @@
     mounted: function () {
       let thisVue = this
       $(this.$el).find('i').click(function (e) {
-        thisVue.$emit('callback', {selected: {className: thisVue.color + ' ' + e.target.className}})
+        thisVue.$emit('callModal', {selected: {className: thisVue.color + ' ' + e.target.className}})
       })
 //      $(this.$el).parent().sticky({
 //        context: '#selected-icon-area'

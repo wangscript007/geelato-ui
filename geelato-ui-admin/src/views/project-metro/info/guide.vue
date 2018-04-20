@@ -14,7 +14,7 @@
   import Sui from '../../../components/sui/index.vue'
   import PageLoader from '../../../components/page/page-loader.vue'
   import Message from '../../../components/message/index.vue'
-  import testData from '../../../mock/project/project-metro/index'
+  import testData from '../../../mock/project/project-metro/tjgc'
 
   export default {
     props: {
@@ -59,7 +59,7 @@
       $_save () {
         let thisVue = this
         this.$GL.data.save(thisVue.entityName, thisVue.model).then(function () {
-          thisVue.$emit('callback', {refreshTable: {}, close: {}})
+          thisVue.$emit('callModal', {refreshTable: {}, close: {}})
         })
       }
     },

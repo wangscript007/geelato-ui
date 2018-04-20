@@ -2,16 +2,18 @@
   <div class="gl-page-content-wrapper">
     <layout-lr title="计划列表" rightTitle="计划配置" :leftActions="leftActions">
       <div slot="left">
-        <div class="ui middle aligned divided  selection list">
-          <div class="item" v-for="item in plan.items">
-            <div class="description" @click="currentPlan=item">{{item.name}}</div>
+        <div class="ui middle aligned divided selection animated list">
+          <div class="item" v-for="item in plan.items" @click="currentPlan=item">
+            <div class="description" :class="{header:currentPlan.id===item.id}">
+              {{item.name}}
+            </div>
           </div>
         </div>
       </div>
       <div slot="rightAction">
         <div class="item">
           <router-link
-            :to="{ path: '/m/project-base/schedule/plan-task', query: { id: currentPlan.id,name: currentPlan.name }}"
+            :to="{ path: '/m/project-base/schedule/'+projectConfig.page.planConfig, query: { id: currentPlan.id,name: currentPlan.name }}"
             class="ui mini button" :class="$GL.ui.color.primary">编制计划
           </router-link>
         </div>
@@ -102,6 +104,7 @@
     props: {},
     data () {
       return {
+        listItemClass: 'header',
         currentPlan: {},
         // 最大时，不展示查询区
         isMax: false,

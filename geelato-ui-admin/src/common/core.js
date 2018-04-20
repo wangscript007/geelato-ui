@@ -189,7 +189,7 @@ let core = {
         '@fs': fieldNames || '*'
       }
       $.extend(gql[entityName], keyValues)
-      return core.data.queryByGql(gql)
+      return core.data.queryByGql(gql, withMeta)
     },
     /**
      * 批量查询
@@ -304,14 +304,16 @@ let core = {
      * @param vueData
      */
     openVue: function (srcVue, vueComponent, vueConfig, callbackSet) {
-      console.log('vueComponent >', vueComponent)
-      console.log('vueConfig >', vueConfig)
-      console.log('callbackSet >', callbackSet)
+      console.log('openVue > vueComponent >', vueComponent)
+      console.log('openVue > vueConfig >', vueConfig)
+      console.log('openVue > callbackSet >', callbackSet)
       // $root对应App.vue的上线，srcVue.$root.$children[0]才对应APP.vue
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalBody', vueComponent)
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', vueConfig || {})
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'callbackSet', callbackSet || {})
-      $('#app-root-modal').modal('setting', 'transition', 'fade').modal('show')
+      // $('#app-root-modal').modal('setting', 'transition', 'fade').modal('show')
+      //  TODO 改成动态创建，并将ID传给modalOpts
+      $('#app-root-modal').modal({closable: false, allowMultiple: true}).modal('show')
     },
     /**
      *

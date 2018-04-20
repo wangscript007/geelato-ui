@@ -1,5 +1,6 @@
 class Modal {
-  constructor (type, value, query) {
+  constructor (title, type, value, query) {
+    this.title = title
     this.type = type
     this.value = value
     this.query = query

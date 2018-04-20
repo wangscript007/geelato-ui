@@ -65,7 +65,7 @@
       $_save () {
         let thisVue = this
         this.$GL.data.save(thisVue.entityName, thisVue.model).then(function () {
-          thisVue.$emit('callback', {refreshTable: {}, close: {}})
+          thisVue.$emit('callModal', {refreshTable: {}, close: {}})
         })
       }
     },

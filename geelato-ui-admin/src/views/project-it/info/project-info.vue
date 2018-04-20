@@ -24,7 +24,7 @@
   import entityNames from '../../../pages/entities'
   import Sui from '../../../components/sui/index.vue'
   import PageLoader from '../../../components/page/page-loader.vue'
-  import testData from '../../../mock/project/project-metro/index'
+  import testData from '../../../mock/project/project-metro/tjgc'
   import ProjectInfoBase from '../../project-base/info/project-info-base.vue'
 
   export default {
@@ -70,7 +70,7 @@
       $_save () {
         let thisVue = this
         this.$GL.data.save(thisVue.entityName, thisVue.model).then(function () {
-          thisVue.$emit('callback', {refreshTable: {}, close: {}})
+          thisVue.$emit('callModal', {refreshTable: {}, close: {}})
         })
       }
     },

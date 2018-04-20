@@ -1,29 +1,53 @@
 let data = {}
 data.projectGroups = [
-  {name: '咨询服务类', shortName: '规划咨询', code: 'ZF', projects: []},
-  {name: '运营类', shortName: '运营类', code: 'YY', projects: []},
-  {name: '建设类', shortName: '建设类', code: 'JS', projects: []},
-  {name: '企业管理类', shortName: '企业管理类', code: 'QY', projects: []},
-  {name: '资源开发类', shortName: '资源开发类', code: 'ZY', projects: []},
-  {name: '硬件网络类', shortName: '资源开发类', code: 'YW', projects: []}
+  {name: '轨道交通一号线', shortName: '一号线', code: 'L011', projects: []},
+  {name: '轨道交通二号线', shortName: '二号线', code: 'L021', projects: []},
+  {name: '轨道交通三号线', shortName: '三号线', code: 'L031', projects: []},
+  {name: '轨道交通四号线', shortName: '四号线', code: 'L041', projects: []},
+  {name: '轨道交通一号线二期', shortName: '四号线', code: 'L012', projects: []}
 ]
 
 data.projects = [
-  {name: 'it项目规划1期', code: 'ZX001', projectGroups: 'ZF', inited: false},
-  {name: 'it项目规划2期', code: 'ZX002', projectGroups: 'ZF'},
-  {name: '运营一体化1期', code: 'YY001', projectGroups: 'YY'},
-  {name: '运营一体化2期', code: 'YY002', projectGroups: 'YY'},
-  {name: '工程一体化1期', code: 'JD004', projectGroups: 'JS'},
-  {name: '工程一体化2期', code: 'JD004', projectGroups: 'JS'},
-  {name: '机房建设1期', code: 'YW001', projectGroups: 'YW'},
-  {name: '机房建设2期', code: 'YW002', projectGroups: 'YW'}
+  {name: '土建施工1标', code: 'TJ001', projectGroups: 'L011', inited: false},
+  {name: '土建施工2标', code: 'TJ002', projectGroups: 'L011'},
+  {name: '土建施工3标', code: 'TJ003', projectGroups: 'L011'},
+  {name: '土建施工4标', code: 'TJ004', projectGroups: 'L011'},
+  {name: '土建施工5标', code: 'TJ005', projectGroups: 'L011'},
+  {name: '土建施工6标', code: 'TJ006', projectGroups: 'L011'},
+  {name: '土建施工7标', code: 'TJ007', projectGroups: 'L011'},
+  {name: '土建施工1标', code: 'TJ001', projectGroups: 'L021'},
+  {name: '土建施工2标', code: 'TJ002', projectGroups: 'L021'},
+  {name: '土建施工3标', code: 'TJ003', projectGroups: 'L021'},
+  {name: '土建施工1标', code: 'TJ001', projectGroups: 'L031'},
+  {name: '土建施工2标', code: 'TJ002', projectGroups: 'L031'},
+  {name: '土建施工3标', code: 'TJ003', projectGroups: 'L031'},
+  {name: '土建施工4标', code: 'TJ004', projectGroups: 'L031'},
+  {name: '机电工程1标', code: 'JD001', projectGroups: 'L041'},
+  {name: '机电工程2标', code: 'JD002', projectGroups: 'L041'},
+  {name: '机电工程3标', code: 'JD003', projectGroups: 'L041'},
+  {name: '机电工程4标', code: 'JD004', projectGroups: 'L041'},
+  {name: '机电工程5标', code: 'JD005', projectGroups: 'L041'},
+  {name: '机电工程6标', code: 'JD006', projectGroups: 'L021'},
+  {name: '机电工程7标', code: 'JD007', projectGroups: 'L011'},
+  {name: '机电工程1标', code: 'JD001', projectGroups: 'L021'},
+  {name: '机电工程2标', code: 'JD002', projectGroups: 'L012'},
+  {name: '机电工程3标', code: 'JD003', projectGroups: 'L012'},
+  {name: '机电工程1标', code: 'JD001', projectGroups: 'L012'},
+  {name: '机电工程2标', code: 'JD002', projectGroups: 'L041'},
+  {name: '机电工程3标', code: 'JD003', projectGroups: 'L041'},
+  {name: '机电工程4标', code: 'JD004', projectGroups: 'L041'}
 ]
 
 data.plan = {}
 data.plan.items = [
-  {id: 'IUYHEGDT', name: '工程一体化1期项目计划'},
-  {id: 'IKJSYEGV', name: '运营一体化1期项目计划'},
-  {id: 'QTSBDIUY', name: '机房建设1期计划'}
+  {id: 'UKDIEWJY', name: '线网规划'},
+  {id: 'IDGTAUSY', name: '2013年建设规划'},
+  {id: 'IDGTWSHY', name: '2018年建设规划'},
+  {id: 'WOSIAUSD', name: '2023年建设规划'},
+  {id: 'IUYHEGDT', name: '一号线工可计划'},
+  {id: 'IKJSYEGV', name: '二号线工可计划'},
+  {id: 'QTSBDIUY', name: '三号线工可计划'},
+  {id: 'UTEYGDGA', name: '四号线工可计划'}
 ]
 
 data.plan.yearItems = [

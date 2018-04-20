@@ -1,4 +1,5 @@
-import tjgc from './project/project-metro/index.js'
+import tjgc from './project/project-metro/tjgc.js'
+import xxgh from './project/project-metro/xxgh.js'
 import itxm from './project/project-it/index.js'
 
 class Data {
@@ -7,6 +8,7 @@ class Data {
     this.currentModule = {}
     this.module = {}
     this.module.tjgc = tjgc
+    this.module.xxgh = xxgh
     this.module.itxm = itxm
     this.module.itxmzx = itxm
   }
@@ -20,7 +22,12 @@ class Data {
   }
 
   get () {
-    return this.module[this.store.state.platform.currentModule.code]
+    let module = this.module[this.store.state.platform.currentModule.code]
+    if (!module) {
+      console.error('未配置模块：' + this.store.state.platform.currentModule.code + '，请检查mock下的配置！')
+      return {}
+    }
+    return module
   }
 }
 

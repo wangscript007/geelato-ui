@@ -1,3 +1,8 @@
+/**
+ *           // cop：比较操作符，eq：等于；default：默认值
+ // cop：比较操作符，contains：包含；lop：逻辑操作符，or：或者
+ // and：并且
+ */
 class Column {
   constructor (field, title, type, visible, format) {
     this.name = 'column'

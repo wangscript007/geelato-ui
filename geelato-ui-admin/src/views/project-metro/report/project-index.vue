@@ -42,7 +42,7 @@
 </template>
 <script>
   import Message from '../../../components/message/index.vue'
-  import testData from '../../../mock/project/project-metro/index'
+  import testData from '../../../mock/project/project-metro/tjgc'
 
   export default {
     props: {
