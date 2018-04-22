@@ -1,5 +1,3 @@
-// import staticCfgManager from '../staticCfgManager'
-
 class SecurityCfg {
   constructor () {
     this.pageCfgs = [
@@ -53,19 +51,19 @@ class SecurityCfg {
                         entityName: 'sys_user',
                         fields: 'id,name,loginName,description',
                         layout: [
-                          [{id: [3, 5]}, {loginName: [3, 5]}, {name: [3, 5]}],
-                          [{description: [3, 21]}]
+                          [{name: [4, 8]}, {loginName: [4, 8]}],
+                          [{description: [4, 20]}]
                         ]
                       }
                     }
                   },
-                  {title: '删除', click: 'delete', confirm: '确定删除？'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出EXCEL', click: 'xls'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出PDF', click: 'pdf'},
-                  // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                  {title: '打印', click: 'print'}
+                  {title: '删除', click: 'delete', confirm: '确定删除？'}
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出EXCEL', click: 'xls'},
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出PDF', click: 'pdf'},
+                  // // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
+                  // {title: '打印', click: 'print'}
                 ]
               }
             },
@@ -74,14 +72,38 @@ class SecurityCfg {
               select: {field: 'id', title: '', type: 'checkbox'},
               dropdown: {
                 title: '操作',
-                action: [{title: '修改', click: 'open', disable: ':id > 0'}, {title: '修改2', click: 'open'}, {
-                  title: '详细',
-                  click: 'js:alert(\'aaaa\')'
-                }, {title: '修改3', click: 'open'}]
+                actions: [
+                  {
+                    title: '修改',
+                    click: 'modal',
+                    modal: {
+                      title: '用户信息',
+                      type: 'href',
+                      value: '/components/page/table-form.vue',
+                      opts: {
+                        entityName: 'sys_user',
+                        fields: 'id,name,loginName,description',
+                        layout: [
+                          [{loginName: [4, 8]}, {name: [4, 8]}],
+                          [{description: [4, 20]}]
+                        ],
+                        model: {id: '@.id'}
+                      }
+                    }
+                  }
+                  // {
+                  //   title: '详细',
+                  //   click: 'modal',
+                  //   modal: {
+                  //     type: 'page',
+                  //     value: 'sys_user_list_detail',
+                  //     opts: {}
+                  //   }
+                  // }
+                ]
               },
               columns: [
-                // {field: 'id', title: '', type: 'checkbox'},
-
+                {field: 'id', title: '', visible: false},
                 {field: 'name', title: '名称', type: 'string', format: ''},
                 {field: 'loginName', title: '登录名', type: 'string', format: ''},
                 {field: 'description', title: '描述', type: 'string', format: ''}
@@ -99,9 +121,13 @@ class SecurityCfg {
         component: '/components/page/table',
         opts: {
           ui: {
-            mode: 'select',
+            // mode: 'select',
             title: '角色信息',
             entity: 'sys_role',
+            layout: {
+              type: 'horizontal',
+              max: 'table'
+            },
             query: {
               // 是否隐藏整个查询区域
               show: true,
@@ -128,14 +154,24 @@ class SecurityCfg {
               dropdown: {
                 title: '',
                 actions: [
-                  {title: '创建', click: 'modal', modal: {}},
-                  {title: '删除', click: 'delete', confirm: '确定删除？'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出EXCEL', click: 'xls'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出PDF', click: 'pdf'},
-                  // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                  {title: '打印', click: 'print'}
+                  {
+                    title: '创建',
+                    click: 'modal',
+                    modal: {
+                      title: '角色管理',
+                      type: 'href',
+                      value: '/components/page/table-form.vue',
+                      opts: {
+                        entityName: 'sys_role',
+                        fields: 'id,name,code,description',
+                        layout: [
+                          [{name: [4, 8]}, {code: [4, 8]}],
+                          [{description: [4, 20]}]
+                        ]
+                      }
+                    }
+                  },
+                  {title: '删除', click: 'delete', confirm: '确定删除？'}
                 ]
               }
             },
@@ -153,17 +189,27 @@ class SecurityCfg {
               dropdown: {
                 title: '操作',
                 actions: [
-                  {title: '修改', click: 'open', disable: 'javascript:@.id > 0'},
+                  // {title: '修改', click: 'open', visible: 'js:@.id'},
                   {
-                    title: '详细',
+                    title: '修改',
                     click: 'modal',
                     modal: {
-                      type: 'page',
-                      value: 'sys_role_list_detail',
-                      query: {}
+                      title: '角色管理',
+                      type: 'href',
+                      value: '/components/page/table-form.vue',
+                      opts: {
+                        entityName: 'sys_role',
+                        fields: 'id,name,code,description',
+                        layout: [
+                          [{name: [4, 8]}, {code: [4, 8]}],
+                          [{description: [4, 20]}]
+                        ],
+                        model: {id: '@.id'}
+                      }
                     }
-                  },
-                  {title: '直接调用js', click: 'javascript:alert(\'aaaa\')'}]
+                  }
+                  // {title: '直接调用js', click: 'js:alert(\'aaaa\')'}
+                ]
               },
               columns: [
                 {field: 'id', title: '序号', visible: false},
@@ -211,6 +257,7 @@ class SecurityCfg {
   }
 }
 
-let instance = new SecurityCfg()
+let
+  instance = new SecurityCfg()
 // staticCfgManager.register(instance)
 export default instance

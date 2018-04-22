@@ -2,7 +2,7 @@
   CRUD的动态表单页面，依据实体自动获取元数据，结合配置的字段（包括字段布局信息）进行渲染
 -->
 <template>
-  <table class="ui small compact form gl-form gl-col-24" v-show="isMounted">
+  <table class="ui small compact form gl-form gl-col-24">
     <thead></thead>
     <tbody>
     <tr v-for="row in opts.layout">
@@ -10,10 +10,10 @@
         <td :colspan="Object.values(cell)[0][0]">{{item.title}}</td>
         <td :colspan="Object.values(cell)[0][1]">
           <template v-if="item.type==='String'&&item.charMaxLength<255">
-            <input type="text">
+            <input type="text" v-model="form[Object.keys(cell)[0]]">
           </template>
           <template v-else-if="item.type==='String'&&item.charMaxLength>255">
-            <textarea rows="5"></textarea>
+            <textarea rows="5" v-model="form[Object.keys(cell)[0]]"></textarea>
           </template>
         </td>
       </template>
@@ -39,7 +39,8 @@
 //              [{name: [3, 9]}, {name: [3, 9]}],
 //              [{id: [3, 9]}, {loginName: [3, 9]}],
 //              [{description: [3, 21]}]
-            ]
+            ],
+            model: {}
           }
         }
       }
@@ -47,37 +48,47 @@
     data () {
       return {
         meta: [],
-        isMounted: false
+        form: {}
       }
     },
     computed: {
+      /**
+       * 将元数据数组转成对象格式，如 {id: {…}, name: {…}, loginName: {…}, description: {…}}
+       * */
       metaMap: function () {
         let result = {}
         for (let i in this.meta) {
           let field = this.meta[i]
           result[field.name] = field
         }
-        console.log(result)
+//        console.log('元数据：', result)
         return result
       }
     },
     created: function () {
-      let theVue = this
-      this.$GL.data.query(this.opts.entityName, {id: -1}, this.opts.fields, true).then(function (res) {
-        theVue.meta = res.meta
-      })
       this.$_loadData()
       this.$_setModal()
     },
     mounted: function () {
-      this.isMounted = true
     },
     methods: {
       $_loadData () {
+        let theVue = this
+        let id = this.opts.model && this.opts.model.id ? this.opts.model.id : -1
+        this.$GL.data.query(theVue.opts.entityName, {id: id}, theVue.opts.fields, true).then(function (res) {
+//          console.log('res>', res)
+          theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
+          theVue.meta = res.meta
+        })
+//        console.log('this.opts>', this.opts)
       },
       $_save () {
+        let thisVue = this
         if (typeof this.$parent.$_close === 'function') {
-          this.$parent.$_close()
+          this.$GL.data.save(this.opts.entityName, this.form).then(function (res) {
+//            console.log('save form res>', res)
+            thisVue.$parent.$_close()
+          })
         }
       },
       /**
@@ -89,14 +100,8 @@
           return
         }
         modal.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
-        modal.$_addAction({
-          name: '$_submit',
-          title: '暂存',
-          fn: function () {
-            alert('submit')
-          }
-        })
-        modal.$_addAction({name: '$_cancel', title: '取消', fn: modal.$_close})
+        // $_cancel是modal内容的方法，这里可以简写成：{name: '$_cancel'}
+        modal.$_addAction({name: '$_cancel', title: '取消', fn: modal.$_cancel})
         modal.$_updateActions()
       }
     },

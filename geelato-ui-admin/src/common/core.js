@@ -133,11 +133,11 @@ let core = {
      * @param keyValues Object类型
      * @returns {*}
      */
-    save: function (entityName, keyValues) {
-      return core.data.update(config.url.apiMetaSave, entityName, keyValues, '保存成功')
+    save: function (entityName, keyValues, successMsg) {
+      return core.data.update(config.url.apiMetaSave, entityName, keyValues, successMsg || '保存成功')
     },
-    delete: function (entityName, keyValues) {
-      return core.data.update(config.url.apiMetaDelete, entityName, keyValues, '删除成功')
+    delete: function (entityName, keyValues, successMsg) {
+      return core.data.update(config.url.apiMetaDelete, entityName, keyValues, successMsg || '删除成功')
     },
     update: function (url, entityName, keyValues, successMsg) {
       let data = {

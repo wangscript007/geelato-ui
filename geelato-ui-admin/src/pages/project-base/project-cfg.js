@@ -143,13 +143,13 @@ class ProjectCfg {
                     click: 'modal',
                     modal: {title: '单位信息', type: 'href', value: '/components/page/table-form.vue'}
                   },
-                  {title: '删除', click: 'delete', confirm: '确定删除？'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出EXCEL', click: 'xls'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出PDF', click: 'pdf'},
-                  // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                  {title: '打印', click: 'print'}
+                  {title: '删除', click: 'delete', confirm: '确定删除？'}
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出EXCEL', click: 'xls'},
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出PDF', click: 'pdf'},
+                  // // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
+                  // {title: '打印', click: 'print'}
                 ]
               }
             },
@@ -249,13 +249,13 @@ class ProjectCfg {
                     click: 'modal',
                     modal: {title: '人员信息', type: 'href', value: '/components/page/table-form.vue'}
                   },
-                  {title: '删除', click: 'delete', confirm: '确定删除？'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出EXCEL', click: 'xls'},
-                  // 弹出页面提示导出多少条记录
-                  {title: '导出PDF', click: 'pdf'},
-                  // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                  {title: '打印', click: 'print'}
+                  {title: '删除', click: 'delete', confirm: '确定删除？'}
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出EXCEL', click: 'xls'},
+                  // // 弹出页面提示导出多少条记录
+                  // {title: '导出PDF', click: 'pdf'},
+                  // // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
+                  // {title: '打印', click: 'print'}
                 ]
               }
             },

@@ -22,8 +22,8 @@
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
-              <button class="ui primary basic button">查询</button>&nbsp;
-              <button class="ui primary basic button">重置</button>
+              <button class="ui mini basic button" :class="$GL.ui.color.primary">查询</button>&nbsp;
+              <button class="ui mini basic button" :class="$GL.ui.color.primary">重置</button>
             </div>
           </div>
         </div>
@@ -38,8 +38,8 @@
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_submit">查询</button>&nbsp;
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="reset">重置</button>
+              <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit">查询</button>&nbsp;
+              <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="reset">重置</button>
             </div>
           </div>
         </div>
@@ -63,7 +63,10 @@
             <!--<button class="ui mini button">删除</button>&nbsp;-->
             <!--<button class="ui mini button">导出</button>-->
             <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="item.click==='delete'?$GL.ui.color.negative:$GL.ui.color.primary"
+                      @click="$_click(item,$event)">
+                {{item.title}}
+              </button>&nbsp;
             </template>
             <!--<div class="ui teal mini buttons">-->
             <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em">操作</div>-->
@@ -83,7 +86,7 @@
         <div v-html="opts.ui.tips.html"></div>
       </div>
       <!--结果列表-->
-      <table class="ui compact table">
+      <table class="ui selectable compact table gl-compact">
         <thead>
         <tr>
           <th style="width: 1em">
@@ -101,24 +104,30 @@
         <tbody v-if="queryResult.data&&queryResult.data.length>0">
         <tr v-for="(rowItem,rowIndex) in queryResult.data">
           <td>
-            <div class="ui child checkbox" v-if="opts.ui.mode!=='select'">
-              <input type="checkbox" data-rowId="rowItem[opts.ui.table.select.field]">
+            <div class="ui child checkbox"
+                 v-if="opts.ui.mode!=='select'">
+              <input type="checkbox" :data-rowId="rowItem[opts.ui.table.select.field]">
               <label></label>
             </div>
             <div v-if="opts.ui.mode==='select'">
               <div class="ui mini buttons" :class="$GL.ui.color.primary">
-                <div class="ui button" @click="$_selectRow(rowItem)">点选</div>
+                <div class="ui button" @click="$_selectRow(rowItem)">选择</div>
               </div>
             </div>
           </td>
           <td>
             <div class="ui mini buttons" :class="$GL.ui.color.primary">
+              <div class="ui button"
+                   v-if="opts.ui.table.dropdown.actions.length===1?item=opts.ui.table.dropdown.actions[0]:''"
+                   @click="$_click(item,$event,rowItem)">{{item.title}}
+              </div>
               <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em"></div>-->
-              <div class="ui floating dropdown icon button">
+              <div class="ui floating dropdown icon button" v-else-if="opts.ui.table.dropdown.actions.length>1">
                 <i class="dropdown icon"></i>
                 <div class="menu">
                   <template v-for="(item, index) in opts.ui.table.dropdown.actions">
-                    <div class="item" @click="$_click(item,$event,rowItem)" v-if="$_eval(item.hidden,rowItem)!==true">
+                    <div class="item" @click="$_click(item,$event,rowItem)"
+                         v-if="$_eval(item.visible,rowItem)!==true">
                       {{item.title}}
                     </div>
                   </template>
@@ -133,7 +142,8 @@
         </tbody>
         <tbody v-else>
         <tr>
-          <td :colspan="opts.ui.table.columns.length+1" style="text-align: center">没有记录</td>
+          <td class="warning" :colspan="opts.ui.table.columns.length+1" style="text-align: center;height: 2.6em">没有记录
+          </td>
         </tr>
         </tbody>
       </table>
@@ -171,6 +181,7 @@
         columns: [],
         visibleColumns: [],
         selectedRows: [],
+        checkedIds: [],
         currentTreeNode: {id: ''},
         lastGql: {}
       }
@@ -183,7 +194,7 @@
     },
     updated () {
       $(this.$el).find('.ui.dropdown').dropdown()
-      this.initCheckbox()
+      this.$_initCheckbox()
     },
     methods: {
       loadData () {
@@ -219,7 +230,7 @@
       toggleSidebar () {
         this.isMax = !this.isMax
       },
-      initCheckbox () {
+      $_initCheckbox () {
         let thisVue = this
         var $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
         var $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
@@ -236,9 +247,12 @@
           onChange: function () {
             let allChecked = true
             let allUnchecked = true
+//            console.log('change checkbox >', this)
+            thisVue.checkedIds = []
             // check to see if all other siblings are checked or unchecked
             $childCheckbox.each(function () {
               if ($(this).checkbox('is checked')) {
+                thisVue.checkedIds.push(this.getElementsByTagName('input')[0].getAttribute('data-rowId'))
                 allUnchecked = false
               } else {
                 allChecked = false
@@ -254,6 +268,14 @@
             }
           }
         })
+      },
+      $_resetCheckbox () {
+        let thisVue = this
+        thisVue.checkedIds = []
+        var $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
+        var $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
+        $masterCheckbox.checkbox('uncheck')
+        $childCheckbox.checkbox('uncheck')
       },
       $_eval (expression, ctx) {
         return utils.invoke(expression, ctx)
@@ -279,7 +301,9 @@
         this.currentTreeNode = data
       },
       $_click (action, event, rowItem) {
-        console.log('click action>', action)
+        console.log('click action >', action)
+        console.log('click event  >', event)
+        console.log('click rowItem>', rowItem)
         let thisVue = this
         switch (action.click) {
           case 'modal':
@@ -294,6 +318,10 @@
                 refreshTable: function () {
                   // 在modal中注册刷新操作
                   thisVue.$_submit()
+                },
+                close: function () {
+                  // 在modal中注册刷新操作
+                  thisVue.$_submit()
                 }
               })
             } else {
@@ -302,10 +330,11 @@
             break
           case 'delete':
             let msg = action.confirm || '确定删除'
-            if (confirm(msg)) {
-              console.log('rowItem>', rowItem)
-              let kv = rowItem ? {id: rowItem.id} : {}
+            if (confirm(msg) && thisVue.checkedIds.length !== 0) {
+//              console.log('checkedIds>', thisVue.checkedIds)
+              let kv = {'id|in': thisVue.checkedIds.join(',')}
               thisVue.$GL.data.delete(thisVue.opts.ui.entity, kv).then(function () {
+                thisVue.$_resetCheckbox()
                 thisVue.$_submit()
               })
             }

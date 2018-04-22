@@ -5,7 +5,7 @@
     </div>
     <div class="scrolling content">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
-      <component :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts" @callModal="$_invokeCallbackSet">
+      <component :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts">
         正在加载...
       </component>
     </div>
@@ -30,6 +30,7 @@
         modalOpts: {title: '', actions: []},
         // 回调事件集合 格式如：{selected:function(data){ // do something }}
         callbackSet: {},
+        // 页面下方的操作按钮
         actions: {},
         isMounted: false
       }
@@ -44,55 +45,51 @@
     },
     methods: {
       /**
-       * @param e {内置事件1:数据，内置事件2：数据，自定义事件名1:数据1，自定义事件名2:数据2}，内置事件如：{close:{}},自定义事件如：{selected:{id:'xx',name,'张三',age:13}}
+       * 关键窗口，并调用钩子 close
+       * @param e
        */
-      $_invokeCallbackSet: function (e) {
-        let thisVue = this
-        if (this.callbackSet) {
-          if (typeof e === 'object') {
-            for (var eventName in e) {
-              // 若自定义的事件与内置事件重名，则取自定义的事件
-              var fn = thisVue.callbackSet[eventName] || thisVue['$_' + eventName]
-              if (fn) {
-                let params = e[eventName]
-                let nextFun = fn(params)
-                // 若返回modal内置的事件，则为作事件链执行
-                if (nextFun === 'close') {
-                  this.$_close()
-                }
-              } else {
-                console.error('不存在函数：' + eventName + '，未能在modal中执行回调。')
-              }
-            }
-          }
-        }
-//        console.log('modal callback event>', e)
-//        if (this.onSelected && typeof this.onSelected === 'function') {
-//          this.onSelected(data)
-//        }
-//        this.$emit('selected', data)
-      },
-      $_close: function () {
+      $_close: function (e) {
         $('#app-root-modal').modal('hide')
+        if (typeof this.callbackSet.close === 'function') {
+          this.callbackSet.close(e)
+        }
+      },
+      /**
+       * 关键窗口，并调用钩子 cancel
+       * @param e
+       */
+      $_cancel: function (e) {
+        $('#app-root-modal').modal('hide')
+        if (typeof this.callbackSet.cancel === 'function') {
+          this.callbackSet.cancel(e)
+        }
       },
       $_doAction: function (name) {
-//        console.log('this', this)
-//        console.log('actionName', name)
         this[name]()
       },
-//      $_removeAction: function (name) {
-//        if (!this.$_checkAction(name)) {
-//          return
-//        }
-//        delete this.actions[name]
-//        delete this[name]
-//      },
       $_addAction: function ({name, title, color, fn}) {
         if (!this.$_checkAction(name)) {
           return
         }
-        this.actions[name] = {title: title, color: color || (name === '$_cancel' ? 'negative' : 'primary')}
-        this[name] = fn
+        if (name === '$_cancel' || name === 'cancel') {
+          this.actions[name] = {
+            title: title || '取消',
+            color: color || 'negative'
+          }
+          this[name] = fn || this.$_cancel
+        } else if (name === '$_close' || name === 'close') {
+          this.actions[name] = {
+            title: title || '关闭',
+            color: color || 'primary'
+          }
+          this[name] = fn || this.$_close
+        } else {
+          this.actions[name] = {
+            title: title,
+            color: color || 'primary'
+          }
+          this[name] = fn
+        }
       },
       $_updateActions () {
         this.$forceUpdate()

@@ -106,7 +106,7 @@ utils.invoke = function (obj, keyValues) {
     objCopy = {}
     $.extend(true, objCopy, obj)
     for (var i in objCopy) {
-      console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
+      // console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
       objCopy[i] = utils.invoke(objCopy[i], keyValues)
     }
     return objCopy
