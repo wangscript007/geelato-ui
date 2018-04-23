@@ -64,6 +64,8 @@
   </div>
 </template>
 <script>
+  /* eslint-disable no-undef */
+
   import { BaiduMap } from '../../../common/map'
   import prjCfg from '../../../common/project/config'
   import * as types from '../../../store/types'
@@ -99,6 +101,7 @@
       BaiduMap(this.$CFG.mapAK).then(function (BMap) {
         thisVue.$_initMap(BMap)
       })
+      console.log('mounted>>>>>>>>>>>')
     },
     methods: {
       $_initMap (BMap) {
