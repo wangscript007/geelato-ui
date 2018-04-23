@@ -14,7 +14,11 @@ export function BaiduMap (ak) {
       document.head.appendChild(script)
       inited = true
     } else {
-      resolve(BMap)
+      // 加上“window.”，确保变量已隐式声明，可检测，否则发报is not defined异常
+      // 加上if (window.BMap)，解决页面刷新时BMap未定义或未声明的问题
+      if (window.BMap) {
+        resolve(window.BMap)
+      }
     }
   })
 }
