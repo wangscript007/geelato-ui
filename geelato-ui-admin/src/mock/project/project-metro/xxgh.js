@@ -1,11 +1,6 @@
-let data = {}
-data.projectGroups = [
-  {name: '轨道交通一号线', shortName: '一号线', code: 'L011', projects: []},
-  {name: '轨道交通二号线', shortName: '二号线', code: 'L021', projects: []},
-  {name: '轨道交通三号线', shortName: '三号线', code: 'L031', projects: []},
-  {name: '轨道交通四号线', shortName: '四号线', code: 'L041', projects: []},
-  {name: '轨道交通一号线二期', shortName: '四号线', code: 'L012', projects: []}
-]
+import base from './base'
+
+let data = base
 
 data.projects = [
   {name: '土建施工1标', code: 'TJ001', projectGroups: 'L011', inited: false},

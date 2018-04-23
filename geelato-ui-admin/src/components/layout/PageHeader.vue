@@ -15,7 +15,6 @@
       </div>
     </div>
     <div class="right menu">
-
       <a class="item">
         <i class="icon mail"></i>
         <div class="floating ui circular mini red label" style="margin:0 0 0 -2.5em!important;top:0.5em">22
@@ -117,9 +116,10 @@
         return this.mode === 0
       },
       $_changeModule: function (module) {
-        console.log(module)
+        console.log('module>', module)
         // 通知更改模块，以便更改菜单
         this.$store.commit(types.CHANGE_MODULE, module)
+        this.$emit('changeModule', module)
         // 更改模块首页面
         if (module.index) {
           // 如将：'/#/m/project-metro/info/select-project',改为'/m/project-metro/info/select-project',

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div :style="header">
-      <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode"
-                   @changeColor="$_changeColor"></page-header>
+      <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="$_changeLayoutMode"
+                   @changeColor="$_changeColor" @changeModule="$_changeModule"></page-header>
     </div>
     <div class="gl-layout-sidebar" :style="sidebar">
       <page-sidebar :mode="mode" :size="sidebar.size" :height="sidebar.height" :width="sidebar.width"
@@ -61,24 +61,21 @@
     },
     mounted () {
       let thisVue = this
-      this.resizeMinContent()
-      // 获取sidebar内容的
-
       $(window).resize(function () {
         this.content = {}
         if (thisVue.isMax) {
-          thisVue.resizeMaxContent()
+          thisVue.$_resizeMaxContent()
         } else {
-          thisVue.resizeMinContent()
+          thisVue.$_resizeMinContent()
         }
       })
       thisVue.$_initUiComponent()
-      $(this.$el).find(this.selector().sidebarToggle).click(function () {
-        thisVue.toggle()
+      $(this.$el).find(this.$_selector().sidebarToggle).click(function () {
+        thisVue.$_toggle()
       })
     },
     methods: {
-      selector () {
+      $_selector () {
         return {
           sidebarToggle: '.gl-layout-sidebar-toggle',
           sidebar: '.gl-layout-sidebar'
@@ -88,35 +85,35 @@
         $('.ui.dropdown').dropdown()
         $('.ui.accordion').accordion()
       },
-      convertToNumber (heightOrWidth) {
+      $_convertToNumber (heightOrWidth) {
         if (!heightOrWidth) return 0
         return heightOrWidth.replace('px', '')
       },
-      toggle () {
+      $_toggle () {
         this.isMax = !this.isMax
         if (this.isMax) {
-          this.resizeMaxContent()
+          this.$_resizeMaxContent()
         } else {
-          this.resizeMinContent()
+          this.$_resizeMinContent()
         }
       },
       // hide sidebar
-      resizeMaxContent () {
-        this.reset()
+      $_resizeMaxContent () {
+        this.$_reset()
         this.sidebar.width = this.defaultValue.sidebar.minWidth
         this.sidebar.size = 'min'
         this.sidebar.display = 'none'
         this.header.height = this.defaultValue.header.minHeight
         this.footer.height = this.defaultValue.footer.minHeight
-        this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+        this.content['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
         this.isMax = true
-        this.refresh()
+        this.$_refresh()
       },
-      resizeMinContent () {
-        this.reset()
+      $_resizeMinContent () {
+        this.$_reset()
         // 取消依赖子内容进行自动调整最大化窗口的功能
 //        if (this.defaultValue.sidebar.adjustWidthBySub) {
-//          this.sidebar.width = $(this.$el).find(this.selector().sidebar).children().eq(0).width() + 2 + 'px'
+//          this.sidebar.width = $(this.$el).find(this.$_selector().sidebar).children().eq(0).width() + 2 + 'px'
 //        } else {
 //          this.sidebar.width = this.defaultValue.sidebar.maxWidth
 //        }
@@ -125,11 +122,11 @@
         this.sidebar.display = 'block'
         this.header.height = this.defaultValue.header.maxHeight
         this.footer.height = this.defaultValue.footer.maxHeight
-        this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+        this.content['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
         this.isMax = false
-        this.refresh()
+        this.$_refresh()
       },
-      reset () {
+      $_reset () {
         // 注意重置content，刷新content的大小才有效
         this.content = {}
 //        this.content.float = 'left'
@@ -139,7 +136,7 @@
           let hex = this.$GL.ui.colorHex[key]
           if (key === this.$GL.ui.color.primary) {
             this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
-            console.log(this.sidebar['background-color'])
+//            console.log(this.sidebar['background-color'])
           }
         }
       },
@@ -155,16 +152,26 @@
        * document.body.clientHeight
        * document.body.clientWidth
        */
-      refresh () {
+      $_refresh () {
         let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
         let winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-        this.content.height = (winHeight - this.convertToNumber(this.header.height) - this.convertToNumber(this.footer.height) - 0) + 'px'
+        this.content.height = (winHeight - this.$_convertToNumber(this.header.height) - this.$_convertToNumber(this.footer.height) - 0) + 'px'
         this.content['max-height'] = this.content.height
-        this.content.width = (winWidth - this.convertToNumber(this.sidebar.width) - 0) + 'px'
+        this.content.width = (winWidth - this.$_convertToNumber(this.sidebar.width) - 0) + 'px'
         this.sidebar.height = this.content.height
       },
-      changeLayoutMode (value) {
+      $_changeLayoutMode (value) {
         this.$emit('changeLayoutMode', value)
+      },
+      $_changeModule (module) {
+        // 当模块指定需最大化打开时，则相应调整窗口，让内容区域最大化
+        if (module.resize === 'max') {
+          this.isMax = false
+        } else {
+          this.isMax = true
+        }
+        console.log('$_changeModule', this.isMax)
+        this.$_toggle()
       },
       $_changeColor (value, oldValue) {
         this.$emit('changeColor', value, oldValue)

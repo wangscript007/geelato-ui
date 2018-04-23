@@ -7,13 +7,16 @@ class Config {
       {
         title: '新线项目中心',
         code: 'xmzx',
+        index: '/#/m/project-base/center/gis',
+        // max or min
+        resize: 'max',
         html: '',
         menu: [{
           title: '项目总体信息',
           class: 'fa fa-connectdevelop',
           items: [
-            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'},
-            {title: '我的任务', href: '/#/m/project-base/task/project-list'}
+            {title: '项目中心视图', href: '/#/m/project-base/center/gis'},
+            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'}
           ]
         }]
       },
@@ -33,7 +36,7 @@ class Config {
           {
             title: '工作事项管理',
             items: [
-              {title: '计划文件配置', href: '/#/m/project-base/schedule/plan-config'},
+              {title: '计划文件管理', href: '/#/m/project-base/schedule/plan-config'},
               {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task-flow'},
               {title: '任务执行跟踪', href: '/#/m/project-base/task/index'},
               {title: '任务标准库配置', href: '/#/m/project-it/task/task-standard'},
@@ -157,7 +160,7 @@ class Config {
           {
             title: '项目进度管理',
             items: [
-              {title: '计划文件配置', href: '/#/m/project-base/schedule/plan-config'},
+              {title: '计划文件管理', href: '/#/m/project-base/schedule/plan-config'},
               {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task'},
               {title: '月度计划执行', href: '/#/m/project-base/schedule/plan-execution'},
               {title: '任务执行跟踪', href: '/#/m/project/task'},
@@ -230,7 +233,8 @@ class Config {
               {title: 'Semantic UI', href: 'http://www.semantic-ui.com', target: '-blank'},
               {title: 'Semantic UI Local', href: 'http://127.0.0.1:9778', target: '_blank'},
               {title: 'fontawesome', href: 'http://fontawesome.io/icons', target: '_blank'},
-              {title: 'sui-vue', href: '/#/m/platform/ui/all-in-one'}
+              {title: 'sui-vue', href: '/#/m/platform/ui/all-in-one'},
+              {title: '百度地图', href: 'http://api.map.baidu.com/lbsapi/staticmap/staticmap-helper.html', target: '_blank'}
             ]
           }]
       }
@@ -274,6 +278,7 @@ class Config {
     }
     // 还未开发该功能，暂禁用
     this.login = {registerEnable: false}
+    this.mapAK = 'sIKTgNAqvT9Uo0yQMlr3H9B6dZADzhfT'
   }
 }
 

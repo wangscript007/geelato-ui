@@ -6,7 +6,7 @@
                     :headerHeight="sidebar.headerHeight"></page-sidebar>
     </div>
     <div :style="header">
-      <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode"
+      <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode" @changeModule="$_changeModule"
                    @changeColor="$_changeColor"></page-header>
     </div>
     <div :style="content" style="position: absolute;overflow-x: auto">
@@ -155,6 +155,15 @@
       },
       changeLayoutMode (value) {
         this.$emit('changeLayoutMode', value)
+      },
+      $_changeModule (module) {
+        // 当模块指定需最大化打开时，则相应调整窗口，让内容区域最大化
+        if (module.resize === 'max') {
+          this.isMax = false
+        } else {
+          this.isMax = true
+        }
+        this.$_toggle()
       },
       $_changeColor (value, oldValue) {
         this.$emit('changeColor', value, oldValue)

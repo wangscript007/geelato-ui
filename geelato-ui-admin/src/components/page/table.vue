@@ -36,7 +36,8 @@
         <div class="ui borderless secondary menu gl-header">
           <div class="item" style="font-weight: bold">查询过滤
           </div>
-          <div class="ui right secondary mini menu">
+          <!-- 当查询条件多于8个时，才会在上方展示查询、重置按钮，这样页面简洁点，在内容较多，不便拖动时才在上方展示-->
+          <div class="ui right secondary mini menu" v-if="opts.ui.query.mix.fields&&opts.ui.query.mix.fields.length>8">
             <div class="item">
               <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit">查询</button>&nbsp;
               <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="reset">重置</button>
@@ -285,7 +286,7 @@
         this.$refs.queryForm.$_submit()
       },
       reset () {
-        this.$refs.queryForm.reset()
+        this.$refs.queryForm.$_reset()
       },
       // 选择一条数据
       $_selectRow (row) {

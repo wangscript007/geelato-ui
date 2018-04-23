@@ -3,11 +3,11 @@
     <div v-for="(item, index) in opts.fields">
       <template v-if="item.type=='string'">
         <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
-        <input type="text" :placeholder="getPlaceholder(item)" v-model.trim="model[item.field]"/>
+        <input @keyup.enter="$_submit" type="text" :placeholder="getPlaceholder(item)" v-model.trim="model[item.field]"/>
       </template>
       <template v-else-if="item.type=='number'">
         <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
-        <input type="text" :placeholder="getPlaceholder(item)" v-model.number="model[item.field]"/>
+        <input @keyup.enter="$_submit" type="text" :placeholder="getPlaceholder(item)" v-model.number="model[item.field]"/>
       </template>
       <template v-else-if="item.type=='date' || item.type=='time'">
         <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
@@ -17,7 +17,7 @@
         <div class="mt-checkbox-inline">
           <label><i class="fa font-green">{{convertLop(item.lop)}} &nbsp;</i></label>
           <label class="mt-checkbox">
-            <input type="checkbox" :id="'checkbox_'+item.field" value="false" v-model="model[item.field]">
+            <input @keyup.enter="$_submit" type="checkbox" :id="'checkbox_'+item.field" value="false" v-model="model[item.field]">
             {{item.title}}
             <span></span>
           </label>
@@ -33,7 +33,7 @@
         <label>{{item.title}}</label>
         <div class="input-icon input-icon-sm">
           <i class="fa font-green">{{convertLop(item.lop)}}</i>
-          <input type="text" class="form-control input-sm"
+          <input @keyup.enter="$_submit" type="text" class="form-control input-sm"
                  :placeholder="getPlaceholder(item)"/>
         </div>
       </template>
@@ -42,8 +42,8 @@
       <div class="item">
       </div>
       <div class="right item">
-        <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</button>&nbsp;
-        <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="reset">重置</button>
+        <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</a>&nbsp;
+        <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_reset">重置</a>
       </div>
     </div>
   </form>
@@ -124,7 +124,7 @@
         console.log('构建成gql查询条件为 > ', result)
         this.$emit('input', result)
       },
-      reset () {
+      $_reset () {
         let self = this
         for (let p in this.defaultValue) {
           // notice:the html element can only be change by vm.$set or Vue.set after model created.
