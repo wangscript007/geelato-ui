@@ -1,6 +1,6 @@
 <template>
   <div style="padding:0.5em 1em">
-    <div v-if="pageStage==='querying'" class="ui padded grid task-list">
+    <div v-if="pageStage==='querying'" class="ui grid task-list">
       <div class="sixteen wide column task-topbar">
         <div class="ui mini menu">
           <a class="item">
@@ -46,52 +46,55 @@
         </div>
       </div>
       <div v-if="!isMax" class="three wide column task-list-query">
-        <div class="ui accordion">
-          <div class="title active">
-            <i class="dropdown icon"></i>
-            计划及临时任务
-          </div>
-          <div class="content active">
-            <div class="ui middle aligned selection animated list">
-              <div class="item" @click="currentPlan={}">
-                <div class="description" :class="{header:!currentPlan.id}">
-                  机动任务（非计划）
+        <div class="ui attached segment">
+          <div class="ui accordion">
+            <div class="title active">
+              <i class="dropdown icon"></i>
+              任务来源
+            </div>
+            <div class="content active">
+              <sui type="checkbox" selector=".ui.checkbox">
+                <div class="ui toggle checkbox">
+                  <input type="checkbox" name="isFromPlan">
+                  <label>计划文件</label>
                 </div>
-              </div>
-              <div class="item" v-for="item in plan.items" @click="currentPlan=item">
-                <div class="description" :class="{header:currentPlan.id===item.id}">
-                  {{item.name}}
+              </sui>
+              <div class="ui middle aligned selection animated list">
+                <div class="item" v-for="item in plan.items" @click="currentPlan=item">
+                  <div class="description" :class="{header:currentPlan.id===item.id}">
+                    {{item.name}}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="ui accordion">
-          <div class="title active">
-            <i class="dropdown icon"></i>
-            计划周期
-          </div>
-          <div class="content active">
-            <div class="task-tags">
-              <div><label class="ui label">年度</label><label class="ui label">月度</label><label class="ui label">周</label>
+          <div class="ui accordion">
+            <div class="title active">
+              <i class="dropdown icon"></i>
+              计划周期
+            </div>
+            <div class="content active">
+              <div class="task-tags">
+                <div><label class="ui label">年度</label><label class="ui label">月度</label><label class="ui label">周</label>
+                </div>
+                <div>2018年 2017年 2016年</div>
+                <div>1月 2月 3月 4月</div>
+                <div>5月 5月 6月 7月</div>
+                <div>9月 10月 11月 12月</div>
+                <div>1周 2周 3周 4周</div>
               </div>
-              <div>2018年 2017年 2016年</div>
-              <div>1月 2月 3月 4月</div>
-              <div>5月 5月 6月 7月</div>
-              <div>9月 10月 11月 12月</div>
-              <div>1周 2周 3周 4周</div>
             </div>
           </div>
-        </div>
-        <div class="ui accordion">
-          <div class="title active">
-            <i class="dropdown icon"></i>
-            任务属性
-          </div>
-          <div class="content active">
-            <div class="task-tags">
-              <label class="ui label">我的收藏</label>
-              <label class="ui label">临时任务</label>
+          <div class="ui accordion">
+            <div class="title active">
+              <i class="dropdown icon"></i>
+              任务属性
+            </div>
+            <div class="content active">
+              <div class="task-tags">
+                <label class="ui label">我的收藏</label>
+                <label class="ui label">临时任务</label>
+              </div>
             </div>
           </div>
         </div>

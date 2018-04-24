@@ -1,70 +1,98 @@
 <template>
-  <div class="ui padded grid">
-    <div class="sixteen wide column">
-      <div class="ui cell divided  list">
-        <div class="item" v-for="projectGroup in projectGroups" @click="$_changeProjectGroup(projectGroup)">
-          <div class="right floated content">
-            <div class="ui mini button" :class="$GL.ui.color.primary">查看</div>
-          </div>
-          <i class="large github middle aligned icon"></i>
-          <div class="content">
-            <a class="header">{{projectGroup.name}}</a>
-            <div class="description">总项目数12个</div>
+  <div style="min-height: 500px">
+    <layout-lr title="项目简报" :rightTitle="rightTitle" :leftActions="leftActions">
+      <div slot="left">
+        <div class="ui middle aligned divided selection animated list">
+          <div class="item" v-for="item in projectShortReport.items" @click="currentPlan=item;rightTitle=item.name;pdfSrc=testPdfSrc">
+            <div class="description" :class="{header:currentPlan.id===item.id}">
+              {{item.name}}
+            </div>
           </div>
         </div>
       </div>
-
-      <message header="说明">
-        选择{{projectConfig.dict['组']}} > 选择{{projectConfig.dict['项目']}}，进入该项目管理视图。
-      </message>
-      <h5 class="ui header" style="padding-left: 1em">最近浏览的项目</h5>
-      <div class="ui mini segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in $store.state.lastProjects"
-             @click="$_changeProject(project)" :title="project.projectGroup">
-          {{project.name}}
+      <div slot="rightAction">
+        <div class="item">
+          <a :href="testPdfSrc" target="_blank" download="201802.pdf"
+             class="ui mini button"
+             :class="$GL.ui.color.primary">下载</a>
         </div>
       </div>
-    </div>
-    <div class="six wide column">
-      <div class="ui borderless secondary menu gl-header">
-        <div class="item" style="font-weight: bold">选择{{projectConfig.dict['组']}}
-        </div>
+      <div slot="right">
+        <!--<pdf src="../../../../static/doc/pdf/2018年2月份工程建设简报.pdf"></pdf>-->
+        <pdf :src="pdfSrc"></pdf>
       </div>
-      <div class="ui fitted divider"></div>
-      <div class="ui middle aligned divided  selection list">
-        <div class="item" v-for="projectGroup in projectGroups" @click="$_changeProjectGroup(projectGroup)">
-          <div class="content">
-            <div class="description">{{projectGroup.name}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ten wide column">
-      <div class="ui borderless secondary menu gl-header">
-        <div class="item" style="font-weight: bold">选择{{projectConfig.dict['项目']}}
-        </div>
-      </div>
-      <div class="ui fitted divider"></div>
-      <div class="ui segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in projects"
-             @click="$_changeProject(project)">
-          {{project.name}}
-        </div>
-      </div>
-    </div>
+    </layout-lr>
   </div>
 </template>
 <script>
+  import Pdf from 'vue-pdf'
+  import Jstree from '../../../components/mix/jstree'
+  import GlTable from '../../../components/collections/table/index'
   import mockData from '../../../mock/data'
   import prjCfg from '../../../common/project/config'
-  import * as types from '../../../store/types'
 
   export default {
-    props: {
-      opts: {
-        type: Object,
-        default: function () {
-          return {data: {}}
+    props: {},
+    data () {
+      return {
+        testPdfSrc: 'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf',
+        pdfSrc: '',
+        rightTitle: '',
+        listItemClass: 'header',
+        currentPlan: {},
+        // 最大时，不展示查询区
+        isMax: false,
+        leftActions: [{
+          title: '新增',
+          click: 'modal',
+          modal: {
+            type: 'page',
+            value: 'sys_role_list_detail',
+            query: {}
+          }
+        }],
+        treeConfig: {},
+        // 任务列表
+        taskData: {
+          columns: [
+//            {field: 'id', title: 'ID', type: 'string'},
+//            {field: 'pid', title: '父ID', type: 'string'},
+            {field: 'level', title: '层级', type: 'string'},
+            {field: 'name', title: '任务名称x', type: 'string', format: '', editable: true},
+            {field: 'type', title: '类型', type: 'string'}
+//            {field: 'res', title: '资源', type: 'string', format: '', editable: true},
+//            {field: 'planFinishDate', title: '计划完成时间', type: 'string', format: ''}
+          ],
+          dataSource: [
+            {id: '100000000', pid: '', level: 1, name: '计量支付信息打印格式有误，字体存在问题。', res: '张三', planFinishDate: '2018-3-26'},
+            {
+              id: '100000001',
+              pid: '100000000',
+              level: 2,
+              name: '计量支付信息打印格式有误，字体存在问题。',
+              type: '分部',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {
+              id: '100000002',
+              pid: '100000000',
+              level: 2,
+              name: '计量支付信息打印格式有误，字体存在问题。',
+              type: '分部',
+              res: '李四',
+              planFinishDate: '2018-3-26'
+            },
+            {
+              id: '100000003',
+              pid: '100000002',
+              level: 3,
+              name: '计量支付信息打印格式有误，字体存在问题。',
+              type: '分项',
+              res: '王五2',
+              planFinishDate: '2018-3-26'
+            }
+          ]
         }
       }
     },
@@ -74,40 +102,48 @@
       },
       projectGroups: function () {
         return mockData.get(this.$route.query.module).projectGroups
+      },
+      projectShortReport: function () {
+        return mockData.get(this.$route.query.module).report.projectShortReport
       }
     },
-    data () {
-      return {
-        projects: [],
-        currentLine: {}
-      }
+    created () {
+      this.$_loadData()
     },
-    mounted: function () {
+    mounted () {
+      this.currentPlan = this.projectShortReport.items[0]
+    },
+    updated () {
     },
     methods: {
-      $_changeProjectGroup (projectGroup) {
-        this.projectGroup = projectGroup
-        this.projects = projectGroup.projects
-      },
-      $_changeProject (project) {
-        this.$store.commit(types.CHANGE_PROJECT, project)
-        this.$store.commit(types.CHANGE_HEADER_TITLE, '<div style="font-weight: bold">当前项目：' + this.projectGroup.shortName + '>' +
-          project.name + '</div>'
-        )
-        if (project.inited === false) {
-          // 若未初始化，进入引导页面
-          this.$router.push('/m/project-metro/info/guide')
-        } else {
-          // 若已初始化，默认进入项目信息视图页面
-          this.$router.push('/m/project-metro/report/project-index')
+      $_loadData () {
+        this.treeConfig = {
+          core: {
+            data: [
+              {
+                text: '轨道交通',
+                state: {
+                  'opened': true,
+                  'selected': true
+                },
+                children: [
+                  {text: '明挖'},
+                  {text: '暗挖'},
+                  {text: '高架'},
+                  {text: '机电'},
+                  {
+                    text: '土建', children: [{text: '明挖'}, {text: '暗挖'}]
+                  }
+                ]
+              }
+            ]
+          },
+          plugins: ['contextmenu', 'dnd', 'state', 'types']
         }
       }
     },
-    components: {}
+    components: {Jstree, GlTable, Pdf}
   }
 </script>
 <style scoped>
-  .ui.mini.button {
-    margin: 0.5em;
-  }
 </style>

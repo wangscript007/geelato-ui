@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <!--<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>-->
   <title>geelato-ui-admin</title>
   <link rel="stylesheet" href="static/plugins/semantic/semantic.min.css">
   <link rel="stylesheet" href="static/plugins/jstree/themes/default/style.min.css"/>
@@ -12,6 +12,14 @@
   <!--<link rel="stylesheet" href="src/assets/geelato.css">-->
 </head>
 <body>
+<div id="rootMessageTarget"></div>
+<script type="text/x-handlebars" id="rootMessageTemplate">
+  <div class="ui {type} message" style="padding:0px">
+    <!--<i class="close icon"></i>-->
+    <div class="header">{title}</div>
+    <p>{msg}</p>
+  </div>
+</script>
 <div class="pusher">
   <div id="app"></div>
 </div>

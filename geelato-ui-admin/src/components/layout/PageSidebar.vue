@@ -47,7 +47,7 @@
 
 <script>
   import config from '../../common/config'
-  import * as types from '../../store/types'
+//  import * as types from '../../store/types'
   //  import utils from '../../common/utils'
 
   export default {
@@ -71,6 +71,7 @@
         for (var i in config.modules) {
           var module = config.modules[i]
           if (module.code === this.$store.state.platform.currentModule.code) {
+            console.log('this.$store.state.platform.currentModule.code>', this.$store.state.platform.currentModule.code)
             this.html = module.html
             return module.menu
           }
@@ -89,14 +90,14 @@
       this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$GL.ui.color.primary : ''
 
       // 从配置中读取默认active的菜单
-      for (var i in config.modules) {
-        var module = config.modules[i]
-        if (module.active) {
-          this.html = module.html
-          this.$store.commit(types.CHANGE_MODULE, module)
-          break
-        }
-      }
+//      for (var i in config.modules) {
+//        var module = config.modules[i]
+//        if (module.active) {
+//          this.html = module.html
+//          this.$store.commit(types.CHANGE_MODULE, module)
+//          break
+//        }
+//      }
     },
     methods: {
       $_selectMenuItem (menuItemIndex, subMenuItemIndex) {

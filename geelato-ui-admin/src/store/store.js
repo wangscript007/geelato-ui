@@ -10,6 +10,7 @@ export default new Vuex.Store({
       // 用于刷新路由
       routeViewKey: '1',
       currentModule: {},
+      currentLayout: {content: {height: ''}},
       // 页面上方展示的信息，可为HTML格式
       headerTitle: ''
     },
@@ -35,8 +36,12 @@ export default new Vuex.Store({
     [types.LOGOUT]: (state) => {
       state.user = {}
     },
+    [types.CHANGE_LAYOUT]: (state, data) => {
+      state.platform.currentLayout = data
+    },
     [types.CHANGE_MODULE]: (state, data) => {
       state.platform.currentModule = data
+      console.log('state.platform.currentModule>', state.platform.currentModule)
     },
     [types.CHANGE_PROJECT]: (state, data) => {
       state.currentProject = data

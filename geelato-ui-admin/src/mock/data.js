@@ -9,6 +9,7 @@ class Data {
     this.module = {}
     this.module.tjgc = tjgc
     this.module.xmzx = tjgc
+    this.module.grgzt = tjgc
     this.module.xxgh = xxgh
     this.module.itxm = itxm
     this.module.itxmzx = itxm

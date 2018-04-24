@@ -24,6 +24,7 @@
   import PageContent from './PageContent.vue'
   import PageFooter from './PageFooter.vue'
   import utils from '../../common/utils'
+  import * as types from '../../store/types'
 
   export default {
     data () {
@@ -159,6 +160,7 @@
         this.content['max-height'] = this.content.height
         this.content.width = (winWidth - this.$_convertToNumber(this.sidebar.width) - 0) + 'px'
         this.sidebar.height = this.content.height
+        this.$store.commit(types.CHANGE_LAYOUT, {content: {height: this.content.height, width: this.content.width}})
       },
       $_changeLayoutMode (value) {
         this.$emit('changeLayoutMode', value)

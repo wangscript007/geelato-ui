@@ -12,6 +12,11 @@
   padding: .1em .7em;
 }
 
+/*.ui.fullscreen.modal {*/
+  /*width: 95% !important;*/
+  /*!*height: 95%;*!*/
+/*}*/
+
 /********* Jstree *************/
 .jstree-default .jstree-clicked {
   border: 0;

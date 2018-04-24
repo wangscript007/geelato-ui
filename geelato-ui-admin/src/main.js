@@ -12,12 +12,14 @@ import projectConfig from './common/project/config.js'
 import Sui from './components/sui/index.vue'
 import Message from './components/message/index.vue'
 import LayoutLr from './components/mix/page-layout-lr'
+import echarts from 'echarts'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$GL = core
 Vue.prototype.$CFG = cfg
 Vue.prototype.$mockData = mockData
+Vue.prototype.$echarts = echarts
 
 Vue.component('sui', Sui)
 Vue.component('message', Message)

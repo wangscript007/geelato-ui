@@ -5,6 +5,24 @@ class Config {
   constructor () {
     this.modules = [
       {
+        title: '个人工作台',
+        code: 'grgzt',
+        index: '/#/m/platform/workbench/index',
+        // max or min
+        resize: 'min',
+        html: '',
+        menu: [{
+          title: '个人工作台',
+          class: 'fa fa-connectdevelop',
+          items: [
+            {title: '任务执行跟踪', href: '/#/m/project-base/task/index'},
+            {title: '我的流程管理', href: '/#/m/platform/workflow/index'},
+            {title: '我的会议管理', href: '/#/m/platform/meeting/index'}
+            // {title: '任务跟踪管理', href: '/#/m/project-base/center/report'}
+          ]
+        }]
+      },
+      {
         title: '新线项目中心',
         code: 'xmzx',
         index: '/#/m/project-base/center/gis',
@@ -12,11 +30,11 @@ class Config {
         resize: 'max',
         html: '',
         menu: [{
-          title: '项目总体信息',
+          title: '项目中心管理',
           class: 'fa fa-connectdevelop',
           items: [
-            {title: '项目中心视图', href: '/#/m/project-base/center/gis'},
-            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'}
+            {title: '项目总体视图', href: '/#/m/project-base/center/gis'},
+            {title: '项目总体报告', href: '/#/m/project-base/center/report'}
           ]
         }]
       },
@@ -44,8 +62,7 @@ class Config {
               {title: '成果标准管理', href: '/#/m/project-base/achievement/achievement-config'}
             ]
           }
-        ],
-        active: true
+        ]
       },
       {
         title: '机电工程', code: 'jdgc'
@@ -58,7 +75,7 @@ class Config {
           class: 'fa fa-connectdevelop',
           items: [
             {title: '项目信息', href: '/#/m/page/project/prj-project-info-list?em=prj-project'},
-            {title: '任务执行', href: '/#/m/project/task'},
+            {title: '任务执行', href: '/#/m/project-base/task/index'},
             {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
             {title: '指标管理', href: '/#/m/project-metro/task/quota'}
             // {title: '需求管理', href: '/#/m/project/requirement'},
@@ -163,7 +180,6 @@ class Config {
               {title: '计划文件管理', href: '/#/m/project-base/schedule/plan-config'},
               {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task'},
               {title: '月度计划执行', href: '/#/m/project-base/schedule/plan-execution'},
-              {title: '任务执行跟踪', href: '/#/m/project/task'},
               {title: '任务标准库配置', href: '/#/m/project-it/task/task-standard'},
               {title: '指标标准管理', href: '/#/m/project-base/quota/quota-config'},
               {title: '成果标准管理', href: '/#/m/project-base/achievement/achievement-config'}
@@ -239,9 +255,9 @@ class Config {
           }]
       }
     ]
-    // 角色的默认首模块
+    // 角色登录后的默认首模块
     this.defaultModule = {
-      admin: 'xmzx'
+      admin: 'grgzt'
     }
 
     this.url = {

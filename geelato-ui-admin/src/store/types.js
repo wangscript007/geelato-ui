@@ -13,3 +13,5 @@ export const CHANGE_MODULE = 'change_module'
 export const CHANGE_PROJECT = 'change_project'
 // 更改首页面上方头部的标题
 export const CHANGE_HEADER_TITLE = 'change_header_title'
+// 更改部局
+export const CHANGE_LAYOUT = 'change_layout'

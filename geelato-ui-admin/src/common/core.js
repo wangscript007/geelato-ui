@@ -322,35 +322,21 @@ let core = {
      * @param title
      * @param timeout 自动关闭时间，单位毫秒，默认2000
      */
-    showMsg (msg, type, title, timeout) {
-      // 基于sidebar实现
-      $('.ui.sidebar.gl-msg').sidebar({
-        // content: document.body,
-        dimPage: false,
-        closable: false,
-        duration: 100
-      }).sidebar('show')
-      // body的class存在pushable时，会导致jsTree的右链失效
-      $('body').removeClass('pushable')
-      // 注册关闭事件
-      $('.ui.sidebar.gl-msg .close.icon').click(hide)
-      // 设置样式、类型
-      if (type) {
-        $('.ui.sidebar.gl-msg .message').addClass(type)
-      }
-      // 设置标题
-      if (title) {
-        $('.ui.sidebar.gl-msg .message>.header').html(title)
-      }
-      // 设置内容
-      if (msg) {
-        $('.ui.sidebar.gl-msg .message>p').html(msg)
-      }
-      window.setTimeout(hide, timeout || 1000)
+    showMsg (msg, type = 'info', title = '', timeout = 1500) {
+      $('#rootMessageTarget').popup(
+        {
+          position: 'top center',
+          target: '#rootMessageTarget',
+          variation: 'basic',
+          title: title,
+          html: document.getElementById('rootMessageTemplate').innerHTML.replace('{msg}', msg).replace('{title}', title).replace('{type}', type),
+          delay: {show: 100, hide: 0}
+        }
+      ).popup('show')
+      window.setTimeout(hide, timeout)
 
       function hide () {
-        $('.ui.sidebar.gl-msg').sidebar('hide')
-        $('.ui.sidebar.gl-msg .message').removeClass(type)
+        $('#rootMessageTarget').popup('hide')
       }
     },
     color: config.color,

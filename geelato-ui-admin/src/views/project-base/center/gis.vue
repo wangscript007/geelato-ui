@@ -1,7 +1,7 @@
 <template>
-  <div class="ui grid">
-    <div class="eleven wide column">
-      <div id="centerMapContainer"></div>
+  <div class="ui grid" style="padding: 0;margin: 0">
+    <div class="eleven wide column" style="padding: 0;margin: 0">
+      <div id="centerMapContainer" :style="{height:$store.state.platform.currentLayout.content.height}"></div>
       <sui id="centerMapContainerMenu" type="tab" selector=".menu .item">
         <div class="ui top attached pointing mini secondary menu" style="background-color: white">
           <a class="active item" data-tab="first">线路</a>
@@ -12,6 +12,11 @@
           <table class="ui selectable compact table gl-compact">
             <thead></thead>
             <tbody>
+            <tr>
+              <td :class="{warning:!currentGroup.name}" @click="$_selectGroup({},$event)"><i
+                class="train icon"></i>全线网概况
+              </td>
+            </tr>
             <tr v-for="group in projectGroups">
               <td :class="{warning:currentGroup.name===group.name}" @click="$_selectGroup(group,$event)"><i
                 class="train icon"></i>{{group.name}}
@@ -46,9 +51,10 @@
         </div>
       </sui>
     </div>
-    <div class="five wide column">
+    <div class="five wide column" :style="{height:$store.state.platform.currentLayout.content.height}"
+         style="overflow-y: scroll">
       <div class="ui borderless secondary menu gl-header">
-        <div class="item" style="font-weight: bold">概况
+        <div class="item" style="font-weight: bold">{{currentGroup.name||'全线网概况'}} (2018-02-02)
         </div>
         <div class="ui right secondary borderless mini menu">
           <div class="item">
@@ -58,7 +64,60 @@
       </div>
       <div class="ui fitted divider"></div>
       <div class="ui attached top segment">
-        1、主体结构
+        <div v-show="!currentGroup.name">
+          <h5>概述</h5>
+          目前南宁轨道交通已开通运营两条线路，分别为1号线及2号线。同时在建3条线路，分部为3、4、5号线。
+          <h5>进度</h5>
+          3号线已完成10座车站主体封顶，占总量50%；……
+          <h5>投资</h5>
+          <table class="ui basic compact table">
+            <tr>
+              <td class="five wide">开累/项目投资总额</td>
+              <td class="seven wide">
+                <sui type="progress" selector=".ui.progress">
+                  <div class="ui small blue progress" data-value="120900" data-total="220900">
+                    <div class="bar">
+                      <div class="progress"></div>
+                    </div>
+                    <div class="label">120900万/220900万</div>
+                  </div>
+                </sui>
+              </td>
+            </tr>
+            <tr>
+              <td class="six wide">年累/2018内控计划</td>
+              <td class="ten wide">
+                <sui type="progress" selector=".ui.progress">
+                  <div class="ui small blue progress" data-value="1209" data-total="2509">
+                    <div class="bar">
+                      <div class="progress"></div>
+                    </div>
+                    <div class="label">1209万/2509万</div>
+                  </div>
+                </sui>
+              </td>
+            </tr>
+            <tr>
+              <td class="six wide">年累/2018城建计划</td>
+              <td class="seven wide">
+                <sui type="progress" selector=".ui.progress">
+                  <div class="ui small blue progress" data-value="1209" data-total="2209">
+                    <div class="bar">
+                      <div class="progress"></div>
+                    </div>
+                    <div class="label">1209万/2209万</div>
+                  </div>
+                </sui>
+              </td>
+            </tr>
+          </table>
+          <h5>安全</h5>
+          <div id="gis-security-peril" style="width: 320px;height: 300px;text-align: center"></div>
+          <div id="gis-security-hidden-peril" style="width: 320px;height: 300px;text-align: center"></div>
+        </div>
+        <div v-show="currentGroup.name">
+          {{currentGroup.name}}
+        </div>
       </div>
     </div>
   </div>
@@ -86,6 +145,9 @@
       projectGroups: function () {
         return this.$mockData.get(this.$route.query.module).projectGroups
       },
+      report: function () {
+        return this.$mockData.get(this.$route.query.module).report
+      },
       workPoints: function () {
         return this.$mockData.get(this.$route.query.module).workPoints
       }
@@ -98,10 +160,18 @@
     },
     mounted: function () {
       let thisVue = this
+      // chart
+      let perilChart = this.$echarts.init(document.getElementById('gis-security-peril'))
+      perilChart.setOption(this.report.security.peril.option)
+
+      let hiddenPerilChart = this.$echarts.init(document.getElementById('gis-security-hidden-peril'))
+      hiddenPerilChart.setOption(this.report.security.hiddenPeril.option)
+      console.log('hiddenPerilChart')
+
       BaiduMap(this.$CFG.mapAK).then(function (BMap) {
         thisVue.$_initMap(BMap)
+        console.log('thisVue.$_initMap(BMap)')
       })
-      console.log('mounted>>>>>>>>>>>')
     },
     methods: {
       $_initMap (BMap) {
@@ -172,7 +242,9 @@
               // 增加折线
               map.addOverlay(polyline)
               polyline.addEventListener('lineupdate', function () {
-//                console.log('polyline>', polyline.getPath())
+              })
+              polyline.addEventListener('click', function (e) {
+                thisVue.$_selectGroup(group)
               })
             }
             // 红色异常线
@@ -186,6 +258,9 @@
               map.addOverlay(redPolyline)
               redPolyline.addEventListener('click', function (e) {
 //                console.log('redPolyline click >', e)
+              })
+              redPolyline.addEventListener('click', function (e) {
+                thisVue.$GL.ui.showMsg('进度异常', 'error')
               })
             }
             console.log('group.workPoints>', group.workPoints)
@@ -202,12 +277,16 @@
                 })
                 map.addOverlay(circle)
                 circle.addEventListener('click', function (e) {
-//                  console.log('circle click >', e)
+                  clickPoint(point, e)
                 })
               }
             }
 //            polyline.enableEditing()
           }
+        }
+
+        function clickPoint (point) {
+          alert(point.name)
         }
       },
       $_selectGroup (group) {
@@ -215,7 +294,7 @@
       },
       $_detail () {
         let thisVue = this
-        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/detail.vue', {title: '项目中心'}, {
+        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/detail.vue', {title: '项目详情'}, {
           close: function () {
             // 在modal中注册刷新操作
 //            thisVue.$_submit()
@@ -251,7 +330,7 @@
   #centerMapContainer {
     /*width: 100%;*/
     /*height: 100%;*/
-    min-height: 550px;
+    /*min-height: 550px;*/
     overflow: hidden;
     margin: 0;
     font-family: "微软雅黑";

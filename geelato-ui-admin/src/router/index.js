@@ -60,7 +60,7 @@ let moduleRoutes = [
   },
   {path: 'designer', component: resolve => require(['../views/geemeta/gm-designer/editor.vue'], resolve)},
   {path: 'preview/:pageCode', component: resolve => require(['../views/geemeta/gm-designer/preview.vue'], resolve)},
-  {path: 'project/task', component: resolve => require(['../views/project-base/task/index.vue'], resolve)},
+  // {path: 'project/task', component: resolve => require(['../views/project-base/task/index.vue'], resolve)},
   {
     path: 'project/requirement',
     component: resolve => require(['../views/project-base/requirement/index.vue'], resolve)
@@ -162,6 +162,9 @@ function addVueFileRoutes (moduleRoutes) {
   }
 // 从配置的菜单中，添加路由
   for (var j in config.modules) {
+    if (config.modules[j].index) {
+      addVueFileToRoutes(config.modules[j].index)
+    }
     if (config.modules[j].menu) {
       for (var k in config.modules[j].menu) {
         let menuItemGroup = config.modules[j].menu[k]
