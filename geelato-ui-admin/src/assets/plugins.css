@@ -12,6 +12,23 @@
   padding: .1em .7em;
 }
 
+.ui.calendar table {
+  width: auto;
+  border-spacing: 0;
+}
+
+.ui.calendar table td {
+  margin: 2px;
+  padding: 2px;
+}
+
+.ui.comments{
+  max-width: inherit;
+}
+/*.ui.accordion > .title {*/
+  /*font-weight: bold;*/
+/*}*/
+
 /*.ui.fullscreen.modal {*/
   /*width: 95% !important;*/
   /*!*height: 95%;*!*/

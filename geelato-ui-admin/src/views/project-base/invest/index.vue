@@ -47,11 +47,13 @@
     </div>
     <layout-lr title="支付批次" rightTitle="支付详情">
       <div slot="left">
-        <div class="ui middle aligned divided  selection list">
-          <div class="item" v-for="item in ['第一笔-预付款','第二笔-进度款','第三笔-进度款','第四笔-质保款']">
-            <div class="description" @click="currentPlan=item">{{item}}</div>
+        <gl-group item=".list>.item">
+          <div class="ui middle aligned divided  selection list">
+            <div class="item" v-for="item in ['第一笔-预付款','第二笔-进度款','第三笔-进度款','第四笔-质保款']">
+              <div class="description" @click="currentPlan=item">{{item}}</div>
+            </div>
           </div>
-        </div>
+        </gl-group>
       </div>
       <div slot="right">
         <!--<div class="ui mini center aligned segment">-->

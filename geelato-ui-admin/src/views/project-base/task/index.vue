@@ -1,36 +1,26 @@
 <template>
   <div style="padding:0.5em 1em">
-    <div v-if="pageStage==='querying'" class="ui grid task-list">
+    <div v-if="pageState==='querying'" class="ui grid task-list">
       <div class="sixteen wide column task-topbar">
         <div class="ui mini menu">
           <a class="item">
-            <!--<div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','bug')"><i class="plus icon"></i>创建</div>-->
-            <div class="ui icon dropdown mini button" :class="$GL.ui.color.primary"><i class="plus icon"></i>创建
-              <div class="mini menu">
-                <div class="header">
-                  <i class="tags icon"></i>
-                  类型
-                </div>
-                <div class="scrolling mini menu">
-                  <div class="mini item" @click="$_edit('','bug')">
-                    <div class="ui red empty circular label"></div>
-                    任务
-                  </div>
-                  <div class="item">
-                    <div class="ui blue empty circular label"></div>
-                    年度任务
-                  </div>
-                  <div class="item">
-                    <div class="ui black empty circular label"></div>
-                    Cannot Fix
-                  </div>
-                  <div class="item">
-                    <div class="ui purple empty circular label"></div>
-                    News
-                  </div>
-                </div>
-              </div>
+            <div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','bug')"><i
+              class="plus icon"></i>创建
             </div>
+            <!--<div class="ui icon dropdown mini button" :class="$GL.ui.color.primary"><i class="plus icon"></i>创建-->
+            <!--<div class="mini menu">-->
+            <!--<div class="header">-->
+            <!--<i class="tags icon"></i>-->
+            <!--类型-->
+            <!--</div>-->
+            <!--<div class="scrolling mini menu">-->
+            <!--<div class="mini item" @click="$_edit('','bug')">-->
+            <!--<div class="ui red empty circular label"></div>-->
+            <!--任务-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
           </a>
           <div class="item" style="width: 85%">
             <div class="ui icon input" style="width: 100%">
@@ -46,56 +36,74 @@
         </div>
       </div>
       <div v-if="!isMax" class="three wide column task-list-query">
-        <div class="ui attached segment">
-          <div class="ui accordion">
-            <div class="title active">
-              <i class="dropdown icon"></i>
-              任务来源
-            </div>
-            <div class="content active">
-              <sui type="checkbox" selector=".ui.checkbox">
-                <div class="ui toggle checkbox">
-                  <input type="checkbox" name="isFromPlan">
-                  <label>计划文件</label>
+        <div class="ui accordion">
+          <div class="title active">
+            <i class="dropdown icon"></i>
+            任务过滤
+          </div>
+          <div class="content active">
+            <gl-group item=".list>.item">
+              <div class="ui mini aligned selection animated list">
+                <div class="item" title="所有我有权限看的任务">
+                  <div class="description">
+                    查看所有
+                  </div>
                 </div>
-              </sui>
-              <div class="ui middle aligned selection animated list">
-                <div class="item" v-for="item in plan.items" @click="currentPlan=item">
-                  <div class="description" :class="{header:currentPlan.id===item.id}">
-                    {{item.name}}
+                <div class="item" title="任务责任人是我的任务">
+                  <div class="description">
+                    我负责的
+                  </div>
+                </div>
+                <div class="item" title="指派给我，正待我处理或我处理中未指派出去的任务">
+                  <div class="description">
+                    待我处理的
+                  </div>
+                </div>
+                <div class="item" title="包括我处理的、评论的，所有与我有关的任务">
+                  <div class="description">
+                    我参与的
+                  </div>
+                </div>
+                <div class="item" title="收入我个人收藏夹的任务">
+                  <div class="description">
+                    我收藏的
                   </div>
                 </div>
               </div>
-            </div>
+            </gl-group>
           </div>
-          <div class="ui accordion">
-            <div class="title active">
-              <i class="dropdown icon"></i>
-              计划周期
-            </div>
-            <div class="content active">
-              <div class="task-tags">
-                <div><label class="ui label">年度</label><label class="ui label">月度</label><label class="ui label">周</label>
-                </div>
-                <div>2018年 2017年 2016年</div>
-                <div>1月 2月 3月 4月</div>
-                <div>5月 5月 6月 7月</div>
-                <div>9月 10月 11月 12月</div>
-                <div>1周 2周 3周 4周</div>
-              </div>
-            </div>
+        </div>
+        <div class="ui accordion">
+          <div class="title active">
+            <i class="dropdown icon"></i>
+            任务属性
           </div>
-          <div class="ui accordion">
-            <div class="title active">
-              <i class="dropdown icon"></i>
-              任务属性
-            </div>
-            <div class="content active">
-              <div class="task-tags">
-                <label class="ui label">我的收藏</label>
-                <label class="ui label">临时任务</label>
-              </div>
-            </div>
+          <div class="content active">
+            <table class="ui compact table gl-compact gl-table mini form">
+              <tr v-for="(item,key) in task.properties">
+                <td colspan="8" style="min-width: 5em;background-color: #eeeeee">{{item.name}}</td>
+                <td colspan="16">
+                  <template v-if="item.type==='text'">
+                    <input type="text">
+                  </template>
+                  <template v-else>
+                    <sui type="dropdown" selector=".ui.dropdown">
+                      <div class="ui fluid dropdown">
+                        <input type="hidden" :name="item.name">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">请选择</div>
+                        <div class="menu">
+                          <div v-for="subItem in item.values" class="item"
+                               style="padding: 0.5em!important;font-size: 1em"
+                               data-value="subItem.code">{{subItem.name}}
+                          </div>
+                        </div>
+                      </div>
+                    </sui>
+                  </template>
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
@@ -133,9 +141,8 @@
             <div class="ui dropdown item">
               单行视图 <i class="dropdown icon"></i>
               <div class="menu">
-                <a class="item">单行视图</a>
-                <a class="item">树型视图</a>
-                <!--<a class="item">详情视图</a>-->
+                <a class="item" @click="display.detail=false">简单视图</a>
+                <a class="item" @click="display.detail=true">详情视图</a>
               </div>
             </div>
             <div class="ui dropdown item">
@@ -153,20 +160,20 @@
         </div>
         <div class="ui divider"></div>
         <div class="ui divided small items">
-          <div class="item">
+          <div class="item" v-for="item in task.items">
             <div class="ui mini image">
               <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
-              <h4 class="ui teal header">
+              <h4 class="ui header" style="cursor: pointer" :class="$GL.ui.color.primary" @click="pageState='editing'">
                 <div class="ui checkbox">
                   <input type="checkbox" name="example">
-                  <label class="ui teal">合同系统-129 保存用户信息失败</label>
+                  <div>{{item.num}}-{{item.title}}</div>
                 </div>
               </h4>
-              <div class="task-datetime">2017-12-12 20:25</div>
-              <div class="description">
-                保存用户信息时，提示用户名不能为空。保存用户信息时，提示用户名不能为空。保存用户信息时，提示用户名不能为空。
+              <div class="task-datetime">{{item.createAt}}</div>
+              <div class="description" v-if="display.detail">
+                {{item.description}}
               </div>
               <div class="task-action">
                 <div style="float: right;display: inline-block">
@@ -176,160 +183,31 @@
                     <!--<i class="teal compress icon" title="收缩"></i>-->
                   </div>
                 </div>
-                <div class="ui inline dropdown mini button">
-                  <!--<i class="filter icon"></i>-->
-                  <span class="text">一般</span>
-                  <div class="mini menu">
-                    <div class="ui icon search input">
-                      <i class="search icon"></i>
-                      <input type="text" placeholder="Search tags...">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                      <i class="tags icon"></i>
-                      优先级
-                    </div>
-                    <div class="scrolling mini menu">
-                      <div class="mini item">
-                        <div class="ui red empty circular label"></div>
-                        Important
-                      </div>
-                      <div class="item">
-                        <div class="ui blue empty circular label"></div>
-                        Announcement
-                      </div>
-                      <div class="item">
-                        <div class="ui black empty circular label"></div>
-                        Cannot Fix
-                      </div>
-                      <div class="item">
-                        <div class="ui purple empty circular label"></div>
-                        News
+
+                <sui type="dropdown" selector=".ui.dropdown" v-for="(item,key) in task.properties"
+                     style="display: inline-block">
+                  <div class="ui inline dropdown mini button">
+                    <!--<i class="filter icon"></i>-->
+                    <span class="text">{{item.values[0].name}}</span>
+                    <div class="mini menu">
+                      <!--<div class="ui icon search input">-->
+                        <!--<i class="search icon"></i>-->
+                        <!--<input type="text" placeholder="查询">-->
+                      <!--</div>-->
+                      <!--<div class="divider"></div>-->
+                      <!--<div class="header">-->
+                        <!--&lt;!&ndash;<i class="tags icon"></i>&ndash;&gt;-->
+                        <!--{{item.name}}-->
+                      <!--</div>-->
+                      <div class="scrolling mini menu">
+                        <div class="mini item" v-for="subItem in item.values" style="padding: 0.4em 0.8em">
+                          <!--<div class="ui red empty circular label" data-value="subItem.code"></div>-->
+                          {{subItem.name}}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="ui inline dropdown mini button">
-                  <!--<i class="filter icon"></i>-->
-                  <span class="text">问题</span>
-                  <div class="mini menu">
-                    <div class="ui icon search input">
-                      <i class="search icon"></i>
-                      <input type="text" placeholder="Search tags...">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                      <i class="tags icon"></i>
-                      类型
-                    </div>
-                    <div class="scrolling mini menu">
-                      <div class="mini item">
-                        <div class="ui red empty circular label"></div>
-                        Important
-                      </div>
-                      <div class="item">
-                        <div class="ui blue empty circular label"></div>
-                        Announcement
-                      </div>
-                      <div class="item">
-                        <div class="ui black empty circular label"></div>
-                        Cannot Fix
-                      </div>
-                      <div class="item">
-                        <div class="ui purple empty circular label"></div>
-                        News
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="ui inline dropdown mini button">
-                  <!--<i class="filter icon"></i>-->
-                  <span class="text">待处理</span>
-                  <div class="mini menu">
-                    <div class="ui icon search input">
-                      <i class="search icon"></i>
-                      <input type="text" placeholder="Search tags...">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                      <i class="tags icon"></i>
-                      状态
-                    </div>
-                    <div class="scrolling mini menu">
-                      <div class="mini item">
-                        <div class="ui red empty circular label"></div>
-                        Important
-                      </div>
-                      <div class="item">
-                        <div class="ui blue empty circular label"></div>
-                        Announcement
-                      </div>
-                      <div class="item">
-                        <div class="ui black empty circular label"></div>
-                        Cannot Fix
-                      </div>
-                      <div class="item">
-                        <div class="ui purple empty circular label"></div>
-                        News
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="ui inline dropdown mini button">
-                  <!--<i class="filter icon"></i>-->
-                  <span class="text">V1.1.1</span>
-                  <div class="mini menu">
-                    <div class="ui icon search input">
-                      <i class="search icon"></i>
-                      <input type="text" placeholder="Search tags...">
-                    </div>
-                    <div class="divider"></div>
-                    <div class="header">
-                      <i class="tags icon"></i>
-                      优先级
-                    </div>
-                    <div class="scrolling mini menu">
-                      <div class="mini item">
-                        <div class="ui red empty circular label"></div>
-                        Important
-                      </div>
-                      <div class="item">
-                        <div class="ui blue empty circular label"></div>
-                        Announcement
-                      </div>
-                      <div class="item">
-                        <div class="ui black empty circular label"></div>
-                        Cannot Fix
-                      </div>
-                      <div class="item">
-                        <div class="ui purple empty circular label"></div>
-                        News
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="ui mini image">
-              <img src="/static/images/avatar/large/jenny.jpg">
-            </div>
-            <div class="content">
-              <h4 class="ui header" :class="$GL.ui.color.primary">Veronika Ossi</h4>
-              <div class="description">
-                <p></p>
-              </div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="ui mini image">
-              <img src="/static/images/avatar/large/jenny.jpg">
-            </div>
-            <div class="content">
-              <h4 class="ui header" :class="$GL.ui.color.primary">Jenny Hess</h4>
-              <div class="description">
-                <p></p>
+                </sui>
               </div>
             </div>
           </div>
@@ -341,26 +219,29 @@
         </div>
       </div>
     </div>
-    <div v-if="pageStage==='editing'" class="task-form">
-      <!--<task-form></task-form>-->
+    <div v-if="pageState==='editing'" class="task-form">
+      <task-form></task-form>
     </div>
-    <div v-if="pageStage==='taskSet'" class="task-set">
+    <div v-if="pageState==='taskSet'" class="task-set">
       <task-set></task-set>
     </div>
   </div>
 </template>
 <script>
-  //  import taskForm from './form'
+  import taskForm from './form-detail.vue'
   import taskSet from './task-set'
 
   export default {
     data () {
       return {
+        display: {
+          detail: true
+        },
         currentPlan: {},
         // 最大时，不展示查询区
         isMax: false,
         // 页面状态 editing querying taskSet
-        pageStage: 'querying'
+        pageState: 'querying'
       }
     },
     computed: {
@@ -369,6 +250,9 @@
 //      },
       projectGroups: function () {
         return this.$mockData.get(this.$route.query.module).projectGroups
+      },
+      task: function () {
+        return this.$mockData.get(this.$route.query.module).task
       },
       plan: function () {
         return this.$mockData.get(this.$route.query.module).plan
@@ -381,8 +265,6 @@
       $_initUi: function () {
         $(this.$el).find('.ui.accordion').accordion()
         $(this.$el).find('.ui.dropdown').dropdown()
-//        $(this.$el).find('.ui.menu>.item[data-tab]').tab()
-//        $(this.$el).find('.ui.menu>.item[data-tab*="designer-sub-tab"]').tab()
         this.$_initProjects()
       },
       $_toggleSidebar () {
@@ -419,17 +301,21 @@
         this.$_query()
       },
       $_edit (id, type, to) {
-//        this.pageStage = 'editing'
-        this.pageStage = 'taskSet'
+        this.pageState = 'editing'
+//        this.pageState = 'taskSet'
       },
       $_query () {
-        this.pageStage = 'querying'
+        this.pageState = 'querying'
       }
     },
-    components: {taskSet}
+    components: {taskForm, taskSet}
   }
 </script>
-<style>
+<style scoped>
+
+  /*.accordion > .title {*/
+  /*background-color: #f0f0f0;*/
+  /*}*/
 
   .items > .item .image > img {
     /*width: 50% !important;*/

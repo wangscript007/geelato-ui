@@ -10,6 +10,7 @@ import cfg from './common/config.js'
 import mockData from './mock/data.js'
 import projectConfig from './common/project/config.js'
 import Sui from './components/sui/index.vue'
+import GlGroup from './components/sui/gl-group.vue'
 import Message from './components/message/index.vue'
 import LayoutLr from './components/mix/page-layout-lr'
 import echarts from 'echarts'
@@ -22,6 +23,7 @@ Vue.prototype.$mockData = mockData
 Vue.prototype.$echarts = echarts
 
 Vue.component('sui', Sui)
+Vue.component('glGroup', GlGroup)
 Vue.component('message', Message)
 Vue.component('layoutLr', LayoutLr)
 // 测试演示的数据

@@ -29,7 +29,7 @@
               <input type="password" v-model="password" name="password" placeholder="密码">
             </div>
           </div>
-          <div class="ui fluid large button" @click="submit" :class="color">登录</div>
+          <div class="ui fluid large button" @click="$_submit" :class="color">登录</div>
         </div>
         <div class="ui error message"></div>
       </form>
@@ -98,7 +98,7 @@
     methods: {
       login: function () {
         let thisVue = this
-        console.log('login')
+//        console.log('login')
         var user = '{"loginName": "@loginName", "password": "@password","remember":"@remember"}'
         user = user.replace('@loginName', thisVue.loginName)
         user = user.replace('@password', thisVue.password)
@@ -112,7 +112,7 @@
           window.location.replace('/')
         })
       },
-      submit: function () {
+      $_submit: function () {
         $('.ui.login-form').form('validate form')
       }
     }

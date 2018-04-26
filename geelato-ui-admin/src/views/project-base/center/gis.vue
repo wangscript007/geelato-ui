@@ -53,18 +53,88 @@
     </div>
     <div class="five wide column" :style="{height:$store.state.platform.currentLayout.content.height}"
          style="overflow-y: scroll">
-      <div class="ui borderless secondary menu gl-header">
-        <div class="item" style="font-weight: bold">{{currentGroup.name||'全线网概况'}} (2018-02-02)
+      <!--全线网-->
+      <div v-if="!currentGroup.name">
+        <div class="ui borderless secondary menu gl-header">
+          <div class="item" style="font-weight: bold">{{currentGroup.name||'全线网概况'}} (2018-02-02)
+          </div>
+          <div class="ui right secondary borderless mini menu">
+            <div class="item">
+              <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_netDetail">详情</a>
+            </div>
+          </div>
         </div>
-        <div class="ui right secondary borderless mini menu">
-          <div class="item">
-            <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_detail">详情</a>
+        <div class="ui fitted divider"></div>
+        <div class="ui attached top segment">
+          <div v-show="!currentGroup.name">
+            <h5>概述</h5>
+            目前南宁轨道交通已开通运营两条线路，分别为1号线及2号线。同时在建3条线路，分部为3、4、5号线。
+            <h5>进度</h5>
+            3号线已完成10座车站主体封顶，占总量50%；……
+            <h5>投资</h5>
+            <table class="ui basic compact table">
+              <tr>
+                <td class="five wide">开累/项目投资总额</td>
+                <td class="seven wide">
+                  <sui type="progress" selector=".ui.progress">
+                    <div class="ui small blue progress" data-value="120900" data-total="220900">
+                      <div class="bar">
+                        <div class="progress"></div>
+                      </div>
+                      <div class="label">120900万/220900万</div>
+                    </div>
+                  </sui>
+                </td>
+              </tr>
+              <tr>
+                <td class="six wide">年累/2018内控计划</td>
+                <td class="ten wide">
+                  <sui type="progress" selector=".ui.progress">
+                    <div class="ui small blue progress" data-value="1209" data-total="2509">
+                      <div class="bar">
+                        <div class="progress"></div>
+                      </div>
+                      <div class="label">1209万/2509万</div>
+                    </div>
+                  </sui>
+                </td>
+              </tr>
+              <tr>
+                <td class="six wide">年累/2018城建计划</td>
+                <td class="seven wide">
+                  <sui type="progress" selector=".ui.progress">
+                    <div class="ui small blue progress" data-value="1209" data-total="2209">
+                      <div class="bar">
+                        <div class="progress"></div>
+                      </div>
+                      <div class="label">1209万/2209万</div>
+                    </div>
+                  </sui>
+                </td>
+              </tr>
+            </table>
+            <h5>安全</h5>
+            <div id="gis-security-peril" style="width: 320px;height: 300px;text-align: center"></div>
+            <div id="gis-security-hidden-peril" style="width: 320px;height: 300px;text-align: center"></div>
+          </div>
+          <div v-show="currentGroup.name">
+            {{currentGroup.name}}
           </div>
         </div>
       </div>
-      <div class="ui fitted divider"></div>
-      <div class="ui attached top segment">
-        <div v-show="!currentGroup.name">
+      <!--单线-->
+      <div v-if="currentGroup.name">
+        <div class="ui borderless secondary menu gl-header">
+          <div class="item" style="font-weight: bold">{{currentGroup.name}} (2018-02-02)
+          </div>
+          <div class="ui right secondary borderless mini menu">
+            <div class="item">
+              <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_lineDetail">详情</a>
+            </div>
+          </div>
+        </div>
+        <div class="ui fitted divider"></div>
+        <div class="ui attached top segment">
           <h5>概述</h5>
           目前南宁轨道交通已开通运营两条线路，分别为1号线及2号线。同时在建3条线路，分部为3、4、5号线。
           <h5>进度</h5>
@@ -114,9 +184,6 @@
           <h5>安全</h5>
           <div id="gis-security-peril" style="width: 320px;height: 300px;text-align: center"></div>
           <div id="gis-security-hidden-peril" style="width: 320px;height: 300px;text-align: center"></div>
-        </div>
-        <div v-show="currentGroup.name">
-          {{currentGroup.name}}
         </div>
       </div>
     </div>
@@ -292,12 +359,19 @@
       $_selectGroup (group) {
         this.currentGroup = group
       },
-      $_detail () {
+      $_netDetail () {
         let thisVue = this
-        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/detail.vue', {title: '项目详情'}, {
+        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/net-detail.vue', {title: '线网详情'}, {
           close: function () {
             // 在modal中注册刷新操作
 //            thisVue.$_submit()
+          }
+        })
+      },
+      $_lineDetail () {
+        let thisVue = this
+        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/line-detail.vue', {title: '线路详情'}, {
+          close: function () {
           }
         })
       },

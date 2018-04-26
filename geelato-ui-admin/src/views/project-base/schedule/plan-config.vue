@@ -1,13 +1,20 @@
 <template>
   <div class="gl-page-content-wrapper">
-    <layout-lr title="计划列表" rightTitle="计划配置" :leftActions="leftActions">
+    <layout-lr title="计划列表" rightTitle="计划配置">
       <div slot="left">
-        <div class="ui middle aligned divided selection animated list">
-          <div class="item" v-for="item in plan.items" @click="currentPlan=item">
-            <div class="description" :class="{header:currentPlan.id===item.id}">
-              {{item.name}}
+        <gl-group item=".list>.item">
+          <div class="ui middle aligned divided selection animated list">
+            <div class="item" v-for="item in plan.items" @click="currentPlan=item">
+              <div class="description" :class="{header:currentPlan.id===item.id}">
+                {{item.name}}
+              </div>
             </div>
           </div>
+        </gl-group>
+      </div>
+      <div slot="leftAction">
+        <div class="item">
+          <a class="ui mini button" :class="$GL.ui.color.primary" @click="newPlan.state='editing'">新增</a>
         </div>
       </div>
       <div slot="rightAction">
@@ -104,19 +111,11 @@
     props: {},
     data () {
       return {
+        newPlan: {name: '', state: ''},
         listItemClass: 'header',
         currentPlan: {},
         // 最大时，不展示查询区
         isMax: false,
-        leftActions: [{
-          title: '新增',
-          click: 'modal',
-          modal: {
-            type: 'page',
-            value: 'sys_role_list_detail',
-            query: {}
-          }
-        }],
         treeConfig: {},
         // 任务列表
         taskData: {

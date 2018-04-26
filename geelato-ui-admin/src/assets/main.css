@@ -273,16 +273,3 @@ table {
   border-spacing: 1px
 }
 
-.ui.calendar table {
-  width: auto;
-  border-spacing: 0;
-}
-
-.ui.calendar table td {
-  margin: 2px;
-  padding: 2px;
-}
-
-.ui.accordion > .title {
-  font-weight: bold;
-}

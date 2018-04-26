@@ -40,6 +40,7 @@
       $_init: function () {
         let theVue = this
 //        theVue.exclusive = true
+        console.log()
         $(this.$el).find(this.selector)[theVue.type](theVue.opts)
       }
     },

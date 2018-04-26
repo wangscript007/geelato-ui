@@ -23,6 +23,13 @@
         <!--</message>-->
         <gl-table :columns="taskData.columns" :data-source="taskData.dataSource"></gl-table>
       </div>
+      <div slot="leftAction">
+        <div class="item" style="padding-top: 0;padding-bottom: 0">
+          <div class="ui mini buttons" :class="$GL.ui.color.primary">
+            <div class="ui mini button" @click="currentPlan={}">选择计划</div>
+          </div>
+        </div>
+      </div>
       <div slot="rightAction">
         <div class="item" style="padding-top: 0;padding-bottom: 0">
           <sui type="dropdown" selector=".ui.dropdown">

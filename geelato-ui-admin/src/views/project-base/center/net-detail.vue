@@ -2,13 +2,16 @@
   <div style="min-height: 500px">
     <layout-lr title="项目简报" :rightTitle="rightTitle" :leftActions="leftActions">
       <div slot="left">
-        <div class="ui middle aligned divided selection animated list">
-          <div class="item" v-for="item in projectShortReport.items" @click="currentPlan=item;rightTitle=item.name;pdfSrc=testPdfSrc">
-            <div class="description" :class="{header:currentPlan.id===item.id}">
-              {{item.name}}
+        <gl-group item=".list>.item" index="-1">
+          <div class="ui middle aligned divided selection animated list">
+            <div class="item" v-for="item in projectShortReport.items"
+                 @click="currentPlan=item;rightTitle=item.name;pdfSrc=testPdfSrc">
+              <div class="description" :class="{header:currentPlan.id===item.id}">
+                {{item.name}}
+              </div>
             </div>
           </div>
-        </div>
+        </gl-group>
       </div>
       <div slot="rightAction">
         <div class="item">
@@ -19,7 +22,7 @@
       </div>
       <div slot="right">
         <!--<pdf src="../../../../static/doc/pdf/2018年2月份工程建设简报.pdf"></pdf>-->
-        <pdf :src="pdfSrc"></pdf>
+        <pdf :src="pdfSrc" :page="1"></pdf>
       </div>
     </layout-lr>
   </div>
@@ -35,22 +38,25 @@
     props: {},
     data () {
       return {
-        testPdfSrc: 'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf',
+//        testPdfSrc: 'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf',
+        testPdfSrc: '/static/doc/report/201802.pdf',
         pdfSrc: '',
         rightTitle: '',
         listItemClass: 'header',
         currentPlan: {},
         // 最大时，不展示查询区
         isMax: false,
-        leftActions: [{
-          title: '新增',
-          click: 'modal',
-          modal: {
-            type: 'page',
-            value: 'sys_role_list_detail',
-            query: {}
-          }
-        }],
+        leftActions: [
+//          {
+//          title: '新增',
+//          click: 'modal',
+//          modal: {
+//            type: 'page',
+//            value: 'sys_role_list_detail',
+//            query: {}
+//          }
+//        }
+        ],
         treeConfig: {},
         // 任务列表
         taskData: {

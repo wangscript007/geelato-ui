@@ -257,7 +257,7 @@ class Config {
     ]
     // 角色登录后的默认首模块
     this.defaultModule = {
-      admin: 'grgzt'
+      admin: 'xmzx'
     }
 
     this.url = {
@@ -285,7 +285,7 @@ class Config {
       // 值0即为HM[MC]F：上、中（左菜单 右内容）、下
       // 值1即为LLR[HCF]，结构为左右，即左（菜单）、右（上-头部、中-内容）、下）
       // mode变化PageSidebar的背景色也调整
-      mode: 1,
+      mode: 0,
       header: {maxHeight: '44px', minHeight: '44px'},
       // miniWidth
       sidebar: {maxWidth: '170px', minWidth: '0px', miniWidth: '70px'},
