@@ -3,8 +3,8 @@
     <div class="left menu">
       <div class="ui item dropdown" :style="{width:logoWidth}" v-if="isShowLogo()">
         <div class="text">
-          <img class="ui avatar image" src="../../../static/images/logo/48x48.png">
-          <span style="font-weight: bold;font-size: 1.25em;margin-left: -13px;">eelato</span>
+          <!--<img class="ui avatar image" src="../../../static/images/logo/48x48.png">-->
+          <span style="font-weight: bold;font-size: 1.25em;margin-left: -13px;">DEMO</span>
         </div>
       </div>
       <a class="gl-layout-sidebar-toggle item">

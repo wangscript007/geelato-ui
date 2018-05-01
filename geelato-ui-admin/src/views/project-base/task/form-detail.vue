@@ -9,10 +9,13 @@
     <!--<div class="dnd-target" data-dnd-allow="table,layout,control" style="border-color: #d8d8d8">-->
     <!--</div>-->
     <!--</div>-->
-    <div class="sixteen wide column"></div>
-    <div class="eleven wide column">
+    <div class="ten wide column">
       <h4 class="ui dividing header">基础信息</h4>
       <div class="two fields">
+        <div class="field">
+          <label>任务标题</label>
+          <input type="text" name="title" v-model="form.task.title" placeholder="标题">
+        </div>
         <div class="field">
           <label>所属项目</label>
           <div class="ui fluid search selection dropdown projectList">
@@ -28,10 +31,6 @@
               </template>
             </div>
           </div>
-        </div>
-        <div class="field">
-          <label>标题</label>
-          <input type="text" name="title" v-model="form.task.title" placeholder="标题">
         </div>
       </div>
       <div class="two fields">
@@ -60,9 +59,119 @@
         <label>描述</label>
         <div class="task-description-editor" v-model="form.task.description"></div>
       </div>
-      <task-comment></task-comment>
+      <div class="ui clearing segment" style="border: 0px;padding: 1em 0 0 0;margin:0 0 0 0"
+           @mouseover="showDynamicInfo=true" @onmouseout="showDynamicInfo=false">
+        <h4 v-if="showDynamicInfo" class="ui right floated header" style="padding-bottom: 0.1em;margin-bottom: 0.1em">
+          <!--<div class="ui toggle checkbox" @click="isCommentOnly=!isCommentOnly">-->
+          <!--<input type="checkbox" name="public">-->
+          <!--<label>评论</label>-->
+          <!--</div>-->
+          <!--<div class="ui toggle checkbox" @click="isCommentOnly=!isCommentOnly">-->
+          <!--<input type="checkbox" name="public">-->
+          <!--<label>附件</label>-->
+          <!--</div>-->
+          <!--<div class="ui toggle checkbox" @click="isCommentOnly=!isCommentOnly">-->
+          <!--<input type="checkbox" name="public">-->
+          <!--<label>所有</label>-->
+          <!--</div>-->
+          <div class="ui mini buttons">
+            <gl-group item=".ui.button">
+              <button class="ui button active" @click="isCommentOnly=false">所有</button>
+              <button class="ui button" @click="isCommentOnly=true">仅评论</button>
+              <button class="ui button" @click="isCommentOnly=false">仅附件</button>
+            </gl-group>
+          </div>
+        </h4>
+        <h4 class="ui left floated header">
+          动态信息
+        </h4>
+      </div>
+      <div class="ui fitted divider"></div>
+      <div class="ui feed">
+        <div class="event" v-if="!isCommentOnly">
+          <div class="label">
+            <i class="user circle huge icon"></i>
+          </div>
+          <div class="content">
+            <div class="summary gl-summary-thin">
+              <a class="user">
+                张三
+              </a> 修改进度60%为80%
+              <div class="date">
+                1 小时前
+              </div>
+            </div>
+            <!--<div class="meta">-->
+            <!--<a class="like">-->
+            <!--<i class="like icon"></i> 4 Likes-->
+            <!--</a>-->
+            <!--</div>-->
+          </div>
+        </div>
+        <div class="event" v-if="!isCommentOnly">
+          <div class="label">
+            <i class="user circle huge icon"></i>
+          </div>
+          <div class="content">
+            <div class="summary gl-summary-thin">
+              <a class="user">
+                张三
+              </a> 修改进度30%为60%
+              <div class="date">
+                2018-03-05 15:15
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="event">
+          <div class="label">
+            <i class="user circle huge icon"></i>
+          </div>
+          <div class="content">
+            <div class="summary gl-summary-thin">
+              <a class="user">
+                张三
+              </a> 添加评论：明天需协调王工参与讨论，明确会议时间。
+              <div class="date">
+                2018-03-02 11:12
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="event" v-if="!isCommentOnly">
+          <div class="label">
+            <i class="user circle huge icon"></i>
+          </div>
+          <div class="content">
+            <div class="summary gl-summary-thin">
+              <a class="user">
+                张三
+              </a> 修改进度20%为30%
+              <div class="date">
+                2018-03-04 17:19
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="event" v-if="!isCommentOnly">
+          <div class="label">
+            <i class="user circle huge icon"></i>
+          </div>
+          <div class="content">
+            <div class="summary gl-summary-thin">
+              <a class="user">
+                张三
+              </a> 修改进度0%为20%
+              <div class="date">
+                2018-03-02 11:12
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<task-comment></task-comment>-->
     </div>
-    <div class="five wide column task-form-properties">
+    <div class="six wide column task-form-properties">
       <h4 class="ui dividing header">属性</h4>
       <table class="ui compact table gl-table" style="width: 100%">
         <tbody>
@@ -77,7 +186,7 @@
                 <div class="ui fluid dropdown">
                   <input type="hidden" :name="item.name">
                   <i class="dropdown icon"></i>
-                  <div class="default text">请选择</div>
+                  <div class="default text" style="padding: .37857143em 1em">请选择</div>
                   <div class="menu">
                     <div v-for="subItem in item.values" class="item"
                          style="font-size: 1em"
@@ -90,48 +199,47 @@
           </td>
         </tr>
         <tr>
+          <td style="min-width: 5em;background-color: #eeeeee">进度</td>
+          <td>
+            <div class="ui fluid labeled input" style="padding: 0">
+              <input type="text" value="80">
+              <div class="ui label">%</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <td style="min-width: 5em;background-color: #eeeeee">指派给</td>
-          <td>张三</td>
+          <td><i class="user circle big icon"></i>张三</td>
         </tr>
         </tbody>
       </table>
       <h4 class="ui dividing header">相关任务</h4>
-      <table class="ui compact table" style="width: 100%">
-        <tbody>
-        <tr v-for="(item,key) in task.properties">
-          <td style="min-width: 5em;background-color: #eeeeee">{{item.name}}</td>
-          <td>
-            <template v-if="item.type==='text'">
-              <input type="text">
-            </template>
-            <template v-else>
-              <sui type="dropdown" selector=".ui.dropdown">
-                <div class="ui fluid dropdown">
-                  <input type="hidden" :name="item.name">
-                  <i class="dropdown icon"></i>
-                  <div class="default text">请选择</div>
-                  <div class="menu">
-                    <div v-for="subItem in item.values" class="item"
-                         style="font-size: 1em"
-                         data-value="subItem.code">{{subItem.name}}
-                    </div>
-                  </div>
-                </div>
-              </sui>
-            </template>
-          </td>
-        </tr>
-        <tr>
-          <td style="min-width: 5em;background-color: #eeeeee">指派给</td>
-          <td>张三</td>
-        </tr>
-        </tbody>
-      </table>
+      <gl-group item=".list>.item">
+        <div class="ui aligned divided list">
+          <div class="item" v-if="subTaskState==='editing'">
+            <div class="right floated content">
+              <i class="user circle big icon"></i>
+            </div>
+            <div class="content">
+              <input type="text" style="width: 80%" @keyup.enter="$_addSubTask($event)">
+            </div>
+          </div>
+          <div class="item" v-if="subTaskState==='querying'">
+            <div class="right floated content">
+              <i class="user circle big icon"></i>
+            </div>
+            <div class="content" style="cursor: pointer" @click="$_toAddingSubTask()">
+              <i class="add circle big icon"></i>
+              添加子任务
+            </div>
+          </div>
+        </div>
+      </gl-group>
     </div>
-    <div class="sixteen wide column">
-      <div class="ui mini button" :class="$GL.ui.color.primary" @click="$_save">保存</div>
-      <div class="ui mini button" :class="$GL.ui.color.negative" @click="$_cancel">取消</div>
-    </div>
+    <!--<div class="sixteen wide column">-->
+    <!--<div class="ui mini button" :class="$GL.ui.color.primary" @click="$_save">保存</div>-->
+    <!--<div class="ui mini button" :class="$GL.ui.color.negative" @click="$_cancel">取消</div>-->
+    <!--</div>-->
   </div>
 </template>
 <script>
@@ -144,6 +252,12 @@
   export default {
     data () {
       return {
+        // 子任务状态 editing querying
+        subTaskState: 'querying',
+        // 动态信息，只展示评论
+        showDynamicInfo: false,
+        // 动态信息，只展示评论
+        isCommentOnly: false,
         // 子任务、前置任务、父任务，{relationShip:'',}
         refTasks: [],
         // 最大时，不展示查询区
@@ -198,8 +312,8 @@
           el: $el.find('.task-description-editor').get(0),
           initialEditType: 'wysiwyg', // markdown
           previewStyle: 'vertical', // tab
-          height: '240px',
-          minHeight: '200px',
+          height: '180px',
+          minHeight: '120px',
           language: 'zh'
         })
         $(this.$el).find('.ui.menu>.item[data-tab]').tab()
@@ -217,18 +331,25 @@
       },
       $_cancel () {
         this.$parent.pageState = 'querying'
+      },
+      $_toAddingSubTask () {
+        this.subTaskState = 'editing'
+      },
+      $_addSubTask (event) {
+        console.log(event)
+        this.subTaskState = 'querying'
       }
     },
     components: {TaskComment}
   }
 </script>
 <style>
-  .te-mode-switch-section {
+  .task-description-editor .te-mode-switch-section {
     display: none;
     /* 隐藏编辑器切换 */
   }
 
-  .tui-codeblock.tui-toolbar-icons {
+  .task-description-editor .tui-codeblock.tui-toolbar-icons {
     display: none;
     /* 隐藏代码功能 */
   }

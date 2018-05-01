@@ -22,16 +22,21 @@
   padding: 2px;
 }
 
-.ui.comments{
+.ui.comments {
   max-width: inherit;
 }
+
+.ui.feed > .event > .content .summary.gl-summary-thin {
+  font-weight: normal;
+}
+
 /*.ui.accordion > .title {*/
-  /*font-weight: bold;*/
+/*font-weight: bold;*/
 /*}*/
 
 /*.ui.fullscreen.modal {*/
-  /*width: 95% !important;*/
-  /*!*height: 95%;*!*/
+/*width: 95% !important;*/
+/*!*height: 95%;*!*/
 /*}*/
 
 /********* Jstree *************/

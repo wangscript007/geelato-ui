@@ -27,7 +27,8 @@
     },
     data () {
       return {
-        id: ''
+        id: '',
+        sui: {}
       }
     },
     updated () {
@@ -39,9 +40,8 @@
     methods: {
       $_init: function () {
         let theVue = this
-//        theVue.exclusive = true
-        console.log()
-        $(this.$el).find(this.selector)[theVue.type](theVue.opts)
+        this.sui = $(this.$el).find(this.selector)[theVue.type](theVue.opts)
+//        console.log('sui>', theVue.sui)
       }
     },
     components: {}

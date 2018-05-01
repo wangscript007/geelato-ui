@@ -4,7 +4,7 @@
       <div class="sixteen wide column task-topbar">
         <div class="ui mini menu">
           <a class="item">
-            <div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','bug')"><i
+            <div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','task')"><i
               class="plus icon"></i>创建
             </div>
             <!--<div class="ui icon dropdown mini button" :class="$GL.ui.color.primary"><i class="plus icon"></i>创建-->
@@ -191,13 +191,13 @@
                     <span class="text">{{item.values[0].name}}</span>
                     <div class="mini menu">
                       <!--<div class="ui icon search input">-->
-                        <!--<i class="search icon"></i>-->
-                        <!--<input type="text" placeholder="查询">-->
+                      <!--<i class="search icon"></i>-->
+                      <!--<input type="text" placeholder="查询">-->
                       <!--</div>-->
                       <!--<div class="divider"></div>-->
                       <!--<div class="header">-->
-                        <!--&lt;!&ndash;<i class="tags icon"></i>&ndash;&gt;-->
-                        <!--{{item.name}}-->
+                      <!--&lt;!&ndash;<i class="tags icon"></i>&ndash;&gt;-->
+                      <!--{{item.name}}-->
                       <!--</div>-->
                       <div class="scrolling mini menu">
                         <div class="mini item" v-for="subItem in item.values" style="padding: 0.4em 0.8em">
@@ -220,11 +220,44 @@
       </div>
     </div>
     <div v-if="pageState==='editing'" class="task-form">
-      <task-form></task-form>
     </div>
     <div v-if="pageState==='taskSet'" class="task-set">
       <task-set></task-set>
     </div>
+    <sui ref="taskModal" type="modal" selector=".ui.modal" :opts="{ duration: 200,closable: false}">
+      <div class="ui longer modal">
+        <div class="ui header">任务信息
+          <i class="tasks icon" title="子任务" style=""></i>
+        </div>
+        <i class="close icon" style="top:0.75em;right: 0.75em;color: black"></i>
+        <div class="scrolling content">
+          <task-form></task-form>
+        </div>
+        <div class="actions" style="text-align: left;padding: 0.25em 2.5em">
+          <div class="ui mini form">
+            <div class="inline field" style="margin: 0">
+              <textarea rows="2" style="" placeholder="在此描述最新进展，@提及他人，按 Ctrl+Enter 快速发布"></textarea>
+            </div>
+            <div class="ui mini text menu" style="margin: 0.2em">
+              <div class="item">
+                <i class="paperclip icon" style="cursor: pointer"></i>
+                <i class="smile outline icon" style="cursor: pointer"></i>
+              </div>
+              <div class="float right item">
+                <div class="ui mini button" :class="$GL.ui.color.primary">发送</div>
+              </div>
+            </div>
+            <!--<div class="inline fields">-->
+              <!--<div class="field">-->
+                <!--<i class="paperclip icon"></i>-->
+              <!--</div>-->
+              <!--<div class="field" style="text-align: right">-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+        </div>
+      </div>
+    </sui>
   </div>
 </template>
 <script>
@@ -300,8 +333,14 @@
       $_save () {
         this.$_query()
       },
+      $_openTask () {
+        this.$GL.ui.openVueByPath(this, '/views/project-base/task/form-detail.vue', {title: '任务信息'})
+      },
       $_edit (id, type, to) {
-        this.pageState = 'editing'
+//        this.$_openTask()
+//        this.pageState = 'editing'
+        this.$refs.taskModal.sui.modal('show')
+//        console.log('this.$refs.taskModal>', this.$refs.taskModal.sui)
 //        this.pageState = 'taskSet'
       },
       $_query () {

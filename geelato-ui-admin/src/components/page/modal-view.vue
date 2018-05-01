@@ -1,7 +1,7 @@
 <template>
   <div id="app-root-modal" class="ui fullscreen modal hide">
     <i class="close icon"></i>
-    <div class="ui header" v-html="modalOpts?modalOpts.title:''">
+    <div class="header" v-html="modalOpts?modalOpts.title:''">
     </div>
     <div class="scrolling content">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
