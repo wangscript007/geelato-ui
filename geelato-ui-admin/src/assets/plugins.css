@@ -3,6 +3,7 @@
    带gl-*为扩展样式，其它则为重置样式
  *************************************/
 /********* semantic ui *************/
+
 .ui.gl-compact.table thead th {
   padding-top: 0.42857143em;
   padding-bottom: 0.42857143em;
@@ -28,6 +29,18 @@
 
 .ui.feed > .event > .content .summary.gl-summary-thin {
   font-weight: normal;
+}
+
+.icon.gl-state-finished {
+  opacity: 1;
+}
+
+.icon.gl-state-none {
+  opacity: 0.6;
+}
+
+.icon.gl-state-unfinished {
+  opacity: 0.2;
 }
 
 /*.ui.accordion > .title {*/
