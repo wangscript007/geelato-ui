@@ -20,6 +20,12 @@
 .gl-state-unfinished{
   /*未完成*/
 }
+
+.gl-fitted {
+  margin: 0;
+  padding: 0;
+}
+
 /*=============gl-state end=============*/
 /*=============gl-form start=============*/
 .gl-form {

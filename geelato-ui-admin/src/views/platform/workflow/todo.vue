@@ -1,7 +1,30 @@
 <template>
-  <div>
-    工作台，会议、任务、项目、计划
-  </div>
+  <sui type="menu" selector=".ui.secondary.menu" style="margin: 1em">
+    <div class="ui secondary pointing menu">
+      <a class="item">
+        我的待办
+        <div class="ui red circular label">0</div>
+      </a>
+      <a class="item active">
+        我的已办
+      </a>
+      <a class="item">
+        我的待阅
+        <div class="ui red circular label">0</div>
+      </a>
+      <a class="item">
+        我的已阅
+      </a>
+      <!--<div class="right menu">-->
+      <!--<a class="ui item">-->
+      <!--Logout-->
+      <!--</a>-->
+      <!--</div>-->
+    </div>
+    <div class="ui segment">
+      <p></p>
+    </div>
+  </sui>
 </template>
 <script>
   import entityNames from '../../../pages/entities'

@@ -7,20 +7,53 @@ class Config {
       {
         title: '个人工作台',
         code: 'grgzt',
-        index: '/#/m/platform/workbench/index',
+        index: '/#/m/project-base/center/projects',
         // max or min
         resize: 'min',
         html: '',
-        menu: [{
-          title: '个人工作台',
-          class: 'fa fa-connectdevelop',
-          items: [
-            {title: '任务执行跟踪', href: '/#/m/project-base/task/index'},
-            {title: '我的流程管理', href: '/#/m/platform/workflow/index'},
-            {title: '我的会议管理', href: '/#/m/platform/meeting/index'}
-            // {title: '任务跟踪管理', href: '/#/m/project-base/center/report'}
-          ]
-        }]
+        menu: [
+          {
+            title: '工作台',
+            class: 'fa fa-connectdevelop',
+            items: [
+              {title: '我的工作台', href: '/#/m/platform/workbench/index'}
+            ],
+            active: true
+          },
+          {
+            title: '会议及任务管理',
+            class: 'fa fa-connectdevelop',
+            items: [
+              {title: '我的会议管理', href: '/#/m/meeting/info/my-meeting'},
+              {title: '会议综合查询', href: '/#/m/meeting/info/query'},
+              {title: '会议任务跟踪', href: '/#/m/project-base/task/meeting-task'}
+              // {title: '任务执行跟踪', href: '/#/m/project-base/task/index'},
+              // {title: '任务跟踪管理', href: '/#/m/project-base/center/report'}
+            ]
+          },
+          {
+            title: '业务流程管理',
+            class: 'fa fa-connectdevelop',
+            items: [
+              {title: '业务流程发起', href: '/#/m/platform/workflow/index'},
+              {title: '我的待办流程', href: '/#/m/platform/workflow/todo'},
+              {title: '我的已办流程', href: '/#/m/platform/workflow/todo'},
+              {title: '流程委托授权', href: '/#/m/platform/workflow/index'}
+              // {title: '我的流程管理', href: '/#/m/platform/workflow/index'}
+            ]
+          }, {
+            title: '项目管理',
+            class: 'fa fa-connectdevelop',
+            items: [
+              {title: '我的项目管理', href: '/#/m/project-base/center/projects'},
+              {title: '我的项目计划', href: '/#/m/project-base/center/projects'}
+              // {title: '创建项目', href: '/#/m/platform/workflow/index'}
+              // {title: '我参与的项目', href: '/#/m/platform/meeting/index'},
+              // {title: '前期工程项目', href: '/#/m/platform/meeting/index'},
+              // {title: '前期工程项目', href: '/#/m/platform/meeting/index'},
+              // {title: '土建工程项目', href: '/#/m/platform/meeting/index'}
+            ]
+          }]
       },
       {
         title: '新线项目中心',
@@ -68,20 +101,38 @@ class Config {
         title: '机电工程', code: 'jdgc'
       },
       {
-        title: '前期工程',
+        title: '前期工程项目',
         code: 'qqgc',
-        menu: [{
-          title: '项目管理',
-          class: 'fa fa-connectdevelop',
-          items: [
-            {title: '项目信息', href: '/#/m/page/project/prj-project-info-list?em=prj-project'},
-            {title: '任务执行', href: '/#/m/project-base/task/index'},
-            {title: '任务标准库配置', href: '/#/m/project-metro/task/task-standard'},
-            {title: '指标管理', href: '/#/m/project-metro/task/quota'}
-            // {title: '需求管理', href: '/#/m/project/requirement'},
-            // {title: '项目报告', href: '/#/m/project/report'}
-          ]
-        }]
+        index: '/#/m/project-base/info/select-project?module=qqgc',
+        html: '<div style="padding: 1.3em 0;text-align: center"><a class="ui mini button" href="/#/m/project-base/info/select-project?module=itxm">选择项目</a></div>',
+        menu: [
+          {
+            title: '项目信息管理',
+            items: [
+              {title: '项目信息', href: '/#/m/project-it/info/project-info'}
+            ]
+          },
+          {
+            title: '项目进度管理',
+            items: [
+              {title: '计划文件管理', href: '/#/m/project-base/schedule/plan-config'},
+              {title: '计划任务管理', href: '/#/m/project-base/schedule/plan-task'},
+              {title: '月度计划执行', href: '/#/m/project-base/schedule/plan-execution'},
+              {title: '任务标准库配置', href: '/#/m/project-it/task/task-standard'},
+              {title: '指标标准管理', href: '/#/m/project-base/quota/quota-config'},
+              {title: '成果标准管理', href: '/#/m/project-base/achievement/achievement-config'}
+            ]
+          },
+          {
+            title: '项目报表视图',
+            items: [
+              {title: '项目总体视图', href: '/#/m/project-metro/report/project-index'},
+              {title: '项目指标报表', href: '/#/m/project-metro/report/project-quota'},
+              {title: '其它定制报表', href: '/#/m/project-metro/report/project-custom'}
+            ]
+          }
+        ],
+        active: true
       },
       {title: '设计管理', code: 'sjgl'},
       {
@@ -295,6 +346,17 @@ class Config {
     // 还未开发该功能，暂禁用
     this.login = {registerEnable: false}
     this.mapAK = 'sIKTgNAqvT9Uo0yQMlr3H9B6dZADzhfT'
+  }
+
+  getModule (moduleCode) {
+    for (let i in this.modules) {
+      let module = this.modules[i]
+      if (module.code === moduleCode) {
+        return module
+      }
+    }
+    console.error('getModule by code :' + moduleCode + ',return {}.')
+    return {}
   }
 }
 

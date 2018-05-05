@@ -230,6 +230,20 @@
         </tr>
         </tbody>
       </table>
+      <h4 class="ui dividing header">任务指标</h4>
+      <table class="ui mini form gl-form gl-col-24">
+        <tbody>
+        <tr>
+          <td colspan="6">流程数</td>
+          <td colspan="9">
+            <input type="text" value="0">
+          </td>
+          <td colspan="9">
+            <input type="text" value="36">
+          </td>
+        </tr>
+        </tbody>
+      </table>
       <h4 class="ui dividing header">任务成果(1/2)</h4>
       <gl-group item=".list>.item">
         <div class="ui aligned divided list">
@@ -256,7 +270,7 @@
             <!--<i class="user circle big icon"></i>-->
             <!--</div>-->
             <div class="content" style="cursor: pointer" @click="$_toAddingAchievement()">
-              <i class="add circle big icon"></i>
+              <i class="add circle big icon gl-state-none"></i>
               添加其它成果
             </div>
           </div>
@@ -286,7 +300,7 @@
               <i class="user circle big icon"></i>
             </div>
             <div class="content" style="cursor: pointer" @click="$_toAddingSubTask()">
-              <i class="add circle big icon"></i>
+              <i class="add circle big icon gl-state-none"></i>
               添加子任务
             </div>
           </div>
@@ -305,10 +319,10 @@
           </div>
           <div class="item" v-if="preTaskState==='querying'">
             <div class="right floated content">
-              <i class="user circle big icon"></i>
+              <i class="user circle big icon gl-state-none"></i>
             </div>
             <div class="content" style="cursor: pointer" @click="$_toAddingPreTask()">
-              <i class="add circle big icon"></i>
+              <i class="add circle big icon gl-state-none"></i>
               添加前置任务
             </div>
           </div>

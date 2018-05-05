@@ -1,5 +1,6 @@
 import tjgc from './project/project-metro/tjgc.js'
 import xxgh from './project/project-metro/xxgh.js'
+import qqgc from './project/project-metro/qqgc.js'
 import itxm from './project/project-it/index.js'
 
 class Data {
@@ -7,6 +8,7 @@ class Data {
     this.description = '数据中心'
     this.currentModule = {}
     this.module = {}
+    this.module.qqgc = qqgc
     this.module.tjgc = tjgc
     this.module.xmzx = tjgc
     this.module.grgzt = tjgc

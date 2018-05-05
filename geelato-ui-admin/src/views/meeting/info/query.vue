@@ -1,6 +1,6 @@
 <template>
-  <div>
-    工作台，会议、任务、项目、计划
+  <div class="ui padded grid">
+    展示会议的综合查询
   </div>
 </template>
 <script>

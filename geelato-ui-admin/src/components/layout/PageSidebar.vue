@@ -116,7 +116,7 @@
 <style scoped>
   .ui.vertical.menu .menu .item {
     padding-top: .3em;
-    padding-bottom: .3em;
+    padding-bottom: .4em;
     font-size: 1em;
   }
 </style>

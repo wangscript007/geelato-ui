@@ -1,6 +1,7 @@
 <template>
-  <div>
-    工作台，会议、任务、项目、计划
+  <div class="ui padded grid">
+    默认以日历方式展示我的会议（包括我参加的、我创建的）
+    可以发起新的会议
   </div>
 </template>
 <script>

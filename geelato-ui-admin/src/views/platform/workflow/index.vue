@@ -1,6 +1,59 @@
 <template>
-  <div>
-    工作流待办
+  <div class="ui padded grid">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h4 class="ui dividing header">xx业务流程</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="sixteen wide column">
+        <h4 class="ui dividing header">xx业务流程</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+      <div class="two wide column">
+        <div class="ui segment">
+          xx申请
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
