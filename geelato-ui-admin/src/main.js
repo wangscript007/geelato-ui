@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import store from './store/store'
 import core from './common/core.js'
+import utils from './common/utils.js'
 import cfg from './common/config.js'
 import mockData from './mock/data.js'
 import projectConfig from './common/project/config.js'
@@ -17,7 +18,8 @@ import echarts from 'echarts'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$GL = core
+Vue.prototype.$gl = core
+Vue.prototype.$utils = utils
 Vue.prototype.$CFG = cfg
 Vue.prototype.$mockData = mockData
 Vue.prototype.$echarts = echarts

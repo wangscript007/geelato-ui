@@ -2,7 +2,7 @@
   <div>
     <div class="ui mini borderless menu" v-if="$store.state.currentProject.name">
       <div class="right float item">
-        <div class="ui mini button" :class="$GL.ui.color.primary">导出</div>
+        <div class="ui mini button" :class="$gl.ui.color.primary">导出</div>
       </div>
     </div>
     <div class="gl-page-content-wrapper" style="padding-top:0px">
@@ -30,7 +30,7 @@
         </div>
         <div class="sixteen wide column" v-else>
           <h2 class="ui center aligned header">
-            <div class="ui mini button" :class="$GL.ui.color.primary"
+            <div class="ui mini button" :class="$gl.ui.color.primary"
                  @click="$router.push('/m/project-metro/info/select-project')">请先选择项目
             </div>
           </h2>

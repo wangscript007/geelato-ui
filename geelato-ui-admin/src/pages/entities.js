@@ -6,7 +6,8 @@ class Entities {
     this.platform = {
       dev: {
         project: 'platform_dev_project',
-        pageConfig: 'platform_page_config'
+        pageConfig: 'platform_page_config',
+        demoEntity: 'platform_demo_entity'
       },
       common: {
         treeNode: 'platform_tree_node',

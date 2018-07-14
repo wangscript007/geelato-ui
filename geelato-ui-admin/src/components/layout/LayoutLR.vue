@@ -126,9 +126,9 @@
 //        this.content.float = 'left'
         this.sidebar.float = 'left'
         // background: '#2185d0'
-        for (let key in this.$GL.ui.colorHex) {
-          let hex = this.$GL.ui.colorHex[key]
-          if (key === this.$GL.ui.color.primary) {
+        for (let key in this.$gl.ui.colorHex) {
+          let hex = this.$gl.ui.colorHex[key]
+          if (key === this.$gl.ui.color.primary) {
             this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
           }
         }

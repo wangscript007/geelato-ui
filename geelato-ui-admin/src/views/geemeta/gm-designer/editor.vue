@@ -41,7 +41,7 @@
           <a class=" item active " data-tab="designer-tab-project">&nbsp;&nbsp;&nbsp;项目</a>
           <a class=" item" data-tab="designer-tab-designer">工具</a>
         </div>
-        <div class="ui bottom attached tab vertical  segment tab-content active" data-tab="designer-tab-project">
+        <div class="ui bottom attached tab vertical segment tab-content active" data-tab="designer-tab-project">
           <project :ds="ds.project" @openPage="onOpenPage"
                    @newPage="onNewPage"></project>
         </div>
@@ -94,13 +94,13 @@
   import core from '../../../common/core'
   import Project from './toolbox-project'
   import TableForm from './toolbox-table-form'
-  import WebComponent from './toolbox-web-component.vue'
+  import WebComponent from './toolbox-sheet.vue'
   import Layout from './toolbox-layout'
   import Control from './toolbox-control'
   import Setting from './setting/setting.vue'
   import Page from './toolbox-page'
   import DivForm from './toolbox-div-form'
-  import Stage from './stage'
+  import Stage from './stage/stage'
   //  import utils from '../../../common/utils'
   import designerStore from '../../../components/designer/DesignerStoreInstance'
   //  import PageInfo from '../../../common/PageInfo'
@@ -225,9 +225,9 @@
           content: JSON.stringify(designerStore.editingPage)
         }).then(function (res) {
           designerStore.editingPage.id = res.data
-//          thisVue.$GL.ui.showMsg('页面保存成功', 'success', '')
+//          thisVue.$gl.ui.showMsg('页面保存成功', 'success', '')
         }).catch(function (e) {
-//          thisVue.$GL.ui.showMsg('页面保存失败', 'fail', '')
+//          thisVue.$gl.ui.showMsg('页面保存失败', 'fail', '')
         })
       },
       loadCachePage: function (extendId) {

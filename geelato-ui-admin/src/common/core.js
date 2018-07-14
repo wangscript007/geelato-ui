@@ -8,7 +8,8 @@ import router from '../router/index'
 import pageManager from '../pages/index'
 
 let componentType = {
-  checkbox: 'modules'
+  checkbox: 'modules',
+  HandsonTable: 'modules'
 }
 /**
  * 在使用之前需选设置$root {@link #ctx}
@@ -57,12 +58,17 @@ let core = {
         })
       })
     },
+    /**
+     *  vue文件模板
+     * @param fileName
+     * @returns {Promise}
+     */
     getFileTemplate: function (fileName) {
       return new Promise((resolve, reject) => {
         console.log('resolve>', resolve)
         // let lazyLoadFn = (fileName, resolve) => { require(['../views/geemeta/gm-designer/file-template/' + fileName + '.vue'], resolve) }
         // resolve(new Vue(lazyLoadFn).$mount())
-        let lazyLoad = (fileName, resolve) => { require(['../views/geemeta/gm-designer/file-template/' + fileName + '.vue'], resolve) }
+        let lazyLoad = (fileName, resolve) => { require(['../views/platform/file/designer-template/' + fileName + '.vue'], resolve) }
         lazyLoad(fileName, data => { resolve(new Vue(data.default).$mount()) })
       })
     },
@@ -247,6 +253,60 @@ let core = {
         }
       })
       return df.promise()
+    },
+    /**
+     * 查询数据定义信息，即元数据信息
+     * @param gqlObject or gqlArray
+     * @param withMeta 是否需同时查询出各列表字段的元数据信息
+     * @returns {*}
+     */
+    queryMeta: function (entityName) {
+      let df = $.Deferred()
+      var url = config.url.apiMetaDefined + '/' + entityName
+      $.ajax(url, {
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json',
+        processData: false,
+        data: '',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          var options = this // 调用本次AJAX请求时传递的options参数
+          console.error({
+            XMLHttpRequest: XMLHttpRequest,
+            textStatus: textStatus,
+            errorThrown: errorThrown,
+            options: options
+          })
+        },
+        success: function (data) {
+          df.resolve(data)
+        }
+      })
+      return df.promise()
+    },
+    queryEntityNames: function () {
+      let df = $.Deferred()
+      var url = config.url.apiMetaEntityNames + '/'
+      $.ajax(url, {
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json',
+        processData: false,
+        data: '',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          var options = this // 调用本次AJAX请求时传递的options参数
+          console.error({
+            XMLHttpRequest: XMLHttpRequest,
+            textStatus: textStatus,
+            errorThrown: errorThrown,
+            options: options
+          })
+        },
+        success: function (data) {
+          df.resolve(data)
+        }
+      })
+      return df.promise()
     }
   },
   url: {
@@ -276,7 +336,7 @@ let core = {
           }
         }
         let path = '../components/page/' + pageConfig.content.component + '.vue'
-        core.ui.openVueByPath(srcVue, path, pageConfig, data)
+        core.ui.openVueByPath(srcVue, path, {title: '', opts: pageConfig}, data)
       })
     },
     /**
@@ -309,7 +369,12 @@ let core = {
       console.log('openVue > callbackSet >', callbackSet)
       // $root对应App.vue的上线，srcVue.$root.$children[0]才对应APP.vue
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalBody', vueComponent)
-      Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', vueConfig || {})
+      Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', vueConfig)
+      // Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', {
+      //   title: '',
+      //   actions: [],
+      //   opts: vueConfig
+      // })
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'callbackSet', callbackSet || {})
       // $('#app-root-modal').modal('setting', 'transition', 'fade').modal('show')
       //  TODO 改成动态创建，并将ID传给modalOpts
@@ -381,62 +446,62 @@ let core = {
       })
     },
     login (user, remember, success) {
-      core.security.loginDemo(user, remember, success)
-      // return $.ajax(config.url.root + '/api/sys/auth/login?remember=' + remember, {
-      //   type: 'POST',
-      //   dataType: 'json',
-      //   contentType: 'application/json',
-      //   processData: false,
-      //   data: user,
-      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
-      //     core.ui.showMsg('账号或密码不正确！', 'error')
-      //   },
-      //   success: success
-      // })
+      // core.security.loginDemo(user, remember, success)
+      return $.ajax(config.url.root + '/api/sys/auth/login?remember=' + remember, {
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        processData: false,
+        data: user,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          core.ui.showMsg('账号或密码不正确！', 'error')
+        },
+        success: success
+      })
     },
     logout () {
-      router.push('/login')
-      // $.ajax(config.url.root + '/api/sys/auth/logout', {
-      //   // type: 'POST',
-      //   // dataType: 'json',
-      //   // contentType: 'application/json',
-      //   // processData: false,
-      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
-      //     core.ui.showMsg('暂时不能注销！', 'warning')
-      //   },
-      //   success: function (data) {
-      //     console.debug('request end>>', data)
-      //     core.security.profile(null)
-      //     router.push('/login')
-      //     // var reloadURL = 'index.html' + window.location.search
-      //     // window.location.replace(reloadURL, true)
-      //   }
-      // })
+      // router.push('/login')
+      $.ajax(config.url.root + '/api/sys/auth/logout', {
+        // type: 'POST',
+        // dataType: 'json',
+        // contentType: 'application/json',
+        // processData: false,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          core.ui.showMsg('暂时不能注销！', 'warning')
+        },
+        success: function (data) {
+          console.debug('request end>>', data)
+          core.security.profile(null)
+          router.push('/login')
+          // var reloadURL = 'index.html' + window.location.search
+          // window.location.replace(reloadURL, true)
+        }
+      })
     },
     /**
      * 同步方法，验证是否已登录
      * @returns {boolean} true or false
      */
     isLogged () {
-      return false
-      // let result = false
-      // let self = this
-      // $.ajax(config.url.root + '/api/sys/auth/isLogged', {
-      //   async: false,
-      //   // dataType: 'json',
-      //   // contentType: 'application/json',
-      //   // processData: false,
-      //   error: function (XMLHttpRequest, textStatus, errorThrown) {
-      //     self.showMsg('暂未能检查是否已登录！')
-      //   },
-      //   success: function (data) {
-      //     if (data) {
-      //       result = true
-      //     }
-      //     console.log('isLogged success')
-      //   }
-      // })
-      // return result
+      // return false
+      let result = false
+      let self = this
+      $.ajax(config.url.root + '/api/sys/auth/isLogged', {
+        async: false,
+        // dataType: 'json',
+        // contentType: 'application/json',
+        // processData: false,
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          self.showMsg('暂未能检查是否已登录！')
+        },
+        success: function (data) {
+          if (data) {
+            result = true
+          }
+          console.log('isLogged success')
+        }
+      })
+      return result
     },
     profile (jsonProflie) {
       if (jsonProflie) {

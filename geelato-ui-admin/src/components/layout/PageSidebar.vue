@@ -87,7 +87,7 @@
 //    },
     created: function () {
 //      let layout = utils.session('geelato.config.layout')
-      this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$GL.ui.color.primary : ''
+      this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$gl.ui.color.primary : ''
 
       // 从配置中读取默认active的菜单
 //      for (var i in config.modules) {

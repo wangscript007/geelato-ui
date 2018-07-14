@@ -102,7 +102,7 @@
 //              type: typeName,
 //              treeId: '876251651961815736'
 //            }
-//            thisVue.$GL.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
+//            thisVue.$gl.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
 //              treeNode.id = res.data
 //              let $ref = $.jstree.reference(data.reference)
 //              console.log('$ref>', $ref)

@@ -5,7 +5,7 @@
   <table class="ui small compact form gl-form gl-col-24">
     <thead></thead>
     <tbody>
-    <tr v-for="row in opts.layout">
+    <tr v-for="row in options.layout">
       <template v-for="cell in row" v-if="item=metaMap[Object.keys(cell)[0]]">
         <td :colspan="Object.values(cell)[0][0]">{{item.title}}</td>
         <td :colspan="Object.values(cell)[0][1]">
@@ -63,6 +63,16 @@
         }
 //        console.log('元数据：', result)
         return result
+      },
+      /**
+       * 解决析开modal时，传过来的参数带多了一层opts的问题
+       * */
+      options: function () {
+        if (this.opts && this.opts.opts) {
+          return this.opts.opts
+        } else {
+          return this.opts
+        }
       }
     },
     created: function () {
@@ -73,19 +83,19 @@
     },
     methods: {
       $_loadData () {
+        console.log('基于以下参数，构建表单>', this.options)
         let theVue = this
-        let id = this.opts.model && this.opts.model.id ? this.opts.model.id : -1
-        this.$GL.data.query(theVue.opts.entityName, {id: id}, theVue.opts.fields, true).then(function (res) {
-//          console.log('res>', res)
+        let id = theVue.options.model && theVue.options.model.id ? theVue.options.model.id : -1
+        this.$gl.data.query(theVue.options.entityName, {id: id}, theVue.options.fields, true).then(function (res) {
+          console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res)
           theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
           theVue.meta = res.meta
         })
-//        console.log('this.opts>', this.opts)
       },
       $_save () {
         let thisVue = this
         if (typeof this.$parent.$_close === 'function') {
-          this.$GL.data.save(this.opts.entityName, this.form).then(function (res) {
+          this.$gl.data.save(this.options.entityName, this.form).then(function (res) {
 //            console.log('save form res>', res)
             thisVue.$parent.$_close()
           })

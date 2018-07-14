@@ -14,20 +14,20 @@
       </div>
       <div slot="leftAction">
         <div class="item">
-          <a class="ui mini button" :class="$GL.ui.color.primary" @click="newPlan.state='editing'">新增</a>
+          <a class="ui mini button" :class="$gl.ui.color.primary" @click="newPlan.state='editing'">新增</a>
         </div>
       </div>
       <div slot="rightAction">
         <div class="item">
           <router-link
             :to="{ path: '/m/project-base/schedule/'+projectConfig.page.planConfig, query: { id: currentPlan.id,name: currentPlan.name }}"
-            class="ui mini button" :class="$GL.ui.color.primary">编制计划
+            class="ui mini button" :class="$gl.ui.color.primary">编制计划
           </router-link>
         </div>
       </div>
       <div slot="right">
         <!--<div class="ui mini center aligned segment">-->
-        <!--<div class="ui mini button" :class="$GL.ui.color.primary">编制计划任务</div>-->
+        <!--<div class="ui mini button" :class="$gl.ui.color.primary">编制计划任务</div>-->
         <!--</div>-->
         <sui type="accordion" selector=".ui.accordion" :opts="{exclusive: false}">
           <div class="ui accordion">

@@ -12,7 +12,7 @@
           <!--</h2>-->
           <br/>
           <i class="massive google icon" style="text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2)"
-             :style="'color:'+$GL.ui.colorHex[$GL.ui.color.primary]"
+             :style="'color:'+$gl.ui.colorHex[$gl.ui.color.primary]"
              aria-readonly="true"></i>
           <br/>
         </div>
@@ -56,11 +56,11 @@
     computed: {
       color: function () {
         let color = utils.session(session.GEELATO_CONFIG_COLOR)
-        return color && color.primary ? color.primary : this.$GL.ui.color.primary
+        return color && color.primary ? color.primary : this.$gl.ui.color.primary
       }
     },
     created () {
-      let isLogged = this.$GL.security.isLogged()
+      let isLogged = this.$gl.security.isLogged()
       if (isLogged) {
         window.location.replace('/')
       }
@@ -99,13 +99,13 @@
       login: function () {
         let thisVue = this
 //        console.log('login')
-        var user = '{"loginName": "@loginName", "password": "@password","remember":"@remember"}'
+        var user = '{"loginName": "@loginName", "password": "@password"}'
         user = user.replace('@loginName', thisVue.loginName)
         user = user.replace('@password', thisVue.password)
-        thisVue.$GL.security.login(user, thisVue.remember, function (data) {
+        thisVue.$gl.security.login(user, thisVue.remember, function (data) {
           console.log('success....login....', data)
-          thisVue.$GL.security.profile(data)
-          // 改用了$GL存储状态数据，不用$store
+          thisVue.$gl.security.profile(data)
+          // 改用了$gl存储状态数据，不用$store
           // thisVue.$store.commit(types.LOGIN, data)
           // $router.push('/m/')的方式不会刷新页面，导致后续异步组件加载展示时，样式信息不全，未知什么原因，先改用window.location.replace的方式
           // thisVue.$router.push('/m/')

@@ -7,7 +7,7 @@
         </div>
         <div class="ui right secondary mini menu">
           <div class="item">
-            <button class="ui mini button" :class="$GL.ui.color.primary">添加</button>&nbsp;
+            <button class="ui mini button" :class="$gl.ui.color.primary">添加</button>&nbsp;
           </div>
         </div>
       </div>
@@ -44,11 +44,13 @@
         </div>
         <div class="ui right secondary  borderless mini menu">
           <div v-if="opts.ui.toolbar.dropdown" class="item">
-            <button class="ui mini button" :class="$GL.ui.color.primary">保存</button>&nbsp;
+            <button class="ui mini button" :class="$gl.ui.color.primary">保存</button>&nbsp;
             <!--<button class="ui mini button">删除</button>&nbsp;-->
             <!--<button class="ui mini button">导出</button>-->
             <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">{{item.title}}</button>&nbsp;
+              <button class="ui mini button" :class="$gl.ui.color.primary" @click="$_click(item,$event)">
+                {{item.title}}
+              </button>&nbsp;
             </template>
             <!--<div class="ui teal mini buttons">-->
             <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em">操作</div>-->
@@ -219,7 +221,7 @@
       },
       $_loadData (queryParams) {
         let thisVue = this
-        this.$GL.data.queryByGql(genGql(queryParams)).then(function (data) {
+        this.$gl.data.queryByGql(genGql(queryParams)).then(function (data) {
           thisVue.queryResult = data
         })
 
@@ -278,7 +280,7 @@
             let modal = utils.invoke(action.modal, kvs)
             console.log('resolved modal>', modal)
             if (modal.type === 'href') {
-              thisVue.$GL.ui.openVueByPath(this, modal.value, modal, {
+              thisVue.$gl.ui.openVueByPath(this, modal.value, {title: '', opts: modal}, {
                 refreshTable: function () {
                   // 在modal中注册刷新操作
                   thisVue.$_submit()
@@ -293,7 +295,7 @@
             if (confirm(msg)) {
               console.log('rowItem>', rowItem)
               let kv = rowItem ? {id: rowItem.id} : {}
-              thisVue.$GL.data.delete(thisVue.opts.ui.entity, kv).then(function () {
+              thisVue.$gl.data.delete(thisVue.opts.ui.entity, kv).then(function () {
                 thisVue.$_submit()
               })
             }

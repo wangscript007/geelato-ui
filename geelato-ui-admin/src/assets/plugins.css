@@ -56,7 +56,51 @@
 /*!*height: 95%;*!*/
 /*}*/
 
-/********* Jstree *************/
+.ui.steps .step {
+  cursor: pointer;
+}
+
+.ui.dimmer {
+  padding: 0em !important;
+  background-color: rgba(0, 0, 0, .35) !important;
+}
+
+.ui.compact.dropdown {
+  min-height: 0;
+}
+
+/********* jsoneditor *************/
+div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
+  /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.jsoneditor-search input {
+  /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+  padding: 1px 0px !important;
+}
+
+.jsoneditor .jsoneditor-outer td {
+  /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+  border-top: inherit !important;
+}
+
+div.jsoneditor-menu > button, div.jsoneditor-menu > div.jsoneditor-modes > button {
+  background-color: #2185D1 !important;
+}
+
+div.jsoneditor-menu {
+  background-color: rgb(238, 238, 238) !important;
+  border-bottom: 1px solid rgb(238, 238, 238) !important;
+}
+
+div.jsoneditor {
+  border: 1px solid rgb(238, 238, 238) !important;
+}
+
+border-top
+  /********* Jstree *************/
 .jstree-default .jstree-clicked {
   border: 0;
   background-color: #e1e1e1;
@@ -156,6 +200,10 @@ a.jstree-anchor {
 .vakata-context-rtl .vakata-context-separator a {
   margin: 0;
   border: 0;
+}
+
+.jstree-default-contextmenu {
+  z-index: 10;
 }
 
 .jstree-rename-input {

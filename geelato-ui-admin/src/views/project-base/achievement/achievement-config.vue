@@ -28,7 +28,7 @@
                   <textarea rows="4"></textarea>
                 </div>
                 <div class="field">
-                  <div class="ui mini basic button" :class="$GL.ui.color.primary">
+                  <div class="ui mini basic button" :class="$gl.ui.color.primary">
                     下载成果模板
                     <i class="download icon"></i>
                   </div>

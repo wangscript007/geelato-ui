@@ -19,9 +19,9 @@
               </div>
             </div>
             <div class="item">
-              <div class="ui button" :class="$GL.ui.color.primary">新增</div>
+              <div class="ui button" :class="$gl.ui.color.primary">新增</div>
               &nbsp;
-              <div class="ui button" :class="$GL.ui.color.primary">保存</div>
+              <div class="ui button" :class="$gl.ui.color.primary">保存</div>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@
         this.isMax = !this.isMax
       },
       $_initProjects () {
-        this.$GL.data.queryByGql()
+        this.$gl.data.queryByGql()
         let types = {
           default: {
             icon: 'fa fa-folder icon-state-warning icon-lg'

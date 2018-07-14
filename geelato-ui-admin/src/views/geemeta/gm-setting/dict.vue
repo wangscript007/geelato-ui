@@ -71,14 +71,14 @@
           return
         }
         let thisVue = this
-        this.$GL.data.query(thisVue.entityName, {id: id}).then(function (data) {
+        this.$gl.data.query(thisVue.entityName, {id: id}).then(function (data) {
           thisVue.model = data
         })
       },
       $_save () {
         console.log('treeNode', this.model)
 //        let thisVue = this
-//        this.$GL.data.save(thisVue.entityName, thisVue.model).then(function () {
+//        this.$gl.data.save(thisVue.entityName, thisVue.model).then(function () {
 //          thisVue.$emit('callModal', {refreshTable: {}, close: {}})
 //        })
       }

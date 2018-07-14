@@ -465,11 +465,11 @@
   </div>
 </template>
 <script>
-  import dndOptions from '../../../components/designer/dndOptions'
-  import designer from '../../../components/designer/DesignerInstance'
-  import blankTemplate from './file-template/blank'
-  import checkbox from '../../../components/modules/checkbox'
-  import EditingPageDefinition from '../../../pages/EditingPageDefinition'
+  import dndOptions from '../../../../components/designer/dndOptions'
+  import designer from '../../../../components/designer/DesignerInstance'
+  import blankTemplate from '../file-template/blank'
+  import checkbox from '../../../../components/modules/checkbox'
+  import EditingPageDefinition from '../../../../pages/EditingPageDefinition'
   //  import Vue from 'vue/dist/vue.esm.js'
 
   export default {
@@ -488,7 +488,7 @@
         this.$emit('beforeChange', {id: oldVal, template: designer.render()})
         // 切换页面
         console.log('切换页面>', this.editingPage.component.template)
-        this.loadPage(this.editingPage)
+        this.$_loadPage(this.editingPage)
       }
     },
     mounted: function () {
@@ -520,7 +520,7 @@
         $(this.$el).find('.ui.menu>.item[data-tab]').tab()
         $(this.$el).find('.ui.calendar').calendar({type: 'date', inline: false})
       },
-      loadPage (page) {
+      $_loadPage (page) {
         let el = this
         designer.load(page)
         designer.init()

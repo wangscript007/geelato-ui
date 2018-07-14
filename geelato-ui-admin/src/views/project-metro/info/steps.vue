@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="sixteen wide column">
-      <button class="ui mini button" @click="$_save" :class="$GL.ui.color.primary">保存</button>
+      <button class="ui mini button" @click="$_save" :class="$gl.ui.color.primary">保存</button>
     </div>
   </div>
 </template>
@@ -71,13 +71,13 @@
           return
         }
         let thisVue = this
-        this.$GL.data.query(thisVue.entityName, {id: id}, 'id,name,code,description').then(function (res) {
+        this.$gl.data.query(thisVue.entityName, {id: id}, 'id,name,code,description').then(function (res) {
           thisVue.model = res.data[0]
         })
       },
       $_save () {
         let thisVue = this
-        this.$GL.data.save(thisVue.entityName, thisVue.model).then(function () {
+        this.$gl.data.save(thisVue.entityName, thisVue.model).then(function () {
           thisVue.$emit('callModal', {refreshTable: {}, close: {}})
         })
       }

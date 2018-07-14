@@ -4,7 +4,7 @@
       <div class="ui cell divided  list">
         <div class="item" v-for="projectGroup in projectGroups" @click="$_changeProjectGroup(projectGroup)">
           <div class="right floated content">
-            <div class="ui mini button" :class="$GL.ui.color.primary">查看</div>
+            <div class="ui mini button" :class="$gl.ui.color.primary">查看</div>
           </div>
           <i class="large github middle aligned icon"></i>
           <div class="content">
@@ -19,7 +19,7 @@
       </message>
       <h5 class="ui header" style="padding-left: 1em">最近浏览的项目</h5>
       <div class="ui mini segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in $store.state.lastProjects"
+        <div class="ui mini button" :class="$gl.ui.color.primary" v-for="project in $store.state.lastProjects"
              @click="$_changeProject(project)" :title="project.projectGroup">
           {{project.name}}
         </div>
@@ -46,7 +46,7 @@
       </div>
       <div class="ui fitted divider"></div>
       <div class="ui segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in projects"
+        <div class="ui mini button" :class="$gl.ui.color.primary" v-for="project in projects"
              @click="$_changeProject(project)">
           {{project.name}}
         </div>

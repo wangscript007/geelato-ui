@@ -10,9 +10,9 @@
       </component>
     </div>
     <div class="actions" style="text-align: center">
-      <!--<div class="ui mini button" :class="$GL.ui.color.primary" @click="$_save">保存</div>-->
-      <!--<div class="ui mini button" :class="$GL.ui.color.negative" @click="$_cancel">取消</div>-->
-      <div v-for="(item,key) in actions" class="ui mini button" :class="$GL.ui.color[item.color]"
+      <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_save">保存</div>-->
+      <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="$_cancel">取消</div>-->
+      <div v-for="(item,key) in actions" class="ui mini button" :class="$gl.ui.color[item.color]"
            @click="$_doAction(key)">
         {{item.title}}
       </div>
@@ -64,8 +64,13 @@
           this.callbackSet.cancel(e)
         }
       },
-      $_doAction: function (name) {
-        this[name]()
+      $_doAction: function (name, params) {
+        let fn = this.callbackSet[name]
+        if (!fn) {
+          console.error('在modal的页面中，调用方法(' + name + ')失败，因为打开该modal时，未注册该方法，已注册的方法为：', this.callbackSet)
+        } else {
+          this.callbackSet[name](params)
+        }
       },
       $_addAction: function ({name, title, color, fn}) {
         if (!this.$_checkAction(name)) {

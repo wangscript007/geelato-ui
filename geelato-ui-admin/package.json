@@ -17,10 +17,12 @@
     "babel-polyfill": "^6.26.0",
     "crypto-js": "^3.1.9-1",
     "echarts": "^4.0.4",
+    "handsontable": "^3.0.0",
     "jsonp": "^0.2.1",
     "semantic-ui-calendar": "^0.0.8",
     "tui-editor": "^1.0.4",
     "vue": "^2.5.16",
+    "vue-json-editor": "^1.2.3",
     "vue-pdf": "^3.2.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.0"

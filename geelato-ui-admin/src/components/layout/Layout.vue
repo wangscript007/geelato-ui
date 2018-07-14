@@ -14,14 +14,14 @@
       return {}
     },
     created () {
-      if (!this.$GL.security.isLogged()) {
+      if (!this.$gl.security.isLogged()) {
         console.log('isLogged>', false)
 //        window.location.replace('/')
       }
       let layout = utils.session(session.GEELATO_CONFIG_LAYOUT)
       let mode = layout && layout.mode !== undefined ? layout.mode : config.layout.mode
       let color = utils.session(session.GEELATO_CONFIG_COLOR)
-      this.$GL.ui.color.primary = color && color.primary ? color.primary : this.$GL.ui.color.primary
+      this.$gl.ui.color.primary = color && color.primary ? color.primary : this.$gl.ui.color.primary
       this.$_changeLayoutMode(mode)
     },
     mounted () {

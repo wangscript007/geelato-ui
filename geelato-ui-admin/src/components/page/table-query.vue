@@ -42,8 +42,8 @@
       <div class="item">
       </div>
       <div class="right item">
-        <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</a>&nbsp;
-        <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_reset">重置</a>
+        <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</a>&nbsp;
+        <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_reset">重置</a>
       </div>
     </div>
   </form>

@@ -120,7 +120,7 @@
 </template>
 <script>
   import dndHandler from '../../../components/designer/dndHandler'
-  import toolbar from './stage-toolbar'
+  import toolbar from './stage/stage-toolbar'
   export default {
     data () {
       return {}

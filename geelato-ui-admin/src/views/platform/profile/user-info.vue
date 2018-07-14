@@ -10,7 +10,7 @@
     </tr>
     <tr>
       <td colspan="2" style="text-align: center">
-        <button class="ui mini button" :class="$GL.ui.color.primary">保存</button>
+        <button class="ui mini button" :class="$gl.ui.color.primary">保存</button>
       </td>
     </tr>
   </table>

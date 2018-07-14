@@ -5,7 +5,7 @@ import Layout from '../components/layout/Layout.vue'
 import Login from '../views/platform/Login.vue'
 // import GridView from '../components/layout/PageBar'
 
-import page from '../views/page/index.vue'
+import page from '../views/platform/ide/plugins/common/stage-ui.vue'
 // import pageContainer from '../components/page/page-loader.vue'
 // import AccountProfile from '../views/profile/Account'
 // const GridView = () => import('@/components/grid/FilterGrid.vue')

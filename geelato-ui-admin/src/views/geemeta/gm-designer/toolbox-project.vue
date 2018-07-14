@@ -56,6 +56,9 @@
           html5: {
             icon: 'fa fa-html5 icon-state-success icon-lg'
           },
+          table: {
+            icon: 'fa fa-table icon-state-success icon-lg'
+          },
           grid: {
             icon: 'fa fa-table icon-state-success icon-lg'
           },
@@ -113,6 +116,9 @@
                     create_html5: createNode('普通页面', 'html5', function (nodeId) {
                       self.newPage({id: nodeId, text: '普通页面', type: 'html5'})
                     }),
+                    create_table: createNode('表格', 'table', function (nodeId) {
+                      self.newPage({id: nodeId, text: '表格', type: 'table'})
+                    }),
                     create_grid: createNode('查询列表', 'grid', function (nodeId) {
                       self.newPage({id: nodeId, text: '查询列表', type: 'grid'})
                     }),
@@ -162,7 +168,7 @@
         })
 
         function getFileNodeData ($node) {
-          let fileTypes = ['html5', 'grid']
+          let fileTypes = ['html5', 'grid', 'table']
           for (var i in fileTypes) {
             let type = fileTypes[i]
             let selector = '.' + types[type].icon.split(' ').join('.').replace(/\s+/g, '')
@@ -175,8 +181,7 @@
         }
 
         function isFile (type) {
-          console.log(type, type === 'grid')
-          return type === 'html5' || type === 'grid'
+          return type === 'html5' || type === 'grid' || type === 'table'
         }
 
         function createIconLabel (label, typeName) {

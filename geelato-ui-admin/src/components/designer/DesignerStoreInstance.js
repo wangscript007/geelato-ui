@@ -5,6 +5,7 @@ import EditingPageDefinition from '../../pages/EditingPageDefinition'
  */
 class DesignerStore {
   constructor () {
+    this.project = {id: ''}
     this.editingPage = new EditingPageDefinition()
     this.history = []
   }
@@ -21,5 +22,5 @@ class DesignerStore {
   }
 }
 
-let instance = new DesignerStore()
-export default instance
+// let instance = new DesignerStore()
+export default DesignerStore

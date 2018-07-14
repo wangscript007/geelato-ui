@@ -38,7 +38,7 @@
         }">
         <a class="item"><i class="theme icon"></i></a>
         <div class="ui flowing popup top left transition hidden">
-          <div v-for="(hex,key) in $GL.ui.colorHex" class="ui mini button" :class="{[key]:true}"
+          <div v-for="(hex,key) in $gl.ui.colorHex" class="ui mini button" :class="{[key]:true}"
                @click="$_changeColor(key)"></div>
         </div>
       </sui>
@@ -83,8 +83,8 @@
     },
     data () {
       return {
-        color: this.$GL.ui.color.primary,
-        user: this.$GL.security.profile().user,
+        color: this.$gl.ui.color.primary,
+        user: this.$gl.security.profile().user,
         logoWidth: config.layout.logo.width,
         modules: config.modules,
         showModuleSelect: false
@@ -96,7 +96,7 @@
       }
     },
     created: function () {
-      this.headerClass = this.mode === 1 ? '' : 'inverted ' + this.$GL.ui.color.primary
+      this.headerClass = this.mode === 1 ? '' : 'inverted ' + this.$gl.ui.color.primary
       // 首次加载切换到角色的默认模块
       // TODO 改从当前用户信息中获取
       let currentRole = 'admin'
@@ -147,7 +147,7 @@
       $_color: function (color) {
       },
       logout: function () {
-        this.$GL.security.logout()
+        this.$gl.security.logout()
       }
     },
     components: {Sui}

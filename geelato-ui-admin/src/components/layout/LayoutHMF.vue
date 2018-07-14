@@ -51,7 +51,7 @@
       }
     },
     created () {
-//      let user = this.$GL.isLogged()
+//      let user = this.$gl.isLogged()
 //      if (user) {
 //        console.debug('isLogged true')
 //        this.$store.commit(types.LOGIN, user)
@@ -132,10 +132,10 @@
         this.content = {}
 //        this.content.float = 'left'
         this.sidebar.float = 'left'
-//        this.sidebar['background-color'] = this.$GL.ui.color.background
-        for (let key in this.$GL.ui.colorHex) {
-          let hex = this.$GL.ui.colorHex[key]
-          if (key === this.$GL.ui.color.primary) {
+//        this.sidebar['background-color'] = this.$gl.ui.color.background
+        for (let key in this.$gl.ui.colorHex) {
+          let hex = this.$gl.ui.colorHex[key]
+          if (key === this.$gl.ui.color.primary) {
             this.sidebar['background-color'] = utils.hex2Rgb(hex, '0.30')
 //            console.log(this.sidebar['background-color'])
           }

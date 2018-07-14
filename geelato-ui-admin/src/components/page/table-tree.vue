@@ -54,7 +54,7 @@
 //          }
 //        }
         // 获取树节点数据，若无，则创建根节点，同时保存到服务端
-        thisVue.$GL.data.query(entityNames.platform.common.treeNode, {treeId: treeId}, 'id,parent,type,text').then(function (res) {
+        thisVue.$gl.data.query(entityNames.platform.common.treeNode, {treeId: treeId}, 'id,parent,type,text').then(function (res) {
           let treeData = []
           console.log('res>', res)
           if (res.total > 0) {
@@ -69,7 +69,7 @@
             }
             createTree(rootId, treeData)
           } else {
-            thisVue.$GL.data.save(entityNames.platform.common.treeNode, {
+            thisVue.$gl.data.save(entityNames.platform.common.treeNode, {
               text: thisVue.opts.text,
               type: 'root',
               treeId: thisVue.opts.treeId
@@ -143,7 +143,7 @@
             ]
           }).on('create_node.jstree', function (e, data) {
             console.log('create......', data)
-            thisVue.$GL.data.save(entityNames.platform.common.treeNode, {
+            thisVue.$gl.data.save(entityNames.platform.common.treeNode, {
               parent: data.node.parent,
               text: data.node.text,
               type: data.node.type,
@@ -154,11 +154,11 @@
             })
             // fail data.instance.refresh()
           }).on('delete_node.jstree', function (e, data) {
-            thisVue.$GL.data.delete(entityNames.platform.common.treeNode, {
+            thisVue.$gl.data.delete(entityNames.platform.common.treeNode, {
               id: data.node.id
             })
           }).on('rename_node.jstree', function (e, data) {
-            thisVue.$GL.data.save(entityNames.platform.common.treeNode, {
+            thisVue.$gl.data.save(entityNames.platform.common.treeNode, {
               id: data.node.id,
               text: data.node.text
             })

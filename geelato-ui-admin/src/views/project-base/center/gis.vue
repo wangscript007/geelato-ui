@@ -60,7 +60,7 @@
           </div>
           <div class="ui right secondary borderless mini menu">
             <div class="item">
-              <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_netDetail">详情</a>
+              <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_netDetail">详情</a>
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@
           </div>
           <div class="ui right secondary borderless mini menu">
             <div class="item">
-              <a class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_lineDetail">详情</a>
+              <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_lineDetail">详情</a>
             </div>
           </div>
         </div>
@@ -327,7 +327,7 @@
 //                console.log('redPolyline click >', e)
               })
               redPolyline.addEventListener('click', function (e) {
-                thisVue.$GL.ui.showMsg('进度异常', 'error')
+                thisVue.$gl.ui.showMsg('进度异常', 'error')
               })
             }
             console.log('group.workPoints>', group.workPoints)
@@ -361,7 +361,7 @@
       },
       $_netDetail () {
         let thisVue = this
-        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/net-detail.vue', {title: '线网详情'}, {
+        thisVue.$gl.ui.openVueByPath(this, '../views/project-base/center/net-detail.vue', {title: '线网详情'}, {
           close: function () {
             // 在modal中注册刷新操作
 //            thisVue.$_submit()
@@ -370,7 +370,7 @@
       },
       $_lineDetail () {
         let thisVue = this
-        thisVue.$GL.ui.openVueByPath(this, '../views/project-base/center/line-detail.vue', {title: '线路详情'}, {
+        thisVue.$gl.ui.openVueByPath(this, '../views/project-base/center/line-detail.vue', {title: '线路详情'}, {
           close: function () {
           }
         })

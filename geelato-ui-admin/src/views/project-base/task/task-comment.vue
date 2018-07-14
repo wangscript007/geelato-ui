@@ -120,10 +120,10 @@
     methods: {
       $_loadData: function () {
         let thisVue = this
-//        thisVue.$GL.data.query(entityNames.project.projectInfo, null, 'id,name').then(function (result) {
+//        thisVue.$gl.data.query(entityNames.project.projectInfo, null, 'id,name').then(function (result) {
 //          thisVue.list.project = result.data
 //        })
-        thisVue.$GL.data.queryBatch([{
+        thisVue.$gl.data.queryBatch([{
           entityName: entityNames.project.projectInfo,
           fieldNames: 'id,name'
         }, {
@@ -153,7 +153,7 @@
         let $el = $(this.$el)
         thisVue.form.task.projectId = $el.find('.ui.dropdown.projectList').dropdown('get value')
         thisVue.form.task.description = this.tuiEditor.getValue()
-        thisVue.$GL.data.save(entityNames.project.task, thisVue.form.task).then(function (resp) {
+        thisVue.$gl.data.save(entityNames.project.task, thisVue.form.task).then(function (resp) {
           console.log('resp>', resp)
         })
         this.$parent.pageState = 'querying'

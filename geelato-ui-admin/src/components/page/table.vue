@@ -22,8 +22,8 @@
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
-              <button class="ui mini basic button" :class="$GL.ui.color.primary">查询</button>&nbsp;
-              <button class="ui mini basic button" :class="$GL.ui.color.primary">重置</button>
+              <button class="ui mini basic button" :class="$gl.ui.color.primary">查询</button>&nbsp;
+              <button class="ui mini basic button" :class="$gl.ui.color.primary">重置</button>
             </div>
           </div>
         </div>
@@ -39,8 +39,8 @@
           <!-- 当查询条件多于8个时，才会在上方展示查询、重置按钮，这样页面简洁点，在内容较多，不便拖动时才在上方展示-->
           <div class="ui right secondary mini menu" v-if="opts.ui.query.mix.fields&&opts.ui.query.mix.fields.length>8">
             <div class="item">
-              <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="$_submit">查询</button>&nbsp;
-              <button class="ui mini basic button" :class="$GL.ui.color.primary" @click="reset">重置</button>
+              <button class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_submit">查询</button>&nbsp;
+              <button class="ui mini basic button" :class="$gl.ui.color.primary" @click="reset">重置</button>
             </div>
           </div>
         </div>
@@ -60,12 +60,13 @@
         </div>
         <div class="ui right secondary  borderless mini menu">
           <div v-if="opts.ui.toolbar.dropdown" class="item">
-            <!--<button class="ui mini button">新增</button>&nbsp;-->
-            <!--<button class="ui mini button">删除</button>&nbsp;-->
-            <!--<button class="ui mini button">导出</button>-->
             <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
-              <button class="ui mini button" :class="item.click==='delete'?$GL.ui.color.negative:$GL.ui.color.primary"
-                      @click="$_click(item,$event)">
+              <!--有hidden属性，或hidden为空-->
+              <!--<button class="ui mini button">新增</button>&nbsp;-->
+              <!--item.click==='delete'?$gl.ui.color.negative:$gl.ui.color.primary-->
+              <button class="ui mini button" :class="item.color?$gl.ui.color[item.color]:$gl.ui.color.primary"
+                      @click="$_click(item,$event)"
+                      v-if="!item.hasOwnProperty('hidden')||$utils.isEmpty(item.hidden)||$utils.eval(item.hidden)">
                 {{item.title}}
               </button>&nbsp;
             </template>
@@ -90,8 +91,8 @@
       <table class="ui selectable compact table gl-compact">
         <thead>
         <tr>
-          <th style="width: 1em">
-            <div class="ui master checkbox" v-if="opts.ui.mode!=='select'">
+          <th style="width: 1em" v-if="opts.ui.mode!=='select'">
+            <div class="ui master checkbox">
               <input type="checkbox">
               <label></label>
             </div>
@@ -104,20 +105,19 @@
         </thead>
         <tbody v-if="queryResult.data&&queryResult.data.length>0">
         <tr v-for="(rowItem,rowIndex) in queryResult.data">
-          <td>
-            <div class="ui child checkbox"
-                 v-if="opts.ui.mode!=='select'">
+          <td v-if="opts.ui.mode!=='select'">
+            <div class="ui child checkbox">
               <input type="checkbox" :data-rowId="rowItem[opts.ui.table.select.field]">
               <label></label>
             </div>
+          </td>
+          <td>
             <div v-if="opts.ui.mode==='select'">
-              <div class="ui mini buttons" :class="$GL.ui.color.primary">
+              <div class="ui mini buttons" :class="$gl.ui.color.primary">
                 <div class="ui button" @click="$_selectRow(rowItem)">选择</div>
               </div>
             </div>
-          </td>
-          <td>
-            <div class="ui mini buttons" :class="$GL.ui.color.primary">
+            <div v-if="opts.ui.mode!=='select'" class="ui mini buttons" :class="$gl.ui.color.primary">
               <div class="ui button"
                    v-if="opts.ui.table.dropdown.actions.length===1?item=opts.ui.table.dropdown.actions[0]:''"
                    @click="$_click(item,$event,rowItem)">{{item.title}}
@@ -188,8 +188,8 @@
       }
     },
     mounted () {
+      console.log('gl-table opts', this.opts)
       this.loadData()
-//      console.log('this.opts', this.opts)
 //      $(this.$el).find('.ui.cards')()
 //      $(this.$el).find('.ui.checkbox').checkbox()
     },
@@ -200,7 +200,7 @@
     methods: {
       loadData () {
         let thisVue = this
-        this.$GL.data.queryByGql(genGql(this.lastMixQueryData)).then(function (data) {
+        this.$gl.data.queryByGql(genGql(this.lastMixQueryData)).then(function (data) {
           thisVue.queryResult = data
         })
 
@@ -282,7 +282,7 @@
         return utils.invoke(expression, ctx)
       },
       $_submit () {
-        // 调研查询子vue的查询方法
+        // 调用查询子vue的查询方法
         this.$refs.queryForm.$_submit()
       },
       reset () {
@@ -290,7 +290,7 @@
       },
       // 选择一条数据
       $_selectRow (row) {
-        this.$emit('$_selectRows', [row])
+        this.$emit('selectRow', row)
       },
       // query组件的查询回调，获取查询条件信息，并调用loadData查询数据，并以数据驱动刷新页面
       formQueryCallback (data) {
@@ -305,6 +305,9 @@
         console.log('click action >', action)
         console.log('click event  >', event)
         console.log('click rowItem>', rowItem)
+        if (action.confirm && !confirm(action.confirm)) {
+          return
+        }
         let thisVue = this
         switch (action.click) {
           case 'modal':
@@ -315,7 +318,7 @@
             let modal = utils.invoke(action.modal, kvs)
             console.log('resolved modal>', modal)
             if (modal.type === 'href') {
-              thisVue.$GL.ui.openVueByPath(this, modal.value, modal, {
+              thisVue.$gl.ui.openVueByPath(this, modal.value, {title: '', opts: modal}, {
                 refreshTable: function () {
                   // 在modal中注册刷新操作
                   thisVue.$_submit()
@@ -330,11 +333,11 @@
             }
             break
           case 'delete':
-            let msg = action.confirm || '确定删除'
-            if (confirm(msg) && thisVue.checkedIds.length !== 0) {
+            // let msg = action.confirm || '确定删除'
+            if (thisVue.checkedIds.length !== 0) {
 //              console.log('checkedIds>', thisVue.checkedIds)
               let kv = {'id|in': thisVue.checkedIds.join(',')}
-              thisVue.$GL.data.delete(thisVue.opts.ui.entity, kv).then(function () {
+              thisVue.$gl.data.delete(thisVue.opts.ui.entity, kv).then(function () {
                 thisVue.$_resetCheckbox()
                 thisVue.$_submit()
               })

@@ -17,7 +17,7 @@
         <div class="item">
           <a :href="testPdfSrc" target="_blank" download="201802.pdf"
              class="ui mini button"
-             :class="$GL.ui.color.primary">下载</a>
+             :class="$gl.ui.color.primary">下载</a>
         </div>
       </div>
       <div slot="right">

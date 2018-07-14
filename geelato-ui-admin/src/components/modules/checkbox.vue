@@ -5,7 +5,7 @@
     <template v-if="opts.type=='radio'">
       <div class="ui radio checkbox" v-for="(item,index) in opts.data">
         <input type="radio" :name="opts.name" class="hidden" :value="item.value">
-        <label>{{item.text}}</label>
+        <label>{{item.text}}&nbsp;</label>
       </div>
     </template>
     <template v-else>
@@ -22,6 +22,9 @@
 
   export default {
     props: {
+      value: {
+        type: String
+      },
       opts: {
         type: Object,
         required: true
@@ -41,9 +44,15 @@
     },
     methods: {
       $_init: function () {
-        $(this.$el).find('.ui.checkbox').checkbox()
+        let $checkbox = $(this.$el).find('.ui.checkbox')
+        $checkbox.checkbox({
+          onChange: function (value) {
+            console.log('value>', value)
+            this.$emit('input', value)
+            $checkbox.checkbox('is ')
+          }
+        })
       }
-//      checkbox: $(this.$el).find('.ui.checkbox').checkbox
     },
     components: {}
   }

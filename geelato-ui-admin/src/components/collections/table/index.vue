@@ -13,7 +13,7 @@
       ></gl-row>
       <tr>
         <td>
-          <button class="ui mini button" :class="$GL.ui.color.primary" style="line-height: 0.5em;width: 2em;padding: 0.5em;margin: 0">+</button>
+          <button class="ui mini button" :class="$gl.ui.color.primary" style="line-height: 0.5em;width: 2em;padding: 0.5em;margin: 0">+</button>
         </td>
       </tr>
       </tbody>

@@ -184,7 +184,7 @@
         this.$content.find(settingOptions.selector.control).attr('placeholder', val)
       },
       'cfg.data.value': function (val, oldVal) {
-        console.log('this.editingPage>', this.editingPage)
+        // console.log('this.editingPage>', this.editingPage)
         // checkbox
 //        let $group = this.$content.find(['data-gl-template-groups'])
 //        let templateDom = $group.children()[0]
@@ -263,7 +263,7 @@
        */
       selectIcon: function (e) {
         let thisVue = this
-        this.$GL.ui.openVueByPath(this, '/views/geemeta/gm-designer/setting/icon-setting',
+        this.$gl.ui.openVueByPath(this, '/views/geemeta/gm-designer/setting/icon-setting',
           {title: '<div class="ui circular label"></div><div class="content">选择图标</div>'},
           {
             selected: function (data) {

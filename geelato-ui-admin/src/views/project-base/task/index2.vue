@@ -4,8 +4,8 @@
       <div class="sixteen wide column task-topbar">
         <div class="ui mini menu">
           <a class="item">
-            <!--<div class="ui icon button" :class="$GL.ui.color.primary" @click="$_edit('','bug')"><i class="plus icon"></i>创建</div>-->
-            <div class="ui icon dropdown mini button" :class="$GL.ui.color.primary"><i class="plus icon"></i>创建
+            <!--<div class="ui icon button" :class="$gl.ui.color.primary" @click="$_edit('','bug')"><i class="plus icon"></i>创建</div>-->
+            <div class="ui icon dropdown mini button" :class="$gl.ui.color.primary"><i class="plus icon"></i>创建
               <div class="mini menu">
                 <div class="header">
                   <i class="tags icon"></i>
@@ -28,7 +28,7 @@
           </div>
           <div class="right menu">
             <div class="item">
-              <div class="ui button" :class="$GL.ui.color.primary">报告</div>
+              <div class="ui button" :class="$gl.ui.color.primary">报告</div>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@
               </div>
             </div>
             <div class="item">
-              <div class="ui button" :class="$GL.ui.color.primary">设置</div>
+              <div class="ui button" :class="$gl.ui.color.primary">设置</div>
             </div>
           </div>
         </div>
@@ -178,7 +178,7 @@
               <img src="/static/images/avatar/large/jenny.jpg">
             </div>
             <div class="content">
-              <h4 class="ui header" :class="$GL.ui.color.primary">
+              <h4 class="ui header" :class="$gl.ui.color.primary">
                 <div class="ui checkbox">
                   <input type="checkbox" name="example">
                   <div>{{item.num}}-{{item.title}}</div>
@@ -191,8 +191,8 @@
               <div class="task-action">
                 <div style="float: right;display: inline-block">
                   <div class="ui inline basic icon mini button">
-                    <i class="comment outline icon" :class="$GL.ui.color.primary" title="评论"></i>&nbsp;
-                    <i class="expand icon" :class="$GL.ui.color.primary" title="展开"></i>
+                    <i class="comment outline icon" :class="$gl.ui.color.primary" title="评论"></i>&nbsp;
+                    <i class="expand icon" :class="$gl.ui.color.primary" title="展开"></i>
                     <!--<i class="teal compress icon" title="收缩"></i>-->
                   </div>
                 </div>
@@ -393,7 +393,7 @@
         this.isMax = !this.isMax
       },
       $_initProjects () {
-        this.$GL.data.queryByGql()
+        this.$gl.data.queryByGql()
         let types = {
           default: {
             icon: 'fa fa-folder icon-state-warning icon-lg'

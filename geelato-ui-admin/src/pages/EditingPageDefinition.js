@@ -27,6 +27,12 @@ class EditingPageDefinition extends PageDefinition {
     let page = $(this).clone(true)
     return page
   }
+
+  reset (options) {
+    super.reset(options)
+    this.editingElement = new DndContent()
+    this.setSettingActionSeq = ''
+  }
 }
 
 export default EditingPageDefinition

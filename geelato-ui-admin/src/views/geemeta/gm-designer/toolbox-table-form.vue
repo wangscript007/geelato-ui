@@ -2,7 +2,7 @@
   <div class="ui vertical following accordion mini menu dnd-toolbox">
     <div class="item">
       <div class="title">
-        默认
+        默认ds
       </div>
       <div class="content">
         <div class="dnd-item">
@@ -129,7 +129,7 @@
 
 <script>
   import dndHandler from '../../../components/designer/dndHandler'
-  import toolbar from './stage-toolbar'
+  import toolbar from './stage/stage-toolbar'
 
   export default {
     data () {

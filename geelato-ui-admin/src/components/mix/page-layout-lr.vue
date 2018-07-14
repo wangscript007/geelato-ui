@@ -11,11 +11,11 @@
         <div class="ui right secondary mini menu">
           <div v-if="leftActions" class="item">
             <template v-for="(item, index) in leftActions">
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">
+              <button class="ui mini button" :class="$gl.ui.color.primary" @click="$_click(item,$event)">
                 {{item.title}}
               </button>&nbsp;
             </template>
-            <!--<button class="ui mini button" :class="$GL.ui.color.primary">添加</button>&nbsp;-->
+            <!--<button class="ui mini button" :class="$gl.ui.color.primary">添加</button>&nbsp;-->
           </div>
           <slot name="leftAction"></slot>
         </div>
@@ -35,7 +35,7 @@
         <div class="ui right secondary  borderless mini menu">
           <div v-if="rightActions" class="item">
             <template v-for="(item, index) in rightActions">
-              <button class="ui mini button" :class="$GL.ui.color.primary" @click="$_click(item,$event)">
+              <button class="ui mini button" :class="$gl.ui.color.primary" @click="$_click(item,$event)">
                 {{item.title}}
               </button>&nbsp;
             </template>

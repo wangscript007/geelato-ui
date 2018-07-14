@@ -128,11 +128,16 @@ utils.compileString = function (expression, $ctx) {
 /**
  * 直接执行eval，代码检查工具eslintrc，提示有误，改该此方法
  * @param expression
+ * @param $ctx 用于expression的上下文参数
  * @returns {*}
  */
 utils.eval = function (expression, $ctx) {
   let Fn = Function
   return new Fn('$ctx', 'return ' + expression)($ctx)
+}
+
+utils.isEmpty = function (str) {
+  return str === undefined || str === null || str.replace(/\s/g, '') === ''
 }
 
 /**
@@ -188,6 +193,23 @@ utils.hex2Rgb = function (hex, alpha) {
   }
   return sColor
 }
+
+/**
+ *函数定义
+ * @param data 需转换的数组
+ * @param id
+ * @param pid
+ */
+// utils.array2tree = function treeUtil (data, id, pid) {
+//   let data = data
+//   let id = id
+//   let pid = pid
+//   let tree = {}
+//
+//   function f () {
+//
+//   }
+// }
 
 /**
  * 数组指定列去重，返回去重后的列对象

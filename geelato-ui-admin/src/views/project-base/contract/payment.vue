@@ -57,7 +57,7 @@
       </div>
       <div slot="right">
         <!--<div class="ui mini center aligned segment">-->
-        <!--<div class="ui mini button" :class="$GL.ui.color.primary">编制计划任务</div>-->
+        <!--<div class="ui mini button" :class="$gl.ui.color.primary">编制计划任务</div>-->
         <!--</div>-->
         <sui type="accordion" selector=".ui.accordion" :opts="{exclusive: false}">
           <div class="ui accordion">

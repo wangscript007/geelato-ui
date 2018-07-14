@@ -26,7 +26,7 @@
       <div slot="rightAction">
         <div class="item" style="padding-top: 0;padding-bottom: 0">
           <sui type="dropdown" selector=".ui.dropdown">
-            <div class="ui mini buttons" :class="$GL.ui.color.primary">
+            <div class="ui mini buttons" :class="$gl.ui.color.primary">
               <div class="ui  mini button">导入</div>
               <div class="ui floating dropdown icon mini button">
                 <i class="dropdown icon"></i>
@@ -40,7 +40,7 @@
           </sui>
           &nbsp;
           <sui type="dropdown" selector=".ui.dropdown">
-            <div class="ui mini buttons" :class="$GL.ui.color.primary">
+            <div class="ui mini buttons" :class="$gl.ui.color.primary">
               <div class="ui button">发布</div>
               <div class="ui floating dropdown icon button">
                 <i class="dropdown icon"></i>
@@ -109,7 +109,7 @@
                   任务成果
                 </div>
                 <div class="content active">
-                  <a class="ui basic mini button" :class="$GL.ui.color.primary" title="添加该任务需交付的成果">添加成果</a>
+                  <a class="ui basic mini button" :class="$gl.ui.color.primary" title="添加该任务需交付的成果">添加成果</a>
                   <div class="ui divider">
                   </div>
                   <div class="ui fluid action input">
@@ -126,7 +126,7 @@
                   任务指标
                 </div>
                 <div class="content active">
-                  <button class="ui basic mini button" :class="$GL.ui.color.primary">添加指标</button>
+                  <button class="ui basic mini button" :class="$gl.ui.color.primary">添加指标</button>
                   <div class="ui divider">
                   </div>
                   <table class="ui mini form gl-form gl-col-24">
@@ -374,7 +374,7 @@
         this.isMax = !this.isMax
       },
       $_initProjects () {
-        this.$GL.data.queryByGql()
+        this.$gl.data.queryByGql()
         let types = {
           default: {
             icon: 'fa fa-folder icon-state-warning icon-lg'

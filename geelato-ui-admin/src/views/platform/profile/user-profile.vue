@@ -61,7 +61,7 @@
     },
     data () {
       return {
-        theme: this.$GL.ui.color.primary
+        theme: this.$gl.ui.color.primary
       }
     },
     mounted: function () {

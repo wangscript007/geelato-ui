@@ -2,9 +2,30 @@
   <div class="ui vertical mini menu dnd-toolbox dnd-sidebar">
     <div class="ui accordion item">
       <div class="title active">
-        基本布局(GRID-16)
+        DIV布局(Grid-16)
       </div>
       <base-layout :class="['active']"></base-layout>
+    </div>
+    <div class="ui accordion item">
+      <div class="title">
+        表格部局(Table)
+      </div>
+      <div class="content">
+        <div class="dnd-item">
+          <div class="dnd-dsc">
+            <span class="dnd-title"><label>16*16 表格</label></span>
+          </div>
+          <toolbar></toolbar>
+          <!--data-meta="{type:'table',ui:'HandsonTable'}"-->
+          <div class="dnd-content" data-meta="{type:'table'}">
+            <div class="gl-table-layout">
+              <div class="ui grey segment">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="ui accordion item">
       <div class="title">
@@ -27,7 +48,7 @@
 
 <script>
   import dndHandler from '../../../components/designer/dndHandler'
-  import toolbar from './stage-toolbar'
+  import toolbar from './stage/stage-toolbar'
   import baseLayout from './toolbox-layout-base'
 
   export default {

@@ -44,7 +44,7 @@
         // 就算路由的参数如id等变化也不刷新
         thisVue.currentView = resolve => require(['../layout/loading-page.vue'], resolve)
         // 路由的格式：page/:moduleName/:pageCode?query
-        thisVue.$GL.data.getPageCfg(thisVue.code).then((res) => {
+        thisVue.$gl.data.getPageCfg(thisVue.code).then((res) => {
           console.log('res>', res)
           if (res.code === '0') {
             console.log('thisVue.pageCfg.component>', thisVue.pageCfg.component)

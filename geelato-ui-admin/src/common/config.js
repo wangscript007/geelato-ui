@@ -46,6 +46,7 @@ class Config {
             class: 'fa fa-connectdevelop',
             items: [
               {title: '我的项目管理', href: '/#/m/project-base/center/projects'},
+              {title: '项目综合查询', href: '/#/m/project-base/center/projects'},
               {title: '我的项目计划', href: '/#/m/project-base/center/projects'}
               // {title: '创建项目', href: '/#/m/platform/workflow/index'}
               // {title: '我参与的项目', href: '/#/m/platform/meeting/index'},
@@ -265,6 +266,8 @@ class Config {
       {
         title: '开发配置',
         code: 'dev',
+        resize: 'max',
+        index: '/#/m/platform/ide/designer/index',
         menu: [
           {
             title: '实施配置',
@@ -280,7 +283,10 @@ class Config {
               {title: '开发项目', href: '/#/m/page/platform/platform-dev-project-list'},
               {title: 'UI设计', href: '/#/m/designer'},
               {title: 'UI预览', href: '/#/m/preview'},
-              {title: '元数据管理', href: '/#/m/meta'}
+              {title: '元数据管理', href: '/#/m/meta'},
+              {title: '接口服务管理', href: '/#/m/platform/ide/designer/index'},
+              {title: 'sheet', href: '/#/m/geemeta/gl-table-form-designer/index'},
+              {title: 'graph', href: '/#/m/geemeta/gl-graph-designer/index'}
             ]
           },
           {
@@ -308,13 +314,15 @@ class Config {
     ]
     // 角色登录后的默认首模块
     this.defaultModule = {
-      admin: 'xmzx'
+      admin: 'dev'
     }
 
     this.url = {
       root: 'http://localhost:8080'
     }
     this.url.api = this.url.root + '/api'
+    this.url.apiMetaDefined = this.url.api + '/meta/defined'
+    this.url.apiMetaEntityNames = this.url.api + '/meta/entityNames'
     this.url.apiMetaList = this.url.api + '/meta/list'
     this.url.apiMetaMultiList = this.url.api + '/meta/multiList'
     this.url.apiMetaSave = this.url.api + '/meta/save'
@@ -323,7 +331,7 @@ class Config {
     this.color = {
       primary: 'blue',
       secondary: 'teal',
-      positive: 'teal',
+      positive: '',
       negative: 'red'
       // background: '#FFE8E6', rgba(0, 181, 173, 0.15)
       // background: '#2185d0' // 'rgba(230, 230, 230, 0.35)'

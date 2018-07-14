@@ -10,9 +10,9 @@
       </component>
     </div>
     <div class="actions" style="text-align: center">
-      <!--<div class="ui mini button" :class="$GL.ui.color.primary" @click="$_save">保存</div>-->
-      <!--<div class="ui mini button" :class="$GL.ui.color.negative" @click="$_cancel">取消</div>-->
-      <div v-for="(item,key) in actions" class="ui mini button" :class="$GL.ui.color[item.color]"
+      <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_save">保存</div>-->
+      <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="$_cancel">取消</div>-->
+      <div v-for="(item,key) in actions" class="ui mini button" :class="$gl.ui.color[item.color]"
            @click="$_doAction(key)">
         {{item.title}}
       </div>

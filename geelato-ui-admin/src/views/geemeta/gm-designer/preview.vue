@@ -38,7 +38,7 @@
         // 路由的格式：preview/:pageCode?query
         var pageCode = this.$route.params.pageCode
         // 如查pageCode不存在，则取当前editor中正在编辑页面进行展示 TODO
-        thisVue.$GL.data.getPageConfig(pageCode).then((res) => {
+        thisVue.$gl.data.getPageConfig(pageCode).then((res) => {
           console.log('res>', res)
           if (res.code === '0') {
             if (res.data) {

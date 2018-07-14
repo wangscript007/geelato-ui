@@ -6,7 +6,7 @@
       </message>
       <h5 class="ui header" style="padding-left: 1em">最近浏览的项目</h5>
       <div class="ui mini segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in $store.state.lastProjects"
+        <div class="ui mini button" :class="$gl.ui.color.primary" v-for="project in $store.state.lastProjects"
              @click="$_changeProject(project)" :title="project.projectGroup">
           {{project.name}}
         </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="ui fitted divider"></div>
       <div class="ui segment">
-        <div class="ui mini button" :class="$GL.ui.color.primary" v-for="project in projects"
+        <div class="ui mini button" :class="$gl.ui.color.primary" v-for="project in projects"
              @click="$_changeProject(project)">
           {{project.name}}
         </div>

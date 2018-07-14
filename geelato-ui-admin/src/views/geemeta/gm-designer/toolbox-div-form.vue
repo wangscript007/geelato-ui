@@ -49,7 +49,7 @@
           </div>
           <toolbar></toolbar>
           <div class="dnd-content" data-meta="{type:'divForm'}">
-            <form action="#" class="ui mini form dnd-target gl-form" data-dnd-allow="fields,element,collection,layout">
+            <form action="#" class="ui mini form dnd-target gl-form" data-dnd-allow="fields,element,collection,layout,table">
             </form>
           </div>
         </div>
@@ -355,7 +355,7 @@
 </template>
 <script>
   import dndHandler from '../../../components/designer/dndHandler'
-  import toolbar from './stage-toolbar'
+  import toolbar from './stage/stage-toolbar'
   import baseLayout from './toolbox-layout-base'
 
   export default {

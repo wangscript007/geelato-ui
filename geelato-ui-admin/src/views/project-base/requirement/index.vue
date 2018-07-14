@@ -405,7 +405,7 @@
                 type: typeName,
                 treeId: '876251651961815736'
               }
-              thisVue.$GL.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
+              thisVue.$gl.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
                 treeNode.id = res.data
                 let $ref = $.jstree.reference(data.reference)
                 console.log('$ref>', $ref)
@@ -440,7 +440,7 @@
         if (node.parent === '#') {
           // 如果是根节点，则更改项目名称
           let project = {id: node.id, name: node.text}
-          thisVue.$GL.data.save(entityNames.platform.dev.project, project).then(function (res) {
+          thisVue.$gl.data.save(entityNames.platform.dev.project, project).then(function (res) {
             console.log('更新项目名称为' + node.text + ',更新返回：', res)
           })
         } else {
@@ -451,7 +451,7 @@
             type: node.type,
             treeId: '876251651961815736'
           }
-          thisVue.$GL.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
+          thisVue.$gl.data.save(entityNames.platform.common.treeNode, treeNode).then(function (res) {
             console.log('更新节点名称为' + node.text + ',更新返回：', res)
           })
         }
