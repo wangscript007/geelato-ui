@@ -355,7 +355,7 @@ let core = {
       console.log('path>', path)
       // path = '../views/geemeta/gm-designer/setting/icon-field-setting.vue'
       let vueComponent = resolve => require(['../' + path], resolve)
-      core.ui.openVue(srcVue, vueComponent, vueConfig, callbackSet)
+      return core.ui.openVue(srcVue, vueComponent, vueConfig, callbackSet)
     },
     /**
      * @param srcVue
@@ -378,7 +378,7 @@ let core = {
       Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'callbackSet', callbackSet || {})
       // $('#app-root-modal').modal('setting', 'transition', 'fade').modal('show')
       //  TODO 改成动态创建，并将ID传给modalOpts
-      $('#app-root-modal').modal({duration: 200, closable: false, allowMultiple: true}).modal('show')
+      return $('#app-root-modal').modal({duration: 200, closable: false, allowMultiple: true}).modal('show')
     },
     /**
      *

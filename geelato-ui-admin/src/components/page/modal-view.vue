@@ -30,7 +30,8 @@
         modalOpts: {title: '', actions: []},
         // 回调事件集合 格式如：{selected:function(data){ // do something }}
         callbackSet: {},
-        // 页面下方的操作按钮
+        // 页面下方的操作按钮，通过action也可以加入一些事件，但与callbackSet不一样，actions会在modal页面中动态生成按钮
+        // 在执行完该按钮绑定的事件之后，会再检查callbackSet是否有同名的方法，有的话，会执行该回调方法
         actions: {},
         isMounted: false
       }
@@ -64,12 +65,24 @@
           this.callbackSet.cancel(e)
         }
       },
-      $_doAction: function (name, params) {
+      $_callback: function (name, params) {
         let fn = this.callbackSet[name]
         if (!fn) {
           console.error('在modal的页面中，调用方法(' + name + ')失败，因为打开该modal时，未注册该方法，已注册的方法为：', this.callbackSet)
         } else {
           this.callbackSet[name](params)
+        }
+      },
+      $_doAction: function (name, params) {
+        let fn = this[name]
+        if (!fn) {
+          console.error('在modal的页面中，调用方法(' + name + ')失败，因为modal没有该操作按钮，当前actions为：', this.actions)
+        } else {
+          this[name](params)
+          // 回调
+          if (typeof this.callbackSet[name] === 'function') {
+            this.callbackSet[name](params)
+          }
         }
       },
       $_addAction: function ({name, title, color, fn}) {

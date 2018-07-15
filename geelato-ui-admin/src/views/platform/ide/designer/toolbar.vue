@@ -72,7 +72,7 @@
           title: '选择项目',
           opts: {editorStore: this.editorStore}
         }, {
-          'selected': function (data) {
+          '$_selected': function (data) {
             thisVue.$emit('openProject', data)
             this.projectOpened = true
           }

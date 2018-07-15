@@ -13,6 +13,7 @@
           <!--！！v-if与v-show结合，保证按需触发加载，加载之后又能保存对象，只是隐藏了-->
           <component v-if="tabInited[item.name]" :is="panelComponent[item.name]" v-show="selectedPanel.name===item.name"
                      :ref="item.name"
+                     :pageId="pageId"
                      :editorStore="editorStore"
                      :editorMainHeight="editorMainHeight"></component>
         </template>
@@ -50,7 +51,9 @@
         tabInited: {},
         plugin: {},
         selectedPanel: '',
-        panelComponent: {}
+        panelComponent: {},
+        // 冗余多个pageId是为了让其变化时，可以驱动setting面版更新数据
+        pageId: ''
       }
     },
     watch: {
@@ -59,6 +62,7 @@
         if (!val) {
           return
         }
+        this.pageId = this.editorStore.editingPage.id
         // 重置为未启用
         this.tabInited = {}
         // this.plugin = this.editorStore.fileTypes[this.editorStore.editingPage.type]

@@ -13,6 +13,27 @@
   padding: .1em .7em;
 }
 
+.ui.form.gl-json .field {
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0.2em !important;
+}
+
+/*缩进*/
+.gl-json-indent {
+  margin-left: 1.68em !important;
+}
+
+.ui.form.gl-json input, .ui.form.gl-json select {
+  border: 0px solid rgba(34, 36, 38, .15) !important;
+  padding: 0 !important;
+  background-color: rgba(34, 36, 38, .15);
+}
+
+.ui.form.gl-json .inline.field > :first-child, .ui.form.gl-json .inline.fields .field > :first-child {
+  margin: 0 !important;
+}
+
 .ui.calendar table {
   width: auto;
   border-spacing: 0;

@@ -267,7 +267,7 @@ class Config {
         title: '开发配置',
         code: 'dev',
         resize: 'max',
-        index: '/#/m/platform/ide/designer/index',
+        index: '/#/m/platform/lab/jsoneditor/index',
         menu: [
           {
             title: '实施配置',
@@ -285,7 +285,6 @@ class Config {
               {title: 'UI预览', href: '/#/m/preview'},
               {title: '元数据管理', href: '/#/m/meta'},
               {title: '接口服务管理', href: '/#/m/platform/ide/designer/index'},
-              {title: 'sheet', href: '/#/m/geemeta/gl-table-form-designer/index'},
               {title: 'graph', href: '/#/m/geemeta/gl-graph-designer/index'}
             ]
           },
@@ -309,7 +308,16 @@ class Config {
               {title: 'sui-vue', href: '/#/m/platform/ui/all-in-one'},
               {title: '百度地图', href: 'http://api.map.baidu.com/lbsapi/staticmap/staticmap-helper.html', target: '_blank'}
             ]
-          }]
+          },
+          {
+            title: '实验室',
+            class: 'fa fa-connectdevelop',
+            items: [
+              {title: 'sheet', href: '/#/m/geemeta/gl-table-form-designer/index'},
+              {title: 'jsonEditor', href: '/#/m/platform/lab/jsoneditor/index'}
+            ]
+          }
+        ]
       }
     ]
     // 角色登录后的默认首模块

@@ -7,11 +7,11 @@
     <!--</div>-->
     <div class="field">
       <label>编码</label>
-      <input type="text" placeholder="英文字符，用于前端调用" name="code" v-model="form.code">
+      <input type="text" placeholder="英文字符，用于前端调用" name="code" v-model="editorStore.editingPage.code">
     </div>
     <div class="field">
       <label>描述</label>
-      <textarea rows="12" v-model="form.description"></textarea>
+      <textarea rows="12" v-model="editorStore.editingPage.description"></textarea>
     </div>
     <div class="ui fitted divider"></div>
     <table class="ui  table ">
@@ -29,26 +29,30 @@
 <script>
   export default {
     props: {
-      editorStore: {
-        type: Object
-      }
+      editorStore: Object
     },
     data () {
       return {
         form: {
-          code: '',
-          description: ''
+          code: this.editorStore.editingPage.code,
+          description: this.editorStore.editingPage.description
         }
       }
     },
     watch: {
-      'editorStore.editingPage.id': function (val, oval) {
-        console.log('editorStore.editingPage.id', this.editorStore.editingPage, this.form)
-        this.form.code = this.editorStore.editingPage.code
-        this.form.description = this.editorStore.editingPage.description
+      'editorStore.editingPage.id': {
+        handler (val, oval) {
+          console.log('setting', this.editorStore.editingPage.code, this.editorStore.editingPage.description, val, oval)
+          this.form.code = this.editorStore.editingPage.code
+          this.form.description = this.editorStore.editingPage.description
+        },
+        immediate: true,
+        deep: true
       }
     },
     mounted: function () {
+      // this.form.code = this.editorStore.editingPage.code
+      // this.form.description = this.editorStore.editingPage.description
     },
     methods: {
       $_commit () {

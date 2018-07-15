@@ -96,7 +96,7 @@
     methods: {
       $_select (item) {
         console.log('item>', item)
-        this.$parent.$_doAction('selected', item)
+        this.$parent.$_callback('$_selected', item)
         this.$parent.$_close()
       }
     },
