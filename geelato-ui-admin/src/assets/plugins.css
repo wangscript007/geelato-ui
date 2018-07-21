@@ -24,6 +24,11 @@
   margin-left: 1.68em !important;
 }
 
+/*扩展*/
+.gl-json-extend {
+  margin-left: -1.68em !important;
+}
+
 .ui.form.gl-json input, .ui.form.gl-json select {
   border: 0px solid rgba(34, 36, 38, .15) !important;
   padding: 0 !important;

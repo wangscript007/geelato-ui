@@ -227,6 +227,43 @@ utils.distinct = function (arr, col) {
   return resultArray
 }
 
+utils.stopPropagationAndPreventDefault = function (e) {
+  if (e && e.stopPropagation) {
+    e.stopPropagation()
+  } else {
+    // IE
+    window.event.cancelBubble = true
+  }
+  // stopDefault 默认事件,比如点击a标签以后会跳转至href链接的页面
+  if (e && e.preventDefault) {
+    e.preventDefault()
+  } else {
+    window.event.returnValue = false
+  }
+}
+
+/**
+ * 数组元素上移
+ * @param items 数组
+ * @param index 移动项索引
+ */
+utils.moveup = function (items, index) {
+  let item = items[index]
+  items.splice(index, 1)
+  items.splice(index - 1, 0, item)
+}
+
+/**
+ * 数组元素下移
+ * @param items 数组
+ * @param index 移动项索引
+ */
+utils.movedown = function (items, index) {
+  let item = items[index]
+  items.splice(index, 1)
+  items.splice(index + 1, 0, item)
+}
+
 utils.CryptoJS = CryptoJS
 window.utils = utils
 // let content = utils.CryptoJS.enc.Utf8.parse(str)

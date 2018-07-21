@@ -5,14 +5,14 @@
 
     <!--<template v-if="isRoot">}]</template>-->
     <!--</div>-->
-      <json-segment :schema="schema" :json="json" :options="options">
-      </json-segment>
+    <json-entity :schema="schema" :json="json" :options="options">
+    </json-entity>
 
   </div>
 </template>
 
 <script>
-  import JsonSegment from './segment'
+  import JsonEntity from './entity'
 
   export default {
     props: {
@@ -39,7 +39,7 @@
     mounted: function () {
     },
     methods: {},
-    components: {JsonSegment}
+    components: {JsonEntity}
   }
 </script>
 <style scoped>

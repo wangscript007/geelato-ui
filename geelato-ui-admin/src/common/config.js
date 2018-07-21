@@ -267,13 +267,14 @@ class Config {
         title: '开发配置',
         code: 'dev',
         resize: 'max',
-        index: '/#/m/platform/lab/jsoneditor/index',
+        index: '/#/m/platform/config/menu/index',
         menu: [
           {
             title: '实施配置',
             items: [
               {title: '任务类型配置', href: '/#/m/project-metro/task/type-config'},
-              {title: '任务导航流程图', href: '/#/m/project-metro/task/flow-config'}
+              {title: '任务导航流程图', href: '/#/m/project-metro/task/flow-config'},
+              {title: '菜单管理', href: '/#/m/platform/config/menu/index'}
             ]
           },
           {

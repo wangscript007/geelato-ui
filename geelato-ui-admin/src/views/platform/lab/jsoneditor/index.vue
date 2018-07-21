@@ -51,7 +51,9 @@
         schema: '',
         editor: {
           json: [],
-          options: {},
+          options: {
+            display: 'expand'
+          },
           schema: {}
         }
       }
@@ -162,27 +164,25 @@
       this.$refs.schema.$_reset(this.schema)
       this.$refs.schema.$_format()
       this.editor.json = {
-        person: {
-          name: '张三',
-          age: '26',
-          favorite_color: '#FFFFFF',
-          gender: '男',
-          location: {
-            province: '广东省',
-            city: '广州',
-            district: '天河区'
+        name: '张三',
+        age: '26',
+        favorite_color: '#FFFFFF',
+        gender: '男',
+        location: {
+          province: '广东省',
+          city: '广州',
+          district: '天河区'
+        },
+        pets: [
+          {
+            type: '狗',
+            name: 'hensi'
           },
-          pets: [
-            {
-              type: '狗',
-              name: 'hensi'
-            },
-            {
-              type: '猫',
-              name: 'kity'
-            }
-          ]
-        }
+          {
+            type: '猫',
+            name: 'kity'
+          }
+        ]
       }
     },
     methods: {},
