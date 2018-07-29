@@ -208,8 +208,8 @@ class Config {
           class: 'fa fa-connectdevelop',
           items: [
             {title: '项目总体视图', href: '/#/m/project-base/center/index'},
-            {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'},
-            {title: '我的任务', href: '/#/m/project-base/task/project-list'}
+            {title: '项目信息台账', href: '/#/m/project-metro/center/ProjectList'},
+            {title: '我的任务', href: '/#/m/project-base/task/ProjectList'}
           ]
         }],
         active: true
@@ -267,7 +267,8 @@ class Config {
         title: '开发配置',
         code: 'dev',
         resize: 'max',
-        index: '/#/m/platform/config/menu/index',
+        index: '/#/m/platform/ide/designer/Index',
+        // index: '/#/m/platform/lab/split/Index',
         menu: [
           {
             title: '实施配置',
@@ -281,12 +282,9 @@ class Config {
             title: '设计开发',
             class: 'fa fa-connectdevelop',
             items: [
-              {title: '开发项目', href: '/#/m/page/platform/platform-dev-project-list'},
-              {title: 'UI设计', href: '/#/m/designer'},
-              {title: 'UI预览', href: '/#/m/preview'},
-              {title: '元数据管理', href: '/#/m/meta'},
-              {title: '接口服务管理', href: '/#/m/platform/ide/designer/index'},
-              {title: 'graph', href: '/#/m/geemeta/gl-graph-designer/index'}
+              {title: '开发项目', href: '/#/m/page/platform/platform-dev-ProjectList'},
+              {title: 'IDE(geelide)', href: '/#/m/platform/ide/designer/Index'},
+              {title: '元数据管理', href: '/#/m/meta'}
             ]
           },
           {
@@ -315,7 +313,11 @@ class Config {
             class: 'fa fa-connectdevelop',
             items: [
               {title: 'sheet', href: '/#/m/geemeta/gl-table-form-designer/index'},
-              {title: 'jsonEditor', href: '/#/m/platform/lab/jsoneditor/index'}
+              {title: 'jsonEditor', href: '/#/m/platform/lab/jsoneditor/index'},
+              {title: 'layout', href: '/#/m/platform/lab/split/index'},
+              {title: 'graph', href: '/#/m/geemeta/gl-graph-designer/index'},
+              {title: 'UI设计', href: '/#/m/designer'},
+              {title: 'UI预览', href: '/#/m/preview'}
             ]
           }
         ]

@@ -252,6 +252,11 @@
   padding: 2em;
 }
 
+.gl-content-wrapper {
+  margin: 0;
+  padding: 1em;
+}
+
 div {
   -webkit-box-shadow: 0 0px 0px 0 rgba(34, 36, 38, .15) !important;
   box-shadow: 0 0px 0px 0 rgba(34, 36, 38, .15) !important;

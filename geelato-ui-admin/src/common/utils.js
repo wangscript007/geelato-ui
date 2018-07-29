@@ -129,11 +129,12 @@ utils.compileString = function (expression, $ctx) {
  * 直接执行eval，代码检查工具eslintrc，提示有误，改该此方法
  * @param expression
  * @param $ctx 用于expression的上下文参数
+ * @param ctxName 指定上下文的参数名，默认为$ctx
  * @returns {*}
  */
-utils.eval = function (expression, $ctx) {
+utils.eval = function (expression, $ctx, ctxName = '$ctx') {
   let Fn = Function
-  return new Fn('$ctx', 'return ' + expression)($ctx)
+  return new Fn(ctxName, 'return ' + expression)($ctx)
 }
 
 utils.isEmpty = function (str) {
@@ -262,6 +263,10 @@ utils.movedown = function (items, index) {
   let item = items[index]
   items.splice(index, 1)
   items.splice(index + 1, 0, item)
+}
+
+utils.remove = function (items, index) {
+  items.splice(index, 1)
 }
 
 utils.CryptoJS = CryptoJS

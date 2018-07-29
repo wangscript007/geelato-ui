@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import FileTree from './project-file-tree.vue'
+  import FileTree from './ProjectFileTree.vue'
   import entityNames from '../../../../pages/entities'
 
   /**

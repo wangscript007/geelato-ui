@@ -46,7 +46,7 @@ class IdeCfg {
                     modal: {
                       title: '用户信息',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_user',
                         fields: 'id,name,loginName,description',
@@ -79,7 +79,7 @@ class IdeCfg {
                     modal: {
                       title: '用户信息',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_user',
                         fields: 'id,name,loginName,description',

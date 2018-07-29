@@ -44,11 +44,11 @@
     },
     methods: {
       $_init: function () {
-        let $checkbox = $(this.$el).find('.ui.checkbox')
+        let thisVue = this
+        let $checkbox = $(thisVue.$el).find('.ui.checkbox')
         $checkbox.checkbox({
           onChange: function (value) {
-            console.log('value>', value)
-            this.$emit('input', value)
+            thisVue.$emit('input', value)
             $checkbox.checkbox('is ')
           }
         })

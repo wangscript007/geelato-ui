@@ -1,12 +1,12 @@
 /**
- *  插件定义
+ *  table 插件，采用json编辑器
  */
 export const Config = {
   file: {
-    title: '列表页面',
-    type: 'list',
+    title: '列表页面-Json',
+    type: 'listJson',
     icon: 'th list icon',
-    description: '通过定制的界面配置列表'
+    description: '通过直接配置json的方式，配置列表'
   },
   toolbar: [],
   stagePanels: [{
@@ -52,20 +52,18 @@ export const Config = {
                 title: '创建',
                 click: 'modal',
                 modal: {
-                  title: '编辑示例实体',
-                  type: 'page',
-                  value: '/components/page/PageLoader.vue',
+                  title: '示例实体管理',
+                  type: 'href',
+                  value: '/components/page/TableForm.vue',
                   opts: {
-                    code: '',
-                    query: {}
-                    // entityName: 'platform_demo_entity',
-                    // fields: 'id,name,type,code,content,description',
-                    // layout: [
-                    //   [{name: [4, 8]}, {code: [4, 8]}],
-                    //   [{type: [4, 8]}],
-                    //   [{content: [4, 20]}],
-                    //   [{description: [4, 20]}]
-                    // ]
+                    entityName: 'platform_demo_entity',
+                    fields: 'id,name,type,code,content,description',
+                    layout: [
+                      [{name: [4, 8]}, {code: [4, 8]}],
+                      [{type: [4, 8]}],
+                      [{content: [4, 20]}],
+                      [{description: [4, 20]}]
+                    ]
                   }
                 },
                 color: 'primary'
@@ -111,10 +109,10 @@ export const Config = {
             ]
           },
           columns: [
-            {field: 'id', title: '序号', visible: false, el: '', width: '', textAlign: 'left'},
-            {field: 'name', title: '名称', type: 'string', el: '', format: '', width: '', textAlign: 'left'},
-            {field: 'code', title: '编码', type: 'string', el: '', format: '', width: '', textAlign: 'left'},
-            {field: 'description', title: '描述', type: 'string', el: '', format: '', width: '', textAlign: 'left'}
+            {field: 'id', title: '序号', visible: false, width: '', 'text-align': 'left'},
+            {field: 'name', title: '名称', type: 'string', format: '', width: '', 'text-align': 'left'},
+            {field: 'code', title: '编码', type: 'string', format: '', width: '', 'text-align': 'left'},
+            {field: 'description', title: '描述', type: 'string', format: '', width: '', 'text-align': 'left'}
           ],
           p: '1,10',
           order: 'name|+'
@@ -130,6 +128,6 @@ export const Config = {
   }],
   settingPanels: [
     {name: 'properties', title: '基本信息', path: 'common/Settings.vue'},
-    {name: 'ui-table', title: '表格组件', path: 'table/Settings.vue'}
+    {name: 'table-json', title: '表格组件', path: 'common/SettingsJson.vue'}
   ]
 }

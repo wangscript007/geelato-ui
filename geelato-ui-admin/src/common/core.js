@@ -368,17 +368,20 @@ let core = {
       console.log('openVue > vueConfig >', vueConfig)
       console.log('openVue > callbackSet >', callbackSet)
       // $root对应App.vue的上线，srcVue.$root.$children[0]才对应APP.vue
-      Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalBody', vueComponent)
-      Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', vueConfig)
-      // Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'modalOpts', {
+      let modalView = srcVue.$root.$children[0].$refs.appRootModalView
+      Vue.set(modalView, 'modalBody', vueComponent)
+      Vue.set(modalView, 'modalOpts', vueConfig)
+      // Vue.set(modalView, 'modalOpts', {
       //   title: '',
       //   actions: [],
       //   opts: vueConfig
       // })
-      Vue.set(srcVue.$root.$children[0].$refs.appRootModalView, 'callbackSet', callbackSet || {})
-      // $('#app-root-modal').modal('setting', 'transition', 'fade').modal('show')
-      //  TODO 改成动态创建，并将ID传给modalOpts
-      return $('#app-root-modal').modal({duration: 200, closable: false, allowMultiple: true}).modal('show')
+      Vue.set(modalView, 'callbackSet', callbackSet || {})
+      // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
+      let $modal = $(modalView.$el).modal({duration: 200, closable: false, allowMultiple: true})
+      $modal.draggable()
+      $modal.modal('show')
+      return $modal
     },
     /**
      *

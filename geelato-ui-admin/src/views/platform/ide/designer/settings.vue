@@ -2,13 +2,14 @@
   <div class="designer-settings-content">
 
     <template v-if="editorStore.editingPage.id">
-      <div class="ui mini top attached tabular menu">
+      <div class="ui mini top attached tabular menu gl-designer-tab-menu">
+        <slot name="resize"></slot>
         <template v-for="(item,key) in plugin.settingPanels">
           <a class="item" :class="{active:item.name===selectedPanel.name}" :data-tab="'designer-tab-'+item.name"
              @click="selectedPanel=item;tabInited[item.name]=true">{{item.title}}</a>
         </template>
       </div>
-      <div class="ui bottom attached segment" style="margin: 0" :style="{height:editorMainHeight}">
+      <div class="ui bottom attached segment gl-designer-tab" :style="{height:editorMainHeight}">
         <template v-for="(item,key) in plugin.settingPanels">
           <!--！！v-if与v-show结合，保证按需触发加载，加载之后又能保存对象，只是隐藏了-->
           <component v-if="tabInited[item.name]" :is="panelComponent[item.name]" v-show="selectedPanel.name===item.name"
@@ -20,13 +21,12 @@
       </div>
     </template>
     <sui v-if="!editorStore.editingPage.id" type="tab" selector=".menu .item">
-      <div class="ui mini top attached tabular menu">
+      <div class="ui mini top attached tabular menu gl-designer-tab-menu">
         <slot name="resize"></slot>
         <a class="item active " data-tab="designer-tab-blank">空</a>
       </div>
       <div class="ui bottom attached tab segment active" :style="{height:editorMainHeight}"
-           data-tab="designer-tab-blank"
-           style="padding:0">
+           data-tab="designer-tab-blank">
       </div>
     </sui>
   </div>

@@ -374,8 +374,8 @@
             class: 'fa fa-connectdevelop',
             items: [
               {title: '项目总体视图', href: '/#/m/project-base/center/index'},
-              {title: '项目信息台账', href: '/#/m/project-metro/center/project-list'},
-              {title: '我的任务', href: '/#/m/project-base/task/project-list'}
+              {title: '项目信息台账', href: '/#/m/project-metro/center/ProjectList'},
+              {title: '我的任务', href: '/#/m/project-base/task/ProjectList'}
             ]
           }],
           active: true
@@ -447,7 +447,7 @@
               title: '设计开发',
               class: 'fa fa-connectdevelop',
               items: [
-                {title: '开发项目', href: '/#/m/page/platform/platform-dev-project-list'},
+                {title: '开发项目', href: '/#/m/page/platform/platform-dev-ProjectList'},
                 {title: 'UI设计', href: '/#/m/designer'},
                 {title: 'UI预览', href: '/#/m/preview'},
                 {title: '元数据管理', href: '/#/m/meta'},

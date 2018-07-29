@@ -9,12 +9,12 @@ export const Config = {
   },
   toolbar: [],
   stagePanels: [
-    {name: 'mvel', title: 'mvel', path: 'common/stage-mvel.vue', opts: {}},
-    {name: 'sql', title: 'sql', path: 'common/stage-sql.vue', opts: {}},
-    {name: 'json', title: 'json', path: 'common/stage-json.vue', opts: {}}
+    {name: 'mvel', title: 'mvel', path: 'common/StageMvel.vue', opts: {}},
+    {name: 'sql', title: 'sql', path: 'common/StageSql.vue', opts: {}},
+    {name: 'json', title: 'json', path: 'common/StageJson.vue', opts: {}}
   ],
   settingPanels: [
-    {name: 'properties', title: '基本信息', path: 'common/settings.vue'},
-    {name: 'ui-table', title: '表格组件', path: 'table/settings.vue'}
+    {name: 'properties', title: '基本信息', path: 'common/Settings.vue'},
+    {name: 'ui-table', title: '表格组件', path: 'table/Settings.vue'}
   ]
 }

@@ -130,6 +130,10 @@
                     return false
                   },
                   action: function (data) {
+                    // TODO 删除成功，才删除前端节点
+                    let node = $.jstree.reference(data.reference).get_node(data.reference)
+                    console.log('removing node>', node)
+                    thisVue.$_removePage(node.id)
                     $.jstree.reference(data.reference).delete_node(data.reference)
                   }
                 },
@@ -229,8 +233,13 @@
 //        this.$emit('newPage', {id: obj.id, text: obj.text, type: obj.type})
 //        console.log('newPage with params >', {id: obj.id, text: obj.text, type: obj.type})
 //        this.editorStore.editingPage.reset({extendId: data.id, name: data.text, type: data.type})
-        this.editorStore.reset(new SimplePageDefinition({extendId: data.id, name: data.text, type: data.type}))
-        console.log('thisVue.editorStore1>', this.editorStore)
+        this.editorStore.reset(new SimplePageDefinition({
+          extendId: data.id,
+          name: data.text,
+          type: data.type,
+          code: data.type + '_' + this.$utils.uuid(8)
+        }))
+        // console.log('thisVue.editorStore1>', this.editorStore)
         this.$_savePage()
 //        this.$_openTemplatePage()
       },
@@ -260,7 +269,7 @@
       /**
        * 新节点，则从模板中加载页面
        * 已有节点，从服务器中加载
-       * @param node {id:xxx} 页面id，对应页面实体的extend_id
+       * @param item {node {id:xxx}} 页面id，对应页面实体的extend_id
        */
       $_openPage (event, item) {
         let thisVue = this
@@ -272,6 +281,17 @@
           console.error(e)
           thisVue.$gl.ui.showMsg('从服务端获取、解析信息失败！')
         })
+      },
+      /**
+       *
+       * @param event
+       * @param nodeId 节点树id，对应页面实体的extend_id
+       */
+      $_removePage (nodeId) {
+        let thisVue = this
+        // 两张表的删除，合在一个事务中
+        thisVue.$gl.data.delete(entityNames.platform.dev.pageConfig, {extendId: nodeId})
+        thisVue.$gl.data.delete(entityNames.platform.common.treeNode, {id: nodeId})
       },
       $_loadCachePage: function (extendId) {
         let thisVue = this

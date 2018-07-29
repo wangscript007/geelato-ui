@@ -37,7 +37,7 @@
     <!--设置（是否启用辅助线）-->
     <!--</div>-->
     <a v-show="projectOpened" class="item" @click="$emit('itemClick','$_savePage',{})">保存</a>
-    <!--<a class="item" @click="currentLayout=currentLayout==='column3'?'column2':'column3'">{{layout[currentLayout].toTitle}}</a>-->
+    <!--<a class="item">{{layout[currentLayout].toTitle}}</a>-->
     <a class="item" href="/help.html" target="_blank">帮助</a>
     <slot></slot>
   </div>
@@ -68,13 +68,13 @@
       },
       $_openProject: function (event) {
         let thisVue = this
-        thisVue.$gl.ui.openVueByPath(this, '/views/platform/ide/designer/project-list', {
+        thisVue.$gl.ui.openVueByPath(this, '/views/platform/ide/designer/ProjectList', {
           title: '选择项目',
           opts: {editorStore: this.editorStore}
         }, {
           '$_selected': function (data) {
             thisVue.$emit('openProject', data)
-            this.projectOpened = true
+            thisVue.projectOpened = true
           }
         })
       },

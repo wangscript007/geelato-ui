@@ -39,7 +39,7 @@
     methods: {
       $_init () {
         let thisVue = this
-        thisVue.editorStore.editingPage.code = ''
+        // thisVue.editorStore.editingPage.code = ''
         let plugin = this.editorStore.plugins[this.editorStore.editingPage.type]
         let uiPanel = null
         for (let index in plugin.stagePanels) {
@@ -50,14 +50,19 @@
           }
         }
         // 如果是从服务端加载page配置信息，此时thisVue.editorStore.editingPage已是最新的，不用本地模板panel的配置数据
-        if (thisVue.editorStore.project && thisVue.editorStore.project.isFromServer) {
+        // 若是从模板打开，则打开之后自动保存
+        // 增加条件thisVue.editorStore.editingPage.content.component不为空，确保当服务端没有存储有效的配置信息信息，改从模板获取示例进行展示
+        if (thisVue.editorStore.editingPage && thisVue.editorStore.editingPage.isFromServer && thisVue.editorStore.editingPage.content.component) {
           thisVue.editorStore.commitOpts('ui', thisVue.editorStore.editingPage.ui)
         } else {
-          thisVue.editorStore.editingPage.component = uiPanel.opts.component
+          thisVue.editorStore.editingPage.content.component = uiPanel.opts.component
           thisVue.editorStore.commitOpts('ui', uiPanel.opts.ui)
         }
+        // console.log('editorStore', thisVue.editorStore)
+        // console.log('opts>', {ui: this.editorStore.editingPage.content.opts.ui})
+        // console.log('query>', this.queryString)
         // thisVue.editorStore.commitOpts('json', thisVue.editorStore.editingPage.content.opts.ui)
-        thisVue.currentView = resolve => require(['../../../../../' + thisVue.editorStore.editingPage.component.substring(1) + '.vue'], resolve)
+        thisVue.currentView = resolve => require(['../../../../../' + thisVue.editorStore.editingPage.content.component.substring(1) + '.vue'], resolve)
       },
       $_focus () {
       },

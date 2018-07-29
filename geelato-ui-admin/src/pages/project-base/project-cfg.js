@@ -36,7 +36,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '项目信息', type: 'href', value: '/components/page/table-form.vue'}
+                    modal: {title: '项目信息', type: 'href', value: '/components/page/TableForm.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'},
                   // 弹出页面提示导出多少条记录
@@ -141,7 +141,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '单位信息', type: 'href', value: '/components/page/table-form.vue'}
+                    modal: {title: '单位信息', type: 'href', value: '/components/page/TableForm.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'}
                   // // 弹出页面提示导出多少条记录
@@ -247,7 +247,7 @@ class ProjectCfg {
                   {
                     title: '创建',
                     click: 'modal',
-                    modal: {title: '人员信息', type: 'href', value: '/components/page/table-form.vue'}
+                    modal: {title: '人员信息', type: 'href', value: '/components/page/TableForm.vue'}
                   },
                   {title: '删除', click: 'delete', confirm: '确定删除？'}
                   // // 弹出页面提示导出多少条记录

@@ -1,9 +1,9 @@
 <template>
-  <div id="app-root-modal" class="ui fullscreen modal hide">
+  <div class="ui fullscreen modal hide">
     <i class="close icon"></i>
-    <div class="header" v-html="modalOpts?modalOpts.title:''">
+    <div class="header" v-html="modalOpts?modalOpts.title:' '" @dblclick="isShowContent=!isShowContent">
     </div>
-    <div class="scrolling content">
+    <div v-show="isShowContent" class="scrolling content">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
       <component :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts">
         正在加载...
@@ -33,7 +33,8 @@
         // 页面下方的操作按钮，通过action也可以加入一些事件，但与callbackSet不一样，actions会在modal页面中动态生成按钮
         // 在执行完该按钮绑定的事件之后，会再检查callbackSet是否有同名的方法，有的话，会执行该回调方法
         actions: {},
-        isMounted: false
+        isMounted: false,
+        isShowContent: true
       }
     },
     created: function () {
@@ -50,7 +51,7 @@
        * @param e
        */
       $_close: function (e) {
-        $('#app-root-modal').modal('hide')
+        $(this.$el).modal('hide')
         if (typeof this.callbackSet.close === 'function') {
           this.callbackSet.close(e)
         }
@@ -60,7 +61,7 @@
        * @param e
        */
       $_cancel: function (e) {
-        $('#app-root-modal').modal('hide')
+        $(this.$el).modal('hide')
         if (typeof this.callbackSet.cancel === 'function') {
           this.callbackSet.cancel(e)
         }

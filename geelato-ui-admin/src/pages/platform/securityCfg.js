@@ -46,7 +46,7 @@ class SecurityCfg {
                     modal: {
                       title: '用户信息',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_user',
                         fields: 'id,name,loginName,description',
@@ -79,7 +79,7 @@ class SecurityCfg {
                     modal: {
                       title: '用户信息',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_user',
                         fields: 'id,name,loginName,description',
@@ -160,7 +160,7 @@ class SecurityCfg {
                     modal: {
                       title: '角色管理',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_role',
                         fields: 'id,name,code,description',
@@ -196,7 +196,7 @@ class SecurityCfg {
                     modal: {
                       title: '角色管理',
                       type: 'href',
-                      value: '/components/page/table-form.vue',
+                      value: '/components/page/TableForm.vue',
                       opts: {
                         entityName: 'sys_role',
                         fields: 'id,name,code,description',

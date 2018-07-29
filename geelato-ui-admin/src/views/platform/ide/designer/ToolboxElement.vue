@@ -349,7 +349,7 @@
 </template>
 <script>
   import dndHandler from '../../../../components/designer/dndHandler'
-  import Toolbar from './tip-toolbar'
+  import Toolbar from './TipToolbar'
 
   export default {
     data () {

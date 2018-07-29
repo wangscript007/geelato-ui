@@ -1,7 +1,7 @@
 <template>
   <!--class="gl-page-content-wrapper"-->
   <div class="">
-    <layout-lr title="实体列表" rightTitle="实体详情">
+    <layout-lr title="实体列表" right-title="实体详情">
       <div slot="left">
         <gl-group item=".list>.item">
           <div class="ui middle aligned divided selection animated list">

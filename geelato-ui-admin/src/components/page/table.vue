@@ -1,5 +1,5 @@
 <template>
-  <div class="ui grid">
+  <div class="ui grid" v-if="opts.ui">
     <!--查询条件-->
     <div v-if="opts.ui.query.show" class="four wide column gl-table-query" :style="{display:(isMax?'none':'')}">
       <div v-if="opts.ui.query.tree">
@@ -98,37 +98,37 @@
             </div>
           </th>
           <th style="width:5em">操作</th>
-          <th v-for="(item, index) in opts.ui.table.columns" v-if="item.visible!==false">
+          <th v-for="(item, index) in opts.ui.table.columns" v-if="item.visible!==false" :style="{width:item.width}">
             {{item.title}}
           </th>
         </tr>
         </thead>
         <tbody v-if="queryResult.data&&queryResult.data.length>0">
-        <tr v-for="(rowItem,rowIndex) in queryResult.data">
+        <tr v-for="(rowDataItem,rowIndex) in queryResult.data">
           <td v-if="opts.ui.mode!=='select'">
             <div class="ui child checkbox">
-              <input type="checkbox" :data-rowId="rowItem[opts.ui.table.select.field]">
+              <input type="checkbox" :data-rowId="rowDataItem[opts.ui.table.select.field]">
               <label></label>
             </div>
           </td>
           <td>
             <div v-if="opts.ui.mode==='select'">
               <div class="ui mini buttons" :class="$gl.ui.color.primary">
-                <div class="ui button" @click="$_selectRow(rowItem)">选择</div>
+                <div class="ui button" @click="$_selectRow(rowDataItem)">选择</div>
               </div>
             </div>
             <div v-if="opts.ui.mode!=='select'" class="ui mini buttons" :class="$gl.ui.color.primary">
               <div class="ui button"
                    v-if="opts.ui.table.dropdown.actions.length===1?item=opts.ui.table.dropdown.actions[0]:''"
-                   @click="$_click(item,$event,rowItem)">{{item.title}}
+                   @click="$_click(item,$event,rowDataItem)">{{item.title}}
               </div>
               <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em"></div>-->
               <div class="ui floating dropdown icon button" v-else-if="opts.ui.table.dropdown.actions.length>1">
                 <i class="dropdown icon"></i>
                 <div class="menu">
                   <template v-for="(item, index) in opts.ui.table.dropdown.actions">
-                    <div class="item" @click="$_click(item,$event,rowItem)"
-                         v-if="$_eval(item.visible,rowItem)!==true">
+                    <div class="item" @click="$_click(item,$event,rowDataItem)"
+                         v-if="$_eval(item.visible,rowDataItem)!==true">
                       {{item.title}}
                     </div>
                   </template>
@@ -136,8 +136,15 @@
               </div>
             </div>
           </td>
-          <td v-for="(item, index) in opts.ui.table.columns" v-if="item.visible!==false">
-            {{rowItem[item.field]}}
+          <!--展示列数据 visible el:表达式  format：格式化-->
+          <td v-for="(item, index) in opts.ui.table.columns" v-if="item.visible!==false"
+              :style="{'text-align':item.textAlign}">
+            <template v-if="item.el">
+              {{$utils.eval(item.el,rowDataItem)}}
+            </template>
+            <template v-else>
+              {{ rowDataItem[item.field]}}
+            </template>
           </td>
         </tr>
         </tbody>
@@ -155,8 +162,8 @@
 </template>
 <script>
   import utils from '../../common/utils'
-  import TableQuery from './table-query.vue'
-  import TableTree from './table-tree.vue'
+  import TableQuery from './TableQuery.vue'
+  import TableTree from './TableTree.vue'
 
   export default {
     props: {
@@ -215,7 +222,10 @@
           let fsAry = []
           for (let i in thisVue.opts.ui.table.columns) {
             let col = thisVue.opts.ui.table.columns[i]
-            fsAry.push(col.field)
+            // 过滤掉空列，或计算列
+            if (!thisVue.$_isVirtualColumn(col.field)) {
+              fsAry.push(col.field)
+            }
           }
           root['@fs'] = fsAry.join(',')
           root['@order'] = thisVue.opts.ui.table.order
@@ -230,6 +240,9 @@
       },
       toggleSidebar () {
         this.isMax = !this.isMax
+      },
+      $_isVirtualColumn (field) {
+        return field === '' || field === '空' || field === '无'
       },
       $_initCheckbox () {
         let thisVue = this
@@ -301,10 +314,10 @@
       $_clickTreeNode (data) {
         this.currentTreeNode = data
       },
-      $_click (action, event, rowItem) {
+      $_click (action, event, rowDataItem) {
         console.log('click action >', action)
         console.log('click event  >', event)
-        console.log('click rowItem>', rowItem)
+        console.log('click rowDataItem>', rowDataItem)
         if (action.confirm && !confirm(action.confirm)) {
           return
         }
@@ -313,12 +326,12 @@
           case 'modal':
             // 传递上下文的$treeNodeId给打开的页面
             var kvs = {$treeNodeId: thisVue.currentTreeNode.id, $treeNodeText: thisVue.currentTreeNode.text}
-            $.extend(true, kvs, rowItem)
+            $.extend(true, kvs, rowDataItem)
             // 对modal中的变量进行变换，转换之后才可传参给模态窗口
             let modal = utils.invoke(action.modal, kvs)
             console.log('resolved modal>', modal)
-            if (modal.type === 'href') {
-              thisVue.$gl.ui.openVueByPath(this, modal.value, {title: '', opts: modal}, {
+            if (modal.type === 'href' || modal.type === 'page') {
+              thisVue.$gl.ui.openVueByPath(this, modal.value, modal, {
                 refreshTable: function () {
                   // 在modal中注册刷新操作
                   thisVue.$_submit()
@@ -332,12 +345,19 @@
               // TODO
             }
             break
-          case 'delete':
-            // let msg = action.confirm || '确定删除'
+          case 'deleteOne':
+            if (rowDataItem) {
+              let keyValue = {'id|eq': rowDataItem.id}
+              thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
+                thisVue.$_resetCheckbox()
+                thisVue.$_submit()
+              })
+            }
+            break
+          case 'deleteMulti':
             if (thisVue.checkedIds.length !== 0) {
-//              console.log('checkedIds>', thisVue.checkedIds)
-              let kv = {'id|in': thisVue.checkedIds.join(',')}
-              thisVue.$gl.data.delete(thisVue.opts.ui.entity, kv).then(function () {
+              let keyValue = {'id|in': thisVue.checkedIds.join(',')}
+              thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
                 thisVue.$_resetCheckbox()
                 thisVue.$_submit()
               })

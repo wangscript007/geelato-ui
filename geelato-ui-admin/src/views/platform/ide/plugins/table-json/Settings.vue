@@ -71,8 +71,8 @@
       },
       $_loadMeta () {
         console.log('ui.toolbar.dropdown.actions>', this.editorStore.editingPage.content.opts.ui.toolbar.dropdown.actions)
-        this.$gl.ui.openVueByPath(this, '/views/platform/ide/plugins/table/SettingsGuide', {
-          title: '列表查询页面配置向导',
+        this.$gl.ui.openVueByPath(this, '/views/platform/ide/plugins/common/settings-json', {
+          title: '列表查询页面配置',
           opts: {
             entityOrQueryKey: this.form.entity,
             editorStore: this.editorStore

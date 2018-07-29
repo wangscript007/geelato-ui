@@ -13,13 +13,30 @@
         <td>
           <sui type="checkbox" selector=".ui.checkbox" v-model="form.checkbox">
             <div class="ui checkbox">
-              <input id="example-id" type="checkbox">
-              <label for="example-id">Label</label>
+              <input type="checkbox">
+              <label>Label1</label>
+            </div>
+            <div class="ui checkbox">
+              <input type="checkbox">
+              <label>Label2</label>
             </div>
           </sui>
+          <div class="ui form">
+            <div class="inline fields">
+              <label>选择</label>
+              <sui class="field" type="checkbox" selector=".ui.checkbox"
+                   v-for="(item,index) in [{text:'A',value:'1'},{text:'B',value:'2'},{text:'C',value:'3'}]">
+                <div class="ui radio checkbox" @click="form.checkboxRadio=item.value">
+                  <input type="radio" name="frequency" :checked="form.checkboxRadio===item.value">
+                  <label>{{item.text}}</label>
+                </div>
+              </sui>
+            </div>
+          </div>
         </td>
         <td>
-          {{form.checkbox}}
+          {{form.checkbox}}<br>
+          {{form.checkboxRadio}}
         </td>
       </tr>
       <tr>
@@ -155,6 +172,7 @@
       return {
         form: {
           checkbox: undefined,
+          checkboxRadio: undefined,
           dropdown1: undefined,
           dropdown2: undefined,
           dropdownMultiple: undefined,

@@ -1,15 +1,17 @@
 <template>
   <div class="gl-designer">
-    <toolbar :editorStore="editorStore" @newProject="$_newProject" @openProject="$_openProject" @itemClick="$_toolbarItemClick">
+    <toolbar ref="toolbar" :editorStore="editorStore" @newProject="$_newProject" @openProject="$_openProject"
+             @itemClick="$_toolbarItemClick">
     </toolbar>
-    <div class="ui grid" style="margin: 0;padding: 0">
-      <div v-show="currentLayout==='column3'" class="three wide column" style="margin: 0;padding: 0">
+    <div :style="{height:editorOuterMainHeight}">
+      <div class="gl-designer-sidebar split split-horizontal">
         <sui type="tab" selector=".menu .item">
-          <div class="ui top attached tabular mini menu">
+          <!--ui mini top attached tabular menu gl-designer-tab-menu-->
+          <div class="ui mini top attached tabular menu gl-designer-tab-menu">
             <a class="item active" data-tab="sidebar-project">项目</a>
-            <a class="item" data-tab="designer-tab-tool">工具</a>
+            <!--<a class="item" data-tab="designer-tab-tool">工具</a>-->
             <a class="item float right" style="padding:0;background-color: #eeeeee"
-               @click="currentLayout=currentLayout==='column3'?'column2':'column3'">
+               @click="spliter.collapse(0)">
               <i class="caret left icon"></i>
             </a>
           </div>
@@ -18,7 +20,8 @@
             <project ref="project" @openPage="$_onOpenPage" @newPage="$_onNewPage"
                      :editorStore="editorStore"></project>
           </div>
-          <div class="ui bottom attached tab segment" :style="{height:editorMainHeight}" data-tab="designer-tab-tool">
+          <div class="ui bottom attached tab segment" :style="{height:editorMainHeight}"
+               data-tab="designer-tab-tool">
             <toolbox-element></toolbox-element>
             <div class="element" draggable>
               <input type="checkbox" name="xx">sss
@@ -26,18 +29,21 @@
           </div>
         </sui>
       </div>
-      <div :class="layout[currentLayout].stageWide + ' wide column'" class="" style="margin: 0;padding: 0 1px">
-        <stage ref="stage" :editorStore="editorStore" :editorMainHeight="editorMainHeight"
-               @resize2Column="currentLayout=currentLayout==='column3'?'column2':'column3'">
-          <a slot="resize" v-if="currentLayout==='column2'" class="item"
-             style="padding:0;background-color: #eeeeee"
-             @click="currentLayout='column3'">
-            <i class="caret right icon"></i>
-          </a>
+      <div class="gl-designer-stage split split-horizontal">
+        <stage ref="stage" :editorStore="editorStore" :editorMainHeight="editorMainHeight">
+          <!--<a slot="resize" v-if="spliter&&spliter.getSizes()[0]>0" class="item"-->
+          <!--style="padding:0;background-color: #eeeeee"-->
+          <!--@click="spliter.collapse(0)">-->
+          <!--<i class="caret right icon"></i>-->
+          <!--</a>-->
         </stage>
       </div>
-      <div class="four wide column" style="margin: 0;padding: 0">
+      <div class="gl-designer-settings split split-horizontal">
         <settings ref="settings" :editorStore="editorStore" :editorMainHeight="editorMainHeight">
+          <a slot="resize" class="item" style="padding:0;background-color: #eeeeee"
+             @click="spliter.collapse(2)">
+            <i class="caret right icon"></i>
+          </a>
         </settings>
         <!--<div class="designer-properties-content">-->
         <!--<div class="ui mini top attached tabular menu">-->
@@ -54,11 +60,12 @@
 </template>
 
 <script>
-  import Toolbar from './toolbar.vue'
-  import Project from './project.vue'
-  import ToolboxElement from './toolbox-element.vue'
-  import Stage from './stage.vue'
-  import Settings from './settings.vue'
+  import Split from 'split.js'
+  import Toolbar from './Toolbar.vue'
+  import Project from './Project.vue'
+  import ToolboxElement from './ToolboxElement.vue'
+  import Stage from './Stage.vue'
+  import Settings from './Settings.vue'
   import EditorStore from '../../../../pages/editor/EditorStore'
   //  import Properties from '../common/settings-properties.vue'
   //  import entityNames from '../../../../pages/entities'
@@ -95,19 +102,29 @@
           }
         }),
         propertiesValue: {},
-        editorMainHeight: '490px',
-        editorMainHeightInt: 490,
-        currentLayout: 'column3',
-        layout: {
-          column2: {
-            toTitle: '三栏布局',
-            stageWide: 'twelve'
-          },
-          column3: {
-            toTitle: '二栏布局',
-            stageWide: 'nine'
-          }
-        }
+        toolbarHeightNum: 33.42, // px
+        // 一般一个tab时，高度为33.42，当增加多一个tab后，变为34.42，按最高的预留;
+        // 最终方案，在gl-designer-tab-menu中指字max-height为31.42
+        tabTitleHeightNum: 31.42,
+        // 预留的向下的距离
+        mainBottomGutter: 2,
+        // editorMainHeight: '490px',
+        // editorMainHeightNum: 490,
+        spliter: undefined
+      }
+    },
+    computed: {
+      editorMainHeightNum: function () {
+        return parseInt(this.$store.state.platform.currentLayout.content.height.replace('px', '')) - this.toolbarHeightNum - this.tabTitleHeightNum - this.mainBottomGutter
+      },
+      editorMainHeight: function () {
+        return this.editorMainHeightNum + 'px'
+      },
+      /**
+       * 包括tab及代码区
+       * */
+      editorOuterMainHeight: function () {
+        return (this.editorMainHeightNum + this.tabTitleHeightNum) + 'px'
       }
     },
     created () {
@@ -127,6 +144,11 @@
       }
     },
     mounted () {
+      this.spliter = Split(['.gl-designer-sidebar', '.gl-designer-stage', '.gl-designer-settings'], {
+        sizes: [18.75, 56.25, 25],
+        gutterSize: 4
+        // minSize: 200
+      })
     },
     methods: {
       $_newProject () {
@@ -167,5 +189,62 @@
 </script>
 
 <style>
+  .gl-designer .ui.tab.segment {
+    margin: 0;
+    padding: 0;
+  }
 
+  .gl-designer-tab-menu.ui.tabular.menu .active.item {
+    border-top-width: 0px;
+    max-height: 31.42px !important;
+    border-top: 0px;
+  }
+
+  .gl-designer-tab.ui.bottom.attached.segment {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gl-designer .split {
+    margin: 0;
+    padding: 0;
+  }
+
+  /*.gl-designer-stage.split {*/
+  /*padding: 0 5px;*/
+  /*}*/
+
+  .gl-designer .split p, .split-flex p {
+    /*padding: 20px;*/
+  }
+
+  .gl-designer .split, .split-flex {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-y: hidden;
+    overflow-x: hidden;
+  }
+
+  .gl-designer .gutter {
+    background-color: #eee;
+    background-repeat: no-repeat;
+    background-position: 50%;
+  }
+
+  .gl-designer .gutter.gutter-horizontal {
+    /*background-image: url('grips/vertical.png');*/
+    cursor: ew-resize;
+  }
+
+  .gl-designer .gutter.gutter-vertical {
+    /*background-image: url('grips/horizontal.png');*/
+    cursor: ns-resize;
+  }
+
+  .gl-designer .split.split-horizontal, .gutter.gutter-horizontal {
+    height: 100%;
+    float: left;
+  }
 </style>

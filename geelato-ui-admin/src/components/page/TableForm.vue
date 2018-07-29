@@ -5,7 +5,7 @@
   <table class="ui small compact form gl-form gl-col-24">
     <thead></thead>
     <tbody>
-    <tr v-for="row in options.layout">
+    <tr v-for="row in options.ui.layout">
       <template v-for="cell in row" v-if="item=metaMap[Object.keys(cell)[0]]">
         <td :colspan="Object.values(cell)[0][0]">{{item.title}}</td>
         <td :colspan="Object.values(cell)[0][1]">
@@ -85,8 +85,8 @@
       $_loadData () {
         console.log('基于以下参数，构建表单>', this.options)
         let theVue = this
-        let id = theVue.options.model && theVue.options.model.id ? theVue.options.model.id : -1
-        this.$gl.data.query(theVue.options.entityName, {id: id}, theVue.options.fields, true).then(function (res) {
+        let id = theVue.options.ui.model && theVue.options.ui.model.id ? theVue.options.ui.model.id : -1
+        this.$gl.data.query(theVue.options.ui.entityName, {id: id}, theVue.options.ui.fields, true).then(function (res) {
           console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res)
           theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
           theVue.meta = res.meta
@@ -95,7 +95,7 @@
       $_save () {
         let thisVue = this
         if (typeof this.$parent.$_close === 'function') {
-          this.$gl.data.save(this.options.entityName, this.form).then(function (res) {
+          this.$gl.data.save(this.options.ui.entityName, this.form).then(function (res) {
 //            console.log('save form res>', res)
             thisVue.$parent.$_close()
           })

@@ -133,15 +133,18 @@
               <td>{{item.field}}</td>
               <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
               <td>
-                <sui ref="copDropdown" type="dropdown">
-                  <div class="ui dropdown">
-                    <div class="text">{{dict.cop[item.cop]}}</div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                      <div v-for="(value,key) in dict.cop" class="item" :data-value="key" :data-text="value">{{value}}
-                      </div>
-                    </div>
-                  </div>
+                <sui ref="copDropdown" type="dropdown" v-model="item.cop" class="cop">
+                  <select>
+                    <option v-for="(value,key) in dict.cop" :value="key">{{value}}</option>
+                  </select>
+                  <!--<div class="ui dropdown">-->
+                  <!--<div class="text">{{dict.cop[item.cop]}}</div>-->
+                  <!--<i class="dropdown icon"></i>-->
+                  <!--<div class="menu">-->
+                  <!--<div v-for="(value,key) in dict.cop" class="item" :data-value="key" :data-text="value">{{value}}-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
                 </sui>
               </td>
               <td><i class="remove red icon" style="cursor: pointer" title="删除"
@@ -197,13 +200,17 @@
             <div class="ui right secondary mini menu">
               <div class="item">
                 <div class="ui mini button" :class="$gl.ui.color.primary"
-                     @click="$_addQueryColumnItem({name: '无', title: '列', type: 'string', format: '',visible: true})">
+                     @click="$_addQueryColumnItem({name: '无', title: '列', type: 'string', el:'',format: '',visible: true})">
                   添加虚拟列
                 </div>
               </div>
             </div>
           </div>
           <div class="ui fitted divider"></div>
+          <message title="">
+            添加虚拟列：如元数据中有年、月分两个字段year、month,但没有年月组合字段，这时可以创建一个虚拟列由年、月组成。<br>
+            值表表达式：以年月组合字段为例，在值表达式中可写成$ctx.year+''+$ctx.month，其中$ctx是关键字，表示当前的上下文信息，在该场景下$ctx表示一行数据
+          </message>
           <table class="ui compact celled table">
             <tr>
               <th>序号</th>
@@ -214,9 +221,8 @@
             </tr>
             <!--{field: 'loginName', title: '登录名', cop: 'contains', type: 'string', lop: 'or'},-->
             <template v-for="(item,index) in ui.table.columns">
-              <tr :key="item.field">
-                <td style="cursor: pointer"
-                    @click="openedStatus.resultTableIndex=openedStatus.resultTableIndex===index?-1:index">{{index+1}}
+              <tr :key="index">
+                <td>{{index+1}}
                 </td>
                 <!--click控制明细行是否展示-->
                 <td style="cursor: pointer"
@@ -224,10 +230,16 @@
                   {{item.field}}
                 </td>
                 <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.format" placeholder="默认为当前字段值"/>
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.el" placeholder="默认为当前字段值"/>
                 </td>
-                <td><i class="remove red icon" style="cursor: pointer" title="删除"
-                       @click="$_removeQueryColumnItem(item,index)"></i>
+                <td>
+                  <i class="compress icon" style="cursor: pointer" title="收缩"
+                     v-if="openedStatus.resultTableIndex===index"
+                     @click="openedStatus.resultTableIndex=openedStatus.resultTableIndex===index?-1:index"></i>
+                  <i class="expand icon" style="cursor: pointer" title="展开" v-if="openedStatus.resultTableIndex!==index"
+                     @click="openedStatus.resultTableIndex=openedStatus.resultTableIndex===index?-1:index"></i>
+                  <i class="remove red icon" style="cursor: pointer" title="删除"
+                     @click="$_removeQueryColumnItem(item,index)"></i>
                   <i class="arrow up icon" style="cursor: pointer" title="向上"
                      @click="$_upQueryColumnItem(item,index)" v-if="index!==0"></i>
                   <i class="arrow down icon" style="cursor: pointer" title="向下"
@@ -235,17 +247,22 @@
               </tr>
               <tr v-if="openedStatus.resultTableIndex===index">
                 <td colspan="5">
-                  <table class="ui mini table gl-compact gl-col-24 gl-form">
+                  <table class="ui small compact table gl-col-24 gl-form">
                     <tr>
                       <td>列宽</td>
                       <td><input type="text" placeholder="5em、50px" v-model="item.width"/></td>
                       <td>对齐</td>
                       <td>
-                        <checkbox :opts="{
-                            name: 'align_checkbox',
-                            type: 'radio',
-                            data: [{text: '左', value: 'left'}, {text: '中', value: 'middle'},{text:'右',value:'right'}]
-                          }" v-model="item['text-align']"></checkbox>
+                        <div class="inline inline fields">
+                          <sui class="field" type="checkbox" selector=".ui.checkbox"
+                               v-for="(checkboxItem,checkboxIndex) in [{text: '左', value: 'left'}, {text: '中', value: 'center'},{text:'右',value:'right'}]">
+                            <div class="ui radio checkbox" @click="item.textAlign=checkboxItem.value">
+                              <input type="radio" :name="item.field+index"
+                                     :checked="item.textAlign===checkboxItem.value">
+                              <label>{{checkboxItem.text}}</label>
+                            </div>
+                          </sui>
+                        </div>
                       </td>
                     </tr>
                   </table>
@@ -270,17 +287,11 @@
             <tr>
               <th>标题</th>
               <th>点击事件</th>
-              <!--<th title="confirm">确认信息</th>-->
-              <!--<th title="hidden">隐藏条件</th>-->
-              <!--<th>参数</th>-->
               <th></th>
             </tr>
             <tr v-for="(item,index) in baseToolbarActions">
               <td>{{item.title}}</td>
               <td>{{item.click}}</td>
-              <!--<td>{{item.confirm}}</td>-->
-              <!--<td>{{item.hidden}}</td>-->
-              <!--<td></td>-->
               <td><i class="plus icon" :class="$gl.ui.color.primary" style="cursor: pointer" title="加入"
                      @click="$_addToolbarActionItem(item,index)"></i></td>
             </tr>
@@ -309,77 +320,63 @@
             <template v-for="(item,index) in  ui.toolbar.dropdown.actions">
               <tr :key="item.field">
                 <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.click"/></td>
+                <td style="margin: 0;padding: 1px">{{item.click}}
+                  <!--<sui type="dropdown" v-model="item.click">-->
+                  <!--<select>-->
+                  <!--<option v-for="(action,actionIndex) in baseToolbarActions" :selected="action.click===item.click"-->
+                  <!--:value="action.click">{{action.click}}-->
+                  <!--</option>-->
+                  <!--</select>-->
+                  <!--</sui>-->
+                  <!--<input type="text" v-model="item.click"/></td>-->
                 <td style="margin: 0;padding: 1px"><input type="text" v-model="item.confirm" placeholder="确定？"/></td>
                 <td style="margin: 0;padding: 1px"><input type="text" v-model="item.hidden" placeholder="js:@.xx===yy"/>
                 </td>
                 <td style="margin: 0;padding: 1px;text-align: center">
                   <sui type="dropdown" selector=".ui.dropdown" v-model="item.color">
-                    <select name="color" class="ui compact dropdown" id="select">
-                      <!--<option :value="item.color"><div class="ui empty circular label" :class="$gl.ui.color[item.color]"></div></option>-->
+                    <select name="color" class="ui compact dropdown">
                       <option v-for="(value,key) in baseColors" :value="key" :selected="item.color===key">
                         <div class="ui empty circular label" :class="value"></div>
                       </option>
                     </select>
-
-                    <!--<div class="ui dropdown">-->
-                    <!--<div class="default text">-->
-                    <!--<div class="ui empty circular label" :class="$gl.ui.color[item.color]"></div>-->
-                    <!--</div>-->
-                    <!--<i class="dropdown icon"></i>-->
-                    <!--<div class="menu">-->
-                    <!--<div class="scrolling menu">-->
-                    <!--<div v-for="(value,key) in baseColors" class="item" :data-value="key">-->
-                    <!--<div class="ui empty circular label" :class="value"></div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="ui dropdown">-->
-                    <!--<input type="hidden" name="gender" />-->
-                    <!--<span class="text">-->
-                    <!--<div class="ui empty circular label" :class="$gl.ui.color[item.color]"></div>-->
-                    <!--</span>-->
-                    <!--<i class="dropdown icon"></i>-->
-                    <!--<div class="menu">-->
-                    <!--<div class="scrolling menu">-->
-                    <!--<div v-for="(value,key) in baseColors" class="item" data-value="key">-->
-                    <!--<div class="ui empty circular label" :class="value"></div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</div>-->
                   </sui>
                 </td>
                 <td>
-                  <div class="ui icon mini buttons">
-                    <button class="ui button" @click="$_removeToolbarActionItem(item,index)" title="删除"><i
-                      class="remove red icon"></i></button>
-                    <button class="ui button" @click="$_upToolbarActionItem(item,index)" v-if="index!==0" title="向上"><i
-                      class="arrow up icon" :class="$gl.ui.color.primary"></i></button>
-                    <button class="ui button" @click="$_downToolbarActionItem(item,index)"
-                            v-if="index!==ui.toolbar.dropdown.actions.length-1" title="向下"><i
-                      class="arrow down icon" :class="$gl.ui.color.primary"></i></button>
-                    <button class="ui button"
-                            @click="openedStatus.toolbarTableIndex=openedStatus.toolbarTableIndex===index?-1:index"
-                            title="参数"><i
-                      class="expand icon" :class="$gl.ui.color.primary"></i></button>
-                  </div>
-                  <!--<i class="remove red icon" style="cursor: pointer" title="删除"-->
-                  <!--@click="$_removeToolbarActionItem(item,index)"></i>-->
-                  <!--<i class="arrow up icon" style="cursor: pointer" title="向上"-->
-                  <!--@click="$_upToolbarActionItem(item,index)" v-if="index!==0"></i>-->
-                  <!--<i class="arrow down icon" style="cursor: pointer" title="向下"-->
-                  <!--@click="$_downToolbarActionItem(item,index)"-->
-                  <!--v-if="index!==ui.toolbar.dropdown.actions.length-1"></i>-->
+                  <i class="compress icon" style="cursor: pointer" title="收缩"
+                     v-if="openedStatus.toolbarActionIndex===index"
+                     @click="openedStatus.toolbarActionIndex=openedStatus.toolbarActionIndex===index?-1:index"></i>
+                  <i class="expand icon" style="cursor: pointer" title="展开"
+                     v-if="openedStatus.toolbarActionIndex!==index"
+                     @click="openedStatus.toolbarActionIndex=openedStatus.toolbarActionIndex===index?-1:index"></i>
+                  <i class="remove red icon" style="cursor: pointer" title="删除"
+                     @click="$utils.remove(ui.toolbar.dropdown.actions, index)"></i>
+                  <i class="arrow up icon" style="cursor: pointer" title="向上"
+                     @click="$utils.moveup(ui.toolbar.dropdown.actions, index)" v-if="index!==0"></i>
+                  <i class="arrow down icon" style="cursor: pointer" title="向下"
+                     @click="$utils.movedown(ui.toolbar.dropdown.actions, index)"
+                     v-if="index!==ui.toolbar.dropdown.actions.length-1"></i>
+                  <!--<div class="ui icon mini buttons">-->
+                  <!--<button class="ui button" @click="$_removeToolbarActionItem(item,index)" title="删除"><i-->
+                  <!--class="remove red icon"></i></button>-->
+                  <!--<button class="ui button" @click="$_upToolbarActionItem(item,index)" v-if="index!==0" title="向上"><i-->
+                  <!--class="arrow up icon" :class="$gl.ui.color.primary"></i></button>-->
+                  <!--<button class="ui button" @click="$_downToolbarActionItem(item,index)"-->
+                  <!--v-if="index!==ui.toolbar.dropdown.actions.length-1" title="向下"><i-->
+                  <!--class="arrow down icon" :class="$gl.ui.color.primary"></i></button>-->
+                  <!--<button class="ui button"-->
+                  <!--@click="openedStatus.toolbarActionIndex=openedStatus.toolbarActionIndex===index?-1:index"-->
+                  <!--title="参数"><i-->
+                  <!--class="expand icon" :class="$gl.ui.color.primary"></i></button>-->
+                  <!--</div>-->
                 </td>
               </tr>
-              <tr v-if="openedStatus.toolbarTableIndex===index">
+              <tr v-if="openedStatus.toolbarActionIndex===index">
                 <td colspan="8">
                   <div class="ui segment info message">
                     {{item.modal?'参数配置说明XXX':'该事件无需配置参数。'}}
                   </div>
-                  <json-editor v-if="item.modal" v-model="item.modal.opts" :show-btns="false" mode="form"
+                  <!--// mode="form"-->
+                  <json-editor v-if="item.click==='modal'" v-model="item.modal" :show-btns="false" mode="code"
                                @json-change=""></json-editor>
                   <!--<table class="ui mini table gl-compact gl-col-24 gl-form">-->
                   <!--<tr>-->
@@ -404,7 +401,78 @@
     </div>
     <!--单行操作-->
     <div class="ui attached segment" v-show="step==='stepE'">
-      <p>E</p>
+      <layout-lr title="操作按钮模板选择列表" right-title="工具栏" :min="{left:5,right:11}">
+        <div slot="left">
+          <table class="ui compact  table">
+            <tr>
+              <th>标题</th>
+              <th>点击事件</th>
+              <th></th>
+            </tr>
+            <tr v-for="(item,index) in baseColumnActions">
+              <td>{{item.title}}</td>
+              <td>{{item.click}}</td>
+              <td><i class="plus icon" :class="$gl.ui.color.primary" style="cursor: pointer" title="加入"
+                     @click="$_addColumnActionItem(item,index)"></i></td>
+            </tr>
+          </table>
+        </div>
+        <div slot="right">
+          <table class="ui compact table">
+            <tr>
+              <th>标题</th>
+              <th>点击事件</th>
+              <th title="confirm">确认信息</th>
+              <th title="hidden">隐藏条件</th>
+              <th style="width: 4em">颜色</th>
+              <th>排序</th>
+            </tr>
+            <template v-for="(item,index) in ui.table.dropdown.actions">
+              <tr :key="item.field">
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
+                <td style="margin: 0;padding: 1px">{{item.click}}
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.confirm" placeholder="确定？"/></td>
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.hidden" placeholder="js:@.xx===yy"/>
+                </td>
+                <td style="margin: 0;padding: 1px;text-align: center">
+                  <sui type="dropdown" selector=".ui.dropdown" v-model="item.color">
+                    <select name="color" class="ui compact dropdown">
+                      <option v-for="(value,key) in baseColors" :value="key" :selected="item.color===key">
+                        <div class="ui empty circular label" :class="value"></div>
+                      </option>
+                    </select>
+                  </sui>
+                </td>
+                <td>
+                  <i class="compress icon" style="cursor: pointer" title="收缩"
+                     v-if="openedStatus.columnActionIndex===index"
+                     @click="openedStatus.columnActionIndex=openedStatus.columnActionIndex===index?-1:index"></i>
+                  <i class="expand icon" style="cursor: pointer" title="展开"
+                     v-if="openedStatus.columnActionIndex!==index"
+                     @click="openedStatus.columnActionIndex=openedStatus.columnActionIndex===index?-1:index"></i>
+                  <i class="remove red icon" style="cursor: pointer" title="删除"
+                     @click="$utils.remove(ui.table.dropdown.actions, index)"></i>
+                  <i class="arrow up icon" style="cursor: pointer" title="向上"
+                     @click="$utils.moveup(ui.table.dropdown.actions, index)" v-if="index!==0"></i>
+                  <i class="arrow down icon" style="cursor: pointer" title="向下"
+                     @click="$utils.movedown(ui.table.dropdown.actions, index)"
+                     v-if="index!==ui.table.dropdown.actions.length-1"></i>
+                </td>
+              </tr>
+              <tr v-if="openedStatus.columnActionIndex===index">
+                <td colspan="8">
+                  <div class="ui segment info message">
+                    {{item.modal?'参数配置说明XXX':'该事件无需配置参数。'}}
+                  </div>
+                  <!--// mode="form"-->
+                  <json-editor v-if="item.click==='modal'" v-model="item.modal" :show-btns="false" mode="code"
+                               @json-change=""></json-editor>
+                </td>
+              </tr>
+            </template>
+          </table>
+        </div>
+      </layout-lr>
     </div>
     <!--<div class="ui attached bottom buttons">-->
     <!--<div class="ui button">保存</div>-->
@@ -415,7 +483,7 @@
   import MetaSelector from '../../../meta/meta-selector.vue'
   import Message from '../../../../../components/message/index'
   import config from '../../../../../common/config.js'
-  import Checkbox from '../../../../../components/modules/checkbox.vue'
+  import GlCheckbox from '../../../../../components/modules/checkbox.vue'
   import JsonEditor from 'vue-json-editor'
 
   export default {
@@ -434,28 +502,31 @@
         form: {
           entityOrQueryKey: this.opts.entityOrQueryKey
         },
+        baseModal: {
+          title: '标题',
+          type: 'page',
+          value: '/components/page/PageLoader.vue',
+          opts: {
+            code: '',
+            query: {}
+          }
+        },
         baseToolbarActions: [
-          {title: '新增', click: 'modal', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '删除', click: 'delete', modal: '', confirm: '是否删除？', js: '', hidden: '', color: 'primary'},
-          {title: 'js', click: 'js', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出xls', click: 'xls', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出word', click: 'word', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出pdf', click: 'pdf', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '打印', click: 'print', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '弹层', click: 'modal', modal: '', confirm: '', js: '', hidden: '', color: 'primary'}
+          {title: '新增', click: 'modal', modal: this.baseModal, confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '删除', click: 'deleteMulti', modal: '', confirm: '是否删除？', js: '', hidden: '', color: 'primary'},
+          {title: 'js(未支持)', click: 'js', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '导出xls(未支持)', click: 'xls', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '导出word(未支持)', click: 'word', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '导出pdf(未支持)', click: 'pdf', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '打印(未支持)', click: 'print', modal: '', confirm: '', js: '', hidden: '', color: 'primary'}
         ],
         baseColumnActions: [
-          {title: '详情', click: 'modal', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '删除', click: 'delete', modal: '', confirm: '是否删除？', js: '', hidden: '', color: 'primary'},
-          {title: 'js', click: 'js', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '弹层', click: 'modal', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出xls', click: 'xls', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出word', click: 'word', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '导出pdf', click: 'pdf', modal: '', confirm: '', js: '', hidden: '', color: 'primary'},
-          {title: '打印', click: 'print', modal: '', confirm: '', js: '', hidden: '', color: 'primary'}
+          {title: '查看', click: 'modal', modal: this.baseModal, confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '修改', click: 'modal', modal: this.baseModal, confirm: '', js: '', hidden: '', color: 'primary'},
+          {title: '删除', click: 'deleteOne', modal: '', confirm: '是否删除？', js: '', hidden: '', color: 'primary'}
         ],
         baseColors: config.color,
-        openedStatus: {resultTableIndex: 1, toolbarTableIndex: 1},
+        openedStatus: {resultTableIndex: -1, toolbarActionIndex: -1, columnActionIndex: -1},
         dict: {
           cop: {
             contains: '包含',
@@ -512,7 +583,7 @@
                 //   modal: {
                 //     title: '用户信息',
                 //     type: 'href',
-                //     value: '/components/page/table-form.vue',
+                //     value: '/components/page/TableForm.vue',
                 //     opts: {
                 //       entityName: 'sys_user',
                 //       fields: 'id,name,loginName,description',
@@ -545,7 +616,7 @@
                 //   modal: {
                 //     title: '用户信息',
                 //     type: 'href',
-                //     value: '/components/page/table-form.vue',
+                //     value: '/components/page/TableForm.vue',
                 //     opts: {
                 //       entityName: 'sys_user',
                 //       fields: 'id,name,loginName,description',
@@ -608,6 +679,7 @@
         this.step = 'stepB'
       },
       $_addQueryMixItem (item) {
+        console.log('item>', item)
         // {field: 'loginName', title: '登录名', cop: 'contains', type: 'string', lop: 'or'},
         this.ui.query.mix.fields.push({
           field: item.name,
@@ -638,9 +710,10 @@
           title: item.title,
           type: item.type,
           format: '',
+          el: '',
           visible: true,
           width: '',
-          'text-align': 'left'
+          textAlign: 'left'
         })
       },
       $_removeQueryColumnItem (item, index) {
@@ -657,21 +730,41 @@
         this.ui.table.columns.splice(index + 1, 0, field)
       },
       $_addToolbarActionItem (item) {
-        this.ui.toolbar.dropdown.actions.push(item)
+        this.ui.toolbar.dropdown.actions.push({
+          title: item.title,
+          click: item.click,
+          modal: item.modal,
+          confirm: item.confirm,
+          js: item.js,
+          hidden: item.hidden,
+          color: item.color
+        })
       },
-      $_removeToolbarActionItem (item, index) {
-        this.ui.toolbar.dropdown.actions.splice(index, 1)
-      },
-      $_upToolbarActionItem (item, index) {
-        let field = this.ui.toolbar.dropdown.actions[index - 1]
-        this.ui.toolbar.dropdown.actions.splice(index - 1, 1)
-        this.ui.toolbar.dropdown.actions.splice(index, 0, field)
-      },
-      $_downToolbarActionItem (item, index) {
-        let field = this.ui.toolbar.dropdown.actions[index]
-        this.ui.toolbar.dropdown.actions.splice(index, 1)
-        this.ui.toolbar.dropdown.actions.splice(index + 1, 0, field)
+      $_addColumnActionItem (item) {
+        this.ui.table.dropdown.actions.push({
+          title: item.title,
+          click: item.click,
+          modal: item.modal,
+          confirm: item.confirm,
+          js: item.js,
+          hidden: item.hidden,
+          color: item.color
+        })
       }
+      // $_removeToolbarActionItem (item, index) {
+      //   this.ui.toolbar.dropdown.actions.splice(index, 1)
+      // },
+      // $_upToolbarActionItem (item, index) {
+      //   let field = this.ui.toolbar.dropdown.actions[index - 1]
+      //   this.ui.toolbar.dropdown.actions.splice(index - 1, 1)
+      //   this.ui.toolbar.dropdown.actions.splice(index, 0, field)
+      // },
+      // $_downToolbarActionItem (item, index) {
+      //   this.$utils.moveup(this.ui.toolbar.dropdown.actions, index)
+      //   // let field = this.ui.toolbar.dropdown.actions[index]
+      //   // this.ui.toolbar.dropdown.actions.splice(index, 1)
+      //   // this.ui.toolbar.dropdown.actions.splice(index + 1, 0, field)
+      // }
       // $_convertCop (cop) {
       //   switch (cop) {
       //     case 'contains':
@@ -694,9 +787,12 @@
       //   this.opts.editorStore.editingPage.content.opts.ui = this.ui
       // }
     },
-    components: {MetaSelector, Message, Checkbox, JsonEditor}
+    components: {MetaSelector, Message, GlCheckbox, JsonEditor}
   }
 </script>
 <style>
+  .cop .ui.selection.dropdown {
+    min-width: 8em !important;
+  }
 </style>
 
