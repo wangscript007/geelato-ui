@@ -1,0 +1,24 @@
+{
+  "name": "vue-cli-plugin-geelato",
+  "version": "1.0.5",
+  "description": "vue-cli 3 plugin to add geelato",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/geelato-projects/geelato-ui/vue-cli-plugin-geelato.git"
+  },
+  "keywords": [
+    "geelato",
+    "geelato-ui",
+    "vue",
+    "vue-cli",
+    "plugin",
+    "cli"
+  ],
+  "author": "Hongxq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/geelato-projects/geelato-ui/vue-cli-plugin-geelato/issues"
+  },
+  "homepage": "https://github.com/geelato-projects/geelato-ui/vue-cli-plugin-geelato#readme"
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="ui mini form">
+  <div class="ui mini form" v-if="ui">
     <div class="ui five top attached steps">
       <div class="step" :class="{active:step==='stepA'}" @click="step='stepA'">
         <i class="table icon"></i>
@@ -657,6 +657,8 @@
         this.ui = this.opts.editorStore.editingPage.content.opts.ui
         this.bindEntity = this.opts.editorStore.editingPage.content.opts.ui.entity
         this.selectedEntity = this.opts.editorStore.editingPage.content.opts.ui.entity
+      } else {
+        console.error('ui is undefined')
       }
     },
     methods: {

@@ -83,7 +83,7 @@
         if (this.isMax) {
           return this.max.left === 0 ? '' : this.wides[this.max.left - 1]
         } else {
-          console.log('xx', this.min.left === 0 ? '' : this.wides[this.min.left - 1])
+          // console.log('xx', this.min.left === 0 ? '' : this.wides[this.min.left - 1])
           return this.min.left === 0 ? '' : this.wides[this.min.left - 1]
         }
       },

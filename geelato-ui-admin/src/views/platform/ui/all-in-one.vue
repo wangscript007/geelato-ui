@@ -25,7 +25,8 @@
             <div class="inline fields">
               <label>选择</label>
               <sui class="field" type="checkbox" selector=".ui.checkbox"
-                   v-for="(item,index) in [{text:'A',value:'1'},{text:'B',value:'2'},{text:'C',value:'3'}]">
+                   v-for="(item,index) in [{text:'A',value:'1'},{text:'B',value:'2'},{text:'C',value:'3'}]"
+                   :key="index">
                 <div class="ui radio checkbox" @click="form.checkboxRadio=item.value">
                   <input type="radio" name="frequency" :checked="form.checkboxRadio===item.value">
                   <label>{{item.text}}</label>

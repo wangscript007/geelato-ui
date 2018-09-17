@@ -31,13 +31,13 @@ class PageDefinition {
     // 用于传递给component的opts，一般用于页面的定义配置
     this.opts = {
       // 页面的配置信息
-      body: {},
+      // body: {},
       // 页面元素的配置信息
       // elements:{'id1':{'ui':{}},'id2':{}}
-      elements: {},
+      // elements: {},
       // 结构树
       // tree:['id1':['id3','id4'],'id2']
-      tree: {}
+      // tree: {}
     }
     // 默认查询参数，与opts不同，query是同一页面定义下的不同参数
     this.params = {}

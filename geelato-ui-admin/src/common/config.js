@@ -378,6 +378,5 @@ class Config {
     return {}
   }
 }
-
 let instance = new Config()
 export default instance

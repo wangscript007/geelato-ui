@@ -379,7 +379,6 @@ let core = {
       Vue.set(modalView, 'callbackSet', callbackSet || {})
       // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
       let $modal = $(modalView.$el).modal({duration: 200, closable: false, allowMultiple: true})
-      $modal.draggable()
       $modal.modal('show')
       return $modal
     },

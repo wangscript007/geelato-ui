@@ -8,7 +8,8 @@
              @click="selectedPanel=item;tabInited[item.name]=true;$_focus(item)">{{item.title}}</a>
         </template>
       </div>
-      <div v-for="(item,key) in plugin.stagePanels" class="ui bottom attached segment gl-designer-tab" :style="{height:editorMainHeight}">
+      <div v-for="(item,key) in plugin.stagePanels" class="ui bottom attached segment gl-designer-tab"
+           :style="{height:editorMainHeight}">
         <!--！！v-if与v-show结合，保证按需触发加载，加载之后又能保存对象，只是隐藏了-->
         <component v-if="tabInited[item.name]" :is="panelComponent[item.name]" v-show="selectedPanel.name===item.name"
                    :ref="item.name"
@@ -70,6 +71,7 @@
         if (!val) {
           return
         }
+        console.log('editorStore.editingPage.id> val:', val, 'oldVal:', oldVal)
         // 重置为未启用
         this.tabInited = {}
         this.plugin = this.editorStore.plugins[this.editorStore.editingPage.type]

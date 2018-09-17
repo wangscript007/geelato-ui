@@ -264,9 +264,16 @@ utils.movedown = function (items, index) {
   items.splice(index, 1)
   items.splice(index + 1, 0, item)
 }
-
-utils.remove = function (items, index) {
-  items.splice(index, 1)
+/**
+ * 数组元素删除
+ * @param items
+ * @param index
+ * @param confirmMsg 删除的确认信息，若有则提示，若无则直接删除
+ */
+utils.remove = function (items, index, confirmMsg) {
+  if (!confirmMsg || confirm(confirmMsg)) {
+    items.splice(index, 1)
+  }
 }
 
 utils.CryptoJS = CryptoJS

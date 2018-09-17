@@ -1,11 +1,11 @@
 <template>
   <div class="ui fullscreen modal hide">
-    <i class="close icon"></i>
+    <i class="close icon" @click="$_close"></i>
     <div class="header" v-html="modalOpts?modalOpts.title:' '" @dblclick="isShowContent=!isShowContent">
     </div>
     <div v-show="isShowContent" class="scrolling content">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
-      <component :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts">
+      <component ref="modal" :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts">
         正在加载...
       </component>
     </div>
@@ -44,6 +44,7 @@
       }
     },
     mounted: function () {
+      $(this.$el).draggable({cancel: '.ui.modal>.content'})
     },
     methods: {
       /**
@@ -51,10 +52,16 @@
        * @param e
        */
       $_close: function (e) {
+        let value = {}
+        if (typeof this.$refs.modal.$_getValue === 'function') {
+          value = this.$refs.modal.$_getValue()
+        }
+        console.log('get value >', value)
         $(this.$el).modal('hide')
         if (typeof this.callbackSet.close === 'function') {
-          this.callbackSet.close(e)
+          this.callbackSet.close(e, value)
         }
+        return value
       },
       /**
        * 关键窗口，并调用钩子 cancel

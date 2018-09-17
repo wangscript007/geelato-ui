@@ -102,9 +102,9 @@
         for (let index in this.plugin.settingPanels) {
           let panel = this.plugin.settingPanels[index]
           let panelComponent = this.$refs[panel.name]
-          // 只获取激活状态的内容
-          if (panelComponent) {
-            // console.log('panelComponent>', panelComponent[0])
+          // 只获取激活状态的内容，未初始化时panelComponent为[]
+          if (panelComponent && panelComponent.length > 0) {
+            console.log('panelComponent>', panel.name, panelComponent)
             let result = panelComponent[0].$_commit()
             if (result.code !== 0) {
               return result

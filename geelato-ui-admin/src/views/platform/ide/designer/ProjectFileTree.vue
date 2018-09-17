@@ -198,7 +198,7 @@
         }
 
         function createNode (label, typeName, callback) {
-          console.log($(thisVue.$el))
+          // console.log($(thisVue.$el))
           let type = types[typeName]
           return {
             label: createIconLabel(label, typeName),
@@ -250,7 +250,7 @@
        */
       $_savePage: function () {
         let thisVue = this
-        // console.log('thisVue.editorStore.editingPage>', thisVue.editorStore.editingPage)
+        console.log('thisVue.editorStore.editingPage>save>', thisVue.editorStore.editingPage)
 //        editorStore.editingPage.component = editorStore.editingPage.component.outerHTML || editorStore.editingPage.component
         thisVue.$gl.data.save(entityNames.platform.dev.pageConfig, {
           id: thisVue.editorStore.editingPage.id,
@@ -275,6 +275,7 @@
         let thisVue = this
         thisVue.$gl.data.query(entityNames.platform.dev.pageConfig, {extendId: item.node.id}, 'id,type,code,description,content').then(function (res) {
 //          thisVue.editorStore.editingPage.reset(res.data[0])
+          console.log('res.data[0]>', res.data[0])
           thisVue.editorStore.reset(new SimplePageDefinition(res.data[0], true))
           // console.log('editingPage>', thisVue.editorStore.editingPage)
         }).catch(function (e) {

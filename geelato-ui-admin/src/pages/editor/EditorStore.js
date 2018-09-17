@@ -39,21 +39,23 @@ class EditorStore {
 
   // 提交版本
   commitOpts (fileType, data) {
-    // console.log('this.history>', this.history)
+    console.log('commitOpts>', fileType, data)
     this.editingPage.content.opts[fileType] = data
     if (!this.history[fileType]) {
       this.history[fileType] = []
     }
     let len = this.history[fileType].length
     if (typeof data === 'object') {
+      let strData = JSON.stringify(data)
+      let copyData = JSON.parse(strData)
       if (len > 0) {
         // 如果和最后一次提交的一致，则不记录版本
         let lastData = this.history[fileType][len - 1]
-        if (JSON.stringify(lastData) !== JSON.stringify(data)) {
-          this.history[fileType].push(data)
+        if (JSON.stringify(lastData) !== strData) {
+          this.history[fileType].push(copyData)
         }
       } else {
-        this.history[fileType].push(data)
+        this.history[fileType].push(copyData)
       }
     } else if (typeof data === 'string') {
       // 对编辑的内容，分代码类做版本管理
@@ -63,7 +65,7 @@ class EditorStore {
         this.history[fileType].push(data)
       }
     } else {
-      console.error('不支持的数据格式，', data)
+      console.error('不支持的数据格式，', typeof data, data)
     }
   }
 
