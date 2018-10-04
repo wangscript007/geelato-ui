@@ -7,11 +7,12 @@
                     <img class="ui avatar image" src="../../assets/images/logo/48x48.png">
                 </div>
             </div>
-            <div v-for="subMenu in menu" class="ui left pointing dropdown link item" :title="subMenu.title"
+            <div v-for="(subMenu,subMenuIndex) in menu" class="ui left pointing dropdown link item" :key="subMenuIndex"
+                 :title="subMenu.title"
                  v-show="size==='min'">
                 <i class="dropdown icon" style="margin: 0;padding: 0"></i>{{subMenu.title.substr(0, 1)}}
                 <div class="menu">
-                    <a v-for="item in subMenu.items" class="item" :href="item.href"
+                    <a v-for="(item,index) in subMenu.items" class="item" :key="index" :href="item.href"
                        :target="item.target">{{item.title}}</a>
                 </div>
             </div>
@@ -22,8 +23,10 @@
              v-show="size==='max'">
             <div class="ui item dropdown" :style="{width:logoWidth,height:headerHeight}" v-if="isShowLogo()">
                 <div class="text">
-                    <img class="ui avatar image" src="../../assets/images/logo/48x48.png">
-                    <span style="font-weight: bold;font-size: 1.25em;margin-left: -13px;">eelato</span>
+                    <img class="ui image" src="/logo_blue.svg">
+                    <span style="font-weight: bold;text-align: center">Geelato</span>
+                    <!--<img class="ui avatar image" src="../../assets/images/logo/48x48.png">-->
+                    <!--<span style="font-weight: bold;font-size: 1.25em;margin-left: -13px;">eelato</span>-->
                 </div>
             </div>
             <!--提示配置菜单-->
@@ -32,6 +35,7 @@
             </div>
             <div v-html="html"></div>
             <div v-for="(subMenu,menuItemIndex) in menu" class="item" :key="menuItemIndex" v-if="size==='max'">
+                <i class="icon gl-menu-icon" :class="subMenu.class"></i>
                 <a class="title active">
                     <i class="dropdown icon"></i>
                     {{subMenu.title}}
@@ -50,9 +54,7 @@
 </template>
 
 <script>
-    //  import * as types from '../../store/types'
-    //  import utils from '../../common/utils'
-
+    /* eslint-disable */
     export default {
         props: {
             mode: Number,
@@ -121,5 +123,11 @@
         padding-top: .3em;
         padding-bottom: .4em;
         font-size: 1em;
+        padding-left: 2.8em !important;
+    }
+
+    .gl-menu-icon {
+        float: left !important;
+        margin: 0.2em 0.5em 0.2em !important;
     }
 </style>

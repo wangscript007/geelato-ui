@@ -1,0 +1,28 @@
+div.jsoneditor td, div.jsoneditor th, div.jsoneditor tr {
+    /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.jsoneditor-search input {
+    /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+    padding: 1px 0px !important;
+}
+
+.jsoneditor .jsoneditor-outer td {
+    /* 增加important，确保在嵌入 .ui.table时，样式被重写*/
+    border-top: inherit !important;
+}
+
+div.jsoneditor-menu > button, div.jsoneditor-menu > div.jsoneditor-modes > button {
+    background-color: #2185D1 !important;
+}
+
+div.jsoneditor-menu {
+    background-color: rgb(238, 238, 238) !important;
+    border-bottom: 1px solid rgb(238, 238, 238) !important;
+}
+
+div.jsoneditor {
+    border: 1px solid rgb(238, 238, 238) !important;
+}

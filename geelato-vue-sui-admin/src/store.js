@@ -8,7 +8,6 @@ export const types = {
     LOGIN: 'login',
     LOGOUT: 'logout',
     CHANGE_MODULE: 'change_module',
-    CHANGE_PROJECT: 'change_project',
     CHANGE_HEADER_TITLE: 'change_header_title',
     CHANGE_LAYOUT: 'change_layout'
 }
@@ -24,14 +23,6 @@ export default new Vuex.Store({
             // 页面上方展示的信息，可为HTML格式
             headerTitle: ''
         },
-        project: {
-            current: {},
-            last: []
-        },
-        // 当前正在浏览的项目
-        currentProject: {},
-        // 最新浏览的项目
-        lastProjects: [],
         // 当前用户信息
         user: {}
     },
@@ -52,17 +43,6 @@ export default new Vuex.Store({
         [types.CHANGE_MODULE]: (state, data) => {
             state.platform.currentModule = data
             console.log('state.platform.currentModule>', state.platform.currentModule)
-        },
-        [types.CHANGE_PROJECT]: (state, data) => {
-            state.currentProject = data
-            for (var i in state.lastProjects) {
-                let project = state.lastProjects[i]
-                if (project.name === data.name) {
-                    // TODO 改成id
-                    return
-                }
-            }
-            state.lastProjects.push(data)
         },
         [types.CHANGE_HEADER_TITLE]: (state, data) => {
             state.platform.headerTitle = data

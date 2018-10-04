@@ -1,4 +1,6 @@
 export default {
+    name: '可视化',
+    version: '0.1.0',
     modules: [
         {
             title: '可视化',

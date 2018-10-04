@@ -49,7 +49,7 @@
                 </div>
                 <div class="ui fitted divider" style="margin-bottom: 0.5em"></div>
                 <table-query ref="queryForm" :opts="opts.ui.query.mix" v-model="mixQuery"
-                             @input="formQueryCallback"></table-query>
+                             @input="$_formQueryCallback"></table-query>
             </div>
         </div>
         <!--查询列表-->
@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="ui fitted divider"></div>
-            <div class="ui info message" v-if="showTips&&opts.ui.tips&&opts.ui.tips.display==='header'">
+            <div class="ui info message" v-if="showTips&&opts.ui.tips">
                 <i class="close icon" @click="showTips=false"></i>
                 <div v-html="opts.ui.tips.html"></div>
             </div>
@@ -163,8 +163,24 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="gl-table-info"></div>
-            <div class="gl-table-stat"></div>
+            <div class="ui info message" v-if="showTips&&opts.ui.tips&&opts.ui.tips.display==='bottom'">
+                <i class="close icon" @click="showTips=false"></i>
+                <div v-html="opts.ui.tips.html"></div>
+            </div>
+            <div class="gl-table-info">
+                <!--{{opts.ui.info}}-->
+            </div>
+            <div class="gl-table-stat">
+                <!--{{opts.ui.stat}}-->
+            </div>
+            <!--分页-->
+            <gl-pagination v-show="queryResult.data&&queryResult.data.length>0" class="center" ref="pagination"
+                           :total="parseInt(queryResult.total)"
+                           :current="parseInt(queryResult.page)"
+                           :showSize="pagination.showSize"
+                           :showSizeChanger="true"
+                           @showSizeChange="$_showSizeChange"
+                           @navPage="$_navPage"></gl-pagination>
         </div>
     </div>
 </template>
@@ -173,6 +189,7 @@
     import utils from '../../assets/script/utils'
     import TableQuery from './TableQuery.vue'
     import TableTree from './TableTree.vue'
+    import GlPagination from '../gl-pagination/Index.vue'
 
     export default {
         props: {
@@ -200,12 +217,21 @@
                 selectedRows: [],
                 checkedIds: [],
                 currentTreeNode: {id: ''},
-                lastGql: {}
+                lastGql: {},
+                pagination: {
+                    // total: 0,
+                    // 第几页，从1开始。
+                    pageNum: 1,
+                    showSize: 0
+                },
+                // 是否重新查询，是的话，重置pagination，再进行查询
+                needResetPagination: false
             }
         },
         mounted() {
+            this.$_resetPagination()
             console.log('gl-table opts', this.opts)
-            this.loadData()
+            this.$_loadData()
 //      $(this.$el).find('.ui.cards')()
 //      $(this.$el).find('.ui.checkbox').checkbox()
         },
@@ -214,7 +240,7 @@
             this.$_initCheckbox()
         },
         methods: {
-            loadData() {
+            $_loadData() {
                 let thisVue = this
                 this.$gl.data.queryByGql(genGql(this.lastMixQueryData)).then(function (data) {
                     thisVue.queryResult = data
@@ -238,7 +264,7 @@
                     }
                     root['@fs'] = fsAry.join(',')
                     root['@order'] = thisVue.opts.ui.table.order
-                    root['@p'] = thisVue.opts.ui.table.p
+                    root['@p'] = thisVue.pagination.pageNum + ',' + thisVue.pagination.showSize
                     let gql = {}
                     gql[thisVue.opts.ui.entity] = root
                     console.log('创建的gql > ', gql)
@@ -255,8 +281,8 @@
             },
             $_initCheckbox() {
                 let thisVue = this
-                var $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
-                var $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
+                let $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
+                let $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
                 $masterCheckbox.checkbox({
                     onChecked: function () {
                         $childCheckbox.checkbox('check')
@@ -270,7 +296,6 @@
                     onChange: function () {
                         let allChecked = true
                         let allUnchecked = true
-//            console.log('change checkbox >', this)
                         thisVue.checkedIds = []
                         // check to see if all other siblings are checked or unchecked
                         $childCheckbox.each(function () {
@@ -295,29 +320,55 @@
             $_resetCheckbox() {
                 let thisVue = this
                 thisVue.checkedIds = []
-                var $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
-                var $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
+                let $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
+                let $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
                 $masterCheckbox.checkbox('uncheck')
                 $childCheckbox.checkbox('uncheck')
             },
             $_eval(expression, ctx) {
                 return utils.invoke(expression, ctx)
             },
+            $_navPage(pageNum) {
+                this.needResetPagination = false
+                this.pagination.pageNum = pageNum
+                this.$refs.queryForm.$_submit()
+            },
+            $_showSizeChange(showSize) {
+                this.needResetPagination = false
+                this.pagination.showSize = parseInt(showSize)
+                this.$refs.queryForm.$_submit()
+            },
             $_submit() {
+                this.needResetPagination = true
                 // 调用查询子vue的查询方法
                 this.$refs.queryForm.$_submit()
             },
             reset() {
                 this.$refs.queryForm.$_reset()
             },
+            $_resetPagination() {
+                let thisVue = this
+                if (thisVue.opts.ui.table.p) {
+                    let page = thisVue.opts.ui.table.p.split(',')
+                    thisVue.pagination.pageNum = parseInt(page[0])
+                    thisVue.pagination.showSize = parseInt(page[1])
+                }
+            },
             // 选择一条数据
             $_selectRow(row) {
                 this.$emit('selectRow', row)
             },
             // query组件的查询回调，获取查询条件信息，并调用loadData查询数据，并以数据驱动刷新页面
-            formQueryCallback(data) {
-                this.lastMixQueryData = data
-                this.loadData()
+            $_formQueryCallback(data) {
+                this.lastMixQueryData = data.value
+                // 有e，则是来源于查询操作按钮，需重置后再查询
+                if (data.e) {
+                    this.needResetPagination = true
+                }
+                if (this.needResetPagination) {
+                    this.$_resetPagination()
+                }
+                this.$_loadData()
                 this.selectedRows = []
             },
             $_clickTreeNode(data) {
@@ -394,7 +445,7 @@
                 }
             }
         },
-        components: {TableQuery, TableTree}
+        components: {TableQuery, TableTree, GlPagination}
     }
 </script>
 <style scoped>

@@ -20,7 +20,7 @@
       },
       editorMainHeight: {
         type: String,
-        defalut: function () {
+        default: function () {
           return '480px'
         }
       }

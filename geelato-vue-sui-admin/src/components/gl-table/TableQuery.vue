@@ -1,6 +1,6 @@
 <template>
     <form class="ui small form">
-        <div v-for="(item, index) in opts.fields">
+        <div v-for="(item, index) in opts.fields" style="margin-top: 2px">
             <template v-if="item.type=='string'||item.type=='String'">
                 <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
                 <input @keyup.enter="$_submit" type="text" :placeholder="getPlaceholder(item)"
@@ -29,7 +29,7 @@
             <template v-else-if="item.type=='select'">
                 <label><i class="fa font-green">{{convertLop(item.lop)}} &nbsp;</i> {{item.title}}</label>
                 <select class="form-control input-sm" v-model="entity[index]">
-                    <option v-for="(o,i) in item.options" :value='o.value'>{{o.key}}</option>
+                    <option v-for="(o) in item.options" :value='o.value'>{{o.key}}</option>
                 </select>
             </template>
             <template v-else>
@@ -101,7 +101,6 @@
                 for (let p in model) {
                     this.defaultValue[p] = model[p]
                 }
-                console.log('model default>', this.defaultValue)
                 return model
             }
         },
@@ -125,18 +124,27 @@
                 }
             },
             $_submit(e) {
-                console.log('model $_submit>', e, this.model)
+                console.log('model $_submit>', e, this.model, this.opts.fields)
                 let result = {}
-                for (var index in this.opts.fields) {
+                for (let index in this.opts.fields) {
                     let item = this.opts.fields[index]
                     // ignore valid field value
-                    if (this.entity[index] === undefined || utils.trim(this.entity[index]) === '') {
+                    if (this.entity[index] === undefined || this.entity[index] === null) {
                         continue
+                    } else {
+                        if (item.type === 'boolean') {
+                            result[item.field + '|' + item.cop] = this.entity[index] ? 1 : 0
+                        } else {
+                            let value = utils.trim(this.entity[index])
+                            if (value === '') {
+                                continue
+                            }
+                            result[item.field + '|' + item.cop] = value
+                        }
                     }
-                    result[item.field + '|' + item.cop] = this.entity[index]
                 }
                 console.log('构建成gql查询条件为 > ', result)
-                this.$emit('input', result)
+                this.$emit('input', {value: result, e: e})
             },
             $_reset() {
                 let self = this

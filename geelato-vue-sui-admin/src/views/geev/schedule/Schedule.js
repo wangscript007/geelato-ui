@@ -1,18 +1,35 @@
+import settings from './settings'
+import ds from './dataset.js'
+
 class Schedule {
     constructor() {
         this.version = '1.0.0'
+
+        this.baseItemStyle = {
+            normal: {
+                opacity: 0.7,
+                color: {
+                    image: undefined,
+                    repeat: 'repeat'
+                },
+                borderWidth: 3,
+                borderColor: '#235894'
+            }
+        }
+        this.baseItemStyleString = JSON.stringify(this.baseItemStyle)
     }
 
     render(dom, rawData) {
-        let myChart = echarts.init(dom);
-        myChart.setOption(makeOption(rawData));
+        let schedule = this
+        let chart = echarts.init(dom);
+        chart.setOption(makeOption(rawData));
 
         function makeOption(rawData) {
             return {
                 tooltip: {},
                 animation: false,
                 title: {
-                    text: 'XX月度报告',
+                    text: '轨道交通4号线西段开通（洪运路站~楞塘村站）总工期筹划示意图(2020年12月28日通车)(2018.1版)',
                     left: 'center'
                 },
                 dataZoom: [{
@@ -91,91 +108,90 @@ class Schedule {
                     splitLine: {show: false},
                     axisLine: {show: false},
                     axisLabel: {show: false},
-                    min: 0,
-                    max: rawData.parkingApron.data.length - 1
+                    min: 0
+                    // max: rawData.parkingApron.data.length - 1
                 },
-                series: [{
-                    type: 'custom',
-                    renderItem: renderGanttItem,
-                    dimensions: rawData.flight.dimensions,
-                    encode: {
-                        x: [1, 2],
-                        y: 0,
-                        tooltip: [0, 1, 2]
+                series: [
+                    {
+                        type: 'custom',
+                        renderItem: renderRectItem,
+                        // dimensions: rawData.flight.dimensions,
+                        // encode: {
+                        //     x: [1, 2],
+                        //     y: 0,
+                        //     tooltip: [0, 1, 2]
+                        // },
+                        encode: {
+                            x: -1, // Then this series will not controlled by x.
+                            y: ['startAt', 'startAt']
+                        },
+                        data: schedule.genTimeline(ds.data).items
                     },
-                    data: rawData.flight.data
-                }, {
-                    type: 'custom',
-                    renderItem: renderAxisLabelItem,
-                    dimensions: rawData.parkingApron.dimensions,
-                    encode: {
-                        x: -1, // Then this series will not controlled by x.
-                        y: 0
-                    },
-                    data: echarts.util.map(rawData.parkingApron.data, function (item, index) {
-                        return [index].concat(item);
-                    })
-                }]
+                    {
+                        type: 'custom',
+                        renderItem: renderAxisLabelItem,
+                        // dimensions: rawData.parkingApron.dimensions,
+                        encode: {
+                            x: -1, // Then this series will not controlled by x.
+                            y: 0
+                        },
+                        data: schedule.genTimeline(ds.data).items
+                    }]
             };
         }
 
-        function renderGanttItem(params, api) {
-            var categoryIndex = api.value(0);
-            var arrival = api.coord([api.value(1), categoryIndex]);
-            var departure = api.coord([api.value(2), categoryIndex]);
+        // 维度的宽度，单位像素
+        let dimensionItem = 50
+        // 维度划分为N等份
+        let dimensionItemDividedCount = 5
 
-            var barLength = departure[0] - arrival[0];
-            // Get the heigth corresponds to length 1 on y axis.
-            var barHeight = api.size([0, 1])[1] * 0.6;
-            var x = arrival[0];
-            var y = arrival[1] - barHeight;
+        let timelineStartAt = '20180601'
+        let timelineItemCount = 20 // 时间线的刻度数
+        let timelineItemFormat = 'yyyy年MM月'
+        let timelineEndAt = '20200601'  // 以该值为准，优先于timelineSize
+        let timelineGapUnit = 'month'  // 间隔单位
+        // 时间刻度宽度，单位像素
+        let timelineGapPx = 18
 
-            var flightNumber = api.value(3) + '';
-            var flightNumberWidth = echarts.format.getTextRect(flightNumber).width;
-            var text = (barLength > flightNumberWidth + 40 && x + barLength >= 180)
-                ? flightNumber : '';
+        // axisLabelItems
+        function genTimelineItems() {
+            let items = []
+            // TODO by months?
+            return items
+        }
 
-            var rectNormal = clipRectByRect(params, {
-                x: x, y: y, width: barLength, height: barHeight
-            });
-            var rectVIP = clipRectByRect(params, {
-                x: x, y: y, width: (barLength) / 2, height: barHeight
-            });
-            var rectText = clipRectByRect(params, {
-                x: x, y: y, width: barLength, height: barHeight
-            });
+        // 计算区块开始及结束坐标
+        function statCoord(params, api) {
+
+        }
+
+        // 手动调整图形的宽度、颜色、填充图
+        function adjustShape() {
+
+        }
+
+        function renderRectItem(params, api) {
+            console.log(params, api)
+
+            let rectShape = clipRectByRect(params, {
+                x: 5, y: 5, width: 50, height: 50
+            })
 
             return {
-                type: 'group',
-                children: [{
-                    type: 'rect',
-                    ignore: !rectNormal,
-                    shape: rectNormal,
-                    style: api.style()
-                }, {
-                    type: 'rect',
-                    ignore: !rectVIP && !api.value(4),
-                    shape: rectVIP,
-                    style: api.style({fill: '#ddb30b'})
-                }, {
-                    type: 'rect',
-                    ignore: !rectText,
-                    shape: rectText,
-                    style: api.style({
-                        fill: 'transparent',
-                        stroke: 'transparent',
-                        text: text,
-                        textFill: '#fff'
-                    })
-                }]
-            };
+                type: 'rect',
+                shape: rectShape,
+                style: api.style(),
+                // itemStyle: schedule.genFillItemStyle('blueMix'),
+                data: ds.data
+            }
         }
 
         function renderAxisLabelItem(params, api) {
-            var y = api.coord([0, api.value(0)])[1];
-            if (y < params.coordSys.y + 5) {
-                return;
-            }
+            console.log('api', api.coord([0, 8]))
+            let y = api.coord([0, 8])[1];
+            // if (y < params.coordSys.y + 5) {
+            //     return;
+            // }
             return {
                 type: 'group',
                 position: [
@@ -220,6 +236,30 @@ class Schedule {
         }
 
     }
+
+    genTimeline(dataset) {
+        return {
+            startAt: '201806',
+            endAt: '201909',
+            gapUnit: 'month',
+            items: ['201806', '201807', '201808', '201809', '201810', '201811', '201908']
+        }
+    }
+
+
+    /**
+     * 获取填充样式
+     * @param fillImageName
+     * @returns {any}
+     */
+    genFillItemStyle(fillImageName) {
+        let itemStyle = JSON.parse(this.baseItemStyleString)
+        let patternImg = new Image()
+        patternImg.src = settings.imageData[fillImageName];
+        itemStyle.normal.color.image = patternImg
+        return itemStyle
+    }
+
 }
 
 export default Schedule

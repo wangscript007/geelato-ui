@@ -15,7 +15,7 @@
         created() {
             if (!this.$gl.security.isLogged()) {
                 console.log('isLogged>', false)
-//        window.location.replace('/')
+                // window.location.replace('/')
             }
 
             let layout = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_LAYOUT)

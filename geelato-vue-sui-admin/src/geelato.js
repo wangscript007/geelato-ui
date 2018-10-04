@@ -4,24 +4,25 @@ import PageManager from './assets/script/PageManager.js'
 import GlLayout from './components/gl-layout/Index.vue'
 
 /**
- *  geelato框架的配置，不包括vue中router、store的配置
+ *  geelato框架的配置、及工具包
  */
 const BASE_DIR = './views'
 const pageManager = new PageManager()
 const CONSTS = {
     SESSION_GEELATO_CONFIG_LAYOUT: 'geelato.config.layout',
-    SESSION_GEELATO_CONFIG_COLOR: 'geelato.config.color'
+    SESSION_GEELATO_CONFIG_COLOR: 'geelato.config.color',
+    SESSION_GEELATO_PROFILE: 'geelato.profile'
 }
 
 class Geelato {
     constructor() {
+        // vueRouter、vueStore
+        this.$router = undefined
+        this.$store = undefined
         this.appBase = '/m/'
         this.modules = []
         this.entityNames = {}
-        // 角色登录后的默认首模块
-        this.defaultModule = {
-            admin: 'geev'
-        }
+        this.defaultModule = 'dev'
         this.vueFiles = []
         this.url = {}
         this.consts = CONSTS
@@ -40,8 +41,6 @@ class Geelato {
         // 还未开发该功能，暂禁用
         this.login = {registerEnable: false}
         this.mapAK = 'sIKTgNAqvT9Uo0yQMlr3H9B6dZADzhfT'
-        this.router = undefined
-        this.store = undefined
         this.data = {
             /**
              * 通过页面id获取页面配置
@@ -75,7 +74,7 @@ class Geelato {
             getComponent: function (componentName, opts) {
                 return new Promise((resolve, reject) => {
                     let lazyLoad = (fileName, resolve) => {
-                        require(['./components/' + componentName + '/index.vue'], resolve)
+                        require(['./components/' + componentName + '/Index.vue'], resolve)
                     }
                     lazyLoad(componentName, data => {
                         if (data.default.propsData) {
@@ -123,6 +122,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: JSON.stringify(gql),
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         // 通常 textStatus 和 errorThrown 之中
@@ -150,6 +153,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: JSON.stringify(page),
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         // 通常 textStatus 和 errorThrown 之中
@@ -194,6 +201,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: JSON.stringify(data),
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         // 通常 textStatus 和 errorThrown 之中
@@ -270,6 +281,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: JSON.stringify(gql),
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         // 通常 textStatus 和 errorThrown 之中
@@ -304,6 +319,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: '',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var options = this // 调用本次AJAX请求时传递的options参数
@@ -328,6 +347,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: '',
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         var options = this // 调用本次AJAX请求时传递的options参数
@@ -370,19 +393,16 @@ class Geelato {
             /**
              * 打开modal
              * @param srcVue 打开页面的源vue
-             * @param vuePath 相对路径，可以带.vue的后缀或不带，如'../views/xx.vue'、'../views/xx'、'../components/xx.vue'、'../components/xx'
+             * @param vuePath src下的绝对路径，可以带.vue的后缀或不带，如'/@/views/xx.vue'、'/@/views/xx'、'/@/components/xx.vue'、'/@/components/xx'
              * @param vueConfig modalOpts的值
              * @param callbackSet 回调事件集合，如：{onSelected:function(){}}
              */
             openVueByPath: function (srcVue, vuePath, vueConfig, callbackSet) {
                 let path = vuePath.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
-                path = path.replace('../views', '')
-                if (path.startsWith('/views')) {
-                    path = path.substring(1)
-                }
-                console.log('path>', path)
+                path = path.replace('/@/', '')
                 // path = './views/geemeta/gm-designer/setting/icon-field-setting.vue'
-                let vueComponent = resolve => require(['./views' + path], resolve)
+                console.log('path>', path)
+                let vueComponent = resolve => require(['.' + path], resolve)
                 return instance.ui.openVue(srcVue, vueComponent, vueConfig, callbackSet)
             },
             /**
@@ -406,7 +426,7 @@ class Geelato {
                 // })
                 Vue.set(modalView, 'callbackSet', callbackSet || {})
                 // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
-                let $modal = $(modalView.$el).modal({duration: 200, closable: false, allowMultiple: true})
+                let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
                 $modal.modal('show')
                 return $modal
             },
@@ -451,43 +471,6 @@ class Geelato {
 
         }
         this.security = {
-            loginDemo(user, remember, success) {
-                success({
-                    'sysConfig': [{
-                        'creator': 1,
-                        'code': 'START_APP',
-                        'businessUnit': null,
-                        'description': '平台启动时触发的应用',
-                        'updateAt': '2018-04-14T23:57:15.000+0000',
-                        'dept': null,
-                        'createAt': '2018-04-14T23:57:15.000+0000',
-                        'updater': 1,
-                        'checkStatus': 0,
-                        'name': '平台启动应用',
-                        'id': 1,
-                        'value': 'dev',
-                        'seq': 1
-                    }],
-                    'user': {
-                        'id': 1,
-                        'createAt': '2018-04-14T23:57:15.000+0000',
-                        'updateAt': '2018-04-14T23:57:15.000+0000',
-                        'creator': 1,
-                        'updater': 1,
-                        'checkStatus': 0,
-                        'businessUnit': null,
-                        'dept': null,
-                        'name': '超级管理员',
-                        'loginName': 'super_admin',
-                        'password': '',
-                        'salt': '',
-                        'avatar': null,
-                        'description': null,
-                        'plainPassword': ''
-                    },
-                    'userConfig': []
-                })
-            },
             login(user, remember, success) {
                 // instance.security.loginDemo(user, remember, success)
                 return $.ajax(instance.url.root + '/api/sys/auth/login?remember=' + remember, {
@@ -495,6 +478,10 @@ class Geelato {
                     dataType: 'json',
                     contentType: 'application/json',
                     processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     data: user,
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         instance.ui.showMsg('账号或密码不正确！', 'error')
@@ -504,20 +491,24 @@ class Geelato {
                 })
             },
             logout() {
-                // instance.router.push('/login')
+                // instance.$router.push('/login')
                 $.ajax(instance.url.root + '/api/sys/auth/logout', {
                     // type: 'POST',
                     // dataType: 'json',
                     // contentType: 'application/json',
                     // processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         instance.ui.showMsg('暂时不能注销！', 'warning')
                         console.log(errorThrown)
                     },
                     success: function (data) {
                         console.debug('request end>>', data)
-                        instance.security.profile(null)
-                        instance.router.push('/login')
+                        instance.security.profile({})
+                        instance.$router.push('/login')
                         // var reloadURL = 'index.html' + window.location.search
                         // window.location.replace(reloadURL, true)
                     }
@@ -536,6 +527,10 @@ class Geelato {
                     // dataType: 'json',
                     // contentType: 'application/json',
                     // processData: false,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         self.showMsg('暂未能检查是否已登录！')
                         console.log(errorThrown)
@@ -543,20 +538,18 @@ class Geelato {
                     success: function (data) {
                         if (data) {
                             result = true
+                        } else {
+                            console.log('check login state and return empty.')
                         }
-                        console.log('isLogged success', data)
                     }
                 })
                 return result
             },
-            profile(jsonProflie) {
-                if (jsonProflie) {
-                    utils.session('geelatoProfile', jsonProflie)
+            profile(profile) {
+                if (profile !== undefined) {
+                    utils.session(CONSTS.SESSION_GEELATO_PROFILE, profile)
                 }
-                let profile = utils.session('geelatoProfile')
-                // console.log('profile', profile)
-                if (profile === undefined) return {}
-                else return profile
+                return utils.session(CONSTS.SESSION_GEELATO_PROFILE) || {}
             }
         }
         this.ctx = {
@@ -565,14 +558,44 @@ class Geelato {
         this.copyright = {}
         this.utils = utils
         this.plugins = {}
+        this.componentOption = {
+            'gl-pagination': {
+                pageSizes: [10, 15, 20, 30, 50, 100],
+                defaultPageSize: 15
+            }
+        }
     }
 
     addPlugin(name) {
         let pluginConfig = this.getPlugin(name)
-        pluginConfig.modules ? this.modules.push(...pluginConfig.modules) : null
+        // 合并模块：
+        // 若不同的插件有相同的模块编码，将进行合并，从而同名模块的菜单会合并在一起
+        // 若不存在同名模块，则直调加模块
+        if (pluginConfig.modules) {
+            for (let i in pluginConfig.modules) {
+                let addingModule = pluginConfig.modules[i]
+                let existing = false
+                for (let addedIndex in this.modules) {
+                    let addedModule = this.modules[addedIndex]
+                    if (addedModule.code === addingModule.code) {
+                        // 注意，菜单级别没有再做同名检查合并
+                        addedModule.menu.push(...addingModule.menu)
+                        existing = true
+                        break
+                    }
+                }
+                if (!existing) {
+                    this.modules.push(addingModule)
+                }
+            }
+        }
         pluginConfig.vueFiles ? this.vueFiles.push(...pluginConfig.vueFiles) : null
         this.plugins[name] = pluginConfig
         this.entityNames[name] = pluginConfig.entityNames
+    }
+
+    removePlugin(name) {
+        delete  this.plugins[name]
     }
 
     getPlugin(name) {
@@ -581,11 +604,11 @@ class Geelato {
     }
 
     setRouter(router) {
-        this.router = router
+        this.$router = router
     }
 
     setStore(store) {
-        this.store = store
+        this.$store = store
     }
 
     setServerUrlRoot(serverUrlRoot) {
@@ -597,6 +620,10 @@ class Geelato {
         this.url.apiMetaMultiList = this.url.api + '/meta/multiList'
         this.url.apiMetaSave = this.url.api + '/meta/save'
         this.url.apiMetaDelete = this.url.api + '/meta/delete'
+    }
+
+    setHelpUrl(url) {
+        this.url.help = url
     }
 
     setCopyright(copyright) {
@@ -616,15 +643,18 @@ class Geelato {
      * addRoutes
      */
     run() {
-        let appBase = this.appBase
-        let pluginRootRoute = undefined
-        for (let index in this.router.options.routes) {
-            let route = this.router.options.routes[index]
-            console.log('path', route.path, 'appbase', this.appBase)
-            if (route.path === this.appBase) {
-                pluginRootRoute = route
-            }
+        if (!this.url.root) {
+            console.error('未设置服务地址，如：geelato.setServerUrlRoot("http://localhost:8080")')
         }
+        let appBase = this.appBase
+        // let pluginRootRoute = undefined
+        // for (let index in this.$router.options.routes) {
+        //     let route = this.$router.options.routes[index]
+        //     console.log('path', route.path, 'appbase', this.appBase)
+        //     if (route.path === this.appBase) {
+        //         pluginRootRoute = route
+        //     }
+        // }
         let routeConfig = {
             path: appBase,
             component: GlLayout,
@@ -636,13 +666,12 @@ class Geelato {
         for (let name in this.plugins) {
             routeConfig.children.push(...createModuleRoutes(this.plugins[name].modules))
         }
-        this.router.addRoutes([routeConfig])
-        console.log('this.router>', this.router)
+        this.$router.addRoutes([routeConfig])
+        console.log('this.$router>', this.$router)
 
         /**
          * 将url与文件地址一致的文件添加到路由表中，来源：
-         * 1、/api/config.js 中的菜单链接href
-         * 2、/router/vue-files.js 中的文件
+         * /{pluginName}/config.js 中的菜单链接href
          */
         function createModuleRoutes(modules) {
             if (!modules || modules.length === undefined || modules.length <= 0) {
@@ -685,6 +714,15 @@ class Geelato {
         }
     }
 
+    /**
+     *  moduleCode的值为字符串时，不区分角色，登录后全部统一默认模块
+     *  moduleCode的值为对象时，可按角色区分登录后的默认首模块
+     * @param moduleCode string or {},e.g. {roleName1:moduleCode1,roleName2:moduleCode2...}
+     */
+    setStartModule(moduleCode) {
+        this.defaultModule = moduleCode
+    }
+
     getModule(moduleCode) {
         for (let i in this.modules) {
             let module = this.modules[i]
@@ -695,7 +733,6 @@ class Geelato {
         console.error('getModule by code :' + moduleCode + ',return {}.')
         return {}
     }
-
 
 }
 

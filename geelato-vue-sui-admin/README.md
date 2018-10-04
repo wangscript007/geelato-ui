@@ -21,19 +21,43 @@ npm run lint
 ```
 
 
-### About ESLint
+### Settings ESLint
+``` json
+"eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "jquery": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "no-console": 0,
+      "vue/require-v-for-key": false
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  }
+```
+
 ESLint: Unexpected console statement. (no-console)
 ```
-{
-    "rules":{
-        "no-console":0
-    }
-}
+ "no-console":0
 ```
 ESLint: 'reject' is defined but never used. (no-unused-vars)
 ```
 "no-unused-vars": 'off'
 ```
+ESLint: Elements in iteration expect to have 'v-bind:key' directives
+```
+"vue/require-v-for-key": false
+```
+
+@see https://blog.csdn.net/qq_30817073/article/details/78043553
+
 ### Plugin and Modules
 1 plugin has 1..n modules
 

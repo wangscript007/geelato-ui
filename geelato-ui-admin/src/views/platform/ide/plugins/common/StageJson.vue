@@ -42,6 +42,7 @@
     },
     methods: {
       $_init () {
+        console.log('CodeMirror', CodeMirror)
         let thisVue = this
         thisVue.editor = CodeMirror.fromTextArea($(thisVue.$el).find('.stage-code-mirror').get(0), {
           lineNumbers: true,

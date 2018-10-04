@@ -1,0 +1,120 @@
+
+.ui.gl-compact.table thead th {
+    padding-top: 0.42857143em;
+    padding-bottom: 0.42857143em;
+}
+
+.ui.gl-compact.table td {
+    padding: .1em .7em;
+}
+
+.ui.form.gl-json .field {
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0.2em !important;
+}
+
+/*缩进*/
+.gl-json-indent {
+    margin-left: 1.68em !important;
+}
+
+/*扩展*/
+.gl-json-extend {
+    margin-left: -1.68em !important;
+}
+
+.ui.form.gl-json input, .ui.form.gl-json select {
+    border: 0px solid rgba(34, 36, 38, .15) !important;
+    padding: 0 !important;
+    background-color: rgba(34, 36, 38, .15);
+}
+
+.ui.form.gl-json .inline.field > :first-child, .ui.form.gl-json .inline.fields .field > :first-child {
+    margin: 0 !important;
+}
+
+.ui.calendar table {
+    width: auto;
+    border-spacing: 0;
+}
+
+.ui.calendar table td {
+    margin: 2px;
+    padding: 2px;
+}
+
+.ui.comments {
+    max-width: inherit;
+}
+
+.ui.feed > .event > .content .summary.gl-summary-thin {
+    font-weight: normal;
+}
+
+.header {
+    font-weight: 500
+}
+
+.icon.gl-state-finished {
+    opacity: 1;
+}
+
+.icon.gl-state-none {
+    opacity: 0.6;
+}
+
+.icon.gl-state-unfinished {
+    opacity: 0.2;
+}
+
+/*.ui.accordion > .title {*/
+/*font-weight: bold;*/
+/*}*/
+
+/*.ui.fullscreen.modal {*/
+/*width: 95% !important;*/
+/*!*height: 95%;*!*/
+/*}*/
+
+.ui.fullscreen.modal {
+    /*width: 98% !important;*/
+    /*height: 95%;*/
+    margin: 0px !important;
+}
+
+/**
+ * 高度调高，有效区域更大；增加min-height，确保页面大小不变化
+ */
+.ui.fullscreen.modal .scrolling.content {
+    max-height: calc(100vh - 10em);
+    min-height: calc(100vh - 15em);
+}
+
+.ui.steps .step {
+    cursor: pointer;
+}
+
+.ui.dimmer {
+    padding: 0em !important;
+    background-color: rgba(0, 0, 0, .35) !important;
+}
+
+.ui.compact.dropdown {
+    min-height: 0;
+}
+
+.ui.cards.gl-settings {
+    margin-top: 0
+}
+
+.ui.cards.gl-settings > .card {
+    border: solid 1px rgba(0, 0, 0, .25);
+    margin-top: .2em;
+    margin-bottom: .2em;
+    width: 100%;
+}
+
+.icon.gl-action {
+    cursor: pointer
+}

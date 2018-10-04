@@ -6,7 +6,7 @@
                           :headerHeight="sidebar.headerHeight"></page-sidebar>
         </div>
         <div :style="header">
-            <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode"
+            <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="$_changeLayoutMode"
                          @changeModule="$_changeModule"
                          @changeColor="$_changeColor"></page-header>
         </div>
@@ -50,25 +50,24 @@
         },
         mounted() {
             let thisVue = this
-            this.resizeMinContent()
+            this.$_resizeMinContent()
             // 获取sidebar内容的
 
             $(window).resize(function () {
-//        console.log('this.isMax ', thisVue.isMax)
                 this.content = {}
                 if (thisVue.isMax) {
-                    thisVue.resizeMaxContent()
+                    thisVue.$_resizeMaxContent()
                 } else {
-                    thisVue.resizeMinContent()
+                    thisVue.$_resizeMinContent()
                 }
             })
             thisVue.$_initUiComponent()
-            $(this.$el).find(this.selector().sidebarToggle).click(function () {
+            $(this.$el).find(this.$_selector().sidebarToggle).click(function () {
                 thisVue.toggle()
             })
         },
         methods: {
-            selector() {
+            $_selector() {
                 return {
                     sidebarToggle: '.gl-layout-sidebar-toggle',
                     sidebar: '.gl-layout-sidebar'
@@ -78,53 +77,51 @@
                 $('.ui.dropdown').dropdown()
                 $('.ui.accordion').accordion()
             },
-            convertToNumber(heightOrWidth) {
+            $_convertToNumber(heightOrWidth) {
                 if (!heightOrWidth) return 0
                 return heightOrWidth.replace('px', '')
             },
-            toggle() {
+            $_toggle() {
                 this.isMax = !this.isMax
                 if (this.isMax) {
-                    this.resizeMaxContent()
+                    this.$_resizeMaxContent()
                     this.$emit('resize', 'maxContent')
                 } else {
-                    this.resizeMinContent()
+                    this.$_resizeMinContent()
                     this.$emit('resize', 'minContent')
                 }
             },
             // hide sidebar
-            resizeMaxContent() {
-                this.reset()
+            $_resizeMaxContent() {
+                this.$_reset()
                 this.sidebar.width = this.defaultValue.sidebar.miniWidth
                 this.sidebar.size = 'min'
                 this.sidebar.headerHeight = this.defaultValue.header.minHeight
                 this.header.height = this.defaultValue.header.minHeight
                 this.footer.height = this.defaultValue.footer.minHeight
-                this.header['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+                this.header['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
                 this.footer['left'] = this.header['left']
                 this.content['left'] = this.header['left']
                 this.isMax = true
-                this.refresh()
+                this.$_refresh()
             },
-            resizeMinContent() {
-                this.reset()
+            $_resizeMinContent() {
+                this.$_reset()
                 this.sidebar.width = this.defaultValue.sidebar.maxWidth
                 this.sidebar.size = 'max'
                 this.sidebar.headerHeight = this.defaultValue.header.minHeight
                 this.header.height = this.defaultValue.header.maxHeight
                 this.footer.height = this.defaultValue.footer.maxHeight
-                this.header['left'] = this.convertToNumber(this.sidebar.width) + 'px'
+                this.header['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
                 this.footer['left'] = this.header['left']
                 this.content['left'] = this.header['left']
                 this.isMax = false
-                this.refresh()
+                this.$_refresh()
             },
-            reset() {
+            $_reset() {
                 // 注意重置content，刷新content的大小才有效
                 this.content = {}
-//        this.content.float = 'left'
                 this.sidebar.float = 'left'
-                // background: '#2185d0'
                 for (let key in this.$gl.ui.colorHex) {
                     let hex = this.$gl.ui.colorHex[key]
                     if (key === this.$gl.ui.color.primary) {
@@ -133,24 +130,23 @@
                 }
             },
             /**
-             * 浏览器窗口的尺寸
-             * IE、Chrome、FireFox、Opera以及Safari
+             *  浏览器窗口的尺寸
+             *  IE、Chrome、FireFox、Opera以及Safari
              *  window.innerHeight   浏览器内部高度
              *  window.innerWidth    浏览器内部宽度
              *  对于IE 5 6 7 8 版本
              *  document.documentElement.clientHeight
-             * document.documentElement.clientWidth
-             * 或者
-             * document.body.clientHeight
-             * document.body.clientWidth
+             *  document.documentElement.clientWidth
+             *  或者
+             *  document.body.clientHeight
+             *  document.body.clientWidth
              */
-            refresh() {
+            $_refresh() {
                 let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
                 let winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-                this.content.height = (winHeight - this.convertToNumber(this.header.height) - this.convertToNumber(this.footer.height) - 0) + 'px'
+                this.content.height = (winHeight - this.$_convertToNumber(this.header.height) - this.$_convertToNumber(this.footer.height) - 0) + 'px'
                 this.content['max-height'] = this.content.height
-                this.content.width = (winWidth - this.convertToNumber(this.sidebar.width) - 0) + 'px'
-//        this.content['max-width'] = (winWidth - this.convertToNumber(this.sidebar.width) - 10) + 'px'
+                this.content.width = (winWidth - this.$_convertToNumber(this.sidebar.width) - 0) + 'px'
                 this.sidebar.height = winHeight + 'px'
                 this.$store.commit(types.CHANGE_LAYOUT, {
                     content: {
@@ -159,7 +155,7 @@
                     }
                 })
             },
-            changeLayoutMode(value) {
+            $_changeLayoutMode(value) {
                 this.$emit('changeLayoutMode', value)
             },
             $_changeModule(module) {

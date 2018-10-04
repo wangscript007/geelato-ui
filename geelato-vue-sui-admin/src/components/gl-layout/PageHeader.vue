@@ -42,12 +42,12 @@
                 <a class="item"><i class="theme icon"></i></a>
                 <div class="ui flowing popup top left transition hidden">
                     <div v-for="(hex,key) in $gl.ui.colorHex" class="ui mini button" :class="{[key]:true}"
-                         @click="$_changeColor(key)"></div>
+                         @click="$_changeColor(key)" :key="key"></div>
                 </div>
             </sui>
             <!--<a class="item" title="mode" @click="$_changeTheme"><i class="paint-brush icon"></i></a>-->
             <a class="item" title="更改部局" @click="$_changeLayoutMode"><i class="exchange alternate icon"></i></a>
-            <a class="item" title="帮助" @click="$_help"><i class="question circle outline icon"></i></a>
+            <a class="item" title="帮助" target="_blank" :href="$gl.url.help"><i class="question circle outline icon"></i></a>
             <a class="item" title="退出" @click="logout"><i class="sign out icon"></i></a>
             <sui v-if="modules&&modules.length>0" type="popup" selector=".modules-selector" :opts="{
           inline: true,
@@ -61,7 +61,7 @@
                 <a class="item modules-selector"><i class="ellipsis vertical icon"></i></a>
                 <div class="ui flowing popup top left transition hidden">
                     <div class="ui three column divided left aligned grid" style="max-width: 390px">
-                        <div class="column" v-for="item in modules" style="padding:0.125em">
+                        <div class="column" v-for="(item,key) in modules" :key="key" style="padding:0.125em">
                             <div class="ui button" @click="$_changeModule(item)" style="width: 9em">
                                 {{item.title}}
                             </div>
@@ -101,10 +101,16 @@
             // 首次加载切换到角色的默认模块
             // TODO 改从当前用户信息中获取
             let currentRole = 'admin'
-            for (var m in this.modules) {
-                var module = this.modules[m]
-                console.log(module, this.$gl.defaultModule[currentRole])
-                if (module.code === this.$gl.defaultModule[currentRole]) {
+            for (let m in this.modules) {
+                let module = this.modules[m]
+                // console.log(module, this.$gl.defaultModule[currentRole])
+
+                if (module.code === this.$gl.defaultModule) {
+                    // 不按角色区分默认模块 typeof defaultModule is string
+                    this.$_changeModule(module)
+                    break
+                } else if (typeof this.$gl.defaultModule === 'object' && module.code === this.$gl.defaultModule[currentRole]) {
+                    // 按角色区分默认模块
                     this.$_changeModule(module)
                     break
                 }
@@ -124,7 +130,7 @@
                 // 更改模块首页面
                 if (module.index) {
                     // 如将：'/#/m/project-metro/info/select-project',改为'/m/project-metro/info/select-project',
-                    var path = module.index.replace('/#', '').replace('#', '')
+                    let path = module.index.replace('/#', '').replace('#', '')
 //          path = path + '?' + 'module=' + module.code + '&t=' + utils.uuid(16)
                     this.$store.commit(types.ROUTE_VIEW_KEY, utils.uuid(16))
                     this.$router.push(path)

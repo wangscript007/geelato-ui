@@ -1,45 +1,47 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from './views/platform/security/Login.vue'
-// import page from './views/platform/ide/plugins/common/StageUi.vue'
+import store from './store'
+import Login from './views/platform-core/security/Login.vue'
 import geelato from './geelato.js'
 
 Vue.use(VueRouter)
 
-
 // router.beforeEach((to, from, next) => {
-//   // if ((to.path !== '/login.html') && (!sessionStorage.getItem('accessToken') || sessionStorage.getItem('accessToken') === 'undefined')) {
-//   //   next({
-//   //     path: '/login.html'
-// // query: { redirect: to.fullPath }
-// //     })
-// //   } else { next() }
-//
-// //   $.ajax({
-// //     url: geelato.ctx.url.root + 'api/sys/auth/isLogged',
-// //     success: function (data) {
-// //       geelato.ctx.profile = data.user // kendo.observable(data.user);
-// //   //        geelato.ctx.sysConfig = arrayToObject(data.sysConfig, 'code');
-// //  //        geelato.ctx.userConfig = arrayToObject(data.userConfig, 'code');
-// //       // 如果登录之后检查isLogged为false，可能是未设置好跨域登陆--user-data-dir=XXX
-// //       if (data.user && data.user.id) {
-// //         geelato.ctx.profile.isLogged = true
-// //       } else {
-// //         geelato.showMsg('showMsg')
-// //         geelato.ctx.profile = {isLogged: false}
-// //         var reloadURL = 'login.html' + window.location.search
-// //         window.location.replace(reloadURL, true)
-// //       }
-// //     },
-// //     error: function (data) {
-// //       console.debug('login fail>', data)
-// //       geelato.showMsg('未登录...可能服务地址不正确或服务未启动。')
-// //     }
-// //   })
+//     console.log('to.path>', to.path)
+//     if ((to.path !== '/#/login') && (!sessionStorage.getItem('accessToken') || sessionStorage.getItem('accessToken') === 'undefined')) {
+//         next({
+//             path: '/#/login',
+//             query: {redirect: to.fullPath}
+//         })
+//     } else {
+//         next()
+//     }
+
+// $.ajax({
+//     url: geelato.ctx.url.root + 'api/sys/auth/isLogged',
+//     success: function (data) {
+//         geelato.ctx.profile = data.user // kendo.observable(data.user);
+//         //        geelato.ctx.sysConfig = arrayToObject(data.sysConfig, 'code');
+//         //        geelato.ctx.userConfig = arrayToObject(data.userConfig, 'code');
+//         // 如果登录之后检查isLogged为false，可能是未设置好跨域登陆--user-data-dir=XXX
+//         if (data.user && data.user.id) {
+//             geelato.ctx.profile.isLogged = true
+//         } else {
+//             geelato.showMsg('showMsg')
+//             geelato.ctx.profile = {isLogged: false}
+//             var reloadURL = 'login.html' + window.location.search
+//             window.location.replace(reloadURL, true)
+//         }
+//     },
+//     error: function (data) {
+//         console.debug('login fail>', data)
+//         geelato.showMsg('未登录...可能服务地址不正确或服务未启动。')
+//     }
+// })
 // })
 // 页面刷新时，重新赋值token
 // if (window.localStorage.getItem('token')) {
-//   store.commit(types.LOGIN, window.localStorage.getItem('token'))
+//     store.commit(types.LOGIN, window.localStorage.getItem('token'))
 // }
 
 
@@ -57,7 +59,7 @@ let routes = [
     //     children: moduleRoutes
     // },
     {
-        path: '/login', component: Login
+        path: '/login', component: Login, meta: {requireAuth: false}
     }
 ]
 
@@ -100,7 +102,10 @@ router.beforeEach((to, from, next) => {
     //     }
     //   }
     // }
-    if (to.matched.some(r => r.meta.requireAuth)) {
+    // if (to.matched.some(r => r.meta.requireAuth)) {
+    console.log('to.matched', to)
+    if (to.matched.some(r => r.meta.requireAuth !== false)) {
+        console.log('geelato.security.profile().user>', geelato.security.profile().user)
         if (geelato.security.profile().user) {
             next()
         } else {
