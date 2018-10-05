@@ -3,7 +3,7 @@
 -->
 <template>
     <div class="ui small compact form">
-        <table v-show="opts.ui.layout.type==='table'||!opts.ui.layout.type"
+        <table v-show="layout.type==='table'||!layout.type"
                class="gl-form gl-col-24">
             <thead>
             <tr>
@@ -12,22 +12,24 @@
                 </th>
             </tr>
             </thead>
-            <tbody>
-            <tr v-for="(row,index) in opts.ui.layout.data">
+            <tbody v-if="init">
+            <tr v-for="(row,index) in layout.data">
                 <template v-for="(cell,cellIndex) in row"
                           v-if="property=$_getProperty(Object.keys(cell)[0])">
                     <td :colspan="Object.values(cell)[0][0]">
+                        <div :hidden="property.hidden===true">
                         <span v-if="property.tips" :data-tooltip="property.tips">
                             <i class="info circle icon"></i>
                         </span>
-                        <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
-                        {{property.title||Object.keys(cell)[0]}}
+                            <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
+                            {{property.title||Object.keys(cell)[0]}}
+                        </div>
                     </td>
                     <td :colspan="Object.values(cell)[0][1]">
                         <template v-if="property.control==='input'">
                             <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
                                    v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"
-                                   :disabled="property.disabled===true">
+                                   :disabled="property.disabled===true" :hidden="property.hidden===true">
                         </template>
                         <template v-else-if="property.control==='textarea'">
                         <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
@@ -44,7 +46,7 @@
                             <sui-dropdown selection :options="property.data"
                                           :name="Object.keys(cell)[0]"
                                           :value="form[Object.keys(cell)[0]]"
-                                          @input='form[Object.keys(cell)[0]]=$event;$_setDropdownText(Object.keys(cell)[0],$event)'
+                                          @input='form[Object.keys(cell)[0]]=$event;$_loadRefData(Object.keys(cell)[0], "")'
                                           :ref="Object.keys(cell)[0]" :readonly="property.readonly===true"
                                           :disabled="property.disabled===true"></sui-dropdown>
                         </template>
@@ -69,48 +71,46 @@
 
 </template>
 <script>
-    //  import utils from '../../common/utils'
     export default {
         props: {
             opts: {
                 type: Object,
-                required: false,
-                default: function () {
-                    return {
-                        defaultEntity: '',
-                        properties: {},
-                        layout: [
-                            //              [{name: [3, 9]}, {name: [3, 9]}],
-                            //              [{id: [3, 9]}, {loginName: [3, 9]}],
-                            //              [{description: [3, 21]}]
-                        ],
-                        ds: {}
-                    }
-                }
+                required: false
             }
         },
         data() {
             return {
-                model: {},
+                init: false,
+                form: {},
+                layout: this.opts.ui.layout,
                 properties: this.opts.ui.properties,
                 ds: this.opts.ui.ds,
                 // 数据源被依赖，格式为：被依赖的属性:[依赖的属性,依赖的属性...]
                 dsBeDependentOn: {}
             }
         },
-        computed: {
-            form: function () {
-                return this.model
-            }
-        },
         created: function () {
-            this.$_initConvertData()
-            this.$_loadInitData()
+
         },
         mounted: function () {
-            this.$_initUI()
+            console.log('form mounted')
+            this.$_reset()
+
         },
         methods: {
+            $_reset(opts) {
+                if (opts) {
+                    this.properties = opts.ui.properties
+                    this.layout = opts.ui.layout
+                    this.ds = opts.ui.ds
+                    this.dsBeDependentOn = {}
+                    this.form = {}
+                    this.init = false
+                }
+                this.$_initConvertData()
+                this.$_initUI()
+                this.$_loadInitData()
+            },
             /**
              * 1、将简化的配置信息转换成完整的配置信息，如只设置了email类型，则将默认增加email验证规则
              * 2、转换并设置一些默认值
@@ -122,15 +122,16 @@
                     // identifier 是 semantic ui form validate 需用到的属性
                     this.properties[key].identifier = key
                     let property = this.properties[key]
-                    this.model[key] = property.value === undefined ? '' : property.value
-                    // console.log('this.model', key, property.value)
+                    // ！！需采用vm.$set的方式，来设置值，确保值变化可被检测
+                    // @see https://cn.vuejs.org/v2/guide/reactivity.html#检测变化的注意事项
+                    this.$set(this.form, key, property.value === undefined ? '' : property.value)
                     // 依据字段类型，自动构建字段验证规则信息，基于semantic ui form validate
                     if (property.control === 'email' && (!property.rules)) {
                         property.rules = []
                         this.properties[key].rules.push({type: 'email'})
                     }
                 }
-                // 数据源依赖
+                // 3、构建数据源依赖 dsBeDependentOn
                 // e.g. {provinceCode: 'gs:$ctx.province'}
                 let pattern = /gs[\s]*\:[\s]*\$ctx\.[a-zA-Z]+[a-zA-Z0-9]*/g;
                 for (let propertyName in this.ds) {
@@ -141,20 +142,23 @@
                             paramValue.match(pattern).forEach(function (item, index) {
                                 let dependPropertyName = item.substring(item.lastIndexOf('\.') + 1)
                                 thisVue.dsBeDependentOn[dependPropertyName] = thisVue.dsBeDependentOn[dependPropertyName] || []
-                                thisVue.dsBeDependentOn[dependPropertyName].push[propertyName]
-                                console.log('dependPropertyName>', dependPropertyName, thisVue.dsBeDependentOn)
+                                thisVue.dsBeDependentOn[dependPropertyName].push(propertyName)
+                                console.log('dependPropertyName>', dependPropertyName, propertyName, thisVue.dsBeDependentOn)
                             })
                         }
                     }
                 }
-
+                this.init = true
             },
             // 加载远程的初始化数据，如字典信息
             $_loadInitData() {
-                for (let i in this.properties) {
-                    let property = this.properties[i]
-                    if (property.ds && property.ds.lazy !== true) {
-                        this.$_loadData(property, property.ds)
+                console.log('property.ds $_loadInitData')
+                for (let propertyName in this.properties) {
+                    let property = this.properties[propertyName]
+                    // && this.ds[property.ds].lazy !== true
+                    if (property.ds) {
+                        console.log('property.ds', property.ds)
+                        this.$_loadData(propertyName, property, property.ds)
                     }
                 }
             },
@@ -190,40 +194,27 @@
                 let $form = $(this.$el)
                 $form.form('validate form')
             },
+            $_clearValidateMessage() {
+                $(this.$el).find('.ui.error.message.segment').html('')
+            },
+            /**
+             * 对于不存在的属性名，则返回默认的空属性
+             * */
             $_getProperty(name) {
-                if (name === '$null') {
+                if (!name || !this.properties[name]) {
                     return {control: 'null', title: ' '}
                 }
                 return this.properties[name]
             },
-            $_setDropdownText(name, value) {
-                // 动态form[name]属性绑定dropdown，更新值时，未能更新text里的内容，需手动设置
-                // 当无初始化值时，无<div role="alert" ... 这个标签，此时用<span class="sizer"></span>来设置text
-                // <div role="alert" aria-live="polite" class="text">这里是text的内容</div>
-                // <span class="sizer"></span>
-                let dropdown = this.$refs[name][0]
-                let options = this.$_getProperty(name).data
-                for (let i in options) {
-                    let option = options[i]
-                    if (option.value === value) {
-                        let $textA = $(dropdown.$el).find('span.sizer')
-                        $textA.text('')
-                        let $textDom = $(dropdown.$el).find('[aria-live=polite]')
-                        if ($textDom.length > 0) {
-                            $textDom.text(option.text)
-                        } else {
-                            $textA.text(option.text)
-                        }
-                        break
-                    }
-                }
-            },
-            $_loadData(property, dataSourceName) {
+            /**
+             * 加载数据源 TODO 改成同时加多个
+             * */
+            $_loadData(propertyName, property, dataSourceName) {
                 let thisVue = this
                 if (!dataSourceName) {
                     return
                 }
-                // ds e.g.
+                // ds 示例格式
                 // {
                 //     entity: 'basedata_city',
                 //     lazy: true, // default false
@@ -243,20 +234,31 @@
                         }
                     }
                     thisVue.$gl.data.query(dsConfig.entity, params, dsConfig.fields).then(function (res) {
-                        // 依据alias的配置，对返回的数据进行重命名
-                        property.data = res.data
-                        // thisVue.$forceUpdate()
+                        thisVue.$set(thisVue.properties[propertyName], 'data', res.data)
+                        // 触发级联加载数据
+                        thisVue.$_loadRefData(propertyName)
                     })
                 } else {
                     console.error('未配置数据源', dataSourceName)
                 }
-
-                // function checkFields(fields) {
-                //     for(let segment in fields.splice(',')){
-                //         let ary = segment.split('[\s]+')
-                //         let fieldName = ary[0]
-                //     }
-                // }
+            },
+            /**
+             * 级联加载数据
+             * */
+            $_loadRefData(propertyName, resetValue) {
+                let thisVue = this
+                let propertyNames = thisVue.dsBeDependentOn[propertyName] || []
+                propertyNames.forEach(function (item, index) {
+                    let triggerProperty = thisVue.$_getProperty(item)
+                    // if (resetValue !== undefined) {
+                    //     // 重置选择的值为空
+                    //     triggerProperty.value = resetValue
+                    // }
+                    if (triggerProperty) {
+                        thisVue.$_loadData(item, triggerProperty, triggerProperty.ds)
+                    }
+                })
+                // thisVue.set(thisVue.form, propertyName, property)
             },
             /**
              * gs(geelato script)执行表达式，若非gs表达式则直接返回

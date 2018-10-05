@@ -298,7 +298,7 @@ class Geelato {
                         })
                     },
                     success: function (data) {
-                        console.log('request end>>', data)
+                        // console.log('request end>>', data)
                         df.resolve(data)
                         // if ($.isFunction(callback))callback(data)
                     }
@@ -313,7 +313,7 @@ class Geelato {
              */
             queryMeta: function (entityName) {
                 let df = $.Deferred()
-                var url = instance.url.apiMetaDefined + '/' + entityName
+                let url = instance.url.apiMetaDefined + '/' + entityName
                 $.ajax(url, {
                     type: 'post',
                     dataType: 'json',

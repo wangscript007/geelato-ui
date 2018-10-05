@@ -1,4 +1,4 @@
-class JsonFormat {
+class Format {
     constructor() {
 
     }
@@ -115,4 +115,4 @@ class JsonFormat {
     }
 }
 
-export default new JsonFormat()
+export default new Format()

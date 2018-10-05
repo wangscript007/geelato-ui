@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import JsonCodeMirror from './JsonCodeMirror'
+    import JsonCodeMirror from '../../../components/gl-codemirror/Index'
     import FormDataHandler from './FormDataHandler'
 
     export default {

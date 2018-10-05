@@ -2,34 +2,34 @@
     <div class="gl-page-content-wrapper">
         <gl-layout-page left-title="表单配置(JSON)" right-title="表单预览" :max="{left:8,right:8}" :min="{left:7,right:9}">
             <div slot="left">
-                <json-code-mirror ref="jsonCM"
-                                  :text="JSON.stringify(configs[current].data)"></json-code-mirror>
+                <json-code-mirror ref="jsonCM" :text="jsonCM"></json-code-mirror>
             </div>
             <div slot="leftAction">
-                <sui-button size="mini" v-for="item in configs" @click="current=item.value">{{item.text}}</sui-button>
+                <sui-button size="mini" v-for="item in configs" @click="$_changeConfig(item.value)">加载{{item.text}}
+                </sui-button>
                 <sui-button size="mini" @click="$_genForm" :class="$gl.ui.color.primary">生成表单</sui-button>
             </div>
             <div slot="right">
                 <div class="ui info attached bottom segment" v-if="values" style="word-wrap:break-word">
                     {{values}}
                 </div>
-                <!--<gl-form-base v-show="current!==null" :opts="formOptions" ref="glForm">-->
-                <!--</gl-form-base>-->
-                <gl-form v-if="current!==null" :opts="formOptions" ref="glForm">
-                </gl-form>
+                <gl-form-base v-if="current!==null" :opts="formOptions" ref="glForm">
+                </gl-form-base>
             </div>
             <div slot="rightAction" v-if="current!==null">
                 <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_validate">验证表单</div>
+                <div class="ui mini button" @click="$_clearValidateMessage">清除验证信息</div>
                 <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_getValues">获取表单值</div>
+                <div class="ui mini button" @click="$_clearValues">清除表单值</div>
+
             </div>
         </gl-layout-page>
     </div>
 </template>
 
 <script>
-    import GlForm from '../../../components/gl-form-base/Index'
-    // import GlForm from '../../platform-labs/bugs/dropdown/DropdownInSlot'
-    import JsonCodeMirror from './JsonCodeMirror'
+    import GlFormBase from '../../../components/gl-form-base/Index'
+    import JsonCodeMirror from '../../../components/gl-codemirror/Index'
     import configData from './formConfig.js'
 
     export default {
@@ -38,30 +38,39 @@
             return {
                 configs: configData,
                 current: 0,
-                values: undefined
-            }
-        },
-        computed: {
-            formOptions() {
-                return {ui: this.configs[this.current].data}
+                values: undefined,
+                formOptions: {ui: JSON.parse(JSON.stringify(configData[0].data))},
+                jsonCM: JSON.stringify(configData[0].data)
             }
         },
         mounted() {
         },
         methods: {
+            $_changeConfig(current) {
+                this.$refs.jsonCM.$_setValue(JSON.stringify(configData[current].data))
+                // this.$forceUpdate()
+                this.$_genForm()
+            },
             $_genForm() {
-                this.configs[this.current].data = JSON.parse(this.$refs.jsonCM.$_getValue())
-                console.log('this.$refs.jsonCM.$_getValue()', this.configs[this.current].data)
+                console.log('this.$refs.jsonCM.$_getValue()', this.$refs.jsonCM.$_getValue())
+                // this.formOptions = {ui: JSON.parse(this.$refs.jsonCM.$_getValue())}
+                this.$refs.glForm.$_reset({ui: JSON.parse(this.$refs.jsonCM.$_getValue())})
             },
             $_validate() {
                 this.$refs.glForm.$_validate()
             },
+            $_clearValidateMessage() {
+                this.$refs.glForm.$_clearValidateMessage()
+            },
             $_getValues() {
                 this.values = JSON.stringify(this.$refs.glForm.$_getValues())
-                console.log('value', this.$refs.glForm.$_getValues())
+                return this.values
+            },
+            $_clearValues() {
+                this.values = ''
             }
         },
-        components: {JsonCodeMirror, GlForm}
+        components: {JsonCodeMirror, GlFormBase}
     }
 </script>
 

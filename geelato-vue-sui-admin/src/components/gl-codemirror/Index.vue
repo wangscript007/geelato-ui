@@ -14,7 +14,7 @@
     import 'codemirror/addon/hint/show-hint.js' // 自动补全
     import 'codemirror/addon/hint/anyword-hint.js' // 自动补全
     import 'codemirror/addon/hint/javascript-hint.js' // sql自动补全
-    import jsonFormat from './jsonFormat.js'
+    import format from './format.js'
 
     export default {
         props: {
@@ -47,27 +47,24 @@
                 editor: undefined
             }
         },
-        watch: {},
         mounted() {
             let thisVue = this
-            jsonFormat.set(CodeMirror)
+            format.set(CodeMirror)
             thisVue.$_setValue(this.text)
-            thisVue.$_format()
             thisVue.editor = this.$refs.cm.codemirror
             thisVue.editor.setSize('100%', this.editorMainHeight)
             thisVue.editor.on('change', function (editor, changes) {
-                // thisVue.$_format()
             })
-            // this.editor.focus()
         },
         methods: {
             $_format() {
                 let totalLines = this.$refs.cm.codemirror.lineCount();
-                console.log('totalLines', totalLines)
                 this.$refs.cm.codemirror.autoFormatRange({line: 0, ch: 0}, {line: totalLines});
             },
             $_setValue(contentString = '') {
                 this.$refs.cm.codemirror.setValue(contentString)
+                this.$_format()
+                this.$refs.cm.codemirror.setCursor(0)
             },
             $_getValue() {
                 return this.$refs.cm.codemirror.getValue()

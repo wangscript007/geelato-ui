@@ -1,15 +1,18 @@
 export default [
     {
-        text: '基础', value: 0, data: {
+        text: '综合示例', value: 0, data: {
             type: 'object',
             defaultEntity: 'platformUser',
             properties: {
                 name: {
                     control: 'input',
                     title: '名称',
-                    disabled: true, // 是否禁用
-                    readonly: false, // 是否只读
-                    hidden: false, // 是否隐藏
+                    // 是否禁用
+                    disabled: true,
+                    // 是否只读
+                    readonly: false,
+                    // 是否隐藏
+                    hidden: false,
                 },
                 loginName: {
                     control: 'input',
@@ -54,12 +57,13 @@ export default [
                 age: {
                     control: 'input',
                     title: '年龄',
-                    value: '20', // 值
+                    // 值
+                    value: '20',
                 },
                 sex: {
                     control: 'dropdown',
                     title: '性别',
-                    //---专有属性
+                    // 若数据是动态生产成，可配置ds，基于ds加载的数据最终会设置到data中
                     data: [
                         {text: '保密', value: ''},
                         {text: '男', value: 'male'},
@@ -83,19 +87,14 @@ export default [
                 province: {
                     control: 'dropdown',
                     title: '省份',
-                    // data: [
-                    //     {text: '男', value: 'male'},
-                    //     {text: '女', value: 'female'}
-                    // ],
-                    ds: 'province'
+                    ds: 'province',
+                    // 广东省
+                    value: '440000'
                 },
                 city: {
                     control: 'dropdown',
                     title: '城市',
-                    // data: [
-                    //     {text: '男', value: 'male'},
-                    //     {text: '女', value: 'female'}
-                    // ],
+                    // 基于数据源，数源名称可自取，如cityDS，不一定需等于本属性名
                     ds: 'city'
                 },
                 enable: {
@@ -117,20 +116,23 @@ export default [
                     [{sex: [4, 8]}, {tel: [4, 8]}],
                     [{province: [4, 8]}, {city: [4, 8]}],
                     [{password: [4, 8]}, {confirmPassword: [4, 8]}],
-                    [{enable: [4, 8]}, {$null: [4, 8]}],
+                    [{enable: [4, 8]}, {'': [4, 8]}],
                     [{description: [4, 20]}]
                 ]
             },
             ds: {
                 province: {
                     entity: 'platform_province',
-                    lazy: false, // default false
+                    // default false
+                    lazy: false,
+                    // 支持字段重命名
                     fields: 'name text,code value'
                 },
                 city: {
                     entity: 'platform_city',
-                    lazy: true, // default false
+                    lazy: true,
                     fields: 'name text,code value',
+                    // 带参数查询的数据源
                     params: {
                         // 该信息会自动加入计算属性中，当province的值变动时，该数据源会重新加载计算
                         provinceCode: 'gs:$ctx.province'
