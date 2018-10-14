@@ -19,7 +19,6 @@
 
 <script>
     import JsonCodeMirror from '../../../components/gl-codemirror/Index'
-    import FormDataHandler from './FormDataHandler'
 
     export default {
         name: "GenFormConfig",
@@ -34,8 +33,6 @@
         },
         methods: {
             $_genFormConfig() {
-                let meta = JSON.parse(this.$refs.metaCM.$_getValue())
-                let dataHandler = new FormDataHandler({meta: meta.meta})
                 // console.log('this.$refs.jsonCM.$_getValue()', JSON.parse(this.$refs.jsonCM.$_getValue()))
             },
             $_getValues() {

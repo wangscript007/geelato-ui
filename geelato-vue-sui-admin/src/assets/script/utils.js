@@ -10,10 +10,10 @@ let utils = {}
  * @returns {string}
  */
 utils.param = function (param, prefix) {
-    var str = ''
+    let str = ''
     if (param instanceof Array || param instanceof Object) {
         for (let k in param) {
-            var subPrefix = prefix ? (prefix + (param instanceof Array ? '[' + k + ']' : '.' + k)) : k
+            let subPrefix = prefix ? (prefix + (param instanceof Array ? '[' + k + ']' : '.' + k)) : k
             str += '&' + utils.param(param[k], subPrefix)
         }
     } else {
@@ -51,9 +51,9 @@ utils.toBoolean = function (v) {
 }
 
 utils.uuid = function (len, radix) {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-    var uuid = []
-    var i
+    let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+    let uuid = []
+    let i
     radix = radix || chars.length
 
     if (len) {
@@ -61,7 +61,7 @@ utils.uuid = function (len, radix) {
         for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix]
     } else {
         // rfc4122, version 4 form
-        var r
+        let r
 
         // rfc4122 requires these characters
         uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
@@ -89,7 +89,7 @@ utils.uuid = function (len, radix) {
 utils.invoke = function (obj, keyValues) {
     let keyword = '@.'
     let jsFlag = 'js:'
-    var objCopy
+    let objCopy
     if (typeof obj === 'string') {
         let expression = obj
         if (expression.startsWith(jsFlag)) {
@@ -105,7 +105,7 @@ utils.invoke = function (obj, keyValues) {
     } else if (typeof obj === 'object') {
         objCopy = {}
         $.extend(true, objCopy, obj)
-        for (var i in objCopy) {
+        for (let i in objCopy) {
             // console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
             objCopy[i] = utils.invoke(objCopy[i], keyValues)
         }
@@ -172,22 +172,22 @@ utils.session = function (key, json) {
  * @returns {string}
  */
 utils.hex2Rgb = function (hex, alpha) {
-    var alphaLocal = alpha || 1
-    var sColor = hex.toLowerCase()
+    let alphaLocal = alpha || 1
+    let sColor = hex.toLowerCase()
     // 十六进制颜色值的正则表达式
-    var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+    let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
     // 如果是16进制颜色
     if (sColor && reg.test(sColor)) {
         if (sColor.length === 4) {
-            var sColorNew = '#'
-            for (var i = 1; i < 4; i += 1) {
+            let sColorNew = '#'
+            for (let i = 1; i < 4; i += 1) {
                 sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
             }
             sColor = sColorNew
         }
         // 处理六位的颜色值
-        var sColorChange = []
-        for (var j = 1; j < 7; j += 2) {
+        let sColorChange = []
+        for (let j = 1; j < 7; j += 2) {
             sColorChange.push(parseInt('0x' + sColor.slice(j, j + 2)))
         }
         return 'RGBA(' + sColorChange.join(',') + ',' + alphaLocal + ')'
@@ -273,6 +273,22 @@ utils.remove = function (items, index, confirmMsg) {
     if (!confirmMsg || confirm(confirmMsg)) {
         items.splice(index, 1)
     }
+}
+
+utils.listToTree = function (data, pid) {
+    let tree = [];
+    let temp;
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].pid == pid) {
+            let obj = data[i];
+            temp = utils.listToTree(data, data[i].id);
+            if (temp.length > 0) {
+                obj.children = temp;
+            }
+            tree.push(obj);
+        }
+    }
+    return tree;
 }
 
 // utils.CryptoJS = CryptoJS

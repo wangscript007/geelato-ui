@@ -24,6 +24,12 @@
                     return '480px'
                 }
             },
+            mode: {
+                type: String,
+                default: function () {
+                    return 'application/json'
+                }
+            },
             text: {
                 type: String
             }

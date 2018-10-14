@@ -2,17 +2,21 @@ export default [
     {
         text: '综合示例', value: 0, data: {
             type: 'object',
+            // 表单可绑定多实体，这是默认第一实体
             defaultEntity: 'platformUser',
+            // update|create|read
+            state: 'save',
             properties: {
+                // 设置该id:{}，便于子实体中依赖该id
+                id: {},
                 name: {
                     control: 'input',
                     title: '名称',
                     // 是否禁用
                     disabled: true,
                     // 是否只读
-                    readonly: false,
-                    // 是否隐藏
-                    hidden: false,
+                    readonly: false
+                    // 是否隐藏，hidden隐藏与否在layout中控制，故没有hidden这个配置
                 },
                 loginName: {
                     control: 'input',
@@ -60,6 +64,11 @@ export default [
                     // 值
                     value: '20',
                 },
+                avatar: {
+                    control: 'image',
+                    title: '头像',
+                    value: 'elliot',
+                },
                 sex: {
                     control: 'dropdown',
                     title: '性别',
@@ -74,7 +83,9 @@ export default [
                 tel: {
                     control: 'input',
                     title: '电话',
+                    // 如果实体的字段名称与tel不一样，或因多实体都存在tel字段，可通过field指定，field未设置时，相关于field:'tel'
                     field: 'telephone',
+                    // 若字段需绑定其它实体，该通过该属性设置
                     entity: 'platformUser',
                     placeholder: '电话号码',
                     rules: [
@@ -105,20 +116,82 @@ export default [
                 description: {
                     control: 'textarea',
                     title: '描述',
+                },
+                code: {
+                    control: 'input',
+                    title: 'DEMO编码',
+                    entity: 'platformDemoEntity',
+                    description: '这是另一个实体的字段'
+                },
+                demoName: {
+                    control: 'input',
+                    title: 'DEMO名称',
+                    // 已存在同名的name，这里重命名为demoName
+                    field: 'name',
+                    entity: 'platformDemoEntity',
+                    description: '这是另一个实体的字段'
+                },
+                demoDescription: {
+                    control: 'textarea',
+                    title: 'DEMO描述',
+                    // 该值$ctx.id在服务端运行求解
+                    isComputeInServer: true,
+                    value: '$ctx.id',
+                    // 已存在同名的name，这里重命名为demoName
+                    field: 'description',
+                    entity: 'platformDemoEntity',
+                    description: '这是另一个实体的字段'
+                },
+                // userId: {
+                //     control: 'input',
+                //     title: '用户id',
+                //     isComputeInServer: true,
+                //     value: '$ctx.id',
+                //     entity: 'platformRole',
+                //     description: '角色实体的userId依赖，用户实体的id'
+                // }
+                // ,
+                roleDescription: {
+                    control: 'input',
+                    title: '角色描述',
+                    isComputeInServer: true,
+                    value: '$ctx.demoDescription',
+                    field: 'description',
+                    entity: 'platformRole',
+                    description: '角色实体的description依赖platformDemoEntity实体的demoDescription'
+                }
+                ,
+                AppDescription: {
+                    control: 'input',
+                    title: '用户描述',
+                    isComputeInServer: true,
+                    value: '$ctx.roleDescription',
+                    field: 'description',
+                    entity: 'platformApp',
+                    description: 'app实体的description依赖platformRole实体的roleDescription'
                 }
             },
             layout: {
                 type: 'table',
                 data: [
-                    // [label col-num,field col-num]
-                    [{name: [4, 8]}, {loginName: [4, 8]}],
-                    [{email: [4, 8]}, {age: [4, 8]}],
+                    // [label colSpan,rowSpan,field colSpan,rowSpan]
+                    [{name: [4, 8]}, {avatar: [4, 8, 4]}],
+                    [{loginName: [4, 8]}],
+                    [{email: [4, 8]}],
+                    [{age: [4, 8]}],
                     [{sex: [4, 8]}, {tel: [4, 8]}],
                     [{province: [4, 8]}, {city: [4, 8]}],
                     [{password: [4, 8]}, {confirmPassword: [4, 8]}],
                     [{enable: [4, 8]}, {'': [4, 8]}],
+                    [{code: [4, 8]}, {demoName: [4, 8]}],
                     [{description: [4, 20]}]
-                ]
+                ],
+                hidden: {
+                    // 各表单状态，需隐藏的内容
+                    update: {password: 1, confirmPassword: 2},
+                    create: {},
+                    read: {}
+                }
             },
             ds: {
                 province: {
@@ -126,7 +199,8 @@ export default [
                     // default false
                     lazy: false,
                     // 支持字段重命名
-                    fields: 'name text,code value'
+                    fields: 'name text,code value',
+                    description: '这是一个拉列表数据源'
                 },
                 city: {
                     entity: 'platform_city',
@@ -135,8 +209,15 @@ export default [
                     // 带参数查询的数据源
                     params: {
                         // 该信息会自动加入计算属性中，当province的值变动时，该数据源会重新加载计算
-                        provinceCode: 'gs:$ctx.province'
-                    }
+                        provinceCode: 'gs:$ctx.form.province'
+                    },
+                    description: '这是一个拉列表数据源，带参数'
+                }
+            },
+            vars: {
+                myVarA: {
+                    description: '这是一个变量，常量名字为myVarA，值为30',
+                    value: '30'
                 }
             }
         }

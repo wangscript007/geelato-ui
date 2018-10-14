@@ -1,5 +1,6 @@
 <!--
-  CRUD的动态表单页面，依据实体自动获取元数据，结合配置的字段（包括字段布局信息）进行渲染
+  提供基础的功能及api接口，不提供保存操作
+  动态表单页面，结合配置的字段（包括字段布局信息）进行渲染
 -->
 <template>
     <div class="ui small compact form">
@@ -16,20 +17,18 @@
             <tr v-for="(row,index) in layout.data">
                 <template v-for="(cell,cellIndex) in row"
                           v-if="property=$_getProperty(Object.keys(cell)[0])">
-                    <td :colspan="Object.values(cell)[0][0]">
-                        <div :hidden="property.hidden===true">
+                    <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]">
                         <span v-if="property.tips" :data-tooltip="property.tips">
                             <i class="info circle icon"></i>
                         </span>
-                            <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
-                            {{property.title||Object.keys(cell)[0]}}
-                        </div>
+                        <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
+                        {{property.title||Object.keys(cell)[0]}}
                     </td>
-                    <td :colspan="Object.values(cell)[0][1]">
+                    <td :colspan="Object.values(cell)[0][1]" :rowspan="Object.values(cell)[0][2]">
                         <template v-if="property.control==='input'">
                             <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
                                    v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"
-                                   :disabled="property.disabled===true" :hidden="property.hidden===true">
+                                   :disabled="property.disabled===true">
                         </template>
                         <template v-else-if="property.control==='textarea'">
                         <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
@@ -49,6 +48,21 @@
                                           @input='form[Object.keys(cell)[0]]=$event;$_loadRefData(Object.keys(cell)[0], "")'
                                           :ref="Object.keys(cell)[0]" :readonly="property.readonly===true"
                                           :disabled="property.disabled===true"></sui-dropdown>
+                        </template>
+                        <template v-else-if="property.control==='image'">
+                            <div class="ui fluid  image">
+                                <a class="ui red right corner label" @click="$_uploadImage">
+                                    <i class="upload icon"></i>
+                                </a>
+                                <img class="ui small rounded image" style=""
+                                     src="../../assets/images/avatar/large/jenny.jpg">
+                            </div>
+                            <!--<div class="ui placeholder">-->
+                                <!--<a class="ui red right corner label" @click="$_uploadImage">-->
+                                    <!--<i class="upload icon"></i>-->
+                                <!--</a>-->
+                                <!--<div class="rectangular image"></div>-->
+                            <!--</div>-->
                         </template>
                         <template v-else-if="property.control==='email'">
                             <input type="email" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
@@ -71,6 +85,12 @@
 
 </template>
 <script>
+    let GEELATO_SCRIPT_PREFIX = 'gs:'
+    let REGEXP_FORM = /gs[\s]*\:[\s]*\$ctx\.form\.[a-zA-Z]+[a-zA-Z0-9]*/g;
+    let REGEXP_CTX = /\$ctx/g
+    let REGEXP_DEPEND_PROPERTY = /\$ctx\.[a-zA-Z]+/g
+    let CONST_GQL_PARENT = '$parent'
+
     export default {
         props: {
             opts: {
@@ -82,9 +102,11 @@
             return {
                 init: false,
                 form: {},
+                defaultEntity: this.opts.ui.defaultEntity,
                 layout: this.opts.ui.layout,
                 properties: this.opts.ui.properties,
                 ds: this.opts.ui.ds,
+                vars: this.opts.ui.vars,
                 // 数据源被依赖，格式为：被依赖的属性:[依赖的属性,依赖的属性...]
                 dsBeDependentOn: {}
             }
@@ -93,23 +115,24 @@
 
         },
         mounted: function () {
-            console.log('form mounted')
-            this.$_reset()
-
+            console.log('form mounted,opts>', this.opts)
+            this.$_reset(this.opts)
         },
         methods: {
             $_reset(opts) {
                 if (opts) {
                     this.properties = opts.ui.properties
                     this.layout = opts.ui.layout
+                    this.defaultEntity = opts.ui.defaultEntity
                     this.ds = opts.ui.ds
+                    this.vars = opts.ui.vars
                     this.dsBeDependentOn = {}
                     this.form = {}
                     this.init = false
                 }
                 this.$_initConvertData()
-                this.$_initUI()
                 this.$_loadInitData()
+                this.$_initUI()
             },
             /**
              * 1、将简化的配置信息转换成完整的配置信息，如只设置了email类型，则将默认增加email验证规则
@@ -119,27 +142,29 @@
             $_initConvertData() {
                 let thisVue = this
                 for (let key in this.properties) {
-                    // identifier 是 semantic ui form validate 需用到的属性
-                    this.properties[key].identifier = key
+                    // 设置一些默认值，添加默认配置等
                     let property = this.properties[key]
-                    // ！！需采用vm.$set的方式，来设置值，确保值变化可被检测
-                    // @see https://cn.vuejs.org/v2/guide/reactivity.html#检测变化的注意事项
+                    // identifier 是 semantic ui form validate 需用到的属性
+                    property.identifier = key
+                    // 未设置实体时，默认为defaultEntity
+                    property.entity = property.entity || this.defaultEntity
+                    property.field = property.field || key
+                    // !!!需采用vm.$set的方式来设置值，确保值变化可被检测 @see https://cn.vuejs.org/v2/guide/reactivity.html#检测变化的注意事项
                     this.$set(this.form, key, property.value === undefined ? '' : property.value)
+                    this.form[key] = property.value === undefined ? '' : property.value
                     // 依据字段类型，自动构建字段验证规则信息，基于semantic ui form validate
                     if (property.control === 'email' && (!property.rules)) {
                         property.rules = []
                         this.properties[key].rules.push({type: 'email'})
                     }
                 }
-                // 3、构建数据源依赖 dsBeDependentOn
-                // e.g. {provinceCode: 'gs:$ctx.province'}
-                let pattern = /gs[\s]*\:[\s]*\$ctx\.[a-zA-Z]+[a-zA-Z0-9]*/g;
+                // 3、构建数据源依赖 dsBeDependentOn e.g. {provinceCode: 'gs:$ctx.form.province'}
                 for (let propertyName in this.ds) {
                     let propertyDs = this.ds[propertyName]
                     for (let paramName in propertyDs.params) {
                         let paramValue = propertyDs.params[paramName]
-                        if (pattern.test(paramValue)) {
-                            paramValue.match(pattern).forEach(function (item, index) {
+                        if (REGEXP_FORM.test(paramValue)) {
+                            paramValue.match(REGEXP_FORM).forEach(function (item, index) {
                                 let dependPropertyName = item.substring(item.lastIndexOf('\.') + 1)
                                 thisVue.dsBeDependentOn[dependPropertyName] = thisVue.dsBeDependentOn[dependPropertyName] || []
                                 thisVue.dsBeDependentOn[dependPropertyName].push(propertyName)
@@ -152,12 +177,10 @@
             },
             // 加载远程的初始化数据，如字典信息
             $_loadInitData() {
-                console.log('property.ds $_loadInitData')
                 for (let propertyName in this.properties) {
                     let property = this.properties[propertyName]
                     // && this.ds[property.ds].lazy !== true
                     if (property.ds) {
-                        console.log('property.ds', property.ds)
                         this.$_loadData(propertyName, property, property.ds)
                     }
                 }
@@ -171,8 +194,6 @@
                     onSuccess: function (event, fields) {
                         console.log('onSuccess>', fields)
                     }
-                    // inline: false,
-                    // on: 'blur'
                 })
             },
             /**
@@ -190,9 +211,112 @@
             $_getValues() {
                 return this.form
             },
+            /**
+             * 获取保存操作的gql语句
+             */
+            $_getGql() {
+                // 找出顶层的实体信息
+                let thisVue = this
+                let gql = {}
+                genGql(gql, this.defaultEntity, this.properties)
+
+                function genGql(parent, entityName, properties, confirmedEntityProperties) {
+                    // console.log('genGql>', parent, entityName, properties)
+                    parent[entityName] = parent[entityName] || {}
+                    let toAnalyseProperties = {}
+                    // 已确认归属实体的属性
+                    let confirmedProperties = confirmedEntityProperties || {}
+                    let subEntityNames = []
+                    for (let propertyName in properties) {
+                        let property = properties[propertyName]
+                        console.log(property.entity, entityName, property)
+                        if (property.entity === entityName) {
+                            // 该实体的直属属性，直接添加
+                            parent[entityName][propertyName] = typeof property.value !== 'string' ? property.value : property.value.replace(REGEXP_CTX, CONST_GQL_PARENT)
+                            confirmedProperties[propertyName] = true
+                        } else {
+                            toAnalyseProperties[propertyName] = property
+                            if (!confirmedProperties[propertyName]) {
+                                // 构建子entityName，便于发起下一次的分析
+                                let parseSubEntityNames = parseSubEntity(entityName, property)
+                                if (parseSubEntityNames === undefined) {
+                                    // 表示简单的字段，不需要解析
+                                    // confirmedProperties[propertyName] = true
+                                } else if (parseSubEntityNames.length > 0) {
+                                    subEntityNames.push(...parseSubEntityNames)
+                                    confirmedProperties[propertyName] = true
+                                } else {
+                                    // 深层级的依赖，当前层级未能解析出来，不能记录到confirmedProperties中。
+                                }
+                                // console.log('分析**entityName>', entityName, '**property>', property, '之后，**subEntityNames>', subEntityNames)
+                            }
+                        }
+                    }
+                    let dynamicAnalyseProperties = toAnalyseProperties
+                    subEntityNames.forEach((subEntityName, index) => {
+                        console.log('subEntityNames', subEntityName, subEntityNames, dynamicAnalyseProperties)
+                        dynamicAnalyseProperties = genGql(parent[entityName], subEntityName, dynamicAnalyseProperties, confirmedProperties)
+                    })
+                    return toAnalyseProperties
+                }
+
+                /**
+                 * TODO 深层依赖的属性，未分析出来时，返回特殊的信息，以便进行一步处理
+                 * @param entityName
+                 * @param subEntityProperty
+                 * @returns {Array}
+                 */
+                function parseSubEntity(entityName, subEntityProperty) {
+                    // console.log('parseSubEntity >entityName:', entityName, ',subEntityProperty', subEntityProperty.field)
+                    if (typeof subEntityProperty.value !== 'string') {
+                        return undefined
+                    }
+                    let dependingPropertyNames = subEntityProperty.value.match(REGEXP_DEPEND_PROPERTY)
+                    let dependEntities = []
+                    if (dependingPropertyNames) {
+                        dependingPropertyNames.forEach((item, index, ary) => {
+                            let dependProperty = thisVue.properties[item.substring(5)]
+                            if (!dependProperty) {
+                                console.error('properties内未配置属性：' + item.substring(5), '，解析依赖：', item, '出错，当前property为：', subEntityProperty)
+                            } else {
+                                // 检查依赖的这个实体dependProperty.entity是否是entityName直属子级实体，是的话才加入
+                                let canBeAdd = true
+                                // if (typeof dependProperty.value === 'string') {
+                                //     let parentDependingPropertyNames = dependProperty.value.match(REGEXP_DEPEND_PROPERTY)
+                                //     if (parentDependingPropertyNames) {
+                                //         // dependProperty还存在依赖信息，需进一步分析
+                                //         for (let parentIndex in parentDependingPropertyNames) {
+                                //             let parentItem = parentDependingPropertyNames[parentIndex]
+                                //             let parentDependProperty = thisVue.properties[parentItem.substring(5)]
+                                //             if (!parentDependProperty) {
+                                //                 console.error('properties内未配置属性：' + parentItem.substring(5), '，解析依赖：', parentItem, '出错，当前property为：', subEntityProperty)
+                                //             } else {
+                                //                 // 只要有一个依赖不等于entityName，则不能加入
+                                //                 if (parentDependProperty.entity !== entityName) {
+                                //                     canBeAdd = false
+                                //                     break
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // }
+                                if (dependProperty.entity != entityName) {
+                                    canBeAdd = false
+                                }
+                                if (canBeAdd) {
+                                    // console.log('dependProperty.entity >', subEntityProperty.entity)
+                                    dependEntities.push(subEntityProperty.entity)
+                                }
+                            }
+                        })
+                    }
+                    return dependEntities
+                }
+
+                return gql
+            },
             $_validate() {
-                let $form = $(this.$el)
-                $form.form('validate form')
+                $(this.$el).form('validate form')
             },
             $_clearValidateMessage() {
                 $(this.$el).find('.ui.error.message.segment').html('')
@@ -220,10 +344,10 @@
                 //     lazy: true, // default false
                 //     fields: 'name text,id value'
                 //     params: {
-                //         provinceId: 'gs:$ctx.province'
+                //         provinceId: 'gs:$ctx.form.province'
                 //     }
                 // }
-                let dsConfig = this.opts.ui.ds[dataSourceName]
+                let dsConfig = this.ds[dataSourceName]
                 if (dsConfig) {
                     let params = {}
                     // 格式如：['name text','id value']
@@ -262,15 +386,22 @@
             },
             /**
              * gs(geelato script)执行表达式，若非gs表达式则直接返回
-             * @param gs gs:$ctx.province
+             * @param gs gs:$ctx.form.province
              */
             $_rungs(str) {
-                if (str.indexOf('gs:') === 0) {
-                    let $ctx = this.$_getValues()
+                let thisVue = this
+                let $ctx = {form: thisVue.$_getValues(), vars: {}}
+                for (let varName in (thisVue.vars || [])) {
+                    $ctx.vars[varName] = typeof thisVue.vars[varName] === 'object' ? thisVue.vars[varName].value : thisVue.vars[varName]
+                }
+                if (str.indexOf(GEELATO_SCRIPT_PREFIX) === 0) {
                     return this.$gl.utils.eval(str.substring(3), $ctx)
                 } else {
                     return str
                 }
+            },
+            $_uploadImage(){
+
             }
         },
         components: {}

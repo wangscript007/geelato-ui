@@ -147,7 +147,7 @@
                 this.$emit('changeLayoutMode', (this.mode + 1) % 2)
             },
             $_profile: function () {
-                this.$router.push('/m/platform/profile/UserProfile')
+                this.$router.push('/m/platform-core/profile/UserProfile')
             },
             $_help: function () {
             },

@@ -1,7 +1,19 @@
 import Vue from "vue";
+import router from './router'
+import store from './store'
 import utils from "./assets/script/utils";
 import PageManager from './assets/script/PageManager.js'
+import SuiVue from 'semantic-ui-vue';
+import Sui from './components/sui/Index.vue'
 import GlLayout from './components/gl-layout/Index.vue'
+import GlModal from './components/gl-modal/Index.vue'
+import GlGroup from './components/gl-group/Index.vue'
+import GlFormSimple from './components/gl-form-simple/Index.vue'
+import GlFormBase from './components/gl-form-base/Index.vue'
+import GlLayoutPage from './components/gl-layout-page/Index.vue'
+import GlMessage from './components/gl-message/Index.vue'
+import GlTable from './components/gl-table/Index.vue'
+import GLDropdown from './components/gl-dropdown/Index.vue'
 
 /**
  *  geelato框架的配置、及工具包
@@ -23,16 +35,15 @@ class Geelato {
         this.modules = []
         this.entityNames = {}
         this.defaultModule = 'dev'
-        this.vueFiles = []
         this.url = {}
         this.consts = CONSTS
         this.layout = {
-            logo: {width: '170px'},
             // 值0即为HM[MC]F：上、中（左菜单 右内容）、下
             // 值1即为LLR[HCF]，结构为左右，即左（菜单）、右（上-头部、中-内容）、下）
             // mode变化PageSidebar的背景色也调整
             mode: 0,
             header: {maxHeight: '44px', minHeight: '44px'},
+            logo: {width: '170px'},
             // miniWidth
             sidebar: {maxWidth: '170px', minWidth: '0px', miniWidth: '70px'},
             // footer: {maxHeight: '22px', minHeight: '22px'}
@@ -147,7 +158,7 @@ class Geelato {
                 return df.promise()
             },
             savePage: function (page) {
-                var df = $.Deferred()
+                let df = $.Deferred()
                 $.ajax(instance.url.apiMetaSave, {
                     type: 'post',
                     dataType: 'json',
@@ -589,7 +600,6 @@ class Geelato {
                 }
             }
         }
-        pluginConfig.vueFiles ? this.vueFiles.push(...pluginConfig.vueFiles) : null
         this.plugins[name] = pluginConfig
         this.entityNames[name] = pluginConfig.entityNames
     }
@@ -737,4 +747,18 @@ class Geelato {
 }
 
 let instance = new Geelato()
+instance.setRouter(router)
+instance.setStore(store)
+instance.addPlugin('platform-core')
+Vue.use(SuiVue)
+Vue.prototype.$gl = instance
+Vue.component('sui', Sui)
+Vue.component('gl-modal', GlModal)
+Vue.component('gl-group', GlGroup)
+Vue.component('gl-layout-page', GlLayoutPage)
+Vue.component('gl-form-simple', GlFormSimple)
+Vue.component('gl-form-base', GlFormBase)
+Vue.component('gl-message', GlMessage)
+Vue.component('gl-table', GlTable)
+Vue.component('gl-dropdown', GLDropdown)
 export default instance

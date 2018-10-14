@@ -5,8 +5,8 @@ export default {
         {
             title: '开发集成',
             code: 'ide',
-            index: '/#/m/platform-ide/form/FormPreview',
-            resize: 'min',
+            index: '/#/m/platform-ide/designer/Index',
+            resize: 'max',
             html: '',
             menu: [
                 {
@@ -14,12 +14,18 @@ export default {
                     class: '',
                     items: [
                         {title: '表单预览展示', href: '/#/m/platform-ide/form/FormPreview'},
-                        {title: '生成表单配置', href: '/#/m/platform-ide/form/GenFormConfig'}
+                        {title: '生成表单配置', href: '/#/m/platform-ide/form/GenFormConfig'},
+                        {title: 'IDE', href: '/#/m/platform-ide/designer/Index'}
                     ],
                     active: true
                 }]
         },
     ],
-    entityNames: {},
-    vueFiles: []
+    entityNames: {
+        dev: {
+            project: 'platform_dev_project',
+            pageConfig: 'platform_page_config',
+            demoEntity: 'platform_demo_entity'
+        }
+    }
 }

@@ -94,7 +94,7 @@
 </template>
 
 <script>
-    import configData from '../../../platform-ide/form/formConfig.js'
+    import configData from '../../../platform-ide/form/formData.js'
 
     import SlotContainer from './SlotContainer'
     import FormOne from './FormOne'
