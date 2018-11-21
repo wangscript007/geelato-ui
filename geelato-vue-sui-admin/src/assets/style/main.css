@@ -235,6 +235,11 @@
     padding: 0;
 }
 
+.gl-form-group-title {
+    padding: 0.5em 12px !important;
+    border-left: 5px solid #888888 !important;
+}
+
 /*=============gl-form end=============*/
 
 .gl-utils-line-no {
@@ -310,3 +315,10 @@ table {
     border-spacing: 1px
 }
 
+.gl-home-bg {
+    background-color: #000000;
+    background: url(../../../public/images/backgrounds/bg5.jpg);
+    filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size: 100% 100%;
+    background-size: 100% 100%;
+}

@@ -46,77 +46,85 @@ Vue.use(VueRouter)
 
 
 let routes = [
-    {
-        path: '/',
-        redirect: '/m/'
-    },
-    // {
-    //     path: '/m/',
-    //     component: GlLayout,
-    //     meta: {
-    //         requireAuth: true
-    //     },
-    //     children: moduleRoutes
-    // },
-    {
-        path: '/login', component: Login, meta: {requireAuth: false}
-    }
+  {
+    path: '/',
+    redirect: '/m/'
+  },
+  // {
+  //     path: '/m/',
+  //     component: GlLayout,
+  //     meta: {
+  //         requireAuth: true
+  //     },
+  //     children: moduleRoutes
+  // },
+  {
+    path: '/login', component: Login, meta: {requireAuth: false}
+  }
 ]
 
 const router = new VueRouter({
-    routes
+  routes
 })
 
 router.beforeEach((to, from, next) => {
-    // alert('router.beforeEach')
-    // console.log('to', to)
-    // console.log('from', from)
-    // console.log('next', next)
-    // console.log('router', router)
-    // console.log('geelato.security.profile().user', geelato.security.profile().user)
-    // console.log('router.getMatchedComponents(to)>', router.getMatchedComponents(to).length)
-    // console.log('router.options.routes>', router.options.routes)
+  // alert('router.beforeEach')
+  // console.log('to', to)
+  // console.log('from', from)
+  // console.log('next', next)
+  // console.log('router', router)
+  // console.log('geelato.security.profile().user', geelato.security.profile().user)
+  // console.log('router.getMatchedComponents(to)>', router.getMatchedComponents(to).length)
+  // console.log('router.options.routes>', router.options.routes)
 
-    // 对于未匹配到的路由
-    // if (router.getMatchedComponents(to).length === 0) {
-    //   for (let index in router.options.routes) {
-    //     let route = router.options.routes[index]
-    //     if (route.path === '/m/') {
-    //       let path = to.path.replace('/m/', '')
-    //       // 默认添加到路由表，匹配views目录下，对应路径的vue文件
-    //       console.log('router.options.routes>', router.options.routes)
-    //       router.addRoutes(
-    //         [{
-    //           path: '/m/',
-    //           component: GlLayout,
-    //           meta: {
-    //             requireAuth: true
-    //           },
-    //           children: [{
-    //             path: path,
-    //             component: resolve => require(['../views/' + path + '.vue'], resolve)
-    //           }]
-    //         }
-    //         ]
-    //       )
-    //     }
-    //   }
-    // }
-    // if (to.matched.some(r => r.meta.requireAuth)) {
-    console.log('to.matched', to)
-    if (to.matched.some(r => r.meta.requireAuth !== false)) {
-        console.log('geelato.security.profile().user>', geelato.security.profile().user)
-        if (geelato.security.profile().user) {
-            next()
-        } else {
-            next({
-                path: '/login',
-                query: {redirect: to.fullPath}
-            })
-        }
+  // 对于未匹配到的路由
+  // if (router.getMatchedComponents(to).length === 0) {
+  //   for (let index in router.options.routes) {
+  //     let route = router.options.routes[index]
+  //     if (route.path === '/m/') {
+  //       let path = to.path.replace('/m/', '')
+  //       // 默认添加到路由表，匹配views目录下，对应路径的vue文件
+  //       console.log('router.options.routes>', router.options.routes)
+  //       router.addRoutes(
+  //         [{
+  //           path: '/m/',
+  //           component: GlLayout,
+  //           meta: {
+  //             requireAuth: true
+  //           },
+  //           children: [{
+  //             path: path,
+  //             component: resolve => require(['../views/' + path + '.vue'], resolve)
+  //           }]
+  //         }
+  //         ]
+  //       )
+  //     }
+  //   }
+  // }
+  // if (to.matched.some(r => r.meta.requireAuth)) {
+  console.log('to.matched', to)
+  if (to.matched.some(r => r.meta.requireAuth !== false)) {
+    console.log('geelato.security.profile().user>', geelato.security.profile().user)
+    if (geelato.security.profile().user) {
+      next()
     } else {
+      let loggedInfo = geelato.security.isLogged()
+      console.log('isLogged', loggedInfo)
+      if (loggedInfo) {
+        geelato.security.profile(loggedInfo)
+        // window.location.replace('/')
         next()
+      } else {
+        next({
+          path: '/login',
+          query: {redirect: to.fullPath}
+        })
+      }
     }
+  } else {
+    next()
+  }
 })
 
 

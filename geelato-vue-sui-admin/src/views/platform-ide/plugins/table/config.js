@@ -14,7 +14,7 @@ export const Config = {
     title: 'ui',
     path: 'common/StageUi.vue',
     opts: {
-      component: '/components/gl-table',
+      component: '/components/gl-table/Index',
       ui: {
         title: '示例实体',
         entity: 'platform_demo_entity',
@@ -78,7 +78,7 @@ export const Config = {
           // 展示位置：header|footer|none，当为none或空时，则不展示。
           display: 'none',
           // 提示内容，html格式
-          html: '<div>这是提示内容<div>'
+          html: ''
         },
         // 选择的行数据
         selected: [],

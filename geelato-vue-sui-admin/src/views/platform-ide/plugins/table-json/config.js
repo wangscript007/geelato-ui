@@ -75,8 +75,8 @@ export const Config = {
         tips: {
           // 展示位置：header|footer|none，当为none或空时，则不展示。
           display: 'none',
-          // 提示内容，html格式
-          html: '<div>这是提示内容<div>'
+          // 提示内容，html格式 <div>这是提示内容<div>
+          html: ''
         },
         // 选择的行数据
         selected: [],

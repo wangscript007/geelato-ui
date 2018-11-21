@@ -10,32 +10,32 @@ let utils = {}
  * @returns {string}
  */
 utils.param = function (param, prefix) {
-    let str = ''
-    if (param instanceof Array || param instanceof Object) {
-        for (let k in param) {
-            let subPrefix = prefix ? (prefix + (param instanceof Array ? '[' + k + ']' : '.' + k)) : k
-            str += '&' + utils.param(param[k], subPrefix)
-        }
-    } else {
-        if ('string|number|boolean'.indexOf(typeof param) !== -1) {
-            str += '&' + prefix + '=' + encodeURIComponent(param)
-        } else {
-            // undefined  RegExp func
-        }
+  let str = ''
+  if (param instanceof Array || param instanceof Object) {
+    for (let k in param) {
+      let subPrefix = prefix ? (prefix + (param instanceof Array ? '[' + k + ']' : '.' + k)) : k
+      str += '&' + utils.param(param[k], subPrefix)
     }
-    return str.substr(1)
+  } else {
+    if ('string|number|boolean'.indexOf(typeof param) !== -1) {
+      str += '&' + prefix + '=' + encodeURIComponent(param)
+    } else {
+      // undefined  RegExp func
+    }
+  }
+  return str.substr(1)
 }
 
 utils.trim = function (str) {
-    return str.replace(/(^\s*)|(\s*$)/g, '')
+  return str.replace(/(^\s*)|(\s*$)/g, '')
 }
 
 utils.join = function (objectAry, propertyName, separator) {
-    let stringAry = new Array(objectAry.length)
-    for (let i in objectAry) {
-        stringAry[i] = objectAry[i][propertyName]
-    }
-    return stringAry.join(separator)
+  let stringAry = new Array(objectAry.length)
+  for (let i in objectAry) {
+    stringAry[i] = objectAry[i][propertyName]
+  }
+  return stringAry.join(separator)
 }
 /**
  * 'false' -> false ,'0' -> false
@@ -43,41 +43,41 @@ utils.join = function (objectAry, propertyName, separator) {
  * @returns {boolean}
  */
 utils.toBoolean = function (v) {
-    if (typeof v === 'string' && 'false|0'.indexOf(utils.trim(v.toLowerCase())) !== -1) {
-        return false
-    } else {
-        return !!v
-    }
+  if (typeof v === 'string' && 'false|0'.indexOf(utils.trim(v.toLowerCase())) !== -1) {
+    return false
+  } else {
+    return !!v
+  }
 }
 
 utils.uuid = function (len, radix) {
-    let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
-    let uuid = []
-    let i
-    radix = radix || chars.length
+  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  let uuid = []
+  let i
+  radix = radix || chars.length
 
-    if (len) {
-        // Compact form
-        for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix]
-    } else {
-        // rfc4122, version 4 form
-        let r
+  if (len) {
+    // Compact form
+    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix]
+  } else {
+    // rfc4122, version 4 form
+    let r
 
-        // rfc4122 requires these characters
-        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
-        uuid[14] = '4'
+    // rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+    uuid[14] = '4'
 
-        // Fill in random data.  At i==19 set the high bits of clock sequence as
-        // per rfc4122, sec. 4.1.5
-        for (i = 0; i < 36; i++) {
-            if (!uuid[i]) {
-                r = 0 | Math.random() * 16
-                uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r]
-            }
-        }
+    // Fill in random data.  At i==19 set the high bits of clock sequence as
+    // per rfc4122, sec. 4.1.5
+    for (i = 0; i < 36; i++) {
+      if (!uuid[i]) {
+        r = 0 | Math.random() * 16
+        uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r]
+      }
     }
+  }
 
-    return uuid.join('')
+  return uuid.join('')
 }
 
 /**
@@ -87,31 +87,31 @@ utils.uuid = function (len, radix) {
  * @returns {*} 如上示例，当id=1jf ,结果为执行1>0即true
  */
 utils.invoke = function (obj, keyValues) {
-    let keyword = '@.'
-    let jsFlag = 'js:'
-    let objCopy
-    if (typeof obj === 'string') {
-        let expression = obj
-        if (expression.startsWith(jsFlag)) {
-            return utils.eval(expression.replace(jsFlag, '').replace(/@\./g, '$ctx.'), keyValues)
-        } else {
-            if (expression.indexOf(keyword) !== -1) {
-                return utils.eval(expression.replace(/@\./g, '$ctx.'), keyValues)
-                // return utils.compileString(expression, keyValues)
-            } else {
-                return expression
-            }
-        }
-    } else if (typeof obj === 'object') {
-        objCopy = {}
-        $.extend(true, objCopy, obj)
-        for (let i in objCopy) {
-            // console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
-            objCopy[i] = utils.invoke(objCopy[i], keyValues)
-        }
-        return objCopy
+  let keyword = '@.'
+  let jsFlag = 'js:'
+  let objCopy
+  if (typeof obj === 'string') {
+    let expression = obj
+    if (expression.startsWith(jsFlag)) {
+      return utils.eval(expression.replace(jsFlag, '').replace(/@\./g, '$ctx.'), keyValues)
+    } else {
+      if (expression.indexOf(keyword) !== -1) {
+        return utils.eval(expression.replace(/@\./g, '$ctx.'), keyValues)
+        // return utils.compileString(expression, keyValues)
+      } else {
+        return expression
+      }
     }
-    return obj
+  } else if (typeof obj === 'object') {
+    objCopy = {}
+    $.extend(true, objCopy, obj)
+    for (let i in objCopy) {
+      // console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))
+      objCopy[i] = utils.invoke(objCopy[i], keyValues)
+    }
+    return objCopy
+  }
+  return obj
 }
 
 /**
@@ -120,9 +120,9 @@ utils.invoke = function (obj, keyValues) {
  * @returns {*}
  */
 utils.compileString = function (expression, $ctx) {
-    let Fn = Function
-    console.log(new Fn('$ctx', 'return "' + expression + '"'))
-    return new Fn('$ctx', 'return "' + expression + '"')($ctx)
+  let Fn = Function
+  console.log(new Fn('$ctx', 'return "' + expression + '"'))
+  return new Fn('$ctx', 'return "' + expression + '"')($ctx)
 }
 
 /**
@@ -133,12 +133,12 @@ utils.compileString = function (expression, $ctx) {
  * @returns {*}
  */
 utils.eval = function (expression, $ctx, ctxName = '$ctx') {
-    let Fn = Function
-    return new Fn(ctxName, 'return ' + expression)($ctx)
+  let Fn = Function
+  return new Fn(ctxName, 'return ' + expression)($ctx)
 }
 
 utils.isEmpty = function (str) {
-    return str === undefined || str === null || str.replace(/\s/g, '') === ''
+  return str === undefined || str === null || str.replace(/\s/g, '') === ''
 }
 
 /**
@@ -147,22 +147,22 @@ utils.isEmpty = function (str) {
  * @param json 默认返回{}
  */
 utils.session = function (key, json) {
-    if (arguments.length === 2) {
-        if (json) {
-            sessionStorage.setItem(key, JSON.stringify(json))
-        } else {
-            sessionStorage.removeItem(key)
-        }
-    } else if (arguments.length === 1) {
-        let value = sessionStorage.getItem(key)
-        if (value) {
-            return JSON.parse(value)
-        } else {
-            return {}
-        }
+  if (arguments.length === 2) {
+    if (json) {
+      sessionStorage.setItem(key, JSON.stringify(json))
     } else {
-        console.error('参数不正确。')
+      sessionStorage.removeItem(key)
     }
+  } else if (arguments.length === 1) {
+    let value = sessionStorage.getItem(key)
+    if (value) {
+      return JSON.parse(value)
+    } else {
+      return {}
+    }
+  } else {
+    console.error('参数不正确。')
+  }
 }
 
 /**
@@ -172,27 +172,27 @@ utils.session = function (key, json) {
  * @returns {string}
  */
 utils.hex2Rgb = function (hex, alpha) {
-    let alphaLocal = alpha || 1
-    let sColor = hex.toLowerCase()
-    // 十六进制颜色值的正则表达式
-    let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
-    // 如果是16进制颜色
-    if (sColor && reg.test(sColor)) {
-        if (sColor.length === 4) {
-            let sColorNew = '#'
-            for (let i = 1; i < 4; i += 1) {
-                sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
-            }
-            sColor = sColorNew
-        }
-        // 处理六位的颜色值
-        let sColorChange = []
-        for (let j = 1; j < 7; j += 2) {
-            sColorChange.push(parseInt('0x' + sColor.slice(j, j + 2)))
-        }
-        return 'RGBA(' + sColorChange.join(',') + ',' + alphaLocal + ')'
+  let alphaLocal = alpha || 1
+  let sColor = hex.toLowerCase()
+  // 十六进制颜色值的正则表达式
+  let reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+  // 如果是16进制颜色
+  if (sColor && reg.test(sColor)) {
+    if (sColor.length === 4) {
+      let sColorNew = '#'
+      for (let i = 1; i < 4; i += 1) {
+        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
+      }
+      sColor = sColorNew
     }
-    return sColor
+    // 处理六位的颜色值
+    let sColorChange = []
+    for (let j = 1; j < 7; j += 2) {
+      sColorChange.push(parseInt('0x' + sColor.slice(j, j + 2)))
+    }
+    return 'RGBA(' + sColorChange.join(',') + ',' + alphaLocal + ')'
+  }
+  return sColor
 }
 
 /**
@@ -218,28 +218,28 @@ utils.hex2Rgb = function (hex, alpha) {
  * @param col
  */
 utils.distinct = function (arr, col) {
-    let resultArray = arr.reduce(function (result, item) {
-        if (!(item[col] in result)) {
-            result[item[col]] = item[col]
-        }
-        return result
-    }, {})
-    return resultArray
+  let resultArray = arr.reduce(function (result, item) {
+    if (!(item[col] in result)) {
+      result[item[col]] = item[col]
+    }
+    return result
+  }, {})
+  return resultArray
 }
 
 utils.stopPropagationAndPreventDefault = function (e) {
-    if (e && e.stopPropagation) {
-        e.stopPropagation()
-    } else {
-        // IE
-        window.event.cancelBubble = true
-    }
-    // stopDefault 默认事件,比如点击a标签以后会跳转至href链接的页面
-    if (e && e.preventDefault) {
-        e.preventDefault()
-    } else {
-        window.event.returnValue = false
-    }
+  if (e && e.stopPropagation) {
+    e.stopPropagation()
+  } else {
+    // IE
+    window.event.cancelBubble = true
+  }
+  // stopDefault 默认事件,比如点击a标签以后会跳转至href链接的页面
+  if (e && e.preventDefault) {
+    e.preventDefault()
+  } else {
+    window.event.returnValue = false
+  }
 }
 
 /**
@@ -248,9 +248,9 @@ utils.stopPropagationAndPreventDefault = function (e) {
  * @param index 移动项索引
  */
 utils.moveup = function (items, index) {
-    let item = items[index]
-    items.splice(index, 1)
-    items.splice(index - 1, 0, item)
+  let item = items[index]
+  items.splice(index, 1)
+  items.splice(index - 1, 0, item)
 }
 
 /**
@@ -259,9 +259,9 @@ utils.moveup = function (items, index) {
  * @param index 移动项索引
  */
 utils.movedown = function (items, index) {
-    let item = items[index]
-    items.splice(index, 1)
-    items.splice(index + 1, 0, item)
+  let item = items[index]
+  items.splice(index, 1)
+  items.splice(index + 1, 0, item)
 }
 /**
  * 数组元素删除
@@ -270,25 +270,25 @@ utils.movedown = function (items, index) {
  * @param confirmMsg 删除的确认信息，若有则提示，若无则直接删除
  */
 utils.remove = function (items, index, confirmMsg) {
-    if (!confirmMsg || confirm(confirmMsg)) {
-        items.splice(index, 1)
-    }
+  if (!confirmMsg || confirm(confirmMsg)) {
+    items.splice(index, 1)
+  }
 }
 
 utils.listToTree = function (data, pid) {
-    let tree = [];
-    let temp;
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].pid == pid) {
-            let obj = data[i];
-            temp = utils.listToTree(data, data[i].id);
-            if (temp.length > 0) {
-                obj.children = temp;
-            }
-            tree.push(obj);
-        }
+  let tree = [];
+  let temp;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].pid == pid) {
+      let obj = data[i];
+      temp = utils.listToTree(data, data[i].id);
+      if (temp.length > 0) {
+        obj.children = temp;
+      }
+      tree.push(obj);
     }
-    return tree;
+  }
+  return tree;
 }
 
 // utils.CryptoJS = CryptoJS

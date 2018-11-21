@@ -1,13 +1,13 @@
 <template>
-  <div class="ui icon message" :class="type">
+  <div class="ui icon info message">
     <i class="info icon"></i>
-    <i class="close icon"></i>
+    <i class="close icon" v-if="closable"></i>
     <div class="content">
       <div class="header">
         {{header}}
       </div>
       <p>{{text}}
-      <slot></slot>
+        <slot></slot>
       </p>
     </div>
   </div>
@@ -15,29 +15,28 @@
 <script>
   export default {
     props: {
-      type: {
-        type: String,
-        default: 'info'
-      },
       header: {
         type: String
       },
       text: {
         type: String
+      },
+      closable: {
+        type: Boolean,
+        default: true
       }
     },
-    data () {
+    data() {
       return {
-        theme: this.$gl.ui.color.primary
       }
     },
-    mounted () {
+    mounted() {
       this.$_initUi()
     },
-    updated () {
+    updated() {
     },
     methods: {
-      $_initUi () {
+      $_initUi() {
         $(this.$el).find('.close').on('click', function () {
           $(this).closest('.message').transition('fade')
         })

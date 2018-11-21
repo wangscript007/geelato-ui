@@ -15,10 +15,10 @@
             <div class="item" @click="$_openProject">
               <i class="cog icon"></i>设置项目
             </div>
-            <!--<div class="item">-->
+            <!--<div class="item toolbar-item">-->
             <!--<i class="file code outline icon"></i>新建页面-->
             <!--</div>-->
-            <!--<div class="item">-->
+            <!--<div class="item toolbar-item">-->
             <!--<i class="pie chart icon"></i>新建页面-->
             <!--</div>-->
             <div class="divider"></div>

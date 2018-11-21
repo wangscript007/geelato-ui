@@ -88,7 +88,7 @@
                 </div>
             </div>
             <div class="ui fitted divider"></div>
-            <div class="ui info message" v-if="showTips&&opts.ui.tips">
+            <div class="ui info message" v-if="showTips&&opts.ui.tips&&opts.ui.tips.html">
                 <i class="close icon" @click="showTips=false"></i>
                 <div v-html="opts.ui.tips.html"></div>
             </div>

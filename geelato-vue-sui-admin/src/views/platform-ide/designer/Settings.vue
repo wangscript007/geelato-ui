@@ -1,6 +1,5 @@
 <template>
   <div class="designer-settings-content">
-
     <template v-if="editorStore.editingPage.id">
       <div class="ui mini top attached tabular menu gl-designer-tab-menu">
         <slot name="resize"></slot>

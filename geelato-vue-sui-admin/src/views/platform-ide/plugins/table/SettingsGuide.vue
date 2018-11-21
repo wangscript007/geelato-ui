@@ -108,7 +108,7 @@
                             设置综合查询条件
                         </div>
                         <div class="ui right secondary mini menu">
-                            <div class="item">
+                            <div class="item toolbar-item">
                                 <!--<div class="ui mini button" :class="$gl.ui.color.primary"-->
                                 <!--@click="$_addQueryColumnItem({name: '无', title: '列', type: 'string', format: '',visible: true})">-->
                                 <!--添加虚拟列-->
@@ -200,7 +200,7 @@
                             设置查询结果列
                         </div>
                         <div class="ui right secondary mini menu">
-                            <div class="item">
+                            <div class="item toolbar-item">
                                 <div class="ui mini button" :class="$gl.ui.color.primary"
                                      @click="$_addQueryColumnItem({name: '无', title: '列', type: 'string', el:'',format: '',visible: true})">
                                     添加虚拟列
@@ -309,7 +309,7 @@
                             工具栏
                         </div>
                         <div class="ui right secondary mini menu">
-                            <div class="item">
+                            <div class="item toolbar-item">
                             </div>
                         </div>
                     </div>
@@ -411,7 +411,7 @@
         </div>
         <!--单行操作-->
         <div class="ui attached segment" v-show="step==='stepE'">
-            <layout-lr title="操作按钮模板选择列表" right-title="工具栏" :min="{left:5,right:11}">
+            <gl-layout-page title="操作按钮模板选择列表" right-title="工具栏" :min="{left:5,right:11}">
                 <div slot="left">
                     <table class="ui compact  table">
                         <tr>
@@ -486,7 +486,7 @@
                         </template>
                     </table>
                 </div>
-            </layout-lr>
+            </gl-layout-page>
         </div>
         <!--<div class="ui attached bottom buttons">-->
         <!--<div class="ui button">保存</div>-->
@@ -496,7 +496,6 @@
 <script>
     import MetaSelector from '../../../platform-meta/selector/Index.vue'
     // import JsonEditor from 'vue-json-editor'
-
     export default {
         props: {
             opts: {
@@ -832,7 +831,7 @@
             //   this.opts.editorStore.editingPage.content.opts.ui = this.ui
             // }
         },
-        components: {MetaSelector, GlCheckbox}
+        components: {MetaSelector}
     }
 </script>
 <style>
