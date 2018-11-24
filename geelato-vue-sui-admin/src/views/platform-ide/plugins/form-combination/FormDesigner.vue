@@ -10,52 +10,10 @@
       <div class="ui middle aligned selection list">
         <draggable @start="drag=true" @end="drag=false"
                    :options="{group:{name:'field', pull:'clone', put:false },sort:false}">
-          <div class="item toolbar-item">
-            <i class="keyboard outline icon"></i>
+          <div class="item toolbar-item" v-for="control in toolbar.controls" :data-control="control.value">
+            <i class="icon" :class="control.icon"></i>
             <div class="content">
-              单行文本
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="keyboard outline icon"></i>
-            <div class="content">
-              多行文本
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="dot circle outline icon"></i>
-            <div class="content">
-              单选
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="check square outline icon"></i>
-            <div class="content">
-              复选
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="calendar alternate outline icon"></i>
-            <div class="content">
-              日期选择
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="clock outline icon"></i>
-            <div class="content">
-              时间选择
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="caret square down outline icon"></i>
-            <div class="content">
-              下拉选择
-            </div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="star outline icon"></i>
-            <div class="content">
-              评分
+              {{control.text}}
             </div>
           </div>
         </draggable>
@@ -105,16 +63,16 @@
             <draggable v-model="layout.data" element="table" class="gl-form gl-col-24"
                        :options="{group:{name:'layout'},chosenClass:'active'}"
                        @start="drag=true"
-                       @add="$_addRow" @change="$_updateLayout">
+                       @add="$_addRow" @change="$_updateLayout" @choose="$_onChooseRow">
               <tr v-for="(row,rowIndex) in layout.data">
-                <!--行数据为分组标题，[{'': [24],  $title: '',$style:''}]-->
-                <template v-if="row.length===1&&row[0].$title!==undefined">
+                <!--行数据为分组标题-->
+                <template v-if="$_isGroupRow(row)">
                   <td colspan="24" class="gl-form-group-title" :style="row[0].$style">
                     <span class="gl-designer-form-row-remove" title="删除当前行"
                           @click="$_removeRow(rowIndex)">
                       <i class="bordered inverted red remove small icon"></i>
                     </span>
-                    <div v-html="row[0].$title"></div>
+                    <div v-html="row[0].$title||'&nbsp;'"></div>
                   </td>
                 </template>
                 <!--行数据非分组标题-->
@@ -136,42 +94,40 @@
 
                     <td class="gl-designer-form-field" :colspan="Object.values(cell)[0][1]"
                         :rowspan="Object.values(cell)[0][2]">
-                      <draggable :options="{group:{name:'field'},chosenClass:'active',sort:false}" @start="drag=true"
+                      <draggable :options="{group:{name:'field'},chosenClass:'active',sort:false}"
+                                 @start="$_onStartDragField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)"
                                  @end="drag=false"
                                  @add="$_addField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)"
-                                 @choose="$_onChoose">
+                                 @choose="$_onChooseField($event,rowIndex,cellIndex,Object.keys(cell)[0])"
+                                 @clone="$_onCloneField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)">
                         <template v-if="property.control==='input'">
-                          <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                                 :readonly="property.readonly===true"
-                                 :disabled="property.disabled===true">
+                          <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>
+                          <!--:readonly="property.readonly===true" :disabled="property.disabled===true"-->
                         </template>
                         <template v-else-if="property.control==='textarea'">
-                        <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                                  :readonly="property.readonly===true"
-                                  :disabled="property.disabled===true"></textarea>
+                          <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
+                                    readonly></textarea>
                         </template>
                         <template v-else-if="property.control==='checkbox'">
-                          <sui-checkbox :name="Object.keys(cell)[0]" :readonly="property.readonly===true"
-                                        :disabled="property.disabled===true"></sui-checkbox>
+                          <sui-checkbox :name="Object.keys(cell)[0]" readonly></sui-checkbox>
                           {{property.placeholder}}
                         </template>
                         <template v-else-if=" property.control==='dropdown'">
-                          <sui-dropdown selection :name="Object.keys(cell)[0]" :readonly="property.readonly===true"
-                                        :disabled="property.disabled===true"></sui-dropdown>
+                          <sui-dropdown selection :options="template.options" :name="Object.keys(cell)[0]"
+                                        readonly></sui-dropdown>
                         </template>
-
+                        <template v-else-if=" property.control==='rating'">
+                          <sui-rating :rating="3" :max-rating="5" readonly/>
+                        </template>
                         <template v-else-if="property.control==='email'">
-                          <input type="email" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                                 :readonly="property.readonly===true"
-                                 :disabled="property.disabled===true">
+                          <input type="email" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>
                         </template>
                         <template v-else-if="property.control==='password'">
                           <input type="password" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                                 :readonly="property.readonly===true"
-                                 :disabled="property.disabled===true">
+                                 readonly>
                         </template>
-                        <span class="gl-designer-form-field-remove" title="删除当前字段"
-                              @click="$_removeField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)">
+                        <span class="gl-designer-form-field-remove" title="清空字段"
+                              @click="$_removeField($event,rowIndex,cellIndex,Object.keys(cell)[0])">
                       <i class="bordered inverted red trash small icon"></i>
                     </span>
                         <!--这是一个占位元素，只有拖动到该元素上才有效-->
@@ -200,6 +156,7 @@
           <a class="item active" data-tab="tab-form">表单</a>
           <a class="item" data-tab="tab-field">字段</a>
           <a class="item" data-tab="tab-cell">单元格</a>
+          <a class="item" data-tab="tab-group">分组标题</a>
         </div>
         <div class="ui tab active" data-tab="tab-form">
           <h5 class="ui dividing header">
@@ -307,7 +264,7 @@
             <div class="ui mini form gl-form gl-content-wrapper">
               <div class="field">
                 <label>标识(key)</label>
-                <input type="text" placeholder="code" v-model="currentPropertyName">
+                <input type="text" placeholder="code" v-model="currentPropertyName" readonly>
               </div>
               <div class="field">
                 <label>绑定实体(entity)</label>
@@ -372,6 +329,27 @@
         </div>
         <div class="ui tab" data-tab="tab-cell">
         </div>
+        <div class="ui tab" data-tab="tab-group">
+          <template v-if="currentGroup">
+            <!--<h5 class="ui dividing header">-->
+            <!--<i class="affiliatetheme icon"></i>-->
+            <!--标题-->
+            <!--</h5>-->
+            <div class="ui mini form gl-form gl-content-wrapper">
+              <div class="field">
+                <label>标题</label>
+                <input type="text" v-model="layout.data[currentGroup.rowIndex][0].$title">
+              </div>
+              <div class="field">
+                <label>样式</label>
+                <textarea v-model="layout.data[currentGroup.rowIndex][0].$style"></textarea>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <gl-message class="warning segment" :closable="false">请先点击选取分组标题行</gl-message>
+          </template>
+        </div>
       </sui>
     </div>
   </div>
@@ -423,7 +401,8 @@
             ],
             // 字段描述
             description: ''
-          }
+          },
+          options: []
         },
         toolbar: {
           layout: [
@@ -442,21 +421,13 @@
             {value: 'time', text: '时间选择', icon: 'clock outline', opts: {}},
             {value: 'dropdown', text: '下拉选择', icon: 'caret square down outline', opts: {}},
             {value: 'rating', text: '评分', icon: 'star outline', opts: {}}
-          ],
-          dict: {
-            '单行文本': {control: 'input'},
-            '多行文本': {control: 'textarea'},
-            '单选': {control: 'checkbox', opts: {type: 'radio'}},
-            '复选': {control: 'checkbox', opts: {type: 'checkbox'}},
-            '日期选择': {control: 'date', opts: {}},
-            '时间选择': {control: 'time', opts: {}},
-            '下拉选择': {control: 'dropdown', opts: {}},
-            '评分': {control: 'rating', opts: {}}
-          }
+          ]
         },
         // #以下编辑状态
         // 当前编辑的字段属性
-        currentPropertyName: ''
+        currentPropertyName: '',
+        // 当前编辑的组信息
+        currentGroup: ''
       }
     },
     computed: {
@@ -528,48 +499,102 @@
       $_onFieldDrag(a, b, c, d) {
         console.log('$_onFieldDrag>', a, 'B>', b, 'C>', c, 'D>', d)
       },
-      $_cloneRow(a, b, c, d) {
-        console.log('$_cloneRow>', a, 'B>', b, 'C>', c, 'D>', d)
-        a.dragged = '<tr><td>abd</td></tr>'
-        return '<tr><td>abd</td></tr>'
-      },
       $_addRow(evt) {
-        console.log('$_addRow>', evt, this.layout.data)
+        if (this.$_isGroupRow(this.layout.data[evt.newIndex])) {
+          this.$_editGroup(evt.newIndex)
+        } else {
+          this.currentGroup = ''
+        }
+        console.log('$_addRow>', evt, this.layout.data[evt.newIndex], evt.newIndex)
+        this.$forceUpdate()
       },
       $_removeRow(rowIndex) {
         this.layout.data.splice(rowIndex, 1)
         console.log('$_removeRow>', this.layout.data)
       },
+      /**
+       * 是否分组标题行
+       * @param row
+       * @returns {boolean}
+       */
+      $_isGroupRow(row) {
+        // row data e.g.: [{'': [24],  $title: '',$style:''}]
+        return row.length === 1 && row[0].$title !== undefined
+      },
+      $_onChooseRow(evt) {
+        let row = this.layout.data[evt.oldIndex]
+        if (this.$_isGroupRow(row)) {
+          this.$_editGroup(evt.oldIndex)
+        } else {
+          this.currentGroup = ''
+        }
+      },
+      $_editGroup(rowIndex) {
+        this.currentGroup = {rowIndex: rowIndex, row: this.layout.data[rowIndex]}
+        this.$_selectSettingTab('tab-group')
+      },
       $_addField(evt, rowIndex, cellIndex, propertyName) {
+        // if (evt.oldIndex > 0) {
+        //   return false
+        // }
+        let cell = this.layout.data[rowIndex][cellIndex]
+        // this.layout.data[rowIndex][cellIndex][propertyName] =
         if (propertyName === undefined) {
           this.currentPropertyName = 'p_' + this.$gl.utils.uuid(8)
-          this.properties[this.currentPropertyName] = JSON.parse(JSON.stringify(this.template.property))
-          this.properties[this.currentPropertyName].entity = this.defaultEntity
+          this.$set(this.properties, this.currentPropertyName, JSON.parse(JSON.stringify(this.template.property)))
+          this.$set(this.properties[this.currentPropertyName], 'entity', this.defaultEntity)
+          this.$set(this.properties[this.currentPropertyName], 'control', evt.item.dataset.control)
+          // this.properties[this.currentPropertyName] = JSON.parse(JSON.stringify(this.template.property))
+          // this.properties[this.currentPropertyName].entity = this.defaultEntity
+          this.layout.data[rowIndex][cellIndex] = {}
+          this.layout.data[rowIndex][cellIndex][this.currentPropertyName] = cell[""]
         } else {
           this.currentPropertyName = propertyName
         }
+        evt.item.parentElement.removeChild(evt.item)
+        console.log('addField', evt, this.layout.data)
         // evt.item.innerText
+        this.$_selectSettingTab('tab-field')
+        this.$forceUpdate()
+      },
+      $_onChooseField(evt, rowIndex, cellIndex, propertyName) {
+        // propertyName 对于新添加的字段，propertyName对应的field为空，即这里propertyName为空
+        let cell = this.layout.data[rowIndex][cellIndex]
+        console.log('$_onChooseField', evt, rowIndex, cellIndex, propertyName, this.layout.data, this.properties)
+        this.currentPropertyName = propertyName
         this.$_selectSettingTab('tab-field')
       },
       $_removeField(evt, rowIndex, cellIndex, propertyName) {
         console.log('$_removeField>', evt, rowIndex, cellIndex, this.layout.data[rowIndex][cellIndex], propertyName)
-        if (propertyName === undefined) {
+        if (propertyName === undefined || '') {
           return
         } else {
           // 清除选中状态
           if (this.currentPropertyName === propertyName) {
             this.currentPropertyName = ''
           }
-          console.log('delete', delete this.properties[propertyName], this.properties)
+          // 删除属性
+          delete this.properties[propertyName]
+          // 清除布局内容
+          let cell = this.layout.data[rowIndex][cellIndex]
+          this.layout.data[rowIndex][cellIndex] = {}
+          this.layout.data[rowIndex][cellIndex][''] = cell[propertyName]
         }
+        this.$forceUpdate()
       },
       $_updateLayout(evt) {
         this.$forceUpdate()
       },
-      $_onChoose(/**Event*/evt) {
-        console.log('$_onChoose', evt)
-        evt.oldIndex;  // element index within parent
+      $_onStartDragField(evt, rowIndex, cellIndex, propertyName) {
+        console.log('$_onStartDragField', evt, rowIndex, cellIndex, propertyName)
+        return false
       },
+      $_onCloneField(evt, rowIndex, cellIndex, propertyName) {
+        let origEl = evt.item;
+        let cloneEl = evt.clone;
+        console.log('$_onCloneField', evt, rowIndex, cellIndex, propertyName, origEl, cloneEl)
+      },
+
       $_openTrSettings() {
 
       },
@@ -704,9 +729,10 @@
     /*top: -18px;*/
   }
 
-  td.gl-designer-form-field:hover input {
+  td.gl-designer-form-field:hover input, td.gl-designer-form-field:hover textarea {
     width: 75% !important;
     display: inline-block;
+    cursor: pointer;
   }
 
 </style>
