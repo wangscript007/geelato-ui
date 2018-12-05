@@ -4,7 +4,7 @@
 -->
 <template>
     <!---->
-    <table class="ui small compact form gl-form gl-col-24">
+    <table class="ui small compact form gl-form gl-col-24" style="table-layout: fixed">
         <thead></thead>
         <tbody>
         <tr v-for="(row,index) in opts.ui.layout">

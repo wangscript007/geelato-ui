@@ -405,7 +405,7 @@ class Geelato {
        * 打开modal
        * @param srcVue 打开页面的源vue
        * @param vuePath src下的绝对路径，可以带.vue的后缀或不带，如'/@/views/xx.vue'、'/@/views/xx'、'/@/components/xx.vue'、'/@/components/xx'
-       * @param vueConfig modalOpts的值
+       * @param vueConfig modalOpts的值 e.g. {title: '', actions: [], padding: '1.5em'}
        * @param callbackSet 回调事件集合，如：{onSelected:function(){}}
        */
       openVueByPath: function (srcVue, vuePath, vueConfig, callbackSet) {
@@ -419,7 +419,7 @@ class Geelato {
       /**
        * @param srcVue
        * @param vueComponent
-       * @param vueConfig
+       * @param vueConfig e.g. {title: '', actions: [], padding: '1.5em'}
        * @param vueData
        */
       openVue: function (srcVue, vueComponent, vueConfig, callbackSet) {

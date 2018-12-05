@@ -33,7 +33,7 @@
         </sui>
       </template>
       <template v-else-if="card.type==='list'">
-        这是一个列表
+        <gl-table :opts="card.opts" :query="{em:'platform_user'}"></gl-table>
       </template>
       <template v-else-if="card.type==='header'">
         <h4 class="ui dividing header">{{card.name}}</h4>
@@ -46,8 +46,8 @@
   </div>
 </template>
 <script>
-  import Toolbar from '../gl-toolbar/Index.vue'
-  import HtTable from '../ht-table/Index.vue'
+  import Toolbar from '../gl-toolbar/Index'
+  import HtTable from '../ht-table/Index'
 
   export default {
     props: {

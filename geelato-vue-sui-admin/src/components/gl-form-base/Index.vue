@@ -5,7 +5,7 @@
 <template>
   <div class="ui small compact form">
     <table v-show="layout.type==='table'||!layout.type"
-           class="gl-form gl-col-24">
+           class="gl-form gl-col-24" style="table-layout: fixed">
       <thead>
       <tr>
         <th colspan="24">

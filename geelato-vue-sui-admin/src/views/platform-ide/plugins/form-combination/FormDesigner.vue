@@ -1,64 +1,170 @@
 <!--
   表单配置页面
 -->
-<template>
-  <div class="gl-designer-form" style="height: 565px">
+<template style="overflow-y: hidden">
+  <div class="gl-designer-form">
     <div class="split split-horizontal toolbar">
-      <h5 class="ui dividing header">
-        基础字段
-      </h5>
-      <div class="ui middle aligned selection list">
-        <draggable @start="drag=true" @end="drag=false"
-                   :options="{group:{name:'field', pull:'clone', put:false },sort:false}">
-          <div class="item toolbar-item" v-for="control in toolbar.controls" :data-control="control.value">
-            <i class="icon" :class="control.icon"></i>
-            <div class="content">
-              {{control.text}}
-            </div>
+      <sui type="tab" selector=".ui.menu>.item" ref="toolbarTabs">
+        <div class="ui pointing secondary menu" style="margin: 0.1rem 0px;">
+          <a class="item active" data-tab="tab-field-selector">字段</a>
+          <a class="item" data-tab="tab-layout-selector">布局</a>
+          <!--<a class="item right floated"-->
+          <!--style="padding-right: 0px;padding-left: 0px; background-color: rgb(238, 238, 238);"><i-->
+          <!--class="caret left icon"></i></a>-->
+        </div>
+        <div class="ui tab active" data-tab="tab-field-selector" :style="heightStyle" style="padding-top: 0.5em">
+          <div class="ui middle aligned selection list">
+            <draggable @start="drag=true" @end="drag=false"
+                       :options="{group:{name:'field', pull:'clone', put:false },sort:false}">
+              <div class="item toolbar-item" v-for="control in toolbar.controls" :data-control="control.value">
+                <i class="icon" :class="control.icon"></i>
+                <div class="content">
+                  {{control.text}}
+                </div>
+              </div>
+            </draggable>
           </div>
-        </draggable>
-      </div>
-      <h5 class="ui dividing header" style="clear: both">
-        页面布局
-      </h5>
-      <div class="ui middle aligned selection list">
-        <draggable v-model="toolbar.layout" element="tr" @start="drag=true" @end="drag=false"
-                   :options="{group:{name:'layout', pull:'clone', put:false },sort:false}">
-          <!--<div class="item" v-for="(item,index) in toolbar.layout">-->
-          <!--<i :class="item.icon"></i>-->
-          <!--<div class="content">{{item.text}}</div>-->
+          <!--<h5 class="ui dividing header">-->
+          <!--基础字段-->
+          <!--</h5>-->
+          <!--<div class="ui middle aligned selection list">-->
+          <!--<draggable @start="drag=true" @end="drag=false"-->
+          <!--:options="{group:{name:'field', pull:'clone', put:false },sort:false}">-->
+          <!--<div class="item toolbar-item" v-for="control in toolbar.controls" :data-control="control.value">-->
+          <!--<i class="icon" :class="control.icon"></i>-->
+          <!--<div class="content">-->
+          <!--{{control.text}}-->
           <!--</div>-->
-          <div class="item toolbar-item">
-            <i class="th icon"></i>
-            <div class="content">一行一列</div>
+          <!--</div>-->
+          <!--</draggable>-->
+          <!--</div>-->
+          <!--<h5 class="ui dividing header" style="clear: both">-->
+          <!--页面布局(24列布局)-->
+          <!--</h5>-->
+          <!--<div class="ui middle aligned selection list">-->
+          <!--<draggable v-model="toolbar.layout" element="table" @start="drag=true" @end="drag=false"-->
+          <!--:options="{group:{name:'layout', pull:'clone', put:false },sort:false}">-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="heading icon"></i>-->
+          <!--<div class="content">分组标题</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="th icon"></i>-->
+          <!--<div class="content">一行一列 4-8</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="th icon"></i>-->
+          <!--<div class="content">一行一列 4-20</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="th icon"></i>-->
+          <!--<div class="content">一行二列 4-8-4-8</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="th icon"></i>-->
+          <!--<div class="content">一行三列 3-5-3-5-3-5</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--<tr>-->
+          <!--<td colspan="24">-->
+          <!--<div class="item toolbar-item">-->
+          <!--<i class="th icon"></i>-->
+          <!--<div class="content">一行四列 2-4-2-4-2-4</div>-->
+          <!--</div>-->
+          <!--</td>-->
+          <!--</tr>-->
+          <!--</draggable>-->
+          <!--</div>-->
+        </div>
+        <div class="ui tab" data-tab="tab-layout-selector" :style="heightStyle" style="padding-top: 0.5em">
+          <div class="ui middle aligned selection list">
+            <draggable v-model="toolbar.layout" element="table" @start="drag=true" @end="drag=false"
+                       :options="{group:{name:'layout', pull:'clone', put:false },sort:false}">
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="heading icon"></i>
+                    <div class="content">分组标题</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="th icon"></i>
+                    <div class="content">一行一列 4-8</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="th icon"></i>
+                    <div class="content">一行一列 4-20</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="th icon"></i>
+                    <div class="content">一行二列 4-8-4-8</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="th icon"></i>
+                    <div class="content">一行三列 3-5-3-5-3-5</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="24">
+                  <div class="item toolbar-item">
+                    <i class="th icon"></i>
+                    <div class="content">一行四列 2-4-2-4-2-4</div>
+                  </div>
+                </td>
+              </tr>
+            </draggable>
           </div>
-          <div class="item toolbar-item">
-            <i class="th icon"></i>
-            <div class="content">一行二列</div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="th icon"></i>
-            <div class="content">一行三列</div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="th icon"></i>
-            <div class="content">一行四列</div>
-          </div>
-          <div class="item toolbar-item">
-            <i class="th icon"></i>
-            <div class="content">分组标题</div>
-          </div>
-        </draggable>
-      </div>
+        </div>
+      </sui>
     </div>
     <div class="split split-horizontal stage">
       <sui type="tab" selector=".ui.menu>.item">
-        <div class="ui pointing secondary menu">
+        <div class="ui pointing secondary menu" style="margin: 0.1rem 0px;">
+          <!--<a class="item" style="padding-right: 0px;padding-left: 0px; background-color: rgb(238, 238, 238);"><i-->
+          <!--class="caret right icon"></i></a>-->
           <a class="item active" data-tab="tab-designer"><i class="edit icon"></i>设计</a>
           <a class="item" data-tab="tab-preview"><i class="eye icon"></i>预览</a>
           <a class="item" data-tab="tab-json"><i class="code icon"></i>JSON配置</a>
+          <!--<a class="item float right"-->
+          <!--style="padding-right: 0px;padding-left: 0px; background-color: rgb(238, 238, 238);"><i-->
+          <!--class="caret left icon"></i></a>-->
         </div>
-        <div class="ui tab active" data-tab="tab-designer">
+        <div class="ui tab active" data-tab="tab-designer" :style="heightStyle">
           <div class="ui small compact form">
             <draggable v-model="layout.data" element="table" class="gl-form gl-col-24"
                        :options="{group:{name:'layout'},chosenClass:'active'}"
@@ -67,7 +173,9 @@
               <tr v-for="(row,rowIndex) in layout.data">
                 <!--行数据为分组标题-->
                 <template v-if="$_isGroupRow(row)">
-                  <td colspan="24" class="gl-form-group-title" :style="row[0].$style">
+                  <td colspan="24" class="gl-form-group-title" :style="row[0].$style"
+                      @mouseover.self="$_onRowOver($event,rowIndex)"
+                      @mouseout.self="$_onRowOut($event,rowIndex)">
                     <span class="gl-designer-form-row-remove" title="删除当前行"
                           @click="$_removeRow(rowIndex)">
                       <i class="bordered inverted red remove small icon"></i>
@@ -79,7 +187,9 @@
                 <template v-else>
                   <template v-for="(cell,cellIndex) in row"
                             v-if="property=$_getProperty(Object.keys(cell)[0])">
-                    <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]" class="title">
+                    <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]" class="title"
+                        @mouseover.self="$_onRowOver($event,rowIndex)"
+                        @mouseout.self="$_onRowOut($event,rowIndex)">
                     <span v-if="cellIndex===0" class="gl-designer-form-row-remove" title="删除当前行"
                           @click="$_removeRow(rowIndex)">
                       <i class="bordered inverted red remove small icon"></i>
@@ -140,25 +250,35 @@
               </tr>
             </draggable>
           </div>
+          <!--<div style="position: relative;z-index: 10000" :style="hoverToolbarStyle">-->
+          <!--<span v-if="hoverRowIndex>=0" title="删除当前行"-->
+          <!--@click="$_removeRow(hoverRowIndex)">-->
+          <!--<i class="bordered inverted red remove small icon"></i>-->
+          <!--</span>-->
+          <!--</div>-->
         </div>
-        <div class="ui tab" data-tab="tab-preview">
+        <div class="ui tab" data-tab="tab-preview" :style="heightStyle">
           <gl-form-base :opts="{ui:config}">
           </gl-form-base>
         </div>
-        <div class="ui tab" data-tab="tab-json">
-          <json-code-mirror ref="jsonCM" :text="configText"></json-code-mirror>
+        <div class="ui tab" data-tab="tab-json" style="overflow-y: hidden;padding-top: 0.3em">
+          <json-code-mirror ref="jsonCM" :text="configText"
+                            :editorMainHeight="heightStyle['max-height']"></json-code-mirror>
         </div>
       </sui>
     </div>
     <div class="split split-horizontal settings">
       <sui type="tab" selector=".ui.menu>.item" ref="settingsTabs">
-        <div class="ui pointing secondary menu">
+        <div class="ui pointing secondary menu" style="margin: 0.1rem 0px;">
+          <!--<a class="item"-->
+          <!--style="padding-right: 0px;padding-left: 0px; background-color: rgb(238, 238, 238);"><i-->
+          <!--class="caret right icon"></i></a>-->
           <a class="item active" data-tab="tab-form">表单</a>
           <a class="item" data-tab="tab-field">字段</a>
           <a class="item" data-tab="tab-cell">单元格</a>
           <a class="item" data-tab="tab-group">分组标题</a>
         </div>
-        <div class="ui tab active" data-tab="tab-form">
+        <div class="ui tab active" data-tab="tab-form" :style="heightStyle" style="padding-top: 0.5em">
           <h5 class="ui dividing header">
             <i class="sticky note outline icon"></i>
             基础
@@ -217,7 +337,7 @@
             </div>
           </div>
         </div>
-        <div class="ui tab" data-tab="tab-field">
+        <div class="ui tab" data-tab="tab-field" :style="heightStyle" style="padding-top: 0.5em">
           <template v-if="currentPropertyName">
             <h5 class="ui dividing header">
               <i class="affiliatetheme icon"></i>
@@ -283,12 +403,24 @@
                 <input type="checkbox"/>
               </div>
               <div class="field">
-                <label>数据源(ds)</label>
-                <input type="text" placeholder="" v-model="properties[currentPropertyName].ds">
-              </div>
-              <div class="field">
-                <label>数据(data)</label>
-                <textarea rows="4" v-model="properties[currentPropertyName].data"></textarea>
+                <!--<label><a @click="alert('a')">数据源(ds)</a>  <a>数据(data)</a></label>-->
+                <!--<div class="ui mini buttons">-->
+                <!--<button class="ui button active">数据源(ds)</button>-->
+                <!--<button class="ui button">数据(data)</button>-->
+                <!--</div>-->
+                <div class="ui text menu">
+                  <div class="header item">选择数据来源：</div>
+                  <a class="item" :class="{active:currentDataSrouce==='ds'}" @click="currentDataSrouce='ds'">
+                    数据源(ds)
+                  </a>
+                  <a class="item" :class="{active:currentDataSrouce==='data'}" @click="currentDataSrouce='data'">
+                    数据(data)
+                  </a>
+                </div>
+                <input v-show="currentDataSrouce==='ds'" type="text" placeholder=""
+                       v-model="properties[currentPropertyName].ds">
+                <textarea v-show="currentDataSrouce==='data'" rows="4"
+                          v-model="properties[currentPropertyName].data"></textarea>
               </div>
             </div>
             <h5 class="ui dividing header">
@@ -327,9 +459,9 @@
             <gl-message class="warning segment" :closable="false">请先点击选取字段</gl-message>
           </template>
         </div>
-        <div class="ui tab" data-tab="tab-cell">
+        <div class="ui tab" data-tab="tab-cell" :style="heightStyle" style="padding-top: 0.5em">
         </div>
-        <div class="ui tab" data-tab="tab-group">
+        <div class="ui tab" data-tab="tab-group" :style="heightStyle" style="padding-top: 0.5em">
           <template v-if="currentGroup">
             <!--<h5 class="ui dividing header">-->
             <!--<i class="affiliatetheme icon"></i>-->
@@ -343,6 +475,12 @@
               <div class="field">
                 <label>样式</label>
                 <textarea v-model="layout.data[currentGroup.rowIndex][0].$style"></textarea>
+                <div class="ui list">
+                  <div class="item" v-for="item in template.style.groupTitle">
+                    <a class="header" @click="layout.data[currentGroup.rowIndex][0].$style+=(';\r\n'+item.style)">{{item.style}}</a>
+                    &nbsp;&nbsp;&nbsp;{{item.description}}
+                  </div>
+                </div>
               </div>
             </div>
           </template>
@@ -359,6 +497,7 @@
   import Split from 'split.js'
   import JsonCodeMirror from '../../../../components/gl-codemirror/Index'
   import formData from '../../form/formData.js'
+  import styleTemplate from './style.js'
 
   export default {
     props: {
@@ -370,18 +509,18 @@
     data() {
       return {
         // #以下表单默认示例配置
-        defaultEntity: 'platformDemo',
-        properties: formData[0].data.properties,
-        layout: formData[0].data.layout,
-        ds: formData[0].data.ds,
-        vars: formData[0].data.vars,
-        // #以下编辑器配置
+        defaultEntity: this.opts.form.defaultEntity,
+        properties: this.opts.form.properties,
+        layout: this.opts.form.layout,
+        ds: this.opts.form.ds,
+        vars: this.opts.form.vars,
+        // **************以下编辑器配置**************
         template: {
           property: {
             control: 'input',
             title: '',
             // 是否禁用
-            disabled: true,
+            disabled: false,
             // 是否只读
             readonly: false,
             // 是否隐藏，hidden隐藏与否在layout中控制，故没有hidden这个配置
@@ -402,15 +541,17 @@
             // 字段描述
             description: ''
           },
-          options: []
+          options: [],
+          style: styleTemplate
         },
         toolbar: {
           layout: [
+            [{'': [24], $title: '分组标题', $style: "background-color:#FFF"}],
+            [{'': [4, 8]}],
             [{'': [4, 20]}],
             [{'': [4, 8]}, {'': [4, 8]}],
             [{'': [3, 5]}, {'': [3, 5]}, {'': [3, 5]}],
-            [{'': [2, 4]}, {'': [2, 4]}, {'': [2, 4]}, {'': [2, 4]}],
-            [{'': [24], $title: '分组标题', $style: "background-color:#FFF"}]
+            [{'': [2, 4]}, {'': [2, 4]}, {'': [2, 4]}, {'': [2, 4]}]
           ],
           controls: [
             {value: 'input', text: '单行文本', icon: 'keyboard outline'},
@@ -423,11 +564,23 @@
             {value: 'rating', text: '评分', icon: 'star outline', opts: {}}
           ]
         },
-        // #以下编辑状态
+        heightStyle: {
+          'max-height': this.$parent.isModal ? 'calc(100vh - 15em)' : 'calc(100vh - 7em)',
+          'min-height': this.$parent.isModal ? 'calc(100vh - 20em)' : 'calc(100vh - 7em)',
+          'overflow-y': 'auto'
+        },
+        // **************以下编辑状态**************
         // 当前编辑的字段属性
         currentPropertyName: '',
         // 当前编辑的组信息
-        currentGroup: ''
+        currentGroup: '',
+        hoverRowIndex: -1,
+        hoverToolbarStyle: {
+          top: '0px',
+          left: '0px'
+        },
+        // 字段当前的数类型 ds or data
+        currentDataSrouce: 'ds'
       }
     },
     computed: {
@@ -447,6 +600,7 @@
     created: function () {
     },
     mounted: function () {
+      console.log('opts>', this.opts)
       this.spliter = Split(['.toolbar', '.stage', '.settings'], {
         sizes: [18.75, 56.25, 25],
         gutterSize: 4
@@ -506,11 +660,18 @@
           this.currentGroup = ''
         }
         console.log('$_addRow>', evt, this.layout.data[evt.newIndex], evt.newIndex)
-        this.$forceUpdate()
       },
       $_removeRow(rowIndex) {
         this.layout.data.splice(rowIndex, 1)
         console.log('$_removeRow>', this.layout.data)
+      },
+      $_onRowOver(evt, rowIndex) {
+        this.hoverRowIndex = rowIndex
+        console.log('$_onRowOver', evt, rowIndex)
+      },
+      $_onRowOut(evt, rowIndex) {
+        this.hoverRowIndex = -1
+        console.log('$_onRowOut', evt, rowIndex)
       },
       /**
        * 是否分组标题行
@@ -553,9 +714,7 @@
         }
         evt.item.parentElement.removeChild(evt.item)
         console.log('addField', evt, this.layout.data)
-        // evt.item.innerText
         this.$_selectSettingTab('tab-field')
-        this.$forceUpdate()
       },
       $_onChooseField(evt, rowIndex, cellIndex, propertyName) {
         // propertyName 对于新添加的字段，propertyName对应的field为空，即这里propertyName为空
@@ -616,7 +775,20 @@
   }
 </script>
 <style scoped>
-  .gl-designer-form .toolbar .item {
+
+  /*.gl-designer-form .toolbar, .gl-designer-form .stage, .gl-designer-form .settings {*/
+    /*border: solid 1px rgba(0, 0, 0, .25);*/
+  /*}*/
+
+  .gl-designer-form .toolbar {
+    min-width: 16em;
+  }
+
+  .gl-designer-form .ui.tab {
+    overflow-x: hidden;
+  }
+
+  .gl-designer-form .toolbar .ui.tab .item {
     margin: 0.125em 0.125em;
     float: left;
     width: 7.5em;
@@ -625,6 +797,10 @@
     border: 1px solid #f4f6fc;
     color: rgba(0, 0, 0, 1);
     border-radius: 0
+  }
+
+  .gl-designer-form .toolbar .ui.tab table tr td .item {
+    width: 15em !important;
   }
 
   .gl-designer-form .toolbar-item:hover {
@@ -643,6 +819,15 @@
   .gl-designer-form .toolbar-item .content {
     display: inline-block;
     margin-left: 0.125em;
+    line-height: 2em;
+  }
+
+  .gl-designer-form .stage table {
+    table-layout: fixed;
+  }
+
+  .gl-designer-form .stage table > tr.sortable-chosen > td {
+    background-color: #fffde6;
     line-height: 2em;
   }
 
