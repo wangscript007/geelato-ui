@@ -1,6 +1,4 @@
 import Vue from "vue";
-// import router from './router'
-// import store from './store'
 import utils from "./assets/script/utils";
 import PageManager from './assets/script/PageManager.js'
 import SuiVue from 'semantic-ui-vue';
@@ -14,9 +12,12 @@ import GlLayoutPage from './components/gl-layout-page/Index.vue'
 import GlMessage from './components/gl-message/Index.vue'
 import GlTable from './components/gl-table/Index.vue'
 import GLDropdown from './components/gl-dropdown/Index.vue'
+import GLDate from './components/gl-date/Index.vue'
 
 /**
  *  geelato框架的配置、及工具包
+ *  在各项目中不需要修改该文件
+ *  可通过@see main.js设置相应的参数值
  */
 const BASE_DIR = './views'
 const pageManager = new PageManager()
@@ -193,21 +194,21 @@ class Geelato {
        * @param keyValues Object类型
        * @returns {*}
        */
-      save: function (entityName, keyValues, successMsg) {
-        return instance.data.update(instance.url.apiMetaSave, entityName, keyValues, successMsg || '保存成功')
+      save: function (entityName, keyValues, biz, successMsg, errorMsg) {
+        return instance.data.update(instance.url.apiMetaSave, entityName, keyValues, biz, successMsg || '保存成功', errorMsg || '保存失败')
       },
-      delete: function (entityName, keyValues, successMsg) {
-        return instance.data.update(instance.url.apiMetaDelete, entityName, keyValues, successMsg || '删除成功')
+      delete: function (entityName, keyValues, biz, successMsg, errorMsg) {
+        return instance.data.update(instance.url.apiMetaDelete, entityName, keyValues, biz, successMsg || '删除成功', errorMsg || '删除失败')
       },
-      update: function (url, entityName, keyValues, successMsg) {
+      update: function (url, entityName, keyValues, biz, successMsg, errorMsg) {
+        let bizCode = biz || '0'
         let data = {
-          '@biz': 'x'
+          '@biz': bizCode
         }
-        let biz = '0'
         data[entityName] = keyValues || {}
         // $.extend(data[entityName], keyValues)
         var df = $.Deferred()
-        $.ajax(url + '/' + biz, {
+        $.ajax(url + '/' + bizCode, {
           type: 'post',
           dataType: 'json',
           contentType: 'application/json',
@@ -227,9 +228,10 @@ class Geelato {
               errorThrown: errorThrown,
               options: options
             })
+            instance.ui.showMsg(errorMsg, 'error')
           },
           success: function (data) {
-            console.debug('request end>>', data)
+            // console.debug('request end>>', data)
             df.resolve(data)
             instance.ui.showMsg(successMsg, 'success')
           }
@@ -309,7 +311,7 @@ class Geelato {
             })
           },
           success: function (data) {
-            // console.log('request end>>', data)
+            console.log('request end>>', data)
             df.resolve(data)
             // if ($.isFunction(callback))callback(data)
           }
@@ -760,4 +762,5 @@ Vue.component('gl-form-base', GlFormBase)
 Vue.component('gl-message', GlMessage)
 Vue.component('gl-table', GlTable)
 Vue.component('gl-dropdown', GLDropdown)
+Vue.component('gl-date', GLDate)
 export default instance

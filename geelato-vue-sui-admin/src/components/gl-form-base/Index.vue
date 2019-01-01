@@ -38,6 +38,18 @@
                        v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"
                        :disabled="property.disabled===true">
               </template>
+              <template v-if="property.control==='date'">
+                <gl-date type="date" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
+                         v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"
+                         :disabled="property.disabled===true">>
+                </gl-date>
+              </template>
+              <template v-if="property.control==='time'">
+                <gl-date type="time" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
+                         v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"
+                         :disabled="property.disabled===true">>
+                </gl-date>
+              </template>
               <template v-else-if="property.control==='textarea'">
                         <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
                                   v-model="form[Object.keys(cell)[0]]" :readonly="property.readonly===true"

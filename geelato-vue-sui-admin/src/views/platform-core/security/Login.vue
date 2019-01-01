@@ -57,8 +57,9 @@
     },
     computed: {
       color: function () {
-        let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
-        return color && color.primary ? color.primary : this.$gl.ui.color.primary
+        // let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
+        // return color && color.primary ? color.primary : this.$gl.ui.color.primary
+        return 'blue'
       }
     },
     created() {

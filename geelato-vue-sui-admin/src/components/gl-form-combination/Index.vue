@@ -36,7 +36,8 @@
         <gl-table :opts="card.opts" :query="{em:'platform_user'}"></gl-table>
       </template>
       <template v-else-if="card.type==='header'">
-        <h4 class="ui dividing header">{{card.name}}</h4>
+        <h4 class="ui dividing header" v-html="card.name">
+        </h4>
       </template>
       <template v-else-if="card.type==='toolbar'">
         <toolbar :actions="card.opts.actions"></toolbar>
@@ -80,6 +81,7 @@
           }
         }
         this.lastFormNum = num
+        return num
       }
     },
     watch: {},

@@ -5,7 +5,8 @@ export default {
     {
       title: '开发集成',
       code: 'ide',
-      index: '/#/m/platform-ide/form/FormDesignerDemo',
+      // index: '/#/m/platform-ide/form/FormDesignerDemo',
+      index: '/#/m/platform-ide/designer/Index',
       resize: 'max',
       html: '',
       menu: [

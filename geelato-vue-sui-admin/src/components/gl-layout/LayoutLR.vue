@@ -63,7 +63,7 @@
             })
             thisVue.$_initUiComponent()
             $(this.$el).find(this.$_selector().sidebarToggle).click(function () {
-                thisVue.toggle()
+                thisVue.$_toggle()
             })
         },
         methods: {

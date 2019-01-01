@@ -1,5 +1,8 @@
+import dataTemplate from './dataTemplate'
+
 /**
- *  插件定义
+ *  @name 业务服务插件
+ *  @description 业务服务插件定义
  */
 export const Config = {
   file: {
@@ -9,12 +12,15 @@ export const Config = {
   },
   toolbar: [],
   stagePanels: [
-    {name: 'mvel', title: 'mvel', path: 'common/StageMvel.vue', opts: {}},
-    {name: 'sql', title: 'sql', path: 'common/StageSql.vue', opts: {}},
-    {name: 'json', title: 'json', path: 'common/StageJson.vue', opts: {}}
+    {
+      name: 'ui',
+      title: 'ui',
+      path: 'common/StageUi.vue',
+      opts: dataTemplate.simple.opts
+    }
+    // {name: 'mvel', title: 'sql', path: 'common/StageMvel.vue', opts: {}},
+    // {name: 'sql', title: 'sql', path: 'common/StageSql.vue', opts: {}}
   ],
   settingPanels: [
-    {name: 'properties', title: '基本信息', path: 'common/Settings.vue'},
-    {name: 'ui-table', title: '表格组件', path: 'table/Settings.vue'}
-  ]
+    {name: 'properties', title: '基本信息', path: 'common/Settings.vue'}]
 }

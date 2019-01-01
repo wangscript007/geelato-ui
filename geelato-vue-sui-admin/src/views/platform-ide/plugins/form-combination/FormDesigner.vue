@@ -214,6 +214,19 @@
                           <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>
                           <!--:readonly="property.readonly===true" :disabled="property.disabled===true"-->
                         </template>
+                        <template v-else-if="property.control==='date'">
+                          <div class="ui right icon input">
+                            <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
+                                   readonly>
+                            <i class="calendar alternate outline icon"></i>
+                          </div>
+                        </template>
+                        <template v-else-if="property.control==='time'">
+                          <div class="ui right icon input">
+                            <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
+                                   readonly>
+                            <i class="clock alternate outline icon"></i>
+                          </div>                        </template>
                         <template v-else-if="property.control==='textarea'">
                           <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
                                     readonly></textarea>
@@ -236,6 +249,9 @@
                           <input type="password" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
                                  readonly>
                         </template>
+                        <!--<template v-else>-->
+                        <!--<input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>-->
+                        <!--</template>-->
                         <span class="gl-designer-form-field-remove" title="清空字段"
                               @click="$_removeField($event,rowIndex,cellIndex,Object.keys(cell)[0])">
                       <i class="bordered inverted red trash small icon"></i>
@@ -777,7 +793,7 @@
 <style scoped>
 
   /*.gl-designer-form .toolbar, .gl-designer-form .stage, .gl-designer-form .settings {*/
-    /*border: solid 1px rgba(0, 0, 0, .25);*/
+  /*border: solid 1px rgba(0, 0, 0, .25);*/
   /*}*/
 
   .gl-designer-form .toolbar {

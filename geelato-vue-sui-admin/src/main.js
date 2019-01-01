@@ -26,8 +26,8 @@ let isRunInServer = window.location.href.match(/[\.]*geelato\.org/) != null
 if (isRunInServer) {
     geelato.setServerUrlRoot('https://api.geelato.org:8080')
 } else {
-    // geelato.setServerUrlRoot('http://localhost:8080')
-    geelato.setServerUrlRoot('https://api.geelato.org:8080')
+    geelato.setServerUrlRoot('http://localhost:8080')
+    // geelato.setServerUrlRoot('https://api.geelato.org:8080')
 }
 
 geelato.setColors({primary: 'blue', secondary: 'teal', positive: '', negative: 'red'})
