@@ -389,7 +389,7 @@
             $.extend(true, kvs, rowDataItem)
             // 对modal中的变量进行变换，转换之后才可传参给模态窗口
             let modal = utils.invoke(action.modal, kvs)
-            console.log('resolved modal>', modal)
+            console.log('click resolved modal>', modal)
             if (modal.type === 'href' || modal.type === 'page') {
               thisVue.$gl.ui.openVueByPath(this, modal.value, modal, {
                 refreshTable: function () {

@@ -105,7 +105,7 @@ router.beforeEach((to, from, next) => {
   // if (to.matched.some(r => r.meta.requireAuth)) {
   console.log('to.matched', to)
   if (to.matched.some(r => r.meta.requireAuth !== false)) {
-    console.log('geelato.security.profile().user>', geelato.security.profile().user)
+    console.log('geelato.security.profile()', geelato.security.profile())
     if (geelato.security.profile().user) {
       next()
     } else {

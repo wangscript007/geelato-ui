@@ -89,7 +89,7 @@ utils.uuid = function (len, radix) {
 utils.invoke = function (obj, keyValues) {
   let keyword = '@.'
   let jsFlag = 'js:'
-  let objCopy
+  // let objCopy
   if (typeof obj === 'string') {
     let expression = obj
     if (expression.startsWith(jsFlag)) {
@@ -102,8 +102,14 @@ utils.invoke = function (obj, keyValues) {
         return expression
       }
     }
+  } else if (Array.isArray(obj)) {
+    let arrayCopy = []
+    for (let index in obj) {
+      arrayCopy[index] = utils.invoke(obj[index], keyValues)
+    }
+    return arrayCopy
   } else if (typeof obj === 'object') {
-    objCopy = {}
+    let objCopy = {}
     $.extend(true, objCopy, obj)
     for (let i in objCopy) {
       // console.log('解析替换' + i, objCopy[i], keyValues, utils.invoke(objCopy[i], keyValues))

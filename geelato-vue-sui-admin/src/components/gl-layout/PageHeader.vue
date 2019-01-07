@@ -74,7 +74,7 @@
         }">
         <a class="item modules-selector"><i class="ellipsis vertical icon"></i></a>
         <div class="ui flowing popup top left transition hidden">
-          <div :class="moduleGroup.class"
+          <div :class="moduleGroup.clazz"
                :style="'max-width:'+moduleGroup.maxWidth">
             <div class="column" v-for="(item,key) in modules" :key="key" style="padding:0.125em">
               <div class="ui button" @click="$_changeModule(item)" style="width: 9em">
@@ -114,13 +114,13 @@
       // 依据模块的数量，展示不同的下拉分组
       moduleGroup: function () {
         if (!this.modules) {
-          return {class: 'ui column divided left aligned grid', maxWidth: '0px'}
+          return {clazz: 'ui column divided left aligned grid', maxWidth: '0px'}
         } else if (this.modules.length <= 5) {
-          return {class: 'ui one column divided left aligned grid', maxWidth: '133px'}
+          return {clazz: 'ui one column divided left aligned grid', maxWidth: '133px'}
         } else if (this.modules.length <= 8) {
-          return {class: 'ui two column divided left aligned grid', maxWidth: '266px'}
+          return {clazz: 'ui two column divided left aligned grid', maxWidth: '266px'}
         } else {
-          return {class: 'ui three column divided left aligned grid', maxWidth: '390px'}
+          return {clazz: 'ui three column divided left aligned grid', maxWidth: '390px'}
         }
       }
     },

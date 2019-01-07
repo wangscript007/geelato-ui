@@ -114,7 +114,13 @@
 
   export default {
     props: {
+      // 表单渲染配置信息
       opts: {
+        type: Object,
+        required: false
+      },
+      // 表单初始化值
+      query: {
         type: Object,
         required: false
       }
@@ -123,11 +129,11 @@
       return {
         init: false,
         form: {},
-        defaultEntity: this.opts.ui.defaultEntity,
-        layout: this.opts.ui.layout,
-        properties: this.opts.ui.properties,
-        ds: this.opts.ui.ds,
-        vars: this.opts.ui.vars,
+        defaultEntity: this.opts.ui ? this.opts.ui.defaultEntity : this.opts.defaultEntity,
+        layout: this.opts.ui ? this.opts.ui.layout : this.opts.layout,
+        properties: this.opts.ui ? this.opts.ui.properties : this.opts.properties,
+        ds: this.opts.ui ? this.opts.ui.ds : this.opts.ds,
+        vars: this.opts.ui ? this.opts.ui.vars : this.opts.vars,
         // 数据源被依赖，格式为：被依赖的属性:[依赖的属性,依赖的属性...]
         dsBeDependentOn: {}
       }
@@ -136,17 +142,18 @@
 
     },
     mounted: function () {
-      console.log('form mounted,opts>', this.opts)
+      console.log('gl-form-base query>', this.query)
       this.$_reset(this.opts)
     },
     methods: {
       $_reset(opts) {
         if (opts) {
-          this.properties = opts.ui.properties
-          this.layout = opts.ui.layout
-          this.defaultEntity = opts.ui.defaultEntity
-          this.ds = opts.ui.ds
-          this.vars = opts.ui.vars
+          let options = opts.ui ? opts : {ui: opts}
+          this.properties = options.ui.properties
+          this.layout = options.ui.layout
+          this.defaultEntity = options.ui.defaultEntity
+          this.ds = options.ui.ds
+          this.vars = options.ui.vars
           this.dsBeDependentOn = {}
           this.form = {}
           this.init = false
@@ -171,8 +178,13 @@
           property.entity = property.entity || this.defaultEntity
           property.field = property.field || key
           // !!!需采用vm.$set的方式来设置值，确保值变化可被检测 @see https://cn.vuejs.org/v2/guide/reactivity.html#检测变化的注意事项
-          this.$set(this.form, key, property.value === undefined ? '' : property.value)
-          this.form[key] = property.value === undefined ? '' : property.value
+          // 若query已存在属性值，则以query的值为准
+          if (thisVue.query && thisVue.query[key]) {
+            this.$set(this.form, key, thisVue.query[key])
+          } else {
+            this.$set(this.form, key, property.value === undefined ? '' : property.value)
+          }
+          // this.form[key] = property.value === undefined ? '' : property.value
           // 依据字段类型，自动构建字段验证规则信息，基于semantic ui form validate
           if (property.control === 'email' && (!property.rules)) {
             property.rules = []
@@ -198,6 +210,17 @@
       },
       // 加载远程的初始化数据，如字典信息
       $_loadInitData() {
+        // 加载主实体数据
+        let theVue = this
+        console.log('gl-form-base Index $_loadInitData query', theVue.query)
+        if (this.form.id) {
+          this.$gl.data.query(theVue.defaultEntity, {id: this.form.id}, this.form, true).then(function (res) {
+            console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res, res.data && res.data.length > 0 ? res.data[0] : {})
+            // theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
+            // theVue.meta = res.meta
+          })
+        }
+        // 加载属性数据，如下拉列表、字典信息等
         for (let propertyName in this.properties) {
           let property = this.properties[propertyName]
           // && this.ds[property.ds].lazy !== true
@@ -238,6 +261,8 @@
       $_getGql() {
         // 找出顶层的实体信息
         let thisVue = this
+        let theForm = thisVue.$_getValues()
+        console.log('theForm>', theForm)
         let gql = {}
         genGql(gql, this.defaultEntity, this.properties)
 
@@ -250,10 +275,17 @@
           let subEntityNames = []
           for (let propertyName in properties) {
             let property = properties[propertyName]
-            console.log(property.entity, entityName, property)
+            let field = theForm[propertyName]
+            console.log(property.entity, entityName, property, field)
             if (property.entity === entityName) {
               // 该实体的直属属性，直接添加
-              parent[entityName][propertyName] = typeof property.value !== 'string' ? property.value : property.value.replace(REGEXP_CTX, CONST_GQL_PARENT)
+              // 获取表单中填写的值
+              if (typeof field === 'boolean') {
+                parent[entityName][propertyName] = field ? 1 : 0
+              } else {
+                parent[entityName][propertyName] = typeof field !== 'string' ? field : field.replace(REGEXP_CTX, CONST_GQL_PARENT)
+              }
+              // parent[entityName][propertyName] = typeof property.value !== 'string' ? property.value : property.value.replace(REGEXP_CTX, CONST_GQL_PARENT)
               confirmedProperties[propertyName] = true
             } else {
               toAnalyseProperties[propertyName] = property
@@ -337,7 +369,10 @@
         return gql
       },
       $_validate() {
-        $(this.$el).form('validate form')
+        this.$_initUI()
+        let result = $(this.$el).form('validate form')
+        console.log('validate result >', result)
+        return result
       },
       $_clearValidateMessage() {
         $(this.$el).find('.ui.error.message.segment').html('')

@@ -35,7 +35,7 @@
             </div>
             <div v-html="html"></div>
             <div v-for="(subMenu,menuItemIndex) in menu" class="item" :key="menuItemIndex" v-if="size==='max'">
-                <i class="icon gl-menu-icon" :class="subMenu.class"></i>
+                <i class="icon gl-menu-icon" :class="subMenu.clazz"></i>
                 <a class="title active">
                     <i class="dropdown icon"></i>
                     {{subMenu.title}}

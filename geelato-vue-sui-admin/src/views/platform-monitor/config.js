@@ -10,7 +10,7 @@ export default {
             menu: [
                 {
                     title: '平台监控',
-                    class: 'tv',
+                    clazz: 'tv',
                     items: [
                         {title: '访问日志', href: '/#/m/platform-monitor/log/Visit'},
                         {title: '接口日志', href: '/#/m/platform-monitor/log/Interface'},

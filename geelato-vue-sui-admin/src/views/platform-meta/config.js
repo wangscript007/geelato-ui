@@ -10,7 +10,7 @@ export default {
             menu: [
                 {
                     title: '元数据管理',
-                    class: 'database',
+                    clazz: 'database',
                     items: [
                         {title: '元数据查看', href: '/#/m/platform-meta/selector/Index'}
                     ]

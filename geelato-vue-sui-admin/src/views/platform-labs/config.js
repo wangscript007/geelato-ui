@@ -11,7 +11,7 @@ export default {
             menu: [
                 {
                     title: '组件集合',
-                    class: '',
+                    clazz: '',
                     items: [
                         {title: 'SUI封装', href: '/#/m/platform-labs/ui/Index'},
                         {title: 'bugs', href: '/#/m/platform-labs/bugs/dropdown/DropdownInSlot'},

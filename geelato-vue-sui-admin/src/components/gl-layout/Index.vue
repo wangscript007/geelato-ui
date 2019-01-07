@@ -38,7 +38,7 @@
       // let mode = layout && layout.mode !== undefined ? layout.mode : this.$gl.layout.mode
       // let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
       // this.$gl.ui.color.primary = color && color.primary ? color.primary : this.$gl.ui.color.primary
-      console.log('this.$_getConfigItem(\'layout_color\').value >', this.$_getConfigItem('layout_color').value)
+      console.log('this.profile >', this.profile)
       this.$gl.ui.color.primary = this.$_getConfigItem('layout_color').value || this.$gl.ui.color.primary
       mode = this.$_getConfigItem('layout_mode').value || this.$gl.layout.mode || 0
       this.$_changeLayoutMode(mode)
@@ -47,7 +47,6 @@
     },
     methods: {
       $_changeLayoutMode(mode) {
-//        console.log('       mode>', mode)
         let thisVue = this
         if (mode == 1) {
           thisVue.currentView = resolve => require(['./LayoutLR.vue'], resolve)
@@ -58,7 +57,6 @@
           thisVue.currentView = resolve => require(['./LayoutHMF.vue'], resolve)
         }
         this.$gl.layout.mode = mode
-        // utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_LAYOUT, this.$gl.layout)
       },
       $_changeLayoutModeAndReload(mode) {
         this.$_changeLayoutMode(mode)
@@ -69,10 +67,8 @@
           id: item.id
         }, 'platform_user_config', '保存成功', '保存失败')
         item.value = mode
-        console.log('this.profile.userConfig>', this.profile.userConfig)
         this.$gl.security.profile(this.profile)
         window.location.reload()
-        // this.$router.push('/')
       },
       $_changeColorAndReload(color, oldValue) {
         let item = this.$_getConfigItem('layout_color')
@@ -87,8 +83,8 @@
         // this.$router.push('/')
       },
       $_getConfigItem(code) {
-        for (let index in this.profile.userConfig) {
-          let item = this.profile.userConfig[index]
+        for (let index in this.profile.userConfig.value) {
+          let item = this.profile.userConfig.value[index]
           if (item.code == code) {
             return item
           }

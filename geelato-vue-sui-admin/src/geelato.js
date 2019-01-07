@@ -8,6 +8,7 @@ import GlModal from './components/gl-modal/Index.vue'
 import GlGroup from './components/gl-group/Index.vue'
 import GlFormSimple from './components/gl-form-simple/Index.vue'
 import GlFormBase from './components/gl-form-base/Index.vue'
+import GlFormCombination from './components/gl-form-combination/Index.vue'
 import GlLayoutPage from './components/gl-layout-page/Index.vue'
 import GlMessage from './components/gl-message/Index.vue'
 import GlTable from './components/gl-table/Index.vue'
@@ -142,7 +143,7 @@ class Geelato {
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             // 通常 textStatus 和 errorThrown 之中
             // 只有一个会包含信息
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -173,7 +174,7 @@ class Geelato {
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             // 通常 textStatus 和 errorThrown 之中
             // 只有一个会包含信息
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -197,6 +198,45 @@ class Geelato {
       save: function (entityName, keyValues, biz, successMsg, errorMsg) {
         return instance.data.update(instance.url.apiMetaSave, entityName, keyValues, biz, successMsg || '保存成功', errorMsg || '保存失败')
       },
+      /**
+       * 基于gql对象进行查询
+       * @param gqlObject or gqlArray
+       * @param biz 业务代码
+       * @returns {*}
+       */
+      saveByGql: function (biz, gql, successMsg, errorMsg) {
+        let df = $.Deferred()
+        let url = Array.isArray(gql) ? instance.url.apiMetaSave : instance.url.apiMetaSave
+        let bizCode = biz || '0'
+        $.ajax(url + '/' + bizCode, {
+          type: 'post',
+          dataType: 'json',
+          contentType: 'application/json',
+          processData: false,
+          xhrFields: {
+            withCredentials: true
+          },
+          crossDomain: true,
+          data: JSON.stringify(gql),
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+            // 通常 textStatus 和 errorThrown 之中
+            // 只有一个会包含信息
+            let options = this // 调用本次AJAX请求时传递的options参数
+            console.error({
+              XMLHttpRequest: XMLHttpRequest,
+              textStatus: textStatus,
+              errorThrown: errorThrown,
+              options: options
+            })
+            instance.ui.showMsg(errorMsg, 'error')
+          },
+          success: function (data) {
+            df.resolve(data)
+            instance.ui.showMsg(successMsg, 'success')
+          }
+        })
+        return df.promise()
+      },
       delete: function (entityName, keyValues, biz, successMsg, errorMsg) {
         return instance.data.update(instance.url.apiMetaDelete, entityName, keyValues, biz, successMsg || '删除成功', errorMsg || '删除失败')
       },
@@ -207,7 +247,7 @@ class Geelato {
         }
         data[entityName] = keyValues || {}
         // $.extend(data[entityName], keyValues)
-        var df = $.Deferred()
+        let df = $.Deferred()
         $.ajax(url + '/' + bizCode, {
           type: 'post',
           dataType: 'json',
@@ -221,7 +261,7 @@ class Geelato {
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             // 通常 textStatus 和 errorThrown 之中
             // 只有一个会包含信息
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -264,7 +304,7 @@ class Geelato {
        */
       queryBatch: function (queryParamArray, withMeta) {
         let gqlAry = []
-        for (var i in queryParamArray) {
+        for (let i in queryParamArray) {
           let queryParam = queryParamArray[i]
           let gql = {}
           gql[queryParam.entityName] = {
@@ -283,7 +323,7 @@ class Geelato {
        */
       queryByGql: function (gql, withMeta) {
         let df = $.Deferred()
-        var url = Array.isArray(gql) ? instance.url.apiMetaMultiList : instance.url.apiMetaList
+        let url = Array.isArray(gql) ? instance.url.apiMetaMultiList : instance.url.apiMetaList
         if (withMeta === true) {
           url = url + '?withMeta=true'
         } else {
@@ -302,7 +342,7 @@ class Geelato {
           error: function (XMLHttpRequest, textStatus, errorThrown) {
             // 通常 textStatus 和 errorThrown 之中
             // 只有一个会包含信息
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -338,7 +378,7 @@ class Geelato {
           crossDomain: true,
           data: '',
           error: function (XMLHttpRequest, textStatus, errorThrown) {
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -354,7 +394,7 @@ class Geelato {
       },
       queryEntityNames: function () {
         let df = $.Deferred()
-        var url = instance.url.apiMetaEntityNames + '/'
+        let url = instance.url.apiMetaEntityNames + '/'
         $.ajax(url, {
           type: 'post',
           dataType: 'json',
@@ -366,7 +406,7 @@ class Geelato {
           crossDomain: true,
           data: '',
           error: function (XMLHttpRequest, textStatus, errorThrown) {
-            var options = this // 调用本次AJAX请求时传递的options参数
+            let options = this // 调用本次AJAX请求时传递的options参数
             console.error({
               XMLHttpRequest: XMLHttpRequest,
               textStatus: textStatus,
@@ -430,8 +470,16 @@ class Geelato {
         console.log('openVue > callbackSet >', callbackSet)
         // $root对应App.vue的上线，srcVue.$root.$children[0]才对应APP.vue
         let modalView = srcVue.$root.$children[0].$refs.appRootModalView
+        // let newModalView = {
+        //   props: {modalOpts: vueConfig},
+        //   extends: modalView
+        // }
+        console.log('openVue > modalView >', modalView)
         Vue.set(modalView, 'modalBody', vueComponent)
         Vue.set(modalView, 'modalOpts', vueConfig)
+        // 不采用Vue.set做转换
+        // modalView.$props.modalOpts = vueConfig
+        // modalView.modalOpts = vueConfig
         // Vue.set(modalView, 'modalOpts', {
         //   title: '',
         //   actions: [],
@@ -522,7 +570,7 @@ class Geelato {
             console.debug('request end>>', data)
             instance.security.profile({})
             instance.$router.push('/login')
-            // var reloadURL = 'index.html' + window.location.search
+            // let reloadURL = 'index.html' + window.location.search
             // window.location.replace(reloadURL, true)
           }
         })
@@ -759,6 +807,7 @@ Vue.component('gl-group', GlGroup)
 Vue.component('gl-layout-page', GlLayoutPage)
 Vue.component('gl-form-simple', GlFormSimple)
 Vue.component('gl-form-base', GlFormBase)
+Vue.component('gl-form-combination', GlFormCombination)
 Vue.component('gl-message', GlMessage)
 Vue.component('gl-table', GlTable)
 Vue.component('gl-dropdown', GLDropdown)

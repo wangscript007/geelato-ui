@@ -12,7 +12,7 @@ export default {
             menu: [
                 {
                     title: '工作台',
-                    class: 'fa fa-connectdevelop',
+                    clazz: 'fa fa-connectdevelop',
                     items: [
                         {title: '我的工作台', href: '/#/m/platform-core/workbench/index'}
                     ],
@@ -20,7 +20,7 @@ export default {
                 },
                 {
                     title: '会议及任务',
-                    class: 'fa fa-connectdevelop',
+                    clazz: 'fa fa-connectdevelop',
                     items: [
                         {title: '我的会议管理', href: '/#/m/meeting/info/my-meeting'},
                         {title: '会议综合查询', href: '/#/m/meeting/info/query'},
@@ -31,7 +31,7 @@ export default {
                 },
                 {
                     title: '业务流程管理',
-                    class: 'fa fa-connectdevelop',
+                    clazz: 'fa fa-connectdevelop',
                     items: [
                         {title: '业务流程发起', href: '/#/m/platform-core/workflow/index'},
                         {title: '我的待办流程', href: '/#/m/platform-core/workflow/todo'},
@@ -41,7 +41,7 @@ export default {
                     ]
                 }, {
                     title: '项目管理',
-                    class: 'fa fa-connectdevelop',
+                    clazz: 'fa fa-connectdevelop',
                     items: [
                         {title: '我的项目管理', href: '/#/m/project-base/center/projects'},
                         {title: '项目综合查询', href: '/#/m/project-base/center/projects'},
@@ -62,7 +62,7 @@ export default {
             menu: [
                 {
                     title: '组织用户',
-                    class: 'sitemap',
+                    clazz: 'sitemap',
                     items: [
                         {title: '用户信息', href: '/#/m/platform-core/security/user/List'},
                         {title: '组织信息', href: '/#/m/platform-core/org/Index'},
@@ -71,7 +71,7 @@ export default {
                 },
                 {
                     title: '权限管理',
-                    class: 'lock',
+                    clazz: 'lock',
                     items: [
                         {title: '角色设置', href: '/#/m/platform-core/security/role/List'},
                         {title: '菜单权限', href: '/#/m/platform-core/settings/menu/Index'}
@@ -79,9 +79,10 @@ export default {
                 },
                 {
                     title: '平台设置',
-                    class: 'cog',
+                    clazz: 'cog',
                     items: [
                         {title: '插件管理', href: '/#/m/platform-core/settings/plugin/Index'},
+                        {title: '模块管理', href: '/#/m/platform-core/settings/module/Index'},
                         {title: '个人信息', href: '/#/m/platform-core/profile/UserProfile'},
                         {title: '参数设置', href: '/#/m/platform-core/settings/parameter/Index'},
                         {title: '外观设置', href: '/#/m/platform-core/settings/theme/Index'},

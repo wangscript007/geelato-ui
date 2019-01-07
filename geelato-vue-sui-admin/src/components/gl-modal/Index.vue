@@ -21,7 +21,14 @@
 </template>
 <script>
   export default {
-    props: {},
+    // props: {
+    //   modalOpts: {
+    //     type: Object,
+    //     default: function () {
+    //       return {title: '', actions: [], contentStyle: {}}
+    //     }
+    //   }
+    // },
     data: function () {
       return {
         isModal: true,
@@ -46,6 +53,7 @@
       }
     },
     mounted: function () {
+      console.log('this.modalOpts>', this.modalOpts)
       this.contentStyle = {padding: '1.5em', 'overflow-y': 'auto'}
       $.extend(this.contentStyle, this.modalOpts.contentStyle)
       $(this.$el).draggable({cancel: '.ui.modal>.content'})

@@ -24,7 +24,7 @@
                                 // null或''表示不展示综合查询区域
                                 mix: {
                                     fields: [
-                                        {field: 'name', title: '名称', cop: 'eq', type: 'string'},
+                                        {field: 'name', title: '名称', cop: 'contains', type: 'string'},
                                         {field: 'code', title: '编码', cop: 'contains', type: 'string', lop: 'or'}
                                     ]
                                 }

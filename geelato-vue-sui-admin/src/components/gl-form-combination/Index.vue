@@ -5,7 +5,8 @@
   <div>
     <div v-for="(card,index) in cards" :key="index">
       <template v-if="card.type==='form'">
-        <gl-form-base :opts="{ui:card.opts}" ref="glForm">
+        <gl-form-base :opts="card.opts&&card.opts.ui?card.opts:{ui:card.opts}" :query="query"
+                      :ref="'card_'+index">
         </gl-form-base>
       </template>
       <!--<template v-if="card.type==='ht-table'" @click="$_updateTableColSize">-->
@@ -16,19 +17,19 @@
       <template v-else-if="card.type==='tab'">
         <sui type="tab" selector=".ui.menu>.item">
           <div class="ui pointing secondary menu">
-            <a class="item" v-for="(item,itemIndex) in card.items" :data-tab="'tab_'+item.name"
+            <a class="item" :class="{active:itemIndex===0}" v-for="(item,itemIndex) in card.items"
+               :data-tab="'tab_'+item.name"
                :key="itemIndex">{{item.name}}</a>
           </div>
-          <div class="ui tab segment" v-for="(item,itemIndex) in card.items" :data-tab="'tab_'+item.name"
+          <div class="ui tab segment" :class="{active:itemIndex===0}" v-for="(item,itemIndex) in card.items"
+               :data-tab="'tab_'+item.name"
                :key="itemIndex">
-            <div class="ui top attached tabular menu">
-              <a class="active item" data-tab="first/a">1A</a>
-              <a class="item" data-tab="first/b">1B</a>
-              <a class="item" data-tab="first/c">1C</a>
-            </div>
-            <div class="ui bottom attached active tab segment" data-tab="first/a">1A</div>
-            <div class="ui bottom attached tab segment" data-tab="first/b">1B</div>
-            <div class="ui bottom attached tab segment" data-tab="first/c">1C</div>
+            <!--若tab项（item）是一个表单-->
+            <gl-form-base v-if="item.type==='form'" :opts="{ui:item.opts}" :query="query">
+            </gl-form-base>
+            <template v-else>
+              card.type:{{card.type}}
+            </template>
           </div>
         </sui>
       </template>
@@ -42,7 +43,12 @@
       <template v-else-if="card.type==='toolbar'">
         <toolbar :actions="card.opts.actions"></toolbar>
       </template>
-      <resize-observer @notify="$_updateTableColSize"/>
+      <template v-else>
+        未支持的类型：{{card.type}}，card:
+        <br>
+        {{card}}
+      </template>
+      <!--<resize-observer @notify="$_updateTableColSize"/>-->
     </div>
   </div>
 </template>
@@ -85,8 +91,13 @@
       }
     },
     watch: {},
+    created: function () {
+      // this.$_loadData()
+      this.$_setModal()
+    },
     mounted: function () {
-      console.log('mounted', this.$el, this.$el.clientWidth)
+      // console.log('mounted', this.$el, this.$el.clientWidth)
+      console.log('gl-form-combination query>', this.query)
       this.$_updateTableColSize()
     },
     methods: {
@@ -102,6 +113,42 @@
             this.$refs.formTable[index].$_resize(size)
           }
         }
+      },
+      $_save() {
+        let thisVue = this
+        for (let index in thisVue.cards) {
+          let card = thisVue.cards[index]
+          console.log('card>', card)
+          if (card.type === 'form') {
+            // console.log('gql', thisVue.$refs)
+            // console.log('gql', thisVue.$refs['card_' + index])
+            let formVue = thisVue.$refs['card_' + index][0]
+            // formVue.$_reset(formVue.$props.opts)
+            formVue.$_validate()
+            let gql = formVue.$_getGql()
+            console.log('$_getGql', gql)
+
+            thisVue.$gl.data.saveByGql(null, gql, '保存成功', '保存失败').then(function (res) {
+//            console.log('save form res>', res)
+              if (typeof thisVue.$parent.$_close === 'function') {
+                thisVue.$parent.$_close()
+              }
+            })
+          }
+        }
+      },
+      /**
+       * 设置弹层的操作按钮及操作事件
+       */
+      $_setModal() {
+        let modal = this.$parent
+        if (!modal.$_addAction) {
+          return
+        }
+        modal.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
+        // $_cancel是modal内容的方法，这里可以简写成：{name: '$_cancel'}
+        modal.$_addAction({name: '$_cancel', title: '取消', fn: modal.$_cancel})
+        modal.$_updateActions()
       }
     },
     components: {HtTable, Toolbar}

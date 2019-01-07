@@ -12,7 +12,7 @@ export default {
       menu: [
         {
           title: '表单示例',
-          class: '',
+          clazz: '',
           items: [
             {title: '表单预览展示', href: '/#/m/platform-ide/form/FormPreview'},
             {title: '生成表单配置', href: '/#/m/platform-ide/form/GenFormConfig'},
