@@ -142,7 +142,7 @@
 
     },
     mounted: function () {
-      console.log('gl-form-base query>', this.query)
+      console.log('gl-form-base > Index > query:', this.query)
       this.$_reset(this.opts)
     },
     methods: {
@@ -214,7 +214,8 @@
         let theVue = this
         console.log('gl-form-base Index $_loadInitData query', theVue.query)
         if (this.form.id) {
-          this.$gl.data.query(theVue.defaultEntity, {id: this.form.id}, this.form, true).then(function (res) {
+          let fieldNames = this.$gl.utils.joinProperties(this.form)
+          this.$gl.data.query(theVue.defaultEntity, {id: this.form.id}, fieldNames, true).then(function (res) {
             console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res, res.data && res.data.length > 0 ? res.data[0] : {})
             // theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
             // theVue.meta = res.meta

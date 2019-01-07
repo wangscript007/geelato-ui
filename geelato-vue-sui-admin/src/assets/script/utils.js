@@ -30,6 +30,20 @@ utils.trim = function (str) {
   return str.replace(/(^\s*)|(\s*$)/g, '')
 }
 
+/**
+ *
+ * @param obj {id:1,name:'z3',description:''}
+ * @param separator ','
+ * @returns {string} e.g. id,name,description
+ */
+utils.joinProperties = function (obj, separator = ',') {
+  let ary = []
+  for (let key in obj) {
+    ary.push(key)
+  }
+  return ary.join(separator)
+}
+
 utils.join = function (objectAry, propertyName, separator) {
   let stringAry = new Array(objectAry.length)
   for (let i in objectAry) {

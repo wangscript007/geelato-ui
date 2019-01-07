@@ -101,7 +101,7 @@ a.jstree-anchor {
 }
 
 .jstree-default-contextmenu {
-    z-index: 10;
+    z-index: 1000000;
 }
 
 .jstree-rename-input {

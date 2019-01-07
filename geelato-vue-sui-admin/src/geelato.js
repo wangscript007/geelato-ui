@@ -14,6 +14,8 @@ import GlMessage from './components/gl-message/Index.vue'
 import GlTable from './components/gl-table/Index.vue'
 import GLDropdown from './components/gl-dropdown/Index.vue'
 import GLDate from './components/gl-date/Index.vue'
+import GLTree from './components/gl-tree/Index.vue'
+import GLTreeForm from './components/gl-tree-form/Index.vue'
 
 /**
  *  geelato框架的配置、及工具包
@@ -812,4 +814,6 @@ Vue.component('gl-message', GlMessage)
 Vue.component('gl-table', GlTable)
 Vue.component('gl-dropdown', GLDropdown)
 Vue.component('gl-date', GLDate)
+Vue.component('gl-tree', GLTree)
+Vue.component('gl-tree-form', GLTreeForm)
 export default instance

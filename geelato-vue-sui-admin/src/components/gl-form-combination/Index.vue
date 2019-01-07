@@ -27,8 +27,10 @@
             <!--若tab项（item）是一个表单-->
             <gl-form-base v-if="item.type==='form'" :opts="{ui:item.opts}" :query="query">
             </gl-form-base>
+            <gl-tree-form v-if="item.type==='treeForm'" :opts="item.opts" :query="query">
+            </gl-tree-form>
             <template v-else>
-              card.type:{{card.type}}
+              <!--card.type:{{card.type}}-->
             </template>
           </div>
         </sui>

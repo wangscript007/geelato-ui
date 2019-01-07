@@ -119,57 +119,91 @@
                       }
                     },
                     {
-                      type: 'form',
+                      type: 'treeForm',
                       name: '菜单信息',
                       opts: {
-                        layout: '', // html
-                        theme: '', // vue file
-                        fields: [],
-                        rules: [] // validate rules
-                      }
-                    },
-                    {
-                      type: 'list',
-                      name: 'list',
-                      opts: {
-                        layout: '', // html
-                        theme: '', // vue file
-                        fields: [],
-                        rules: [] // validate rules
+                        leftTitle: '模块菜单',
+                        rightTitle: '菜单项',
+                        max: {left: 8, right: 8},
+                        min: {left: 5, right: 11},
+                        treeEntityName: "platform_module",
+                        treeEntityNameField: "title",
+                        nodeEntityName: "platform_menu_item",
+                        nodeEntityNameField: "title",
+                        treeId: "opts.ui.model.id",
+                        treeName: "模块菜单",
+                        form: {
+                          type: 'form',
+                          name: '菜单项',
+                          opts: {
+                            type: 'object',
+                            // 表单可绑定多实体，这是默认第一实体
+                            defaultEntity: 'platform_menu_item',
+                            // update|create|read
+                            state: 'save',
+                            properties: {
+                              // 设置该id:{}，便于子实体中依赖该id
+                              id: {},
+                              title: {
+                                control: 'input',
+                                title: '名称',
+                                // 是否禁用
+                                disabled: false,
+                                // 是否只读
+                                readonly: false,
+                                // 是否隐藏，hidden隐藏与否在layout中控制，故没有hidden这个配置
+                                rules: [
+                                  {
+                                    type: 'empty',
+                                    prompt: '请输入名称'
+                                  }
+                                ]
+                              },
+                              clazz: {
+                                control: 'input',
+                                title: '类样式'
+                              },
+                              active: {
+                                control: 'dropdown',
+                                title: '启用',
+                                data: [
+                                  {text: '启用', value: '1'},
+                                  {text: '不启用', value: '0'}
+                                ],
+                                value: '1'
+                              },
+                              href: {
+                                control: 'input',
+                                title: '链接',
+                                placeholder: '/#/m/platform-ide/designer/Index',
+                              }
+                              // description: {
+                              //   control: 'textarea',
+                              //   title: '描述',
+                              // },
+                            },
+                            layout: {
+                              type: 'table',
+                              data: [
+                                // [label colSpan,rowSpan,field colSpan,rowSpan]
+                                [{title: [4, 8]}, {clazz: [4, 8]}],
+                                [{active: [4, 8]}, {'': [4, 8]}],
+                                [{href: [4, 20]}]
+                              ],
+                              hidden: {
+                                // 各表单状态，需隐藏的内容
+                                update: {},
+                                create: {},
+                                read: {}
+                              }
+                            },
+                            ds: {},
+                            vars: {}
+                          }
+                        }
                       }
                     }
                   ]
-                },
-                {
-                  type: 'toolbar',
-                  name: '',
-                  opts: {
-                    actions: [
-                      {
-                        title: '创建',
-                        click: 'modal',
-                        modal: {
-                          title: '编辑示例实体',
-                          type: 'page',
-                          value: '/components/page/PageLoader.vue',
-                          opts: {
-                            code: '',
-                            query: {}
-                            // entityName: 'platform_demo_entity',
-                            // fields: 'id,name,type,code,content,description',
-                            // layout: [
-                            //   [{name: [4, 8]}, {code: [4, 8]}],
-                            //   [{type: [4, 8]}],
-                            //   [{content: [4, 20]}],
-                            //   [{description: [4, 20]}]
-                            // ]
-                          }
-                        },
-                        color: 'primary'
-                      },
-                      {title: '删除', click: 'delete', confirm: '确定删除？', color: 'negative'}
-                    ]
-                  }
                 }
               ]
             }

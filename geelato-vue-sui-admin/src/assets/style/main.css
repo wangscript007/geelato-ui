@@ -259,7 +259,7 @@
 }
 
 /*.scrolling.content 已有padding，当与.gl-page-content-wrapper一起用时，去掉.gl-page-content-wrapper的padding*/
-.scrolling.content > .gl-page-content-wrapper {
+.scrolling.content .gl-page-content-wrapper {
     margin: 0;
     padding: 0em;
 }
