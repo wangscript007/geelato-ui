@@ -338,6 +338,9 @@
         this.pagination.showSize = parseInt(showSize)
         this.$refs.queryForm.$_submit()
       },
+      $_refresh() {
+        this.$_submit()
+      },
       $_submit() {
         this.needResetPagination = true
         // 调用查询子vue的查询方法

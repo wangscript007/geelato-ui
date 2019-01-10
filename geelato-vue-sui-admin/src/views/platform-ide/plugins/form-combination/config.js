@@ -1,4 +1,4 @@
-import formTemplate from './dataTemplate.js'
+import uiDataTemplate from './dataTemplate.js'
 
 /**
  *  插件定义
@@ -20,7 +20,7 @@ export const Config = {
       ui: {
         cards: [
           {type: 'header', name: '标题...', opts: {}},
-          formTemplate.simple,
+          uiDataTemplate.form,
           {
             type: 'ht-table',
             name: 'platform_demo_entity',
@@ -117,10 +117,8 @@ export const Config = {
                       read: {}
                     }
                   },
-                  ds: {
-                  },
-                  vars: {
-                  }
+                  ds: {},
+                  vars: {}
                 }
               },
               {
@@ -211,10 +209,8 @@ export const Config = {
                       read: {}
                     }
                   },
-                  ds: {
-                  },
-                  vars: {
-                  }
+                  ds: {},
+                  vars: {}
                 }
               }
             ]
@@ -256,6 +252,6 @@ export const Config = {
   }],
   settingPanels: [
     {name: 'properties', title: '基本信息', path: 'common/Settings.vue'},
-    {name: 'form-combination', title: '页面组成', path: 'form-combination/Settings.vue'}
+    {name: 'form-combination', title: '页面配置', path: 'form-combination/Settings.vue'}
   ]
 }

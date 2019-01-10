@@ -4,6 +4,8 @@
   </div>
 </template>
 <script>
+  import detailConfig from './detail.js'
+
   export default {
     data() {
       return {
@@ -107,7 +109,7 @@
                                       readonly: true,
                                       value: -1
                                     },
-                                    enable: {
+                                    enabled: {
                                       control: 'checkbox',
                                       title: '启用',
                                       value: true
@@ -122,7 +124,7 @@
                                     data: [
                                       // [label colSpan,rowSpan,field colSpan,rowSpan]
                                       [{title: [4, 8]}, {resize: [4, 8]}],
-                                      [{code: [4, 8]}, {enable: [4, 8]}],
+                                      [{code: [4, 8]}, {enabled: [4, 8]}],
                                       [{html: [4, 8]}, {seq: [4, 8]}],
                                       [{description: [4, 20]}]
                                     ],
@@ -182,26 +184,42 @@
                     //     }
                     //   }
                     // },
+                    // {
+                    //   title: '详情',
+                    //   click: 'modal',
+                    //   modal: {
+                    //     title: '详细信息',
+                    //     type: 'href',
+                    //     value: '/views/platform-core/settings/module/Detail.vue',
+                    //     opts: {
+                    //       ui: {
+                    //         model: {id: '@.id'}
+                    //       }
+                    //     }
+                    //   }
+                    // },
                     {
-                      title: '详情',
+                      title: '详情1',
                       click: 'modal',
                       modal: {
                         title: '详细信息',
                         type: 'href',
-                        value: '/views/platform-core/settings/module/Detail.vue',
+                        value: '/components/gl-page-loader/Index.vue',
                         opts: {
-                          ui: {
-                            // entityName: 'platform_module',
-                            // fields: 'id,title,code,index,resize,html,description',
-                            // layout: [
-                            //   [{title: [4, 8]}, {code: [4, 8]}],
-                            //   [{index: [4, 8]}, {resize: [4, 8]}],
-                            //   [{html: [4, 20]}],
-                            //   [{description: [4, 20]}]
-                            // ],
-                            model: {id: '@.id'}
-                          }
+                          // code: 'list_9V02AlD4',
+                          code: 'form-combination_Ygvv7IXs',
+                          model: {id: '@.id'}
                         }
+                      }
+                    },
+                    {
+                      title: '详情2',
+                      click: 'modal',
+                      modal: {
+                        title: '详细信息',
+                        type: 'href',
+                        value: detailConfig.component,
+                        opts: detailConfig.opts
                       }
                     }
                   ]

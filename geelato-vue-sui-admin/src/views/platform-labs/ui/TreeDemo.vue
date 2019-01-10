@@ -23,7 +23,7 @@
         treeId: 9838743
       }
     },
-    mounted: function () {
+    mounted() {
     },
     methods: {},
     components: {}

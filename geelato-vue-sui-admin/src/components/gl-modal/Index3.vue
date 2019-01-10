@@ -12,14 +12,17 @@
     <div class="actions" style="text-align: center">
       <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_save">保存</div>-->
       <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="$_cancel">取消</div>-->
-      <div v-for="(item,key) in actions" class="ui mini button" :key="key" :class="$gl.ui.color[item.color]"
-           @click="$_doAction(key)">
-        {{item.title}}
+      <div v-for="(action,index) in externalActions" class="ui mini button" :key="key"
+           :class="$gl.ui.color[action.color]"
+           @click="$_execAction(action,index)">
+        {{action.title}}
       </div>
     </div>
   </div>
 </template>
 <script>
+  import ActionHandler from '../gl-toolbar/ActionHandler.js'
+
   export default {
     // props: {
     //   modalOpts: {
@@ -69,6 +72,13 @@
       },
       $_getOpener() {
         return this.opener
+      },
+      $_setActions(actions) {
+        this.externalActions = actions
+      },
+      $_execAction(action, index) {
+        let actionHandler = new ActionHandler(this.$gl)
+        actionHandler.do(action, action.opts)
       },
       /**
        * 关键窗口，并调用钩子 close

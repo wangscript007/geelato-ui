@@ -1,5 +1,5 @@
 <template>
-  <div class="ui icon info message">
+  <div class="ui icon info message segment">
     <i class="info icon"></i>
     <i class="close icon" v-if="closable"></i>
     <div class="content">

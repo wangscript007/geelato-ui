@@ -18,7 +18,9 @@ export default {
             {title: 'bugs', href: '/#/m/platform-labs/bugs/dropdown/DropdownInSlot'},
             {title: 'SUI-VUE', href: '/#/m/platform-labs/ui/Sui'},
             {title: 'SplitExampleOne', href: '/#/m/platform-labs/split/ExampleOne'},
-            {title: 'SplitMix', href: '/#/m/platform-labs/split/Index'}
+            {title: 'SplitMix', href: '/#/m/platform-labs/split/Index'},
+            {title: '动态页面加载', href: '/#/m/platform-core/pages/PageLoader?p=list_byf48EYk'},
+            {title: '动态页面加载', href: '/#/m/platform-core/pages/PageLoader?p=form-combination_Ygvv7IXs'}
           ],
           active: true
         }]

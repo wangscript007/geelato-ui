@@ -103,14 +103,14 @@ router.beforeEach((to, from, next) => {
   //   }
   // }
   // if (to.matched.some(r => r.meta.requireAuth)) {
-  console.log('to.matched', to)
+  console.log('router > try to match: ', to)
   if (to.matched.some(r => r.meta.requireAuth !== false)) {
-    console.log('geelato.security.profile()', geelato.security.profile())
+    console.log('router > matched and current profile: ', geelato.security.profile())
     if (geelato.security.profile().user) {
       next()
     } else {
       let loggedInfo = geelato.security.isLogged()
-      console.log('isLogged', loggedInfo)
+      console.log('router > matched and isLogged: ', loggedInfo)
       if (loggedInfo) {
         geelato.security.profile(loggedInfo)
         // window.location.replace('/')

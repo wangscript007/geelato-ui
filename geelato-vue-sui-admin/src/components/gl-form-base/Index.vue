@@ -122,7 +122,10 @@
       // 表单初始化值
       query: {
         type: Object,
-        required: false
+        required: false,
+        default() {
+          return {}
+        }
       }
     },
     data() {
@@ -213,12 +216,15 @@
         // 加载主实体数据
         let theVue = this
         console.log('gl-form-base Index $_loadInitData query', theVue.query)
-        if (this.form.id) {
-          let fieldNames = this.$gl.utils.joinProperties(this.form)
-          this.$gl.data.query(theVue.defaultEntity, {id: this.form.id}, fieldNames, true).then(function (res) {
-            console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res, res.data && res.data.length > 0 ? res.data[0] : {})
-            // theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
-            // theVue.meta = res.meta
+        if (theVue.form.id) {
+          let fieldNames = this.$gl.utils.joinProperties(theVue.form)
+          this.$gl.data.query(theVue.defaultEntity, {id: theVue.form.id}, fieldNames, true).then(function (res) {
+            let resForm = res.data && res.data.length > 0 ? res.data[0] : {}
+            for (let key in resForm) {
+              // form需设置成响应式
+              theVue.$set(theVue.form, key, resForm[key])
+            }
+            theVue.meta = res.meta
           })
         }
         // 加载属性数据，如下拉列表、字典信息等
@@ -255,6 +261,12 @@
       },
       $_getValues() {
         return this.form
+      },
+      $_setValues(form) {
+        for (let key in form) {
+          this.$set(this.form, key, form[key])
+        }
+        this.$_reset(this.opts)
       },
       /**
        * 获取保存操作的gql语句

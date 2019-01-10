@@ -129,18 +129,31 @@
       // 首次加载切换到角色的默认模块
       // TODO 改从当前用户信息中获取
       let currentRole = 'admin'
-      for (let m in this.modules) {
-        let module = this.modules[m]
-        // console.log(module, this.$gl.defaultModule[currentRole])
-
-        if (module.code === this.$gl.defaultModule) {
-          // 不按角色区分默认模块 typeof defaultModule is string
-          this.$_changeModule(module)
-          break
-        } else if (typeof this.$gl.defaultModule === 'object' && module.code === this.$gl.defaultModule[currentRole]) {
-          // 按角色区分默认模块
-          this.$_changeModule(module)
-          break
+      let path = this.$route.path
+      console.log('gl-layout > PageHeader > path: ', path)
+      if (path === '/#/' || path === '/m/') {
+        // 加载时，若path是默认的'/#/'，则按默认模块的配置登录默认首页
+        for (let m in this.modules) {
+          let module = this.modules[m]
+          if (module.code === this.$gl.defaultModule) {
+            // 不按角色区分默认模块 typeof defaultModule is string
+            this.$_changeModule(module)
+            break
+          } else if (typeof this.$gl.defaultModule === 'object' && module.code === this.$gl.defaultModule[currentRole]) {
+            // 按角色区分默认模块
+            this.$_changeModule(module)
+            break
+          }
+        }
+      } else {
+        // 加载时，若path中已指定了地址，不是默认的'/#/'，则需进行自动切换
+        // 从url中获取模块编码
+        let redirectModuleCode = this.$route.query._m
+        for (let i in this.$gl.modules) {
+          let module = this.$gl.modules[i]
+          if (module.code === redirectModuleCode) {
+            this.$_changeModule(module, this.$route.path)
+          }
         }
       }
     },
@@ -150,21 +163,32 @@
       isShowLogo: function () {
         return this.mode === 0
       },
-      $_changeModule: function (module) {
-        console.log('module>', module)
+      /**
+       * 检查跳转的页面所在的模块
+       * @param module 指定跳转的模块
+       * @param toPath 指定跳转的页面
+       */
+      $_changeModule: function (module, toPath) {
+        console.log('layout > change to module: ', module.title, module)
         // 通知更改模块，以便更改菜单
         this.$store.commit(types.CHANGE_MODULE, module)
         this.$emit('changeModule', module)
+        // 如果有指定加载的path，则按指定
+        let redirectPath = toPath || module.index
         // 更改模块首页面
-        if (module.index) {
+        if (redirectPath) {
           // 如将：'/#/m/project-metro/info/select-project',改为'/m/project-metro/info/select-project',
-          let path = module.index.replace('/#', '').replace('#', '')
+          let path = redirectPath.replace('/#', '').replace('#', '')
 //          path = path + '?' + 'module=' + module.code + '&t=' + utils.uuid(16)
           this.$store.commit(types.ROUTE_VIEW_KEY, utils.uuid(16))
-          this.$router.push(path)
+          this.$router.push(this.$_addQueryToPath(path, {_m: module.code}))
         } else {
-          console.error('未配置模块[' + module.title + ']首页面！')
+          console.error('layout > 未配置模块[' + module.title + ']首页面！')
         }
+      },
+      $_addQueryToPath(path, params) {
+        // return path.indexOf('\?') !== -1 ? path + '&' + this.$gl.utils.param(param) : path + '?' + this.$gl.utils.param(param)
+        return utils.addParamToPath(path, params)
       },
       $_changeColor: function (newColor) {
         let lastColor = this.color + ''

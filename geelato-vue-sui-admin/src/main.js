@@ -19,7 +19,7 @@ geelato.addPlugin('platform-meta')
 geelato.addPlugin('platform-labs')
 geelato.addPlugin('platform-ide')
 // Set default module for login, and there is a default index href in module.
-geelato.setStartModule('labs')
+geelato.setStartModule('ide')
 
 geelato.setHelpUrl('https://www.geelato.org')
 let isRunInServer = window.location.href.match(/[\.]*geelato\.org/) != null

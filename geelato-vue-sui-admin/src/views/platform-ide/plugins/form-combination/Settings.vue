@@ -22,6 +22,7 @@
           <div class="header item"><i class="plus icon" style="margin-left: 0.5em"></i>添加：</div>
           <a class="item" @click="$_addHeader">标题</a>
           <a class="item" @click="$_addForm">表单</a>
+          <a class="item" @click="$_addTreeForm">树表单</a>
           <a class="item" @click="$_addTabs">选项卡</a>
           <a class="item" @click="$_addList">列表</a>
           <a class="item" @click="$_addToolbar">工具条</a>
@@ -37,85 +38,93 @@
       </div>
       <div class="ui fitted divider" style="margin-top: 0.25em;"></div>
       <draggable :list="cards">
-        <transition-group>
-          <div class="ui cards gl-settings" v-if="cards" v-for="(card,index) in cards" :key="index">
-            <div class="ui card">
-              <div class="content gl-hover-header">
-                <div class="right floated gl-hover-content">
-                  <i class="arrow up icon gl-action" title="向上"
-                     @click="$gl.utils.moveup(cards, index)" v-if="index!==0"></i>
-                  <i class="arrow down icon gl-action" title="向下"
-                     @click="$gl.utils.movedown(cards, index)"
-                     v-if="index!==cards.length-1"></i>
-                  &nbsp;&nbsp;
-                  <i class="plus icon gl-action" title="添加" :class="$gl.ui.color.primary"
-                     @click="$_addCardItem(card)" v-if="card.items"></i>
-                  &nbsp;&nbsp;
-                  <i class="remove red icon gl-action" title="删除" :class="$gl.ui.color.negative"
-                     @click="$gl.utils.remove(cards, index,'是否删除')"></i>
-                </div>
-                <div class="" v-html="dict[card.type]"></div>
+        <!--<transition-group>-->
+        <div class="ui cards gl-settings" v-if="cards" v-for="(card,index) in cards" :key="index">
+          <div class="ui card">
+            <!--共用头部-->
+            <div class="content gl-hover-header">
+              <div class="right floated gl-hover-content">
+                <i class="arrow up icon gl-action" title="向上"
+                   @click="$gl.utils.moveup(cards, index)" v-if="index!==0"></i>
+                <i class="arrow down icon gl-action" title="向下"
+                   @click="$gl.utils.movedown(cards, index)"
+                   v-if="index!==cards.length-1"></i>
+                &nbsp;&nbsp;
+                <i class="plus icon gl-action" title="添加" :class="$gl.ui.color.primary"
+                   @click="$_addCardItem(card)" v-if="card.items"></i>
+                &nbsp;&nbsp;
+                <i class="remove red icon gl-action" title="删除" :class="$gl.ui.color.negative"
+                   @click="$gl.utils.remove(cards, index,'是否删除')"></i>
               </div>
-              <template v-if="card.type==='tab'">
-                <div class="content" v-if="card.items">
-                  <div class="ui fluid action input" style="margin-bottom: 3px"
-                       v-for="(item,index) in card.items">
-                    <label class="ui label">
-                      <!--<i class="arrow up icon"  title="向上"-->
-                      <!--@click="$gl.utils.moveup(card.items, index)" v-if="index!==0"></i>-->
-                      <i class="arrow down icon gl-action" title="向下"
-                         @click="$gl.utils.movedown(card.items, index)"
-                         v-if="index!==card.items.length-1"></i>
-                      <i class="remove red icon gl-action" title="删除"
-                         :class="$gl.ui.color.negative"
-                         @click="$gl.utils.remove(card.items, index,'是否删除')"></i>
-                    </label>
-                    <input type="text" placeholder="未设置..." v-model="item.name" readonly>
-                    <div class="ui mini button" @click="$_loadMeta"><i class="cog icon"
-                                                                       title="设置"></i></div>
-                  </div>
-                </div>
-                <!--<div class="extra content">-->
-                <!--<button class="ui button">xx</button>-->
-                <!--</div>-->
-              </template>
-              <template v-else-if="card.type==='form'">
-                <div class="content">
-                  <div class="ui fluid action input">
-                    <input type="text" placeholder="未设置..." v-model="card.name" readonly>
-                    <div class="ui mini button" @click="$_openFormDesigner(card)">
-                      <i class="cog icon" title="设置"></i>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else-if="card.type==='list'">
-                <div class="content">
-                  <div class="ui fluid action input">
-                    <input type="text" placeholder="未设置..." v-model="card.name" readonly>
-                    <div class="ui mini button" @click="$_openListDesigner(card)">
-                      <i class="cog icon" title="设置"></i>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else-if="card.type==='header'">
-                <div class="content">
-                  <div class="ui fluid action input">
-                    <input type="text" placeholder="未设置..." v-model="card.name">
-                  </div>
-                </div>
-              </template>
+              <div class="" v-html="dict[card.type]"></div>
             </div>
+            <!--以下为各类card的专属设置-->
+            <template v-if="card.type==='tab'">
+              <div class="content" v-if="card.items">
+                <div class="ui fluid action input" style="margin-bottom: 3px"
+                     v-for="(item,index) in card.items">
+                  <label class="ui label">
+                    <!--<i class="arrow up icon"  title="向上"-->
+                    <!--@click="$gl.utils.moveup(card.items, index)" v-if="index!==0"></i>-->
+                    <i class="arrow down icon gl-action" title="向下"
+                       @click="$gl.utils.movedown(card.items, index)"
+                       v-if="index!==card.items.length-1"></i>
+                    <i class="remove red icon gl-action" title="删除"
+                       :class="$gl.ui.color.negative"
+                       @click="$gl.utils.remove(card.items, index,'是否删除')"></i>
+                  </label>
+                  <input type="text" placeholder="未设置..." v-model="item.name" readonly>
+                  <div class="ui mini button" @click="$_loadMeta"><i class="cog icon"
+                                                                     title="设置"></i></div>
+                </div>
+              </div>
+              <!--<div class="extra content">-->
+              <!--<button class="ui button">xx</button>-->
+              <!--</div>-->
+            </template>
+            <template v-else-if="card.type==='form'">
+              <div class="content">
+                <div class="ui fluid action input">
+                  <input type="text" placeholder="未设置..." v-model="card.name" readonly>
+                  <div class="ui mini button" @click="$_openFormDesigner(card)">
+                    <i class="cog icon" title="设置"></i>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="card.type==='list'">
+              <div class="content">
+                <div class="ui fluid action input">
+                  <input type="text" placeholder="未设置..." v-model="card.name" readonly>
+                  <div class="ui mini button" @click="$_openListDesigner(card)">
+                    <i class="cog icon" title="设置"></i>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="card.type==='header'">
+              <div class="content">
+                <div class="ui fluid action input">
+                  <input type="text" placeholder="未设置..." v-model="card.name">
+                </div>
+              </div>
+            </template>
+            <template v-else-if="card.type==='toolbar'">
+              <div class="content">
+                <div class="ui fluid action input">
+                  <input type="text" placeholder="未设置..." v-model="card.name">
+                </div>
+              </div>
+            </template>
           </div>
-        </transition-group>
+        </div>
+        <!--</transition-group>-->
       </draggable>
     </div>
   </div>
 </template>
 <script>
-  import formTemplate from './dataTemplate.js'
-  import listDataTemplate from '../table/dataTemplate.js'
+  import uiDataTemplate from './dataTemplate.js'
   import Draggable from 'vuedraggable'
 
   export default {
@@ -132,6 +141,7 @@
           header: '<i class="heading icon"></i>标题(header)',
           list: '<i class="list icon"></i>列表(List)',
           form: '<i class="wpforms icon"></i>表单(Form)',
+          treeForm: '<i class="wpforms icon"></i>树表单(TreeForm)',
           tab: '<i class="sitemap icon"></i>选项卡(Tab)',
           toolbar: '<i class="crosshairs icon"></i>工具条(Toolbar)',
           'ht-table': '<i class="table icon"></i>表格(Table)'
@@ -147,53 +157,26 @@
     mounted: function () {
       // this.$_sortCards()
       // this.$_sortCardItems()
-      console.log('editorStore.editingPage>', this.editorStore.editingPage)
+      console.log('plugins > form-combination > Settings > editorStore.editingPage: ', this.editorStore.editingPage)
     },
     methods: {
-      // $_sortCards () {
-      //   $(this.$el).find('.ui.cards.sortable').sortable()
-      //   // $(this.$el).find('.ui.cards.sortable').disableSelection()
-      // },
-      // $_sortCardItems () {
-      //   $(this.$el).find('.ui.cards.sortable .content.sortable').sortable()
-      //   // $(this.$el).find('.ui.cards.sortable').disableSelection()
-      // },
       $_addHeader(e) {
-        this.cards.push({
-          type: 'header',
-          name: '标题...',
-          opts: {}
-        })
+        this.cards.push(uiDataTemplate.header)
       },
       $_addForm(e) {
-        this.cards.push(formTemplate.simple)
+        this.cards.push(uiDataTemplate.form)
+      },
+      $_addTreeForm(e) {
+        this.cards.push(uiDataTemplate.treeForm)
       },
       $_addTabs(e) {
-        this.cards.push({
-          type: 'tab',
-          name: '',
-          items: [
-            {
-              type: 'form',
-              name: 'form1',
-              opts: {
-                layout: '', // html
-                theme: '', // vue file
-                fields: [],
-                rules: [] // validate rules
-              }
-            },
-            {
-              type: 'form',
-              name: 'form2',
-              opts: {
-                layout: '', // html
-                theme: '', // vue file
-                fields: [],
-                rules: [] // validate rules
-              }
-            }]
-        })
+        this.cards.push(uiDataTemplate.tabs)
+      },
+      $_addList(e) {
+        this.cards.push(uiDataTemplate.list)
+      },
+      $_addToolbar(e) {
+        this.cards.push(uiDataTemplate.toolbar)
       },
       $_addCardItem(card) {
         card.items.push({
@@ -204,42 +187,6 @@
             theme: '', // vue file
             fields: [],
             rules: [] // validate rules
-          }
-        })
-      },
-      $_addList(e) {
-        this.cards.push(listDataTemplate.simple)
-      },
-      $_addToolbar(e) {
-        this.cards.push({
-          type: 'toolbar',
-          name: '',
-          opts: {
-            actions: [
-              {
-                title: '创建',
-                click: 'modal',
-                modal: {
-                  title: '编辑示例实体',
-                  type: 'page',
-                  value: '/components/page/PageLoader.vue',
-                  opts: {
-                    code: '',
-                    query: {}
-                    // entityName: 'platform_demo_entity',
-                    // fields: 'id,name,type,code,content,description',
-                    // layout: [
-                    //   [{name: [4, 8]}, {code: [4, 8]}],
-                    //   [{type: [4, 8]}],
-                    //   [{content: [4, 20]}],
-                    //   [{description: [4, 20]}]
-                    // ]
-                  }
-                },
-                color: 'primary'
-              },
-              {title: '删除', click: 'delete', confirm: '确定删除？', color: 'negative'}
-            ]
           }
         })
       },

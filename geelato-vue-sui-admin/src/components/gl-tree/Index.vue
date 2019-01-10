@@ -106,22 +106,22 @@
     },
     methods: {
       $_loadData() {
-        let thisVue = this
+        let theVue = this
         let treeData = [{
-          id: thisVue.treeId,
-          text: thisVue.treeName || '根',
+          id: theVue.treeId,
+          text: theVue.treeName || '根',
           parent: '#',
           type: 'root'
         }]
-        console.log('gl-tree > Index > watch.treeId > thisVue.$gl.entityNames>', thisVue.$gl.entityNames)
-        thisVue.$gl.data.query(thisVue.$gl.entityNames['platform-core'].common.treeNode, {treeId: thisVue.treeId}, 'id,parent,text,type').then(function (res) {
+        console.log('gl-tree > Index > watch.treeId > theVue.$gl.entityNames>', theVue.$gl.entityNames)
+        theVue.$gl.data.query(theVue.$gl.entityNames['platform-core'].common.treeNode, {treeId: theVue.treeId}, 'id,parent,text,type').then(function (res) {
           console.log('res>', res)
-          thisVue.$_newTree(treeData.concat(res.data))
+          theVue.$_newTree(treeData.concat(res.data))
         })
       },
       $_newTree(treeData) {
         console.log('treeData>', treeData)
-        let thisVue = this
+        let theVue = this
         $.jstree.defaults.contextmenu.select_node = false
         $.jstree.defaults.contextmenu.show_at_node = true
         let $tree = $(this.$el)
@@ -148,7 +148,7 @@
             icon: 'remove icon'
           }
         }
-        $.extend(types, thisVue.fileTypes)
+        $.extend(types, theVue.fileTypes)
         $tree.jstree({
           core: {
             themes: {
@@ -168,7 +168,7 @@
                 }
               } else if (operation === 'delete_node') {
                 if (node.parent === '#' || !node.parent) {
-                  thisVue.$gl.ui.showMsg('根节点不能删除！', 'warning')
+                  theVue.$gl.ui.showMsg('根节点不能删除！', 'warning')
                   return false
                 }
               }
@@ -195,7 +195,7 @@
                   label: createIconLabel('重命名', 'edit'),
                   _disabled: false,
                   action: function (data) {
-                    $.jstree.reference(data.reference).edit(data.reference, undefined, thisVue.$_updateNode)
+                    $.jstree.reference(data.reference).edit(data.reference, undefined, theVue.$_updateNode)
                   }
                 },
                 remove: {
@@ -213,7 +213,7 @@
                     // TODO 删除成功，才删除前端节点
                     let node = $.jstree.reference(data.reference).get_node(data.reference)
                     console.log('removing node>', node)
-                    thisVue.$_removeEntity(node.id)
+                    theVue.$_removeEntity(node.id)
                     $.jstree.reference(data.reference).delete_node(data.reference)
                   }
                 },
@@ -223,23 +223,52 @@
             }
           }
         })
-        $tree.bind('dblclick.jstree', function (event) {
+        $tree.bind('dblclick.jstree', function (event, node) {
           // jstree的双击事件针对整个jstree对象，不区分是否为节点。这里对叶子节点的双击事件生效
           if (!$(event.target).parent().hasClass('jstree-leaf')) {
             return
           }
           let $node = $(event.target).closest('li')
-          let data = getFileNodeData($node)
+          console.log('gl-tree > Index > dblclick event >', event)
+          console.log('gl-tree > Index > dblclick node >', node)
+
           // 且叶子节点为文件类型才生效
-          if (data.type) {
-            thisVue.$emit('open_node', {node: data})
+          let treeNode = getFileNodeData($node)
+          if (treeNode.type) {
+            console.log('gl-tree > Index > treeNode >', treeNode)
+            let nodeEntity = {
+              treeNodeId: treeNode.id,
+              [theVue.nodeEntityNameField]: treeNode.text
+            }
+            theVue.$emit('dblclick', nodeEntity, treeNode)
+          }
+        })
+        $tree.bind('activate_node.jstree', function (event, node) {
+          console.log('gl-tree > Index > activate event >', event)
+          console.log('gl-tree > Index > activate node >', node)
+          let treeNode = {
+            text: node.node.text,
+            icon: node.node.icon,
+            type: node.node.type,
+            parent: node.node.parent,
+            treeEntity: theVue.treeEntityName,
+            treeId: theVue.treeId,
+            extendEntity: theVue.nodeEntityName
+          }
+          // 且叶子节点为文件类型才生效
+          if (treeNode.type) {
+            let nodeEntity = {
+              treeNodeId: treeNode.id,
+              [theVue.nodeEntityNameField]: treeNode.text
+            }
+            theVue.$emit('select', nodeEntity, treeNode)
           }
         })
         $tree.jstree(true).open_all()
 
         function getFileNodeData($node) {
-          for (let type in thisVue.fileTypes) {
-            let selector = '.' + thisVue.fileTypes[type].icon.split(' ').join('.').replace(/\s+/g, '')
+          for (let type in theVue.fileTypes) {
+            let selector = '.' + theVue.fileTypes[type].icon.split(' ').join('.').replace(/\s+/g, '')
             let data = $.jstree.reference($tree).get_node($node.find(selector))
             if (data.type) {
               return data
@@ -249,7 +278,7 @@
         }
 
         function isFile(type) {
-          return !!thisVue.fileTypes[type]
+          return !!theVue.fileTypes[type]
         }
 
         function createIconLabel(label, typeName) {
@@ -260,23 +289,23 @@
         /**
          *  返回结果如：
          *  create_html5: createNode('普通页面', 'html5', function (nodeId) {
-         *    thisVue.$_newEntity({id: nodeId, text: '普通页面', type: 'html5'})
+         *    theVue.$_newEntity({id: nodeId, text: '普通页面', type: 'html5'})
          *  }),
          *  create_folder: createNode('目录', 'default')
          */
         function createSubmenuItems() {
           let items = {}
-          for (let fileType in thisVue.fileTypes) {
-            let item = thisVue.fileTypes[fileType]
-            items['create_' + fileType] = createNode(item.name, fileType, function (nodeId) {
-              thisVue.$_newEntity({id: nodeId, text: item.name, type: fileType})
+          for (let fileType in theVue.fileTypes) {
+            let item = theVue.fileTypes[fileType]
+            items['create_' + fileType] = createNode(item.name, fileType, function (node) {
+              // theVue.$_newEntity({id: node, text: item.name, type: fileType})
             })
           }
           items.create_folder = createNode('目录', 'default')
           return items
         }
 
-        function createNode(label, typeName, callback) {
+        function createNode(label, typeName) {
           let type = types[typeName]
           return {
             label: createIconLabel(label, typeName),
@@ -286,60 +315,30 @@
                 text: '新' + label,
                 icon: type.icon,
                 type: typeName,
-                treeEntity: thisVue.treeEntityName,
-                treeId: thisVue.treeId,
+                treeEntity: theVue.treeEntityName,
+                treeId: theVue.treeId,
                 parent: data.reference[0].parentElement.id,
-                extendEntity: thisVue.nodeEntityName
+                extendEntity: theVue.nodeEntityName
               }
               console.log('gl-tree > Index > createNode > jstree $ref: ', $ref)
               console.log('gl-tree > Index > createNode > data.reference: ', data.reference)
               console.log('gl-tree > Index > createNode > treeNode before save: ', treeNode)
-              thisVue.$gl.data.save(thisVue.$gl.entityNames['platform-core'].common.treeNode, treeNode).then(function (res) {
+              theVue.$gl.data.save(theVue.$gl.entityNames['platform-core'].common.treeNode, treeNode).then(function (res) {
                 treeNode.id = res.data
                 let nodeId = $ref.create_node(data.reference, treeNode, 'last')
                 $ref.deselect_all()
                 $ref.select_node(nodeId)
-                $ref.edit(nodeId, undefined, thisVue.$_updateNode)
-                if ($.isFunction(callback)) callback(nodeId)
+                $ref.edit(nodeId, undefined, theVue.$_updateNode)
+                let nodeEntity = {
+                  treeNodeId: treeNode.id,
+                  [theVue.nodeEntityNameField]: treeNode.text
+                }
+                theVue.$emit('created', nodeEntity, treeNode)
+                // if ($.isFunction(callback)) callback(treeNode)
               })
             }
           }
         }
-      },
-      $_newEntity(data) {
-//        let obj = data
-        // TODO是否保存旧的page
-//        this.$emit('newPage', {id: obj.id, text: obj.text, type: obj.type})
-//        console.log('newPage with params >', {id: obj.id, text: obj.text, type: obj.type})
-//        this.editorStore.editingPage.reset({extendId: data.id, name: data.text, type: data.type})
-//                 this.editorStore.reset(new SimplePageDefinition({
-//                     extendId: data.id,
-//                     name: data.text,
-//                     type: data.type,
-//                     code: data.type + '_' + this.$utils.uuid(8)
-//                 }))
-        // console.log('thisVue.editorStore1>', this.editorStore)
-        this.$_saveEntity()
-      },
-      /**
-       * 保存到服务端
-       * 记录保存更新状态
-       */
-      $_saveEntity: function () {
-        let thisVue = this
-//         thisVue.$gl.data.save(thisVue.$gl.entityNames['platform-core'].dev.pageConfig, {
-//           id: thisVue.editorStore.editingPage.id,
-//           extendId: thisVue.editorStore.editingPage.extendId,
-//           type: thisVue.editorStore.editingPage.type,
-//           code: thisVue.editorStore.editingPage.code,
-//           description: thisVue.editorStore.editingPage.description,
-//           content: thisVue.editorStore.editingPage.content
-//         }).then(function (res) {
-//           thisVue.editorStore.editingPage.id = res.data
-// //          thisVue.$gl.ui.showMsg('页面保存成功', 'success', '')
-//         }).catch(function (e) {
-// //          thisVue.$gl.ui.showMsg('页面保存失败', 'fail', '')
-//         })
       },
       /**
        *
@@ -347,10 +346,10 @@
        * @param nodeId 节点树id，对应页面实体的extend_id
        */
       $_removeEntity(nodeId) {
-        let thisVue = this
+        let theVue = this
         // 两张表的删除，合在一个事务中
-        // thisVue.$gl.data.delete(thisVue.treeEntityName, {extendId: nodeId})
-        thisVue.$gl.data.delete(thisVue.$gl.entityNames['platform-core'].common.treeNode, {id: nodeId})
+        // theVue.$gl.data.delete(theVue.treeEntityName, {extendId: nodeId})
+        theVue.$gl.data.delete(theVue.$gl.entityNames['platform-core'].common.treeNode, {id: nodeId})
       },
       $_moveNode() {
         // TODO 移动节点时，需更新node parent
@@ -359,15 +358,15 @@
         if (cancelled) {
           return false
         }
-        let thisVue = this
-        if (node.parent === '#') {
+        let theVue = this
+        if (node.parent === '#' && theVue.treeEntityName) {
           // 如果是根节点，则更改实体名称
           // 由于根节点是在前端构建的，后台不存在对应的节点，所以不需更新treeNode
           let entity = {}
-          entity[thisVue.treeEntityPkField] = node.id
-          entity[thisVue.treeEntityNameField] = node.text
-          thisVue.$gl.data.save(thisVue.treeEntityName, entity).then(function (res) {
-            console.log('更新名称为' + node.text + ',更新返回：', res)
+          entity[theVue.treeEntityPkField] = node.id
+          entity[theVue.treeEntityNameField] = node.text
+          theVue.$gl.data.save(theVue.treeEntityName, entity).then(function (res) {
+            // console.log('更新名称为' + node.text + ',更新返回：', res)
           })
         } else {
           // 如果非根节点，则更改文件或目录名称
@@ -376,11 +375,16 @@
             parent: node.parent,
             text: node.text,
             type: node.type,
-            treeId: thisVue.treeId
+            treeId: theVue.treeId
           }
           // TODO 若节点的extend_id值不为空，则需同时更新该节点对应业务实体相应的记录名称
-          thisVue.$gl.data.save(thisVue.$gl.entityNames['platform-core'].common.treeNode, treeNode).then(function (res) {
-            console.log('更新节点名称为“' + node.text + '”,更新返回：', res)
+          theVue.$gl.data.save(theVue.$gl.entityNames['platform-core'].common.treeNode, treeNode).then(function (res) {
+            let nodeEntity = {
+              treeNodeId: treeNode.id,
+              [theVue.nodeEntityNameField]: treeNode.text
+            }
+            theVue.$emit('updated', nodeEntity, treeNode)
+            // console.log('更新节点名称为“' + node.text + '”,更新返回：', res)
           })
         }
       }

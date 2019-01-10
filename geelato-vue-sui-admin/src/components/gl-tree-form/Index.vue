@@ -8,7 +8,11 @@
                  :node-entity-name="opts.nodeEntityName"
                  :node-entity-name-field="opts.nodeEntityNameField"
                  :tree-id="opts.treeId"
-                 :tree-name="opts.treeName">
+                 :tree-name="opts.treeName"
+                 @created="$_onNodeSelect"
+                 @updated="$_onNodeSelect"
+                 @select="$_onNodeSelect"
+        >
         </gl-tree>
       </div>
       <div slot="leftAction">
@@ -19,7 +23,7 @@
       <div slot="right">
         <!--<div class="ui info attached bottom segment" v-if="" style="word-wrap:break-word">-->
         <!--</div>-->
-        <gl-form-base :opts="opts.form.opts" :query="query" ref="glForm">
+        <gl-form-base :opts="opts.form.opts" :query="currentNodeEntity" ref="glForm">
         </gl-form-base>
       </div>
       <div slot="rightAction">
@@ -45,7 +49,10 @@
       }
     },
     data() {
-      return {}
+      return {
+        currentTreeNode: {},
+        currentNodeEntity: {}
+      }
     },
     watch: {},
     mounted: function () {
@@ -53,6 +60,23 @@
     },
     methods: {
       $_loadData() {
+      },
+      $_validate() {
+        // console.log('gl-tree-form > Index > this.$refs: ', this.$refs)
+        return this.$refs.glForm.$_validate()
+      },
+      $_getGql() {
+        return this.$refs.glForm.$_getGql()
+      },
+      $_onNodeSelect(nodeEntity, treeNode) {
+        // console.log(nodeEntity, treeNode)
+        for (let key in nodeEntity) {
+          this.$set(this.currentNodeEntity, key, nodeEntity[key])
+        }
+        for (let key in treeNode) {
+          this.$set(this.currentTreeNode, key, treeNode[key])
+        }
+        this.$refs.glForm.$_setValues(nodeEntity)
       }
     },
     components: {}

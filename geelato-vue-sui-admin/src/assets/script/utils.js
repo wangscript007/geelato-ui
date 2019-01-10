@@ -26,6 +26,49 @@ utils.param = function (param, prefix) {
   return str.substr(1)
 }
 
+/**
+ * 为path增加参数，存已存在同名的参数则覆盖
+ * @param path
+ * @param param {key:value,key2,value2}
+ */
+utils.addParamToPath = function (url, params) {
+  if (!params || typeof params !== 'object' || Array.isArray(params)) {
+    return url
+  }
+  let route = utils.parseUrl(url)
+  for (let key in params) {
+    route.query[key] = params[key]
+  }
+  return route.path + '?' + utils.param(route.query)
+}
+
+/**
+ * 解析url，提取path及query
+ * @param url
+ * @returns {{path: string, query}}
+ */
+utils.parseUrl = function (url) {
+  let qIndex = url.indexOf('\?')
+  let path = qIndex !== -1 ? url.substring(0, qIndex) : url
+  let mixQuery = {}
+  if (qIndex > 0) {
+    let paramAry = url.substring(qIndex + 1).split("\&")
+    for (let index in paramAry) {
+      let param = paramAry[index]
+      let segment = utils.trim(param)
+      if (segment.length > 0) {
+        let keyValues = segment.split('=')
+        if (keyValues.length === 2) {
+          mixQuery[keyValues[0]] = keyValues[1]
+        }
+      }
+    }
+  }
+  return {
+    path: path,
+    query: mixQuery
+  }
+}
 utils.trim = function (str) {
   return str.replace(/(^\s*)|(\s*$)/g, '')
 }
