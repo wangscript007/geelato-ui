@@ -1,8 +1,8 @@
 <template>
   <div class="ui mini borderless menu" style="margin:0px;background-color: #eeeeee">
-    <a class="item">
+    <a class="">
       <sui type="dropdown" :opts="{action: 'hide'}">
-        <a class="ui dropdown" style="color:black">文件
+        <a class="ui dropdown item" style="color:black">文件
           <!--<div class="text">&nbsp;</div>-->
           <!--<i class="dropdown icon"></i>-->
           <div class="menu">
@@ -38,7 +38,7 @@
     <!--</div>-->
     <a v-show="projectOpened" class="item" @click="$emit('itemClick','$_savePage',{})">保存</a>
     <!--<a class="item">{{layout[currentLayout].toTitle}}</a>-->
-    <a class="item" href="http://wwww.geelato.org" target="_blank">帮助</a>
+    <a class="item" href="https://www.geelato.org" target="_blank">帮助</a>
     <slot></slot>
   </div>
 </template>
@@ -51,7 +51,7 @@
         required: true
       }
     },
-    data () {
+    data() {
       return {
         projectOpened: false
       }
@@ -72,11 +72,16 @@
           title: '选择项目',
           opts: {editorStore: this.editorStore}
         }, {
-          '$_selected': function (data) {
+          $_selected: function (data) {
             thisVue.$emit('openProject', data)
             thisVue.projectOpened = true
           }
         })
+      },
+      $_selected: function (data) {
+        let thisVue = this
+        thisVue.$emit('openProject', data)
+        thisVue.projectOpened = true
       },
       $_closeProject: function (event) {
         this.projectOpened = false
@@ -84,7 +89,8 @@
       $_savePage: function () {
 //        let thisVue = this
       },
-      $_showHelp () {}
+      $_showHelp() {
+      }
     },
     components: {}
   }

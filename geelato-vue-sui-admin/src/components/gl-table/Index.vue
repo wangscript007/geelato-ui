@@ -199,10 +199,19 @@
       },
       query: {
         type: Object
+      },
+      opener: {
+        type: Object,
+        required: false
+      },
+      modal: {
+        type: Object,
+        required: false
       }
     },
     data() {
       return {
+        // opener: {},
         // 最大时，不展示查询区
         isMax: false,
         // 关闭tips
@@ -215,6 +224,8 @@
         columns: [],
         visibleColumns: [],
         selectedRows: [],
+        // 点击action,选中的row
+        clickRow: {},
         checkedIds: [],
         currentTreeNode: {id: ''},
         lastGql: {},
@@ -228,8 +239,11 @@
         needResetPagination: false
       }
     },
+    created() {
+      console.log('gl-table > Index>  opts: ', this.opts)
+      console.log('gl-table > Index> ooo: ', this.ooo)
+    },
     mounted() {
-      console.log('gl-table opts', this.opts)
       this.$_resetPagination()
       this.$_loadData()
 //      $(this.$el).find('.ui.cards')()
@@ -384,6 +398,7 @@
         if (action.confirm && !confirm(action.confirm)) {
           return
         }
+        this.clickRow = rowDataItem
         let thisVue = this
         switch (action.click) {
           case 'modal':
@@ -440,7 +455,7 @@
             break
           default:
             if (action.click.indexOf('js:') === 0) {
-              utils.eval(action.click.replace('js:', ''), thisVue)
+              utils.eval(action.click.replace('js:', ''), {opener: this.opener, modal: this.modal, data: this.clickRow})
             } else {
               console.error('该操作：' + action.click + '，未配置处理方法')
             }

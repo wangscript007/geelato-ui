@@ -33,6 +33,8 @@
       }
     },
     mounted () {
+      // 默认加载，我的最近一个项目
+
     },
     methods: {
       $_newProject () {

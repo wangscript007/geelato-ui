@@ -197,7 +197,18 @@ utils.compileString = function (expression, $ctx) {
  */
 utils.eval = function (expression, $ctx, ctxName = '$ctx') {
   let Fn = Function
-  return new Fn(ctxName, 'return ' + expression)($ctx)
+  let str = utils.trim(expression)
+  let index = str.indexOf(';')
+  if (index === -1 || index === str.length - 1) {
+    // 单语句
+    return new Fn(ctxName, 'return ' + expression)($ctx)
+  } else {
+    // 多语句
+    let strAry = str.split(';')
+    let lastStr = strAry.pop();
+    let preStr = strAry.join(';')
+    return new Fn(ctxName, preStr + '; return ' + lastStr)($ctx)
+  }
 }
 
 utils.isEmpty = function (str) {

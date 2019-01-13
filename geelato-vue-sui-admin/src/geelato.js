@@ -469,19 +469,53 @@ class Geelato {
        * @param vueData
        */
       openVue: function (opener, vueComponent, vueConfig, callbackSet) {
+        console.log('geelato > openVue > opener >', opener)
+        console.log('geelato > openVue > modalBody >', vueComponent)
+        console.log('geelato > openVue > vueConfig >', vueConfig)
+        console.log('geelato > openVue > callbackSet >', callbackSet)
+
+        let id = utils.uuid(16)
+        let el = document.createElement('div')
+        el.setAttribute('id', id)
+        document.getElementById('app').appendChild(el)
+        let GLModalComponent = Vue.component('gl-modal')
+        let modalView = new GLModalComponent({
+          // el: '',
+          propsData: {
+            modalId: id,
+            modalOpener: opener,
+            modalBody: vueComponent,
+            modalOpts: vueConfig,
+            callbackSet: callbackSet
+          }
+        })
+        modalView.$mount('#' + id);
+        // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
+        let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
+        $modal.modal('show')
+        return $modal
+      },
+      /**
+       * @param opener
+       * @param vueComponent
+       * @param vueConfig e.g. {title: '', actions: [], padding: '1.5em'}
+       * @param vueData
+       */
+      openVue2: function (opener, vueComponent, vueConfig, callbackSet) {
         console.log('geelato > openVue > vueComponent >', vueComponent)
         console.log('geelato > openVue > vueConfig >', vueConfig)
         console.log('geelato > openVue > callbackSet >', callbackSet)
         // $root对应App.vue的上线，opener.$root.$children[0]才对应APP.vue
         let modalView = opener.$root.$children[0].$refs.appRootModalView
-        modalView.$_setOpener(opener)
+        console.log('geelato > openVue > modalView >', modalView)
         // let newModalView = {
         //   props: {modalOpts: vueConfig},
         //   extends: modalView
         // }
-        console.log('geelato > openVue > modalView >', modalView)
+        modalView.$_setOpener(opener)
         Vue.set(modalView, 'modalBody', vueComponent)
         Vue.set(modalView, 'modalOpts', vueConfig)
+        // Vue.set(modalView, 'opener', opener)
         // 不采用Vue.set做转换
         // modalView.$props.modalOpts = vueConfig
         // modalView.modalOpts = vueConfig

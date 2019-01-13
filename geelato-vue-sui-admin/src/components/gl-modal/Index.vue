@@ -5,7 +5,8 @@
     </div>
     <div v-show="isShowContent" class="scrolling content" :style="contentStyle">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
-      <component ref="modal" :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts">
+      <component ref="modal" :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts"
+                 :opener="modalOpener" :modal="modal">
         正在加载...
       </component>
     </div>
@@ -21,25 +22,32 @@
 </template>
 <script>
   export default {
-    // props: {
-    //   modalOpts: {
-    //     type: Object,
-    //     default: function () {
-    //       return {title: '', actions: [], contentStyle: {}}
-    //     }
-    //   }
-    // },
+    props: {
+      modalId: String,
+      modalOpener: {
+        type: Object
+      },
+      // modalHeader:  {title: ''},
+      // modalFooter: null,
+      modalBody: Function,
+      modalOpts: {
+        type: Object,
+        default() {
+          return {title: '', actions: [], contentStyle: {}}
+        }
+      },
+      // 回调事件集合 格式如：{selected:function(data){ // do something }}
+      callbackSet: {
+        type: Object,
+        default() {
+          return {}
+        }
+      }
+    },
     data: function () {
       return {
-        opener: undefined,
         externalActions: {},
         isModal: true,
-//        modalHeader:  {title: ''},
-        modalBody: null,
-//        modalFooter: null,
-        modalOpts: {title: '', actions: [], contentStyle: {}},
-        // 回调事件集合 格式如：{selected:function(data){ // do something }}
-        callbackSet: {},
         // 页面下方的操作按钮，通过action也可以加入一些事件，但与callbackSet不一样，actions会在modal页面中动态生成按钮
         // 在执行完该按钮绑定的事件之后，会再检查callbackSet是否有同名的方法，有的话，会执行该回调方法
         actions: {},
@@ -48,11 +56,14 @@
         contentStyle: {}
       }
     },
-    created: function () {
-      this.actions = {
-//        $_save: {title: '保存', color: 'primary'},
-//        $_cancel: {title: '取消', color: 'negative'}
+    computed: {
+      modal() {
+        console.log('gl-modal > Index > computed modal: ', this)
+        return this
       }
+    },
+    created: function () {
+      console.log('gl-modal > Index> opener: ', this.modalOpener)
     },
     mounted: function () {
       this.contentStyle = {padding: '1.5em', 'overflow-y': 'auto'}
@@ -66,6 +77,9 @@
        */
       $_setOpener(opener) {
         this.opener = opener
+        // if (this.$refs.modal.$_setOpener && typeof  this.$refs.modal.$_setOpener === 'function') {
+        //   this.$refs.modal.$_setOpener(opener)
+        // }
       },
       $_getOpener() {
         return this.opener
@@ -84,6 +98,7 @@
         if (typeof this.callbackSet.close === 'function') {
           this.callbackSet.close(e, value)
         }
+        // TODO 删除id
         return value
       },
       /**
@@ -95,6 +110,7 @@
         if (typeof this.callbackSet.cancel === 'function') {
           this.callbackSet.cancel(e)
         }
+        // TODO 删除id
       },
       $_callback: function (name, params) {
         let fn = this.callbackSet[name]

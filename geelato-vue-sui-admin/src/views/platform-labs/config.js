@@ -13,6 +13,7 @@ export default {
           title: '组件集合',
           clazz: '',
           items: [
+            {title: '生命周期', href: '/#/m/platform-labs/ui/VueLifeCycle'},
             {title: 'SUI封装', href: '/#/m/platform-labs/ui/Index'},
             {title: 'tree demo', href: '/#/m/platform-labs/ui/TreeDemo'},
             {title: 'bugs', href: '/#/m/platform-labs/bugs/dropdown/DropdownInSlot'},

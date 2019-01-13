@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <router-view/>
-    <gl-modal ref="appRootModalView"></gl-modal>
+    <!--<div id="appModals"></div>-->
+    <!--<gl-modal ref="appRootModalView" :opener="opener"></gl-modal>-->
   </div>
 </template>
 
@@ -10,6 +11,9 @@
   // import 'babel-polyfill'
   export default {
     name: 'app',
+    data() {
+      return {opener: undefined}
+    },
     mounted() {
     },
     components: {}
