@@ -38,7 +38,7 @@
       // let mode = layout && layout.mode !== undefined ? layout.mode : this.$gl.layout.mode
       // let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
       // this.$gl.ui.color.primary = color && color.primary ? color.primary : this.$gl.ui.color.primary
-      console.log('this.profile >', this.profile)
+      console.log('gl-layout > Index > profile: ', this.profile)
       this.$gl.ui.color.primary = this.$_getConfigItem('layout_color').value || this.$gl.ui.color.primary
       mode = this.$_getConfigItem('layout_mode').value || this.$gl.layout.mode || 0
       this.$_changeLayoutMode(mode)

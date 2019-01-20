@@ -365,6 +365,9 @@ utils.listToTree = function (data, pid) {
   return tree;
 }
 
+utils.sleep = function (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 // utils.CryptoJS = CryptoJS
 window.utils = utils
 // let content = utils.CryptoJS.enc.Utf8.parse(str)

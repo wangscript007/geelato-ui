@@ -480,7 +480,6 @@ class Geelato {
         document.getElementById('app').appendChild(el)
         let GLModalComponent = Vue.component('gl-modal')
         let modalView = new GLModalComponent({
-          // el: '',
           propsData: {
             modalId: id,
             modalOpener: opener,
@@ -489,8 +488,7 @@ class Geelato {
             callbackSet: callbackSet
           }
         })
-        modalView.$mount('#' + id);
-        // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
+        modalView.$mount(document.getElementById(id));
         let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
         $modal.modal('show')
         return $modal
@@ -648,9 +646,15 @@ class Geelato {
       profile(profile) {
         if (profile !== undefined) {
           console.log('geelato > set profile>', profile)
+          appendModules(profile.modules)
           utils.session(CONSTS.SESSION_GEELATO_PROFILE, profile)
           console.log('geelato > get profile>', utils.session(CONSTS.SESSION_GEELATO_PROFILE))
         }
+
+        function appendModules(modules) {
+          // let plugin =
+        }
+
         return utils.session(CONSTS.SESSION_GEELATO_PROFILE) || {}
       }
     }
@@ -668,8 +672,16 @@ class Geelato {
     }
   }
 
-  addPlugin(name) {
-    let pluginConfig = this.getPlugin(name)
+  /**
+   *
+   * @param plugin plugin code or plugin config
+   */
+  addPlugin(plugin) {
+    let pluginConfig = plugin
+    if (typeof plugin === 'string') {
+      pluginConfig = this.getPlugin(plugin)
+    }
+    console.log('geelato > addPlugin > name: ', pluginConfig.name, pluginConfig)
     // 合并模块：
     // 若不同的插件有相同的模块编码，将进行合并，从而同名模块的菜单会合并在一起
     // 若不存在同名模块，则直调加模块
@@ -691,12 +703,12 @@ class Geelato {
         }
       }
     }
-    this.plugins[name] = pluginConfig
-    this.entityNames[name] = pluginConfig.entityNames
+    this.plugins[pluginConfig.code] = pluginConfig
+    this.entityNames[pluginConfig.code] = pluginConfig.entityNames
   }
 
   removePlugin(name) {
-    delete  this.plugins[name]
+    delete this.plugins[name]
   }
 
   getPlugin(name) {
@@ -741,6 +753,7 @@ class Geelato {
   }
 
   /**
+   * login and get config
    * addRoutes
    */
   run() {
@@ -748,14 +761,20 @@ class Geelato {
       console.error('geelato > run > 未设置服务地址，如：geelato.setServerUrlRoot("http://localhost:8080")')
     }
     let appBase = this.appBase
-    // let pluginRootRoute = undefined
-    // for (let index in this.$router.options.routes) {
-    //     let route = this.$router.options.routes[index]
-    //     console.log('path', route.path, 'appbase', this.appBase)
-    //     if (route.path === this.appBase) {
-    //         pluginRootRoute = route
-    //     }
-    // }
+    let loggedInfo = instance.security.isLogged()
+    console.log('geelato > run > loggedInfo: ', loggedInfo)
+    if (loggedInfo) {
+      let plugin = {
+        name: '系统内置默认插件',
+        version: '1.0.0',
+        modules: loggedInfo.modules,
+        entityNames: {},
+        description: '模块信息来源于平台后台配置。'
+      }
+      instance.addPlugin(plugin)
+      instance.security.profile(loggedInfo)
+    }
+
     let routeConfig = {
       path: appBase,
       component: GlLayout,

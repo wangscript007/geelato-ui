@@ -1,5 +1,6 @@
 export default {
   name: '实验室',
+  code: 'platform-lab',
   version: '0.1.0',
   modules: [
     {

@@ -1,5 +1,6 @@
 export default {
   name: '开发集成',
+  code: 'platform-ide',
   version: '0.1.0',
   modules: [
     {

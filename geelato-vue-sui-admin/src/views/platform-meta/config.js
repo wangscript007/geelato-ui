@@ -1,5 +1,6 @@
 export default {
   name: '平台元数据',
+  code: 'platform-meta',
   version: '0.1.0',
   modules: [
     {

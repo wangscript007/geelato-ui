@@ -85,8 +85,14 @@
                                     },
                                     index: {
                                       control: 'input',
-                                      title: '首页',
+                                      title: '模块首页',
                                       placeholder: '/#/m/platform-ide/designer/Index',
+                                      rules: [
+                                        {
+                                          type: 'empty',
+                                          prompt: '请输入模块首页'
+                                        }
+                                      ]
                                     },
                                     html: {
                                       control: 'input',
@@ -123,8 +129,9 @@
                                     type: 'table',
                                     data: [
                                       // [label colSpan,rowSpan,field colSpan,rowSpan]
-                                      [{title: [4, 8]}, {resize: [4, 8]}],
-                                      [{code: [4, 8]}, {enabled: [4, 8]}],
+                                      [{title: [4, 8]}, {code: [4, 8]}],
+                                      [{index: [4, 20]}],
+                                      [{resize: [4, 8]}, {enabled: [4, 8]}],
                                       [{html: [4, 8]}, {seq: [4, 8]}],
                                       [{description: [4, 20]}]
                                     ],
@@ -198,22 +205,22 @@
                     //     }
                     //   }
                     // },
+                    // {
+                    //   title: '详情1',
+                    //   click: 'modal',
+                    //   modal: {
+                    //     title: '详细信息',
+                    //     type: 'href',
+                    //     value: '/components/gl-page-loader/Index.vue',
+                    //     opts: {
+                    //       // code: 'list_9V02AlD4',
+                    //       code: 'form-combination_Ygvv7IXs',
+                    //       model: {id: '@.id'}
+                    //     }
+                    //   }
+                    // },
                     {
-                      title: '详情1',
-                      click: 'modal',
-                      modal: {
-                        title: '详细信息',
-                        type: 'href',
-                        value: '/components/gl-page-loader/Index.vue',
-                        opts: {
-                          // code: 'list_9V02AlD4',
-                          code: 'form-combination_Ygvv7IXs',
-                          model: {id: '@.id'}
-                        }
-                      }
-                    },
-                    {
-                      title: '详情2',
+                      title: '详情',
                       click: 'modal',
                       modal: {
                         title: '详细信息',
