@@ -76,10 +76,10 @@
                   let componentsPath = thisVue.pageCfg.component.substring(1) + '.vue'
                   thisVue.currentView = resolve => require(['../../' + componentsPath], resolve)
                 } else {
-                  console.error('暂不支持的格式thisVue.pageCfg.component>', thisVue.pageCfg.component)
+                  console.error('gl-page-loader > Index > 不支持的component格式: ', thisVue.pageCfg.component, '当前页面配置为：', thisVue.pageCfg)
                 }
               } else {
-                console.error('暂不支持的格式thisVue.pageCfg.component>', thisVue.pageCfg.component)
+                console.error('gl-page-loader > Index > 不支持的component格式: ', thisVue.pageCfg.component, '当前页面配置为：', thisVue.pageCfg)
               }
             } else {
               thisVue.$set(thisVue.message, 'header', '加载失败')

@@ -196,6 +196,8 @@ utils.compileString = function (expression, $ctx) {
  * @returns {*}
  */
 utils.eval = function (expression, $ctx, ctxName = '$ctx') {
+  console.log('utils > expression: ', expression)
+  console.log('utils > $ctx: ', $ctx)
   let Fn = Function
   let str = utils.trim(expression)
   let index = str.indexOf(';')
@@ -349,6 +351,12 @@ utils.remove = function (items, index, confirmMsg) {
   }
 }
 
+/**
+ *
+ * @param data 列表数据
+ * @param pid  根id
+ * @returns {Array}
+ */
 utils.listToTree = function (data, pid) {
   let tree = [];
   let temp;

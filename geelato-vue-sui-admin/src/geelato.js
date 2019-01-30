@@ -1,8 +1,10 @@
 import Vue from "vue";
+import VueClipboard from 'vue-clipboard2'
 import utils from "./assets/script/utils";
 import PageManager from './assets/script/PageManager.js'
 import SuiVue from 'semantic-ui-vue';
 import Sui from './components/sui/Index.vue'
+import GlToolbar from './components/gl-toolbar/Index.vue'
 import GlLayout from './components/gl-layout/Index.vue'
 import GlModal from './components/gl-modal/Index.vue'
 import GlGroup from './components/gl-group/Index.vue'
@@ -494,41 +496,6 @@ class Geelato {
         return $modal
       },
       /**
-       * @param opener
-       * @param vueComponent
-       * @param vueConfig e.g. {title: '', actions: [], padding: '1.5em'}
-       * @param vueData
-       */
-      openVue2: function (opener, vueComponent, vueConfig, callbackSet) {
-        console.log('geelato > openVue > vueComponent >', vueComponent)
-        console.log('geelato > openVue > vueConfig >', vueConfig)
-        console.log('geelato > openVue > callbackSet >', callbackSet)
-        // $root对应App.vue的上线，opener.$root.$children[0]才对应APP.vue
-        let modalView = opener.$root.$children[0].$refs.appRootModalView
-        console.log('geelato > openVue > modalView >', modalView)
-        // let newModalView = {
-        //   props: {modalOpts: vueConfig},
-        //   extends: modalView
-        // }
-        modalView.$_setOpener(opener)
-        Vue.set(modalView, 'modalBody', vueComponent)
-        Vue.set(modalView, 'modalOpts', vueConfig)
-        // Vue.set(modalView, 'opener', opener)
-        // 不采用Vue.set做转换
-        // modalView.$props.modalOpts = vueConfig
-        // modalView.modalOpts = vueConfig
-        // Vue.set(modalView, 'modalOpts', {
-        //   title: '',
-        //   actions: [],
-        //   opts: vueConfig
-        // })
-        Vue.set(modalView, 'callbackSet', callbackSet || {})
-        // $('modalView.$el).modal('setting', 'transition', 'fade').modal('show')
-        let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
-        $modal.modal('show')
-        return $modal
-      },
-      /**
        *
        * @param msg
        * @param type warning、info、positive|success、negative|error
@@ -635,26 +602,62 @@ class Geelato {
           success: function (data) {
             if (data) {
               console.log('geelato > isLogged > res', data)
+              // 转换modules的菜单格式(只支持二级级单)
+              if (data.modules && data.modules.length > 0) {
+                for (let i in data.modules) {
+                  let module = data.modules[i]
+                  console.log('geelato > module.tree: ', module.tree)
+                  let menu = []
+                  for (let i in module.tree) {
+                    let treeNode = module.tree[i]
+                    // 一级菜单
+                    let menuItem = {
+                      title: treeNode['tn_text'],
+                      clazz: treeNode['clazz'],
+                      href: treeNode['href'],
+                      active: treeNode['active']
+                    }
+                    // 二级菜单
+                    if (treeNode.items) {
+                      menuItem.items = []
+                      for (let iL2 in treeNode.items) {
+                        let treeNodeL2 = treeNode.items[iL2]
+                        let menuItemL2 = {
+                          title: treeNodeL2['tn_text'],
+                          clazz: treeNodeL2['clazz'],
+                          href: treeNodeL2['href'],
+                          active: treeNodeL2['active']
+                        }
+                        if (menuItemL2.href) {
+                          menuItem.items.push(menuItemL2)
+                        } else {
+                          console.error('geelato > valid menuItem: ', menuItemL2)
+                        }
+                      }
+                    }
+                    menu.push(menuItem)
+                  }
+                  module.menu = menu
+                  delete module.tree
+                }
+              }
               result = data
             } else {
               console.log('geelato > isLogged > check login state and return empty.')
             }
           }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          //net::ERR_CONNECTION_REFUSED 发生时，也能进入
+          console.info("geelato > isLogged: 网络出错")
         })
         return result
       },
       profile(profile) {
         if (profile !== undefined) {
           console.log('geelato > set profile>', profile)
-          appendModules(profile.modules)
           utils.session(CONSTS.SESSION_GEELATO_PROFILE, profile)
           console.log('geelato > get profile>', utils.session(CONSTS.SESSION_GEELATO_PROFILE))
         }
-
-        function appendModules(modules) {
-          // let plugin =
-        }
-
         return utils.session(CONSTS.SESSION_GEELATO_PROFILE) || {}
       }
     }
@@ -856,9 +859,11 @@ class Geelato {
 }
 
 let instance = new Geelato()
+Vue.use(VueClipboard)
 Vue.use(SuiVue)
 Vue.prototype.$gl = instance
 Vue.component('sui', Sui)
+Vue.component('gl-toolbar', GlToolbar)
 Vue.component('gl-modal', GlModal)
 Vue.component('gl-group', GlGroup)
 Vue.component('gl-layout-page', GlLayoutPage)

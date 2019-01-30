@@ -1,6 +1,7 @@
 export default class ActionHandler {
-  constructor($gl) {
-    this.$gl = $gl
+  constructor(theVue) {
+    this.theVue = theVue
+    this.$gl = theVue.$gl
   }
 
   /**
@@ -54,8 +55,10 @@ export default class ActionHandler {
         console.log('export:print')
         break
       default:
-        if (action.click.indexOf('js:') === 0) {
-          utils.eval(action.click.replace('js:', ''), thisVue)
+        if (action.click.indexOf('@:') === 0) {
+          console.log('gl-toolbar > ActionHandler > $ctx: ', this.theVue)
+          utils.eval(action.click.replace('@:', ''), this.theVue)
+          console.log('gl-toolbar > ActionHandler > $ctx: ', this.theVue)
         } else {
           console.error('该操作：' + action.click + '，未配置处理方法')
         }

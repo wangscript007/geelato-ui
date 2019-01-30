@@ -115,13 +115,37 @@ export default [
         },
         description: {
           control: 'textarea',
-          title: '描述',
+          title: '描述'
         },
         code: {
           control: 'input',
           title: 'DEMO编码',
           entity: 'platformDemoEntity',
           description: '这是另一个实体的字段'
+        },
+        type: {
+          control: 'radio',
+          title: '类型',
+          value: 'typeB',
+          data: [
+            {text: '类型A', value: 'typeA'},
+            {text: '类型B', value: 'typeB'},
+            {text: '类型C', value: 'typeC'}
+          ]
+        },
+        typeA: {
+          control: 'input',
+          title: '类型A'
+        },
+        typeB: {
+          control: 'input',
+          title: '类型B',
+          readonly: true,
+          js: "gs:$ctx.form.typeB=$ctx.form.province+'-'+$ctx.form.city"
+        },
+        typeC: {
+          control: 'input',
+          title: '类型C'
         },
         demoName: {
           control: 'input',
@@ -186,10 +210,19 @@ export default [
           [{password: [4, 8]}, {confirmPassword: [4, 8]}],
           [{enable: [4, 8]}, {'': [4, 8]}],
           [{code: [4, 8]}, {demoName: [4, 8]}],
+          [{type: [4, 20]}],
+          [{typeA: [4, 20]}],
+          [{typeB: [4, 20]}],
+          [{typeC: [4, 20]}],
           [{description: [4, 20]}]
         ],
         hidden: {
           // 各表单状态，需隐藏的内容
+          common: {
+            typeA: 'gs:$ctx.form.type!=="typeA"',
+            typeB: 'gs:$ctx.form.type!=="typeB"',
+            typeC: 'gs:$ctx.form.type!=="typeC"'
+          },
           update: {password: 1, confirmPassword: 2},
           create: {},
           read: {}

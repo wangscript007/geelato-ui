@@ -5,18 +5,24 @@
     </div>
     <div v-show="isShowContent" class="scrolling content" :style="contentStyle">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
-      <component ref="modal" :componentUpdated="isMounted=true" :is="modalBody" :opts="modalOpts.opts"
+      <component ref="content" :componentUpdated="isMounted=true" :is="modalBody"
+                 :opts="modalOpts.opts"
+                 :query="modalOpts.query"
                  :opener="modalOpener" :modal="modal">
         正在加载...
       </component>
     </div>
-    <div class="actions" style="text-align: center">
-      <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_save">保存</div>-->
+    <!-- 采用"actions"样式类，其内部的button会被semantic-ui框架加上关闭事件，这里改用gl-modal-actions重写 -->
+    <div class="gl-modal-actions" style="text-align: center">
+      <!--<div class="ui mini button" :class="$gl.ui.color.primary">保存</div>-->
       <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="$_cancel">取消</div>-->
-      <div v-for="(item,key) in actions" class="ui mini button" :key="key" :class="$gl.ui.color[item.color]"
-           @click="$_doAction(key)">
-        {{item.title}}
-      </div>
+
+      <!--<div v-if="!toolbar" v-for="(item,key) in actions" class="ui mini button" :key="key"-->
+      <!--:class="$gl.ui.color[item.color]"-->
+      <!--@click="$_doAction(key)">-->
+      <!--{{item.title}}-->
+      <!--</div>-->
+      <gl-toolbar v-if="toolbar" v-bind="toolbar" :css="{align:'center',dividing:false}" :ctx="content"></gl-toolbar>
     </div>
   </div>
 </template>
@@ -53,19 +59,25 @@
         actions: {},
         isMounted: false,
         isShowContent: true,
-        contentStyle: {}
+        contentStyle: {},
+        toolbar: undefined
       }
     },
     computed: {
       modal() {
         console.log('gl-modal > Index > computed modal: ', this)
         return this
+      },
+      content() {
+        console.log('gl-modal > Index > computed modalContent: ', this.$refs.content)
+        return this.$refs.content
       }
     },
     created: function () {
       console.log('gl-modal > Index> opener: ', this.modalOpener)
     },
     mounted: function () {
+      this.toolbar = undefined
       this.contentStyle = {padding: '1.5em', 'overflow-y': 'auto'}
       $.extend(this.contentStyle, this.modalOpts.contentStyle)
       $(this.$el).draggable({cancel: '.ui.modal>.content'})
@@ -77,12 +89,14 @@
        */
       $_setOpener(opener) {
         this.opener = opener
-        // if (this.$refs.modal.$_setOpener && typeof  this.$refs.modal.$_setOpener === 'function') {
-        //   this.$refs.modal.$_setOpener(opener)
-        // }
       },
-      $_getOpener() {
-        return this.opener
+      /**
+       *  合并工具条
+       *  @toolbar 工具配置
+       */
+      $_appendToolbar(toolbar) {
+        this.toolbar = toolbar
+        return true
       },
       /**
        * 关键窗口，并调用钩子 close
@@ -90,10 +104,10 @@
        */
       $_close: function (e) {
         let value = {}
-        if (typeof this.$refs.modal.$_getValue === 'function') {
-          value = this.$refs.modal.$_getValue()
+        if (typeof this.$refs.content.$_getValue === 'function') {
+          value = this.$refs.content.$_getValue()
         }
-        console.log('get value >', value)
+        console.log('gl-modal > Index > $_close > get value: ', value)
         $(this.$el).modal('hide')
         if (typeof this.callbackSet.close === 'function') {
           this.callbackSet.close(e, value)
@@ -106,6 +120,7 @@
        * @param e
        */
       $_cancel: function (e) {
+        console.log('gl-modal > Index > $_cancel()')
         $(this.$el).modal('hide')
         if (typeof this.callbackSet.cancel === 'function') {
           this.callbackSet.cancel(e)
@@ -171,7 +186,13 @@
   }
 </script>
 <style scoped>
-  .page-content {
-    margin-left: 0;
+  /*.page-content {*/
+  /*margin-left: 0;*/
+  /*}*/
+
+  .gl-modal-actions {
+    background: #f9fafb;
+    padding: 1rem 1rem;
+    border-top: 1px solid rgba(34, 36, 38, .15);
   }
 </style>

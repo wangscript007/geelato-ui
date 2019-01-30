@@ -8,12 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "clipboard": "^2.0.4",
     "handsontable": "^5.0.2",
     "screenfull": "^3.3.3",
     "semantic-ui-vue": "^0.7.0",
     "split.js": "^1.5.10",
     "vue": "^2.5.21",
+    "vue-clipboard2": "^0.2.1",
     "vue-codemirror": "^4.0.5",
     "vue-multipane": "^0.9.5",
     "vue-pdf": "^3.2.2",

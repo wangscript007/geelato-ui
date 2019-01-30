@@ -166,6 +166,8 @@
                   // 必须有父节点，即限制只有一个根节点
                   return false
                 }
+                // TODO 保存parent
+
               } else if (operation === 'delete_node') {
                 if (node.parent === '#' || !node.parent) {
                   theVue.$gl.ui.showMsg('根节点不能删除！', 'warning')
@@ -258,12 +260,36 @@
           // 且叶子节点为文件类型才生效
           if (treeNode.type) {
             let nodeEntity = {
-              treeNodeId: treeNode.id,
+              treeNodeId: node.node.id,
               [theVue.nodeEntityNameField]: treeNode.text
             }
             theVue.$emit('select', nodeEntity, treeNode)
           }
         })
+        $tree.bind('move_node.jstree', function (e, data) {
+          console.log('gl-tree > Index > move tree node: ', data);
+
+          let treeNode = {
+            id: data.node.id,
+            parent: data.node.parent
+          }
+          theVue.$gl.data.save(theVue.$gl.entityNames['platform-core'].common.treeNode, treeNode).then(function (res) {
+            // 且叶子节点为文件类型才生效
+            let nodeEntity = {
+              treeNodeId: treeNode.id,
+              [theVue.nodeEntityNameField]: treeNode.text
+            }
+            theVue.$emit('moved', nodeEntity, treeNode)
+          })
+
+          // jQuery.post("modulemng/dndmodule",
+          //   {
+          //     id: data.node.id,
+          //     parent: data.parent,
+          //     position: data.position
+          //   }
+        })
+
         $tree.jstree(true).open_all()
 
         function getFileNodeData($node) {

@@ -5,11 +5,10 @@
   <div>
     <div v-for="(card,index) in cards" :key="index">
       <template v-if="card.type==='form'">
-        <gl-form-base :opts="card.opts&&card.opts.ui?card.opts:{ui:card.opts}" :query="query"
-                      :ref="'form_'+index">
+        <gl-form-base :opts="card.opts" :query="query" :ref="'form_'+index">
         </gl-form-base>
       </template>
-      <gl-tree-form v-if="card.type==='treeForm'" :opts="card.opts" :query="query">
+      <gl-tree-form v-if="card.type==='treeForm'" :opts="card.opts" :query="query" :ref="'form_'+index">
       </gl-tree-form>
       <!--<template v-if="card.type==='ht-table'" @click="$_updateTableColSize">-->
       <!--<ht-table ref="formTable" :width="card.opts.table.width" :col-num="card.opts.table.colNum"-->
@@ -27,9 +26,10 @@
                :data-tab="'tab_'+item.name"
                :key="itemIndex">
             <!--若tab项（item）是一个表单-->
-            <gl-form-base v-if="item.type==='form'" :opts="{ui:item.opts}" :query="query" :ref="'form_'+index+'_'+itemIndex">
+            <gl-form-base v-if="item.type==='form'" :opts="item.opts" :query="query" :ref="'form_'+index+'_'+itemIndex">
             </gl-form-base>
-            <gl-tree-form v-if="item.type==='treeForm'" :opts="item.opts" :query="query" :ref="'form_'+index+'_'+itemIndex">
+            <gl-tree-form v-if="item.type==='treeForm'" :opts="item.opts" :query="query"
+                          :ref="'form_'+index+'_'+itemIndex">
             </gl-tree-form>
             <template v-else>
               <!--card.type:{{card.type}}-->
@@ -38,14 +38,16 @@
         </sui>
       </template>
       <template v-else-if="card.type==='list'">
-        <gl-table :opts="card.opts" :query="{em:'platform_user'}"></gl-table>
+        <gl-table :opts="card.opts" :query="query"></gl-table>
       </template>
       <template v-else-if="card.type==='header'">
         <h4 class="ui dividing header" v-html="card.name">
         </h4>
       </template>
       <template v-else-if="card.type==='toolbar'">
-        <gl-toolbar :actions="card.opts.actions"></gl-toolbar>
+        <gl-toolbar
+            v-if="!(card.opts.appendToParent&&modal&&(typeof modal.$_appendToolbar === 'function')&&modal.$_appendToolbar(card.opts)===true)"
+            v-bind="card.opts" :ctx="$_self()"></gl-toolbar>
       </template>
       <template v-else>
         <!--未支持的类型：{{card.type}}，card:-->
@@ -61,6 +63,7 @@
 
   export default {
     props: {
+      // ui的配置信息，用于渲染ui
       opts: {
         type: Object,
         required: true
@@ -68,14 +71,25 @@
       updateSeq: {
         type: String
       },
+      // 业务数据信息，用于获取填充表单值
       query: {
         type: Object
+      },
+      // 打开本组件的来源组件
+      opener: {
+        type: Object,
+        required: false
+      },
+      // 通过modal窗口打开该页面时，可获取到该窗口的引用
+      modal: {
+        type: Object,
+        required: false
       }
     },
     data() {
       return {
         lastFormNum: 0,
-        cards: this.opts.ui.cards,
+        cards: this.opts.cards,
         // 工具体内置的方法，用于工作条配置时，选取
         toolbarDefaultActions: [
           {name: '$_save', title: '保存', color: 'primary', click: this.$_save, opts: {}, callback: {}},
@@ -83,9 +97,6 @@
       }
     },
     computed: {
-      // width: function () {
-      //   return this.$el ? this.$el.clientWidth : undefined
-      // }
       formNum: function () {
         let num
         for (let card in this.cards) {
@@ -99,15 +110,16 @@
     },
     watch: {},
     created: function () {
-      // this.$_loadData()
       this.$_appendActionToParent()
     },
     mounted: function () {
-      // console.log('mounted', this.$el, this.$el.clientWidth)
-      console.log('gl-form-combination query>', this.query)
+      // console.log('gl-form-combination > mounted > query: ', this.query)
       this.$_updateTableColSize()
     },
     methods: {
+      $_self() {
+        return this
+      },
       $_updateTableColSize() {
         if (!this.$refs.formTable) {
           return
@@ -121,41 +133,113 @@
           }
         }
       },
-      $_save() {
+      $_validate() {
         let thisVue = this
+        let validateInfoAry = []
         for (let index in thisVue.cards) {
           let card = thisVue.cards[index]
-          console.log('card>', card)
+          console.log('gl-form-combination > Index > $_validate > card: ', card)
           if (card.type === 'form' || card.type === 'treeForm') {
-            console.log('gql', thisVue.$refs)
-            console.log('gql', thisVue.$refs['form_' + index])
-            save(thisVue.$refs['form_' + index][0])
+            let v = thisVue.$refs['form_' + index][0]
+            validateInfoAry.push(v.$_validate())
           } else if (card.type === 'tab') {
             for (let itemIndex in card.items) {
               let tabCard = card.items[itemIndex]
-              console.log('tabCard>', tabCard, index, itemIndex)
+              console.log('gl-form-combination > Index > tabCard: ', tabCard, index, itemIndex)
               if (tabCard.type === 'form' || tabCard.type === 'treeForm') {
-                console.log('sub gql', thisVue.$refs)
-                console.log('sub gql', thisVue.$refs['form_' + index + '_' + itemIndex])
-                save(thisVue.$refs['form_' + index + '_' + itemIndex][0])
+                let v = thisVue.$refs['form_' + index + '_' + itemIndex][0]
+                validateInfoAry.push(v.$_validate())
               }
             }
           }
         }
 
-        function save(formVue) {
-          console.log('gl-form-combination > formVue: ', formVue)
-          // formVue.$_reset(formVue.$props.opts)
-          if (formVue) {
-            formVue.$_validate()
-            let gql = formVue.$_getGql()
-            console.log('$_getGql', gql)
-            thisVue.$gl.data.saveByGql(null, gql, '保存成功', '保存失败').then(function (res) {
-//            console.log('save form res>', res)
-              if (typeof thisVue.$parent.$_close === 'function') {
-                $parent.$_close()
+        let isSuccess = true
+        for (let index in validateInfoAry) {
+          let validateInfo = validateInfoAry[index]
+          if (!validateInfo.isSuccess) {
+            isSuccess = false
+            break;
+          }
+        }
+
+        return {code: isSuccess ? 0 : -1, isSuccess: isSuccess, result: validateInfoAry}
+      },
+      $_getGql() {
+        let thisVue = this
+        let formVueAry = []
+        for (let index in thisVue.cards) {
+          let card = thisVue.cards[index]
+          console.log('gl-form-combination > Index > $_getGql > card: ', card)
+          if (card.type === 'form' || card.type === 'treeForm') {
+            let v = thisVue.$refs['form_' + index][0]
+            formVueAry.push(v)
+          } else if (card.type === 'tab') {
+            for (let itemIndex in card.items) {
+              let tabCard = card.items[itemIndex]
+              console.log('gl-form-combination > Index > $_getGql > tabCard: ', tabCard, index, itemIndex)
+              if (tabCard.type === 'form' || tabCard.type === 'treeForm') {
+                let v = thisVue.$refs['form_' + index + '_' + itemIndex][0]
+                formVueAry.push(v)
               }
+            }
+          }
+        }
+        let gqlAry = []
+        for (let index in formVueAry) {
+          let formVue = formVueAry[index]
+          console.log('gl-form-combination > $_getGql > formVue: ', formVue)
+          let gql = formVue.$_getGql()
+          console.log('gl-form-combination > $_getGql> gql: ', gql)
+          gqlAry.push(gql)
+        }
+        return gqlAry
+      },
+      $_save(isSaveAndCloseParent = true) {
+        let thisVue = this
+        let validateInfo = thisVue.$_validate()
+        if (!validateInfo.isSuccess) {
+          return false
+        }
+        let gql = thisVue.$_getGql()
+        if (typeof gql === 'object' && gql.length > 0) {
+          for (let i in gql) {
+            // TODO 三层或更多层嵌套时
+            save(gql[i])
+          }
+        } else {
+          save(gql)
+        }
+
+        if (isSaveAndCloseParent && this.modal && typeof this.modal.$_close === 'function') {
+          this.modal.$_close()
+        }
+
+        function save(gql) {
+          if (gql && gql !== {}) {
+            let gqlOne = gql.length === 1 ? gql[0] : gql
+            thisVue.$gl.data.saveByGql(null, gqlOne, '保存成功', '保存失败').then(function (res) {
             })
+          }
+        }
+      },
+      $_setValues(values) {
+        let thisVue = this
+        for (let index in thisVue.cards) {
+          let card = thisVue.cards[index]
+          console.log('gl-form-combination > Index > card: ', card)
+          if (card.type === 'form' || card.type === 'treeForm') {
+            let v = thisVue.$refs['form_' + index][0]
+            typeof v.$_setValues === 'function' ? v.$_setValues(values) : null
+          } else if (card.type === 'tab') {
+            for (let itemIndex in card.items) {
+              let tabCard = card.items[itemIndex]
+              console.log('gl-form-combination > Index > tabCard: ', tabCard, index, itemIndex)
+              if (tabCard.type === 'form' || tabCard.type === 'treeForm') {
+                let v = thisVue.$refs['form_' + index + '_' + itemIndex][0]
+                typeof v.$_setValues === 'function' ? v.$_setValues(values) : null
+              }
+            }
           }
         }
       },
@@ -172,9 +256,9 @@
         if (!parent.$_addAction || typeof  parent.$_addAction !== 'function') {
           return
         }
-        parent.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
+        // parent.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
         // $_cancel是modal内容的方法，这里可以简写成：{name: '$_cancel'}
-        parent.$_addAction({name: '$_cancel', title: '取消', fn: parent.$_cancel})
+        // parent.$_addAction({name: '$_cancel', title: '取消', fn: parent.$_cancel})
         parent.$_updateActions()
       }
     },

@@ -30,6 +30,16 @@
           return false
         }
       },
+      /**
+       *  action执行时，调用方法的所在组件
+       */
+      ctx: {
+        type: Object,
+        required: false,
+        default() {
+          return {}
+        }
+      },
       actions: {
         type: Array,
         required: false
@@ -39,7 +49,7 @@
         required: false,
         default() {
           return {
-            aligned: 'center', // left|right|center
+            align: 'center', // left|right|center
             dividing: true
           }
         }
@@ -48,9 +58,9 @@
     data() {
       return {
         clazz: {
-          left: this.css.aligned === 'left',
-          right: this.css.aligned === 'right',
-          center: this.css.aligned === 'center',
+          left: this.css.align === 'left',
+          right: this.css.align === 'right',
+          center: this.css.align === 'center',
           dividing: this.css.dividing
         }
       }
@@ -59,7 +69,7 @@
     },
     methods: {
       $_click(action, $event) {
-        let actionHandler = new ActionHandler(this.$gl)
+        let actionHandler = new ActionHandler(this.ctx)
         actionHandler.do(action)
       }
     },
