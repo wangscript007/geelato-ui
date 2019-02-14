@@ -10,17 +10,17 @@
                  :node-entity-name-field="opts.nodeEntityNameField"
                  :tree-id="opts.treeId"
                  :tree-name="opts.treeName"
-                 @created="$_onNodeSelect"
-                 @updated="$_onNodeUpdate"
-                 @select="$_onNodeSelect"
-                 @moved="$_onNodeSelect"
+                 @created="onNodeSelect"
+                 @updated="onNodeUpdate"
+                 @select="onNodeSelect"
+                 @moved="onNodeSelect"
         >
         </gl-tree>
       </div>
       <div slot="leftAction">
-        <!--<sui-button size="mini" v-for="item in configs" @click="$_changeConfig(item.value)">加载{{item.text}}-->
+        <!--<sui-button size="mini" v-for="item in configs" @click="changeConfig(item.value)">加载{{item.text}}-->
         <!--</sui-button>-->
-        <!--<sui-button size="mini" @click="$_genForm" :class="$gl.ui.color.primary">生成表单</sui-button>-->
+        <!--<sui-button size="mini" @click="genForm" :class="$gl.ui.color.primary">生成表单</sui-button>-->
       </div>
       <div slot="right">
         <!--<div class="ui info attached bottom segment" v-if="" style="word-wrap:break-word">-->
@@ -34,10 +34,10 @@
         </gl-message>
       </div>
       <div slot="rightAction">
-        <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_validate">验证表单</div>-->
-        <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="$_getValues">获取表单值</div>-->
-        <!--<div class="ui mini button gql" :class="$gl.ui.color.primary" @click="$_getGql">获取Gql</div>-->
-        <!--<div class="ui mini button" @click="$_clear">清除</div>-->
+        <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="validate">验证表单</div>-->
+        <!--<div class="ui mini button" :class="$gl.ui.color.primary" @click="getValues">获取表单值</div>-->
+        <!--<div class="ui mini button gql" :class="$gl.ui.color.primary" @click="getGql">获取Gql</div>-->
+        <!--<div class="ui mini button" @click="clear">清除</div>-->
         <gl-toolbar v-if="toolbar" v-bind="toolbar" :css="{align:'right',dividing:false}" :ctx="content"></gl-toolbar>
       </div>
 
@@ -81,35 +81,35 @@
       this.toolbar = undefined
     },
     methods: {
-      $_validate() {
-        return this.$refs.glForm.$_validate()
+      validate() {
+        return this.$refs.glForm.validate()
       },
-      $_getGql() {
-        return this.$refs.glForm.$_getGql()
+      getGql() {
+        return this.$refs.glForm.getGql()
       },
-      $_onNodeUpdate(nodeEntity, treeNode) {
-        this.$refs.glForm.$_setValues(nodeEntity)
+      onNodeUpdate(nodeEntity, treeNode) {
+        this.$refs.glForm.setValues(nodeEntity)
       },
-      $_onNodeSelect(nodeEntity, treeNode) {
+      onNodeSelect(nodeEntity, treeNode) {
         this.selected = true
         this.$nextTick()
-        console.log('gl-tree-form > Index > $_onNodeSelect > nodeEntity: ', nodeEntity)
-        console.log('gl-tree-form > Index > $_onNodeSelect > treeNode: ', treeNode)
+        console.log('gl-tree-form > Index > onNodeSelect > nodeEntity: ', nodeEntity)
+        console.log('gl-tree-form > Index > onNodeSelect > treeNode: ', treeNode)
         for (let key in nodeEntity) {
           this.$set(this.currentNodeEntity, key, nodeEntity[key])
         }
         for (let key in treeNode) {
           this.$set(this.currentTreeNode, key, treeNode[key])
         }
-        this.$refs.glForm.$_setValues(nodeEntity)
+        this.$refs.glForm.setValues(nodeEntity)
         // this.$refs.glForm.$nextTick()
-        console.log('gl-tree-form > Index > $_onNodeSelect > currentNodeEntity: ', this.currentNodeEntity)
+        console.log('gl-tree-form > Index > onNodeSelect > currentNodeEntity: ', this.currentNodeEntity)
       },
       /**
        *  合并工具条
        *  @toolbar 工具配置
        */
-      $_appendToolbar(toolbar) {
+      appendToolbar(toolbar) {
         this.toolbar = toolbar
         return true
       }

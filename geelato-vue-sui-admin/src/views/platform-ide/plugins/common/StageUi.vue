@@ -1,6 +1,6 @@
 <template>
     <div class="gl-page-content-wrapper">
-        <component :is="currentView" :opts="{ui:editorStore.editingPage.content.opts.ui}" :query="queryString">
+        <component :is="currentView" :opts="editorStore.editingPage.content.opts.ui" :query="queryString">
             <!-- 组件在 vm.currentview 变化时改变！ -->
         </component>
     </div>
@@ -34,18 +34,18 @@
                 }
                 console.log('editorStore.editingPage.id> val:', val, 'oldVal:', oldVal)
                 // 重置为未启用
-                this.$_init()
+                this.init()
             }
         },
         created: function () {
             // 组件创建完后获取数据，
         },
         mounted: function () {
-            this.$_init()
+            this.init()
             // this.$forceUpdate()
         },
         methods: {
-            $_init() {
+            init() {
                 let thisVue = this
                 // 如果是从服务端加载page配置信息，此时thisVue.editorStore.editingPage已是最新的，不用本地模板panel的配置数据
                 // 增加条件thisVue.editorStore.editingPage.content.component不为空，确保当服务端没有存储有效的配置信息信息，改从模板获取示例进行展示
@@ -75,13 +75,13 @@
                 // thisVue.editorStore.commitOpts('json', thisVue.editorStore.editingPage.content.opts.ui)
                 thisVue.currentView = resolve => require(['../../../../' + thisVue.editorStore.editingPage.content.component.substring(1) + '.vue'], resolve)
             },
-            $_focus() {
+            focus() {
             },
-            $_reset() {
+            reset() {
             },
-            $_setValue(contentString = '') {
+            setValue(contentString = '') {
             },
-            $_commit() {
+            commit() {
                 return {code: 0, msg: ''}
             }
         },

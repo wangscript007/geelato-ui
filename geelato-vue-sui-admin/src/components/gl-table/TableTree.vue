@@ -27,10 +27,10 @@
         created: function () {
         },
         mounted: function () {
-            this.$_load(this.opts.treeId)
+            this.load(this.opts.treeId)
         },
         methods: {
-            $_load(treeId) {
+            load(treeId) {
                 if (!treeId) {
                     return
                 }
@@ -167,7 +167,7 @@
                     })
                 }
             }
-//      $_submit (e) {
+//      submit (e) {
 //        let result = {}
 //        this.$emit('input', result)
 //      },

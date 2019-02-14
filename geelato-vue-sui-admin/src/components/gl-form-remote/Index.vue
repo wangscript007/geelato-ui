@@ -23,21 +23,21 @@
         mounted: function () {
         },
         methods: {
-            $_genForm() {
-                this.$refs.glForm.$_reset({ui: JSON.parse(this.$refs.jsonCM.$_getValue())})
+            genForm() {
+                this.$refs.glForm.reset({ui: JSON.parse(this.$refs.jsonCM.getValue())})
             },
-            $_validate() {
-                this.$refs.glForm.$_validate()
+            validate() {
+                this.$refs.glForm.validate()
             },
-            $_clearValidateMessage() {
-                this.$refs.glForm.$_clearValidateMessage()
+            clearValidateMessage() {
+                this.$refs.glForm.clearValidateMessage()
             },
-            $_save() {
+            save() {
                 let thisVue = this
-                let formValues = this.$refs.glForm.$_getValues()
+                let formValues = this.$refs.glForm.getValues()
                 this.$gl.data.save(this.opts.ui.entityName, this.form).then(function (res) {
-                    if (typeof thisVue.$parent.$_close === 'function') {
-                        thisVue.$parent.$_close()
+                    if (typeof thisVue.$parent.close === 'function') {
+                        thisVue.$parent.close()
                     }
                 })
 
@@ -45,15 +45,15 @@
             /**
              * 设置弹层的操作按钮及操作事件
              */
-            $_setModal() {
+            setModal() {
                 let modal = this.$parent
-                if (!modal.$_addAction) {
+                if (!modal.addAction) {
                     return
                 }
-                modal.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
-                // $_cancel是modal内容的方法，这里可以简写成：{name: '$_cancel'}
-                modal.$_addAction({name: '$_cancel', title: '取消', fn: modal.$_cancel})
-                modal.$_updateActions()
+                modal.addAction({name: 'save', title: '保存', fn: this.save})
+                // cancel是modal内容的方法，这里可以简写成：{name: 'cancel'}
+                modal.addAction({name: 'cancel', title: '取消', fn: modal.cancel})
+                modal.updateActions()
             }
         },
         components: {}

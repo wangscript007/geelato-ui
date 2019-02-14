@@ -1,10 +1,10 @@
 <template>
   <div class="ui fullscreen modal hide">
-    <i class="close icon" @click="$_close"></i>
+    <i class="close icon" @click="close"></i>
     <div class="header" v-html="modalOpts?modalOpts.title:' '" @dblclick="isShowContent=!isShowContent">
     </div>
     <div v-show="isShowContent" class="scrolling content" :style="contentStyle">
-      <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发$_invokeCallbackSet-->
+      <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发invokeCallbackSet-->
       <component ref="content" :componentUpdated="isMounted=true" :is="modalBody"
                  :opts="modalOpts.opts"
                  :query="modalOpts.query"
@@ -15,11 +15,11 @@
     <!-- 采用"actions"样式类，其内部的button会被semantic-ui框架加上关闭事件，这里改用gl-modal-actions重写 -->
     <div class="gl-modal-actions" style="text-align: center">
       <!--<div class="ui mini button" :class="$gl.ui.color.primary">保存</div>-->
-      <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="$_cancel">取消</div>-->
+      <!--<div class="ui mini button" :class="$gl.ui.color.negative" @click="cancel">取消</div>-->
 
       <!--<div v-if="!toolbar" v-for="(item,key) in actions" class="ui mini button" :key="key"-->
       <!--:class="$gl.ui.color[item.color]"-->
-      <!--@click="$_doAction(key)">-->
+      <!--@click="doAction(key)">-->
       <!--{{item.title}}-->
       <!--</div>-->
       <gl-toolbar v-if="toolbar" v-bind="toolbar" :css="{align:'center',dividing:false}" :ctx="content"></gl-toolbar>
@@ -87,14 +87,14 @@
        *  设置打开modal的来源组件
        *  便于后续直接调用opener的操作，例如，在gl-table中打开modal,当modal中保存并关闭窗口时，调用opener的刷新gl-table页面
        */
-      $_setOpener(opener) {
+      setOpener(opener) {
         this.opener = opener
       },
       /**
        *  合并工具条
        *  @toolbar 工具配置
        */
-      $_appendToolbar(toolbar) {
+      appendToolbar(toolbar) {
         this.toolbar = toolbar
         return true
       },
@@ -102,12 +102,12 @@
        * 关键窗口，并调用钩子 close
        * @param e
        */
-      $_close: function (e) {
+      close: function (e) {
         let value = {}
-        if (typeof this.$refs.content.$_getValue === 'function') {
-          value = this.$refs.content.$_getValue()
+        if (typeof this.$refs.content.getValue === 'function') {
+          value = this.$refs.content.getValue()
         }
-        console.log('gl-modal > Index > $_close > get value: ', value)
+        console.log('gl-modal > Index > close > get value: ', value)
         $(this.$el).modal('hide')
         if (typeof this.callbackSet.close === 'function') {
           this.callbackSet.close(e, value)
@@ -119,15 +119,15 @@
        * 关键窗口，并调用钩子 cancel
        * @param e
        */
-      $_cancel: function (e) {
-        console.log('gl-modal > Index > $_cancel()')
+      cancel: function (e) {
+        console.log('gl-modal > Index > cancel()')
         $(this.$el).modal('hide')
         if (typeof this.callbackSet.cancel === 'function') {
           this.callbackSet.cancel(e)
         }
         // TODO 删除id
       },
-      $_callback: function (name, params) {
+      callback: function (name, params) {
         let fn = this.callbackSet[name]
         if (!fn) {
           console.error('在modal的页面中，调用方法(' + name + ')失败，因为打开该modal时，未注册该方法，已注册的方法为：', this.callbackSet)
@@ -135,7 +135,7 @@
           this.callbackSet[name](params)
         }
       },
-      $_doAction: function (name, params) {
+      doAction: function (name, params) {
         let fn = this[name]
         if (!fn) {
           console.error('在modal的页面中，调用方法(' + name + ')失败，因为modal没有该操作按钮，当前actions为：', this.actions)
@@ -147,22 +147,22 @@
           }
         }
       },
-      $_addAction: function ({name, title, color, fn}) {
-        if (!this.$_checkAction(name)) {
+      addAction: function ({name, title, color, fn}) {
+        if (!this.checkAction(name)) {
           return
         }
-        if (name === '$_cancel' || name === 'cancel') {
+        if (name === 'cancel' || name === 'cancel') {
           this.actions[name] = {
             title: title || '取消',
             color: color || 'negative'
           }
-          this[name] = fn || this.$_cancel
-        } else if (name === '$_close' || name === 'close') {
+          this[name] = fn || this.cancel
+        } else if (name === 'close' || name === 'close') {
           this.actions[name] = {
             title: title || '关闭',
             color: color || 'primary'
           }
-          this[name] = fn || this.$_close
+          this[name] = fn || this.close
         } else {
           this.actions[name] = {
             title: title,
@@ -171,11 +171,11 @@
           this[name] = fn
         }
       },
-      $_updateActions() {
+      updateActions() {
         this.$forceUpdate()
       },
-      $_checkAction: function (name) {
-        if (name === '$_addAction' || name === '$_doAction' || name === '$_removeAction') {
+      checkAction: function (name) {
+        if (name === 'addAction' || name === 'doAction' || name === 'removeAction') {
           console.error('{name}是内置的action管理函数，不可添加或删除！')
           return false
         }

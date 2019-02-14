@@ -6,13 +6,13 @@
           <!--<div class="text">&nbsp;</div>-->
           <!--<i class="dropdown icon"></i>-->
           <div class="menu">
-            <div class="item" @click="$_newProject">
+            <div class="item" @click="newProject">
               <i class="folder icon"></i>新建项目
             </div>
-            <div class="item" @click="$_openProject">
+            <div class="item" @click="openProject">
               <i class="open folder icon"></i>打开项目
             </div>
-            <div class="item" @click="$_openProject">
+            <div class="item" @click="openProject">
               <i class="cog icon"></i>设置项目
             </div>
             <!--<div class="item toolbar-item">-->
@@ -22,7 +22,7 @@
             <!--<i class="pie chart icon"></i>新建页面-->
             <!--</div>-->
             <div class="divider"></div>
-            <div class="item" @click="$_closeProject">
+            <div class="item" @click="closeProject">
               <i class="trash icon"></i>
               关闭项目
             </div>
@@ -36,7 +36,7 @@
     <!--<div class="item" style="cursor: pointer">-->
     <!--设置（是否启用辅助线）-->
     <!--</div>-->
-    <a v-show="projectOpened" class="item" @click="$emit('itemClick','$_savePage',{})">保存</a>
+    <a v-show="projectOpened" class="item" @click="$emit('itemClick','savePage',{})">保存</a>
     <!--<a class="item">{{layout[currentLayout].toTitle}}</a>-->
     <a class="item" href="https://www.geelato.org" target="_blank">帮助</a>
     <slot></slot>
@@ -62,34 +62,34 @@
       /**
        *  emit project like {id,name,tree}
        */
-      $_newProject: function () {
+      newProject: function () {
         this.$emit('newProject')
         this.projectOpened = true
       },
-      $_openProject: function (event) {
+      openProject: function (event) {
         let thisVue = this
         thisVue.$gl.ui.openVueByPath(this, '/views/platform-ide/designer/ProjectList', {
           title: '选择项目',
           opts: {editorStore: this.editorStore}
         }, {
-          $_selected: function (data) {
+          selected: function (data) {
             thisVue.$emit('openProject', data)
             thisVue.projectOpened = true
           }
         })
       },
-      $_selected: function (data) {
+      selected: function (data) {
         let thisVue = this
         thisVue.$emit('openProject', data)
         thisVue.projectOpened = true
       },
-      $_closeProject: function (event) {
+      closeProject: function (event) {
         this.projectOpened = false
       },
-      $_savePage: function () {
+      savePage: function () {
 //        let thisVue = this
       },
-      $_showHelp() {
+      showHelp() {
       }
     },
     components: {}

@@ -354,8 +354,8 @@ export default {
         dividing: true
       },
       actions: [
-        // {title: '保存', color: 'primary', click: 'fn', fn: 'this.$_save'},
-        // {title: '打开', color: 'primary', click: 'fn', fn: 'this.$_openPage'},
+        // {title: '保存', color: 'primary', click: 'fn', fn: 'this.save'},
+        // {title: '打开', color: 'primary', click: 'fn', fn: 'this.openPage'},
         // {
         //   title: '创建',
         //   click: 'modal',

@@ -1,8 +1,8 @@
 <template>
     <div>
         <div :style="header">
-            <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="$_changeLayoutMode"
-                         @changeColor="$_changeColor" @changeModule="$_changeModule"></page-header>
+            <page-header :mode="mode" :size="sidebar.size" @changeLayoutMode="changeLayoutMode"
+                         @changeColor="changeColor" @changeModule="changeModule"></page-header>
         </div>
         <div class="gl-layout-sidebar" :style="sidebar">
             <page-sidebar :mode="mode" :size="sidebar.size" :height="sidebar.height" :width="sidebar.width"
@@ -63,56 +63,56 @@
             $(window).resize(function () {
                 this.content = {}
                 if (thisVue.isMax) {
-                    thisVue.$_resizeMaxContent()
+                    thisVue.resizeMaxContent()
                 } else {
-                    thisVue.$_resizeMinContent()
+                    thisVue.resizeMinContent()
                 }
             })
-            thisVue.$_initUiComponent()
-            $(this.$el).find(this.$_selector().sidebarToggle).click(function () {
-                thisVue.$_toggle()
+            thisVue.initUiComponent()
+            $(this.$el).find(this.selector().sidebarToggle).click(function () {
+                thisVue.toggle()
             })
         },
         methods: {
-            $_selector() {
+            selector() {
                 return {
                     sidebarToggle: '.gl-layout-sidebar-toggle',
                     sidebar: '.gl-layout-sidebar'
                 }
             },
-            $_initUiComponent() {
+            initUiComponent() {
                 $('.ui.dropdown').dropdown()
                 $('.ui.accordion').accordion()
             },
-            $_convertToNumber(heightOrWidth) {
+            convertToNumber(heightOrWidth) {
                 if (!heightOrWidth) return 0
                 return heightOrWidth.replace('px', '')
             },
-            $_toggle() {
+            toggle() {
                 this.isMax = !this.isMax
                 if (this.isMax) {
-                    this.$_resizeMaxContent()
+                    this.resizeMaxContent()
                 } else {
-                    this.$_resizeMinContent()
+                    this.resizeMinContent()
                 }
             },
             // hide sidebar
-            $_resizeMaxContent() {
-                this.$_reset()
+            resizeMaxContent() {
+                this.reset()
                 this.sidebar.width = this.defaultValue.sidebar.minWidth
                 this.sidebar.size = 'min'
                 this.sidebar.display = 'none'
                 this.header.height = this.defaultValue.header.minHeight
                 this.footer.height = this.defaultValue.footer.minHeight
-                this.content['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
+                this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
                 this.isMax = true
-                this.$_refresh()
+                this.refresh()
             },
-            $_resizeMinContent() {
-                this.$_reset()
+            resizeMinContent() {
+                this.reset()
                 // 取消依赖子内容进行自动调整最大化窗口的功能
 //        if (this.defaultValue.sidebar.adjustWidthBySub) {
-//          this.sidebar.width = $(this.$el).find(this.$_selector().sidebar).children().eq(0).width() + 2 + 'px'
+//          this.sidebar.width = $(this.$el).find(this.selector().sidebar).children().eq(0).width() + 2 + 'px'
 //        } else {
 //          this.sidebar.width = this.defaultValue.sidebar.maxWidth
 //        }
@@ -121,11 +121,11 @@
                 this.sidebar.display = 'block'
                 this.header.height = this.defaultValue.header.maxHeight
                 this.footer.height = this.defaultValue.footer.maxHeight
-                this.content['left'] = this.$_convertToNumber(this.sidebar.width) + 'px'
+                this.content['left'] = this.convertToNumber(this.sidebar.width) + 'px'
                 this.isMax = false
-                this.$_refresh()
+                this.refresh()
             },
-            $_reset() {
+            reset() {
                 // 注意重置content，刷新content的大小才有效
                 this.content = {}
 //        this.content.float = 'left'
@@ -151,12 +151,12 @@
              * document.body.clientHeight
              * document.body.clientWidth
              */
-            $_refresh() {
+            refresh() {
                 let winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
                 let winWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-                this.content.height = (winHeight - this.$_convertToNumber(this.header.height) - this.$_convertToNumber(this.footer.height) - 0) + 'px'
+                this.content.height = (winHeight - this.convertToNumber(this.header.height) - this.convertToNumber(this.footer.height) - 0) + 'px'
                 this.content['max-height'] = this.content.height
-                this.content.width = (winWidth - this.$_convertToNumber(this.sidebar.width) - 0) + 'px'
+                this.content.width = (winWidth - this.convertToNumber(this.sidebar.width) - 0) + 'px'
                 this.sidebar.height = this.content.height
                 this.$store.commit(types.CHANGE_LAYOUT, {
                     content: {
@@ -165,20 +165,20 @@
                     }
                 })
             },
-            $_changeLayoutMode(value) {
+            changeLayoutMode(value) {
                 this.$emit('changeLayoutMode', value)
             },
-            $_changeModule(module) {
+            changeModule(module) {
                 // 当模块指定需最大化打开时，则相应调整窗口，让内容区域最大化
                 if (module.resize === 'max') {
                     this.isMax = false
                 } else {
                     this.isMax = true
                 }
-                console.log('$_changeModule', this.isMax)
-                this.$_toggle()
+                console.log('changeModule', this.isMax)
+                this.toggle()
             },
-            $_changeColor(value, oldValue) {
+            changeColor(value, oldValue) {
                 this.$emit('changeColor', value, oldValue)
             }
         },

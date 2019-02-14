@@ -33,35 +33,35 @@
         },
         watch: {
             'editorStore.editingPage': function (val, oval) {
-                this.$_init()
-                this.$_reset()
+                this.init()
+                this.reset()
             }
         },
         mounted: function () {
-            this.$_init()
-            this.$_reset()
+            this.init()
+            this.reset()
         },
         methods: {
-            $_init() {
+            init() {
                 let thisVue = this
                 thisVue.editor = thisVue.$refs.cm.editor
                 thisVue.editor.focus()
             },
-            $_focus() {
+            focus() {
                 this.editor.focus()
             },
-            $_reset() {
+            reset() {
                 if (this.editorStore.editingPage.content.opts) {
-                    this.$_setValue(this.editorStore.editingPage.content.opts.sql)
+                    this.setValue(this.editorStore.editingPage.content.opts.sql)
                 } else {
-                    this.$_setValue('')
+                    this.setValue('')
                 }
-                this.$_focus()
+                this.focus()
             },
-            $_setValue(contentString = '') {
+            setValue(contentString = '') {
                 return this.editor.setValue(contentString)
             },
-            $_commit() {
+            commit() {
                 this.editorStore.commitOpts('sql', this.editor.getValue())
                 return {code: 0, msg: '', data: this.editor.getValue()}
             }

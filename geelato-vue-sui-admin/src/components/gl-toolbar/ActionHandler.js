@@ -28,8 +28,8 @@ export default class ActionHandler {
       //   if (rowDataItem) {
       //     let keyValue = {'id|eq': rowDataItem.id}
       //     thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
-      //       thisVue.$_resetCheckbox()
-      //       thisVue.$_submit()
+      //       thisVue.resetCheckbox()
+      //       thisVue.submit()
       //     })
       //   }
       //   break
@@ -37,8 +37,8 @@ export default class ActionHandler {
       //   if (thisVue.checkedIds.length !== 0) {
       //     let keyValue = {'id|in': thisVue.checkedIds.join(',')}
       //     thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
-      //       thisVue.$_resetCheckbox()
-      //       thisVue.$_submit()
+      //       thisVue.resetCheckbox()
+      //       thisVue.submit()
       //     })
       //   }
       //   break

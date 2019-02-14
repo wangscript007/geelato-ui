@@ -5,13 +5,13 @@
                 <json-code-mirror ref="metaCM" :text="meta"></json-code-mirror>
             </div>
             <div slot="leftAction">
-                <sui-button size="mini" @click="$_genFormConfig" :class="$gl.ui.color.primary">生成表单配置</sui-button>
+                <sui-button size="mini" @click="genFormConfig" :class="$gl.ui.color.primary">生成表单配置</sui-button>
             </div>
             <div slot="right">
                 <json-code-mirror ref="configCM" :text="config"></json-code-mirror>
             </div>
             <div slot="rightAction">
-                <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_getValues">获取表单配置</div>
+                <div class="ui mini button" :class="$gl.ui.color.primary" @click="getValues">获取表单配置</div>
             </div>
         </gl-layout-page>
     </div>
@@ -32,11 +32,11 @@
         mounted() {
         },
         methods: {
-            $_genFormConfig() {
-                // console.log('this.$refs.jsonCM.$_getValue()', JSON.parse(this.$refs.jsonCM.$_getValue()))
+            genFormConfig() {
+                // console.log('this.$refs.jsonCM.getValue()', JSON.parse(this.$refs.jsonCM.getValue()))
             },
-            $_getValues() {
-                // console.log('value', this.$refs.glForm.$_getValues())
+            getValues() {
+                // console.log('value', this.$refs.glForm.getValues())
             }
         },
         components: {JsonCodeMirror}

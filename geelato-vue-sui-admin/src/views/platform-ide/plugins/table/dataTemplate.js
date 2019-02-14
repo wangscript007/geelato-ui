@@ -8,7 +8,11 @@ export default {
     opts: {
       component: '/components/gl-table/Index',
       ui: {
-        title: '示例实体',
+        // max: 10,
+        // min: 10,
+        leftTitle: '查询过滤',
+        rightTitle: '示例实体',
+        // title: '示例实体',
         entity: 'platform_demo_entity',
         layout: {
           type: 'horizontal',

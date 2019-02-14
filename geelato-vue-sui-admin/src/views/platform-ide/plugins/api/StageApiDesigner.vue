@@ -29,27 +29,27 @@
         }
         console.log('editorStore.editingPage.id> val:', val, 'oldVal:', oldVal)
         // 重置为未启用
-        this.$_init()
+        this.init()
       }
     },
     created: function () {
       // 组件创建完后获取数据，
     },
     mounted: function () {
-      this.$_init()
+      this.init()
       // this.$forceUpdate()
     },
     methods: {
-      $_init() {
+      init() {
         let thisVue = this
       },
-      $_focus() {
+      focus() {
       },
-      $_reset() {
+      reset() {
       },
-      $_setValue(contentString = '') {
+      setValue(contentString = '') {
       },
-      $_commit() {
+      commit() {
         return {code: 0, msg: ''}
       }
     },

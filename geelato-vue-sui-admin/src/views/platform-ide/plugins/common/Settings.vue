@@ -65,7 +65,7 @@
       // this.form.description = this.editorStore.editingPage.description
     },
     methods: {
-      $_commit () {
+      commit () {
         let myForm = $(this.$el).form({
           on: 'blur',
           fields: {

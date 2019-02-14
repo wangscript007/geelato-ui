@@ -49,7 +49,7 @@
             mergeCells: {
                 handler(val, oval) {
                     console.log('mergeCells', val, oval)
-                    this.$_updateTable(this.colNum, this.rowNum)
+                    this.updateTable(this.colNum, this.rowNum)
                 },
                 // immediate: true,
                 deep: true
@@ -58,13 +58,13 @@
         created: function () {
         },
         mounted: function () {
-            this.$_initTable(this.colNum, this.rowNum)
+            this.initTable(this.colNum, this.rowNum)
         },
         methods: {
-            $_initTable(colNum, rowNum) {
+            initTable(colNum, rowNum) {
                 let thisVue = this
                 let container = thisVue.$el
-                thisVue.hot = new HandsonTable(container, thisVue.$_genSettings(colNum, rowNum))
+                thisVue.hot = new HandsonTable(container, thisVue.genSettings(colNum, rowNum))
                 bindDragStart()
 
                 function bindDragStart() {
@@ -75,11 +75,11 @@
                     })
                 }
             },
-            $_updateTable(colNum, rowNum) {
+            updateTable(colNum, rowNum) {
                 let thisVue = this
-                thisVue.hot.updateSettings(thisVue.$_genSettings(colNum, rowNum))
+                thisVue.hot.updateSettings(thisVue.genSettings(colNum, rowNum))
             },
-            $_genSettings(colNum, rowNum, mergeCells) {
+            genSettings(colNum, rowNum, mergeCells) {
                 let thisVue = this
                 let data = []
                 let columns = []
@@ -253,7 +253,7 @@
 //        editor: 'sui' // 设计单元格的默认编辑器为sui,
                 }
             },
-            $_resize({width, colWidths}) {
+            resize({width, colWidths}) {
                 // console.log('width:', width)
                 if (colWidths !== this.colWidths) {
                     this.colWidths = colWidths
@@ -264,7 +264,7 @@
                     // console.log('updateSettings')
                 }
             },
-            $_getValue() {
+            getValue() {
                 // console.log('data>', this.hot.getData())
                 let mergeCellIntance = this.hot.getPlugin('mergeCells')
                 console.log('mergeCellIntance>', mergeCellIntance)

@@ -5,9 +5,9 @@
         <json-code-mirror ref="jsonCM" :text="jsonCM"></json-code-mirror>
       </div>
       <div slot="leftAction">
-        <sui-button size="mini" v-for="item in configs" @click="$_changeConfig(item.value)">加载{{item.text}}
+        <sui-button size="mini" v-for="item in configs" @click="changeConfig(item.value)">加载{{item.text}}
         </sui-button>
-        <sui-button size="mini" @click="$_genForm" :class="$gl.ui.color.primary">生成表单</sui-button>
+        <sui-button size="mini" @click="genForm" :class="$gl.ui.color.primary">生成表单</sui-button>
       </div>
       <div slot="right">
         <div class="ui info attached bottom segment" v-if="values" style="word-wrap:break-word">
@@ -20,10 +20,10 @@
         </gl-form-base>
       </div>
       <div slot="rightAction" v-if="current!==null">
-        <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_validate">验证表单</div>
-        <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_getValues">获取表单值</div>
-        <div class="ui mini button gql" :class="$gl.ui.color.primary" @click="$_getGql">获取Gql</div>
-        <div class="ui mini button" @click="$_clear">清除</div>
+        <div class="ui mini button" :class="$gl.ui.color.primary" @click="validate">验证表单</div>
+        <div class="ui mini button" :class="$gl.ui.color.primary" @click="getValues">获取表单值</div>
+        <div class="ui mini button gql" :class="$gl.ui.color.primary" @click="getGql">获取Gql</div>
+        <div class="ui mini button" @click="clear">清除</div>
       </div>
     </gl-layout-page>
   </div>
@@ -48,44 +48,44 @@
       }
     },
     mounted() {
-      this.$_genForm()
+      this.genForm()
     },
     methods: {
-      $_changeConfig(current) {
-        this.$refs.jsonCM.$_setValue(JSON.stringify(configData[current].data))
-        this.$_genForm()
+      changeConfig(current) {
+        this.$refs.jsonCM.setValue(JSON.stringify(configData[current].data))
+        this.genForm()
       },
-      $_genForm() {
-        // console.log('this.$refs.jsonCM.$_getValue()', this.$refs.jsonCM.$_getValue())
-        this.$refs.glForm.$_reset({ui: JSON.parse(this.$refs.jsonCM.$_getValue())})
+      genForm() {
+        // console.log('this.$refs.jsonCM.getValue()', this.$refs.jsonCM.getValue())
+        this.$refs.glForm.reset({ui: JSON.parse(this.$refs.jsonCM.getValue())})
       },
-      $_validate() {
-        this.$refs.glForm.$_validate()
+      validate() {
+        this.$refs.glForm.validate()
       },
-      $_clear() {
-        this.$_clearValidateMessage()
-        this.$_clearValues()
+      clear() {
+        this.clearValidateMessage()
+        this.clearValues()
         this.gql = ''
       },
-      $_clearValidateMessage() {
-        this.$refs.glForm.$_clearValidateMessage()
+      clearValidateMessage() {
+        this.$refs.glForm.clearValidateMessage()
       },
-      $_getGql() {
-        let gqlJson = this.$refs.glForm.$_getGql()
+      getGql() {
+        let gqlJson = this.$refs.glForm.getGql()
         this.gql = JSON.stringify(gqlJson)
         console.log('gqlJson>', gqlJson)
-        this.$_copyToClipBoard('.btn.gql', this.gql)
+        this.copyToClipBoard('.btn.gql', this.gql)
         return this.gql
       },
-      $_getValues() {
-        this.values = JSON.stringify(this.$refs.glForm.$_getValues())
-        this.$_copyToClipBoard(this.values)
+      getValues() {
+        this.values = JSON.stringify(this.$refs.glForm.getValues())
+        this.copyToClipBoard(this.values)
         return this.values
       },
-      $_clearValues() {
+      clearValues() {
         this.values = ''
       },
-      $_copyToClipBoard(selector, clipBoardContent) {
+      copyToClipBoard(selector, clipBoardContent) {
         // let clipboard = new ClipboardJS(selector, {
         //     text: function () {
         //         return clipBoardContent;

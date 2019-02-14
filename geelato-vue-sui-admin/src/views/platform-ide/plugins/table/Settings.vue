@@ -1,15 +1,21 @@
 <template>
   <div class="gl-content-wrapper">
     <div class="ui mini form">
-      <div class="ui accordion item">
-        <div class="title">
-          绑定的实体编码
-          <div class="ui fitted divider" style="margin-top: 0.25em;"></div>
+      <div class="ui mini form gl-form">
+        <div class="ui error message segment"></div>
+        <div class="field">
+          <label>左标题</label>
+          <input type="text" placeholder="" v-model="editorStore.editingPage.content.opts.ui.leftTitle">
         </div>
-        <div class="active content">
+        <div class="field">
+          <label>右标题</label>
+          <input type="text" placeholder="" v-model="editorStore.editingPage.content.opts.ui.rightTitle">
+        </div>
+        <div class="field">
+          <label>绑定实体</label>
           <div class="ui fluid action input">
-            <input type="text" placeholder="输入实体编码或查询KEY..." v-model="form.entity" readonly>
-            <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_loadMeta">设置</div>
+            <input type="text" placeholder="输入实体编码或查询KEY..." v-model="editorStore.editingPage.content.opts.ui.entity" readonly>
+            <div class="ui mini button" :class="$gl.ui.color.primary" @click="loadMeta">设置</div>
           </div>
         </div>
       </div>
@@ -43,7 +49,7 @@
         required: true
       }
     },
-    data () {
+    data() {
       return {
         form: {
           entity: this.editorStore.editingPage.content.opts.ui ? this.editorStore.editingPage.content.opts.ui.entity : '',
@@ -57,19 +63,23 @@
 //        this.form.description = this.editingPage.description
       }
     },
+    computed: {
+      entity: function () {
+        return this.editorStore.editingPage.content.opts.ui ? this.editorStore.editingPage.content.opts.ui.entity : ''
+      }
+    },
     mounted: function () {
     },
     methods: {
-      $_addQuery (e) {
+      addQuery(e) {
         console.log(e)
         // js阻止事件冒泡
         e.cancelBubble = true
         e.stopPropagation()
-
         // js阻止链接默认行为，没有停止冒泡
         // oEvent.preventDefault();
       },
-      $_loadMeta () {
+      loadMeta() {
         // console.log('ui.toolbar.dropdown.actions>', this.editorStore.editingPage.content.opts.ui.toolbar.dropdown.actions)
         this.$gl.ui.openVueByPath(this, '/views/platform-ide/plugins/table/SettingsGuide', {
           title: '列表查询页面配置向导',
@@ -79,7 +89,7 @@
           }
         })
       },
-      $_commit () {
+      commit() {
         return {code: 0, msg: ''}
       }
     },

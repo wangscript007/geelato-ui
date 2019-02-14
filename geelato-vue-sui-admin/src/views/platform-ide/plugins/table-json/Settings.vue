@@ -9,7 +9,7 @@
         <div class="active content">
           <div class="ui fluid action input">
             <input type="text" placeholder="输入实体编码或查询KEY..." v-model="form.entity" readonly>
-            <div class="ui mini button" :class="$gl.ui.color.primary" @click="$_loadMeta">设置</div>
+            <div class="ui mini button" :class="$gl.ui.color.primary" @click="loadMeta">设置</div>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
     mounted: function () {
     },
     methods: {
-      $_addQuery (e) {
+      addQuery (e) {
         console.log(e)
         // js阻止事件冒泡
         e.cancelBubble = true
@@ -69,7 +69,7 @@
         // js阻止链接默认行为，没有停止冒泡
         // oEvent.preventDefault();
       },
-      $_loadMeta () {
+      loadMeta () {
         console.log('ui.toolbar.dropdown.actions>', this.editorStore.editingPage.content.opts.ui.toolbar.dropdown.actions)
         this.$gl.ui.openVueByPath(this, '/views/platform-ide/plugins/common/settings-json', {
           title: '列表查询页面配置',
@@ -79,7 +79,7 @@
           }
         })
       },
-      $_commit () {
+      commit () {
         return {code: 0, msg: ''}
       }
     },

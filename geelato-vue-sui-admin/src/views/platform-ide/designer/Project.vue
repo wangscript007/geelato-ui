@@ -37,22 +37,22 @@
 
     },
     methods: {
-      $_newProject () {
+      newProject () {
         // TODO 是否保存旧项目
         let thisVue = this
         // 重置，并通过数据驱动，各页面板进入初始状态
         this.editorStore.reset()
         thisVue.editorStore.project = {name: '新项目', tree: ''}
-        this.$_saveProject()
+        this.saveProject()
       },
-      $_openProject (project) {
+      openProject (project) {
         let thisVue = this
         // 重置，并通过数据驱动，各页面板进入初始状态
         this.editorStore.reset()
         thisVue.editorStore.project = project
         thisVue.projectId = project.id
       },
-      $_saveProject: function () {
+      saveProject: function () {
         let thisVue = this
         thisVue.$gl.data.save(thisVue.$gl.entityNames['platform-ide'].dev.project, thisVue.editorStore.project).then(function (res) {
           thisVue.editorStore.project.id = res.data

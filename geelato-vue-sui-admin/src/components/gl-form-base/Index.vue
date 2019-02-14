@@ -23,45 +23,45 @@
         <!--行数据非分组标题-->
         <template v-else>
           <template v-for="(cell,cellIndex) in row"
-                    v-if="property=$_getPropertyByCell(cell)">
-            <template v-if="!$_isHidden(Object.keys(cell)[0])">
-              <!--通过$_autoRun，执行property.js，以实现设置值、只计状态等-->
+                    v-if="property=getPropertyByCell(cell)">
+            <template v-if="!isHidden(Object.keys(cell)[0])">
+              <!--通过autoRun，执行property.js，以实现设置值、只计状态等-->
               <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]"
-                  v-show="$_autoRun(property)">
+                  v-show="autoRun(property)">
                         <span v-if="property.tips" :data-tooltip="property.tips">
               <i class="info circle icon"
-                 @click="$_copyTips($_getPropertyByCell(cell).tips)"></i>
+                 @click="copyTips(getPropertyByCell(cell).tips)"></i>
               </span>
-                <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
+                <span class="gl-required">{{isRequired(property)?'*':''}}</span>
                 {{property.title||Object.keys(cell)[0]}}&nbsp;
               </td>
               <!--v-if="Object.values(cell)[0][1]" 分组时-- Object.values(cell)[0]的值为[24] -->
               <td :colspan="Object.values(cell)[0][1]" :rowspan="Object.values(cell)[0][2]">
                 <template v-if="property.control==='input'">
                   <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                         v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                         v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                          :disabled="property.disabled===true">
                 </template>
-                <template v-if="property.control==='date'">
+                <template v-else-if="property.control==='date'">
                   <gl-date type="date" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                           v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                           v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                            :disabled="property.disabled===true">
                   </gl-date>
                 </template>
-                <template v-if="property.control==='time'">
+                <template v-else-if="property.control==='time'">
                   <gl-date type="time" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                           v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                           v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                            :disabled="property.disabled===true">
                   </gl-date>
                 </template>
                 <template v-else-if="property.control==='textarea'">
                         <textarea rows="5" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                                  v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                                  v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                                   :disabled="property.disabled===true"></textarea>
                 </template>
                 <template v-else-if="property.control==='checkbox'">
                   <sui-checkbox :name="Object.keys(cell)[0]" v-model="form[Object.keys(cell)[0]]"
-                                :readonly="$_isReadonly(property)"
+                                :readonly="isReadonly(property)"
                                 :disabled="property.disabled===true"></sui-checkbox>
                   {{property.placeholder}}
                 </template>
@@ -71,29 +71,29 @@
                     <sui-checkbox radio :label="radioItem.text" :name="Object.keys(cell)[0]"
                                   v-model="form[Object.keys(cell)[0]]"
                                   :value="radioItem.value"
-                                  :readonly="$_isReadonly(property)"
+                                  :readonly="isReadonly(property)"
                                   :disabled="property.disabled===true"></sui-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
                   </template>
                   {{property.placeholder}}
                 </template>
-                <template v-else-if=" property.control==='dropdown'">
+                <template v-else-if="property.control==='dropdown'">
                   <sui-dropdown selection :options="property.data"
                                 :name="Object.keys(cell)[0]"
                                 :value="form[Object.keys(cell)[0]]"
-                                @input='form[Object.keys(cell)[0]]=$event;$_loadRefData(Object.keys(cell)[0], "")'
-                                :ref="Object.keys(cell)[0]" :readonly="$_isReadonly(property)"
+                                @input='form[Object.keys(cell)[0]]=$event;loadRefData(Object.keys(cell)[0], "")'
+                                :ref="Object.keys(cell)[0]" :readonly="isReadonly(property)"
                                 :disabled="property.disabled===true"></sui-dropdown>
                 </template>
                 <template v-else-if="property.control==='image'">
                   <div class="ui fluid  image">
-                    <a class="ui red right corner label" @click="$_uploadImage">
+                    <a class="ui red right corner label" @click="uploadImage">
                       <i class="upload icon"></i>
                     </a>
                     <img class="ui small rounded image" style=""
                          src="../../assets/images/avatar/large/jenny.jpg">
                   </div>
                   <!--<div class="ui placeholder">-->
-                  <!--<a class="ui red right corner label" @click="$_uploadImage">-->
+                  <!--<a class="ui red right corner label" @click="uploadImage">-->
                   <!--<i class="upload icon"></i>-->
                   <!--</a>-->
                   <!--<div class="rectangular image"></div>-->
@@ -101,13 +101,16 @@
                 </template>
                 <template v-else-if="property.control==='email'">
                   <input type="email" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                         v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                         v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                          :disabled="property.disabled===true">
                 </template>
                 <template v-else-if="property.control==='password'">
                   <input type="password" :placeholder="property.placeholder" :name="Object.keys(cell)[0]"
-                         v-model="form[Object.keys(cell)[0]]" :readonly="$_isReadonly(property)"
+                         v-model="form[Object.keys(cell)[0]]" :readonly="isReadonly(property)"
                          :disabled="property.disabled===true">
+                </template>
+                <template v-else>
+                  {{form[Object.keys(cell)[0]]}}
                 </template>
               </td>
             </template>
@@ -171,16 +174,16 @@
     },
     mounted: function () {
       console.log('gl-form-base > Index > query:', this.query)
-      this.$_reset(this.opts)
+      this.reset(this.opts)
     },
     watch: {
       'query.treeNodeId': function (val, oval) {
         console.log('gl-form-base > Index > query > treeNodeId > oval : ', oval, ', val: ', val)
-        this.$_reset(this.opts)
+        this.reset(this.opts)
       }
     },
     methods: {
-      $_reset(opts = this.opts) {
+      reset(opts = this.opts) {
         if (opts) {
           let options = opts
           this.properties = options.properties
@@ -192,16 +195,16 @@
           this.form = {}
           this.init = false
         }
-        this.$_initConvertData()
-        this.$_loadInitData()
-        this.$_initUI()
+        this.initConvertData()
+        this.loadInitData()
+        this.initUI()
       },
       /**
        * 1、将简化的配置信息转换成完整的配置信息，如只设置了email类型，则将默认增加email验证规则
        * 2、转换并设置一些默认值
        * 3、分析数据源依赖
        *  */
-      $_initConvertData() {
+      initConvertData() {
         let thisVue = this
         for (let key in this.properties) {
           // 设置一些默认值，添加默认配置等
@@ -243,11 +246,11 @@
         this.init = true
       },
       // 加载远程的初始化数据，如字典信息
-      $_loadInitData() {
+      loadInitData() {
         // 加载主实体数据
         let theVue = this
-        console.log('gl-form-base > Index > $_loadInitData > query:', theVue.query)
-        console.log('gl-form-base > Index > $_loadInitData > queryFields:', theVue.queryFields)
+        console.log('gl-form-base > Index > loadInitData > query:', theVue.query)
+        console.log('gl-form-base > Index > loadInitData > queryFields:', theVue.queryFields)
         // 一般地，若未指定queryFields，则condition 为{id: theVue.form.id}
         let condition = {}
         let isValidCondition = false
@@ -257,7 +260,7 @@
           if (condition[field]) {
             isValidCondition = true
           } else {
-            console.error('gl-form-base > Index > $_loadInitData > 无效的查询条件信息（field: ', field, '，condition[field]: ', condition[field], '）。')
+            console.error('gl-form-base > Index > loadInitData > 无效的查询条件信息（field: ', field, '，condition[field]: ', condition[field], '）。')
           }
         }
         if (isValidCondition) {
@@ -276,11 +279,11 @@
           let property = this.properties[propertyName]
           // && this.ds[property.ds].lazy !== true
           if (property.ds) {
-            this.$_loadData(propertyName, property, property.ds)
+            this.loadData(propertyName, property, property.ds)
           }
         }
       },
-      $_initUI() {
+      initUI() {
         $(this.$el).form({
           fields: this.properties,
           onFailure: function (formErrors, fields) {
@@ -296,7 +299,7 @@
        * @param property 字段配置信息
        * @returns {boolean}
        */
-      $_isRequired(property) {
+      isRequired(property) {
         if (!property.rules || property.rules.length === 0) {
           return false
         } else {
@@ -309,55 +312,56 @@
        * @param property 字段配置信息
        * @returns {boolean}
        */
-      $_autoRun(property) {
-        // console.log('gl-form-base > Index > $_autoRun > js: ', property.js)
+      autoRun(property) {
+        // console.log('gl-form-base > Index > autoRun > js: ', property.js)
         if (property.js && typeof property.js === 'string') {
-          this.$_rungs(property.js)
+          this.rungs(property.js)
         }
         return true
       },
-      $_isReadonly(property) {
+      isReadonly(property) {
         if (property.readonly === true) {
           return true
         } else if (typeof property.readonly === 'string') {
-          return this.$_rungs(property.readonly)
+          return this.rungs(property.readonly)
         }
         return false
       },
       /**
        *  layout.hidden中指定的属性需hide
        */
-      $_isHidden(propertyName) {
-        // console.log('gl-form-base > Index > $_isHidden > propertyName: ', propertyName)
+      isHidden(propertyName) {
+        // console.log('gl-form-base > Index > isHidden > propertyName: ', propertyName)
         if (this.layout.hidden && this.layout.hidden.common) {
           let js = this.layout.hidden.common[propertyName]
-          return js ? this.$_rungs(js) : false
+          return js ? this.rungs(js) : false
         } else {
           return false
         }
       },
-      $_getValues() {
+      getValues() {
         return this.form
       },
-      $_setValues(form) {
-        // this.$_reset(this.opts)
+      setValues(form) {
+        // this.reset(this.opts)
         for (let key in form) {
-          console.log('gl-form-base > Index > $_setValues > key,value: ', key, form[key])
+          // console.log('gl-form-base > Index > setValues > key,value: ', key, form[key])
           this.$set(this.form, key, form[key])
         }
-        // this.$_reset(this.opts)
+        // this.reset(this.opts)
         // this.$forceUpdate()
-        // this.$_reset(this.opts)
+        // this.reset(this.opts)
         this.$nextTick()
       },
       /**
+       * 基于properties的定义，结合表单值构建
        * 获取保存操作的gql语句
        */
-      $_getGql() {
+      getGql() {
         // 找出顶层的实体信息
         let thisVue = this
-        let theForm = thisVue.$_getValues()
-        console.log('theForm>', theForm)
+        let theForm = thisVue.getValues()
+        console.log('gl-form-base > Index > getGql > form: ', theForm)
         let gql = {}
         genGql(gql, this.defaultEntity, this.properties)
 
@@ -375,8 +379,13 @@
             if (property.entity === entityName) {
               // 该实体的直属属性，直接添加
               // 获取表单中填写的值
+              // boolean类型的值可以转换成数值的方式表示
               if (typeof field === 'boolean') {
-                parent[entityName][propertyName] = field ? 1 : 0
+                if (property.convert === 'number') {
+                  parent[entityName][propertyName] = field ? 1 : 0
+                } else {
+                  parent[entityName][propertyName] = field
+                }
               } else {
                 parent[entityName][propertyName] = typeof field !== 'string' ? field : field.replace(REGEXP_CTX, CONST_GQL_PARENT)
               }
@@ -463,20 +472,20 @@
 
         return gql
       },
-      $_validate() {
-        this.$_initUI()
+      validate() {
+        this.initUI()
         let result = $(this.$el).form('validate form')
         console.log('gl-form-base > Index > validate > result: ', result)
         let isSuccess = result.get(0).className.indexOf('error') === -1
         return {code: isSuccess ? 0 : -1, isSuccess: isSuccess, result: result}
       },
-      $_clearValidateMessage() {
+      clearValidateMessage() {
         $(this.$el).find('.ui.error.message.segment').html('')
       },
       /**
        * 对于不存在的属性名，则返回默认的空属性
        * */
-      $_getPropertyByCell(cell) {
+      getPropertyByCell(cell) {
         // 一个非$开头的key，即为属性名
         let name = null
         for (let key in cell) {
@@ -485,9 +494,9 @@
             break
           }
         }
-        return this.$_getProperty(name)
+        return this.getProperty(name)
       },
-      $_getProperty(name) {
+      getProperty(name) {
         if (!name || !this.properties[name]) {
           return {control: 'null', title: ' '}
         }
@@ -496,7 +505,7 @@
       /**
        * 加载数据源 TODO 改成同时加多个
        * */
-      $_loadData(propertyName, property, dataSourceName) {
+      loadData(propertyName, property, dataSourceName) {
         let thisVue = this
         if (!dataSourceName) {
           return
@@ -517,13 +526,13 @@
           if (dsConfig.params) {
             for (let key in dsConfig.params) {
               let value = dsConfig.params[key]
-              params[key] = this.$_rungs(value)
+              params[key] = this.rungs(value)
             }
           }
           thisVue.$gl.data.query(dsConfig.entity, params, dsConfig.fields).then(function (res) {
             thisVue.$set(thisVue.properties[propertyName], 'data', res.data)
             // 触发级联加载数据
-            thisVue.$_loadRefData(propertyName)
+            thisVue.loadRefData(propertyName)
           })
         } else {
           console.error('未配置数据源', dataSourceName)
@@ -532,17 +541,17 @@
       /**
        * 级联加载数据
        * */
-      $_loadRefData(propertyName, resetValue) {
+      loadRefData(propertyName, resetValue) {
         let thisVue = this
         let propertyNames = thisVue.dsBeDependentOn[propertyName] || []
         propertyNames.forEach(function (item, index) {
-          let triggerProperty = thisVue.$_getProperty(item)
+          let triggerProperty = thisVue.getProperty(item)
           // if (resetValue !== undefined) {
           //     // 重置选择的值为空
           //     triggerProperty.value = resetValue
           // }
           if (triggerProperty) {
-            thisVue.$_loadData(item, triggerProperty, triggerProperty.ds)
+            thisVue.loadData(item, triggerProperty, triggerProperty.ds)
           }
         })
         // thisVue.set(thisVue.form, propertyName, property)
@@ -551,9 +560,9 @@
        * gs(geelato script)执行表达式，若非gs表达式则直接返回
        * @param gs gs:$ctx.form.province
        */
-      $_rungs(str) {
+      rungs(str) {
         let thisVue = this
-        let $ctx = {form: thisVue.$_getValues(), vars: {}}
+        let $ctx = {form: thisVue.getValues(), vars: {}}
         for (let varName in (thisVue.vars || [])) {
           $ctx.vars[varName] = typeof thisVue.vars[varName] === 'object' ? thisVue.vars[varName].value : thisVue.vars[varName]
         }
@@ -563,11 +572,11 @@
           return str
         }
       },
-      $_uploadImage() {
+      uploadImage() {
 
       },
-      $_copyTips(tips) {
-        // console.log('gl-form-base > Index > $_copyTips > tips: ', tips)
+      copyTips(tips) {
+        // console.log('gl-form-base > Index > copyTips > tips: ', tips)
         this.$copyText(tips).then(function () {
         })
       }

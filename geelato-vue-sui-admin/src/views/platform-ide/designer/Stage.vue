@@ -5,7 +5,7 @@
         <slot name="resize"></slot>
         <template v-for="(item,key) in plugin.stagePanels">
           <a class="item" :class="{active:item.name===selectedPanel.name}" :data-tab="'designer-tab-'+item.name"
-             @click="selectedPanel=item;tabInited[item.name]=true;$_focus(item)">{{item.title}}</a>
+             @click="selectedPanel=item;tabInited[item.name]=true;focus(item)">{{item.title}}</a>
         </template>
       </div>
       <div v-for="(item,key) in plugin.stagePanels" class="ui bottom attached segment gl-designer-tab"
@@ -50,12 +50,12 @@
       },
       editorMainHeight: {
         type: String,
-        defalut: function () {
+        default: function () {
           return '480px'
         }
       }
     },
-    data () {
+    data() {
       return {
         // 解决未加载时，渲染codemirror出错问题，默认为不渲染，如默认只有第一个初始化{mvel:true,sql:false,json:false}
         tabInited: {},
@@ -71,7 +71,7 @@
         if (!val) {
           return
         }
-        console.log('editorStore.editingPage.id> val:', val, 'oldVal:', oldVal)
+        console.log('designer > Stage > watch > editorStore.editingPage.id > val:', val, 'oldVal:', oldVal)
         // 重置为未启用
         this.tabInited = {}
         this.plugin = this.editorStore.plugins[this.editorStore.editingPage.type]
@@ -93,9 +93,11 @@
         let plugin = this.editorStore.plugins[key]
         for (let index in plugin.stagePanels) {
           let panel = plugin.stagePanels[index]
-          // TODO 重名，但文件path不一样的怎么处理
           if (!this.panelComponent[panel.name]) {
             this.panelComponent[panel.name] = resolve => require(['../plugins/' + panel.path], resolve)
+          } else {
+            // 重名的panel丢弃
+            // console.error('designer > Stage > created > 存在重名的panel，原panel: ', this.panelComponent[panel.name], '新panel: ', panel)
           }
         }
       }
@@ -103,14 +105,14 @@
     mounted: function () {
     },
     methods: {
-      $_focus (panel) {
+      focus(panel) {
         // 每个tab初次调用，component还未生成，即this.$refs[subType]为undefined
-        if (this.$refs[panel.name] && typeof this.$refs[panel.name].$_focus === 'function') {
+        if (this.$refs[panel.name] && typeof this.$refs[panel.name].focus === 'function') {
           // 注意要用$nextTick，待tab切换后完成之后回调
-          this.$nextTick(this.$refs[panel.name].$_focus)
+          this.$nextTick(this.$refs[panel.name].focus)
         }
       },
-      $_getValue () {
+      getValue() {
         if (!this.plugin.stagePanels) {
           return {}
         }
@@ -118,7 +120,7 @@
           let panel = this.plugin.stagePanels[index]
           // 只获取激活状态的内容
           if (this.$refs[panel.name] && this.$refs[panel.name][0]) {
-            this.editorStore.commitOpts(panel.name, this.$refs[panel.name][0].$_getValue())
+            this.editorStore.commitOpts(panel.name, this.$refs[panel.name][0].getValue())
           }
         }
       }

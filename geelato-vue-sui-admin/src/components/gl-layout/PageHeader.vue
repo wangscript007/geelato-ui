@@ -24,7 +24,7 @@
         </div>
       </a>
 
-      <div class="ui right item inline dropdown" @click="$_profile">
+      <div class="ui right item inline dropdown" @click="profile">
         <div class="text">
           <img class="ui avatar image" src="../../assets/images/avatar/large/jenny.jpg">
           {{user.name}}
@@ -39,7 +39,7 @@
             hide: 100
           }
         }">
-        <a class="item" @click="$_toggleFullScreen"><i class="window maximize icon"></i></a>
+        <a class="item" @click="toggleFullScreen"><i class="window maximize icon"></i></a>
         <div class="ui flowing popup top left transition hidden">
           按ESC键即可退出全屏
         </div>
@@ -56,11 +56,11 @@
         <a class="item"><i class="theme icon"></i></a>
         <div class="ui flowing popup top left transition hidden">
           <div v-for="(hex,key) in $gl.ui.colorHex" class="ui mini button" :class="{[key]:true}"
-               @click="$_changeColor(key)" :key="key"></div>
+               @click="changeColor(key)" :key="key"></div>
         </div>
       </sui>
-      <!--<a class="item" title="mode" @click="$_changeTheme"><i class="paint-brush icon"></i></a>-->
-      <a class="item" title="更改部局" @click="$_changeLayoutMode"><i class="exchange alternate icon"></i></a>
+      <!--<a class="item" title="mode" @click="changeTheme"><i class="paint-brush icon"></i></a>-->
+      <a class="item" title="更改部局" @click="changeLayoutMode"><i class="exchange alternate icon"></i></a>
       <a class="item" title="帮助" target="_blank" :href="$gl.url.help"><i class="question circle outline icon"></i></a>
       <a class="item" title="退出" @click="logout"><i class="sign out icon"></i></a>
       <sui v-if="modules&&modules.length>0" type="popup" selector=".modules-selector" :opts="{
@@ -77,7 +77,7 @@
           <div :class="moduleGroup.clazz"
                :style="'max-width:'+moduleGroup.maxWidth">
             <div class="column" v-for="(item,key) in modules" :key="key" style="padding:0.125em">
-              <div class="ui button" @click="$_changeModule(item)" style="width: 9em">
+              <div class="ui button" @click="changeModule(item)" style="width: 9em">
                 {{item.title}}
               </div>
             </div>
@@ -137,11 +137,11 @@
           let module = this.modules[m]
           if (module.code === this.$gl.defaultModule) {
             // 不按角色区分默认模块 typeof defaultModule is string
-            this.$_changeModule(module)
+            this.changeModule(module)
             break
           } else if (typeof this.$gl.defaultModule === 'object' && module.code === this.$gl.defaultModule[currentRole]) {
             // 按角色区分默认模块
-            this.$_changeModule(module)
+            this.changeModule(module)
             break
           }
         }
@@ -152,7 +152,7 @@
         for (let i in this.$gl.modules) {
           let module = this.$gl.modules[i]
           if (module.code === redirectModuleCode) {
-            this.$_changeModule(module, this.$route.path)
+            this.changeModule(module, this.$route.path)
           }
         }
       }
@@ -168,7 +168,7 @@
        * @param module 指定跳转的模块
        * @param toPath 指定跳转的页面
        */
-      $_changeModule: function (module, toPath) {
+      changeModule: function (module, toPath) {
         console.log('layout > change to module: ', module.title, module)
         // 通知更改模块，以便更改菜单
         this.$store.commit(types.CHANGE_MODULE, module)
@@ -181,35 +181,35 @@
           let path = redirectPath.replace('/#', '').replace('#', '')
 //          path = path + '?' + 'module=' + module.code + '&t=' + utils.uuid(16)
           this.$store.commit(types.ROUTE_VIEW_KEY, utils.uuid(16))
-          this.$router.push(this.$_addQueryToPath(path, {_m: module.code}))
+          this.$router.push(this.addQueryToPath(path, {_m: module.code}))
         } else {
           console.error('layout > 未配置模块[' + module.title + ']首页面！')
         }
       },
-      $_addQueryToPath(path, params) {
+      addQueryToPath(path, params) {
         // return path.indexOf('\?') !== -1 ? path + '&' + this.$gl.utils.param(param) : path + '?' + this.$gl.utils.param(param)
         return utils.addParamToPath(path, params)
       },
-      $_changeColor: function (newColor) {
+      changeColor: function (newColor) {
         let lastColor = this.color + ''
         this.color = newColor
         this.$emit('changeColor', this.color, lastColor)
       },
-      $_changeLayoutMode: function () {
+      changeLayoutMode: function () {
         this.$emit('changeLayoutMode', (this.mode + 1) % 2)
       },
-      $_profile: function () {
+      profile: function () {
         this.$router.push('/m/platform-core/profile/UserProfile')
       },
-      $_help: function () {
+      help: function () {
       },
-      $_color: function (color) {
-        console.log(color)
-      },
+      // color: function (color) {
+      //   console.log(color)
+      // },
       logout: function () {
         this.$gl.security.logout()
       },
-      $_toggleFullScreen() {
+      toggleFullScreen() {
         screenfull.toggle()
       }
     },

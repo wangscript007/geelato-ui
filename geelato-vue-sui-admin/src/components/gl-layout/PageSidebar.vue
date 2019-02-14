@@ -45,7 +45,7 @@
              style="background-color:rgba(248,248,248,0.8)"
              :href="$gl.utils.addParamToPath(item.href,{_m:$store.state.platform.currentModule.code})"
              :target="item.target"
-             @click="$_selectMenuItem(menuItemIndex,subMenuItemIndex)"><i class="icon"
+             @click="selectMenuItem(menuItemIndex,subMenuItemIndex)"><i class="icon"
                                                                           v-show="activeMenuItem==menuItemIndex+'_'+subMenuItemIndex">▌</i>
             {{item.title}}</a>
         </div>
@@ -106,7 +106,7 @@
 //      }
     },
     methods: {
-      $_selectMenuItem(menuItemIndex, subMenuItemIndex) {
+      selectMenuItem(menuItemIndex, subMenuItemIndex) {
         this.activeMenuItem = menuItemIndex + '_' + subMenuItemIndex
       },
       isShowLogo() {

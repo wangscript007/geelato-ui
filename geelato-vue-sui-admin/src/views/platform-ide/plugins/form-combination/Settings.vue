@@ -3,37 +3,37 @@
     <div class="ui mini form">
       <div>
         <!--<input type="text" placeholder="输入实体编码或查询KEY..." v-model="form.entity" readonly>-->
-        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_addForm"><i class="add icon"></i>表单-->
+        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="addForm"><i class="add icon"></i>表单-->
         <!--</div>-->
-        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_addTabs"><i class="add icon"></i>选项卡-->
+        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="addTabs"><i class="add icon"></i>选项卡-->
         <!--</div>-->
-        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_addList"><i class="add icon"></i>列表-->
+        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="addList"><i class="add icon"></i>列表-->
         <!--</div>-->
-        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_addToolbar"><i class="add icon"></i>工具条-->
+        <!--<div class="ui mini basic button" :class="$gl.ui.color.primary" @click="addToolbar"><i class="add icon"></i>工具条-->
         <!--</div>-->
         <!--<div class="five ui mini icon buttons">-->
-        <!--<button class="ui button" @click="$_addHeader">标题</button>-->
-        <!--<button class="ui button" @click="$_addForm">表单</button>-->
-        <!--<button class="ui button" @click="$_addTabs">选项卡</button>-->
-        <!--<button class="ui button" @click="$_addList">列表</button>-->
-        <!--<button class="ui button" @click="$_addToolbar">工具条</button>-->
+        <!--<button class="ui button" @click="addHeader">标题</button>-->
+        <!--<button class="ui button" @click="addForm">表单</button>-->
+        <!--<button class="ui button" @click="addTabs">选项卡</button>-->
+        <!--<button class="ui button" @click="addList">列表</button>-->
+        <!--<button class="ui button" @click="addToolbar">工具条</button>-->
         <!--</div>-->
         <div class="ui text mini menu" style="margin: 0em -.5em">
           <div class="header item"><i class="plus icon" style="margin-left: 0.5em"></i>添加：</div>
-          <a class="item" @click="$_addHeader">标题</a>
-          <a class="item" @click="$_addForm">表单</a>
-          <a class="item" @click="$_addTreeForm">树表单</a>
-          <a class="item" @click="$_addTabs">选项卡</a>
-          <a class="item" @click="$_addList">列表</a>
-          <a class="item" @click="$_addToolbar">工具条</a>
+          <a class="item" @click="addHeader">标题</a>
+          <a class="item" @click="addForm">表单</a>
+          <a class="item" @click="addTreeForm">树表单</a>
+          <a class="item" @click="addTabs">选项卡</a>
+          <a class="item" @click="addList">列表</a>
+          <a class="item" @click="addToolbar">工具条</a>
         </div>
         <!--<div class="ui basic mini labels" :class="$gl.ui.color.primary">-->
         <!--<i class="plus icon" style="margin-left: 0.5em"></i>-->
-        <!--<a class="ui label" @click="$_addHeader">标题</a>-->
-        <!--<a class="ui label" @click="$_addForm">表单</a>-->
-        <!--<a class="ui label" @click="$_addTabs">选项卡</a>-->
-        <!--<a class="ui label" @click="$_addList">列表</a>-->
-        <!--<a class="ui label" @click="$_addToolbar">工具条</a>-->
+        <!--<a class="ui label" @click="addHeader">标题</a>-->
+        <!--<a class="ui label" @click="addForm">表单</a>-->
+        <!--<a class="ui label" @click="addTabs">选项卡</a>-->
+        <!--<a class="ui label" @click="addList">列表</a>-->
+        <!--<a class="ui label" @click="addToolbar">工具条</a>-->
         <!--</div>-->
       </div>
       <div class="ui fitted divider" style="margin-top: 0.25em;"></div>
@@ -51,7 +51,7 @@
                    v-if="index!==cards.length-1"></i>
                 &nbsp;&nbsp;
                 <i class="plus icon gl-action" title="添加" :class="$gl.ui.color.primary"
-                   @click="$_addCardItem(card)" v-if="card.items"></i>
+                   @click="addCardItem(card)" v-if="card.items"></i>
                 &nbsp;&nbsp;
                 <i class="remove red icon gl-action" title="删除" :class="$gl.ui.color.negative"
                    @click="$gl.utils.remove(cards, index,'是否删除')"></i>
@@ -74,7 +74,7 @@
                        @click="$gl.utils.remove(card.items, index,'是否删除')"></i>
                   </label>
                   <input type="text" placeholder="未设置..." v-model="item.name" readonly>
-                  <div class="ui mini button" @click="$_loadMeta"><i class="cog icon"
+                  <div class="ui mini button" @click="loadMeta"><i class="cog icon"
                                                                      title="设置"></i></div>
                 </div>
               </div>
@@ -86,7 +86,7 @@
               <div class="content">
                 <div class="ui fluid action input">
                   <input type="text" placeholder="未设置..." v-model="card.name" readonly>
-                  <div class="ui mini button" @click="$_openFormDesigner(card)">
+                  <div class="ui mini button" @click="openFormDesigner(card)">
                     <i class="cog icon" title="设置"></i>
                   </div>
                 </div>
@@ -96,7 +96,7 @@
               <div class="content">
                 <div class="ui fluid action input">
                   <input type="text" placeholder="未设置..." v-model="card.name" readonly>
-                  <div class="ui mini button" @click="$_openListDesigner(card)">
+                  <div class="ui mini button" @click="openListDesigner(card)">
                     <i class="cog icon" title="设置"></i>
                   </div>
                 </div>
@@ -155,30 +155,30 @@
       }
     },
     mounted: function () {
-      // this.$_sortCards()
-      // this.$_sortCardItems()
+      // this.sortCards()
+      // this.sortCardItems()
       console.log('plugins > form-combination > Settings > editorStore.editingPage: ', this.editorStore.editingPage)
     },
     methods: {
-      $_addHeader(e) {
+      addHeader(e) {
         this.cards.push(uiDataTemplate.header)
       },
-      $_addForm(e) {
+      addForm(e) {
         this.cards.push(uiDataTemplate.form)
       },
-      $_addTreeForm(e) {
+      addTreeForm(e) {
         this.cards.push(uiDataTemplate.treeForm)
       },
-      $_addTabs(e) {
+      addTabs(e) {
         this.cards.push(uiDataTemplate.tabs)
       },
-      $_addList(e) {
+      addList(e) {
         this.cards.push(uiDataTemplate.list)
       },
-      $_addToolbar(e) {
+      addToolbar(e) {
         this.cards.push(uiDataTemplate.toolbar)
       },
-      $_addCardItem(card) {
+      addCardItem(card) {
         card.items.push({
           type: 'form',
           name: 'form1',
@@ -190,9 +190,9 @@
           }
         })
       },
-      $_loadMeta() {
+      loadMeta() {
       },
-      $_openFormDesigner(card) {
+      openFormDesigner(card) {
         // console.log('ui.toolbar.dropdown.actions>', this.editorStore.editingPage.content.opts.ui.toolbar.dropdown.actions)
         let thisVue = this
         this.$gl.ui.openVueByPath(this, '/views/platform-ide/plugins/form-combination/FormDesigner',
@@ -216,7 +216,7 @@
           }
         )
       },
-      $_openListDesigner(card) {
+      openListDesigner(card) {
         // console.log('ui.toolbar.dropdown.actions>', this.editorStore.editingPage.content.opts.ui.toolbar.dropdown.actions)
         let thisVue = this
         this.$gl.ui.openVueByPath(this, '/views/platform-ide/plugins/table/SettingsGuide', {
@@ -227,7 +227,7 @@
           }
         })
       },
-      $_commit() {
+      commit() {
         return {code: 0, msg: ''}
       }
     },

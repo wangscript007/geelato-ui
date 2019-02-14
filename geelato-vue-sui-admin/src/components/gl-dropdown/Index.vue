@@ -37,17 +37,17 @@
             }
         },
         mounted: function () {
-            this.$_init()
+            this.init()
         },
         updated: function () {
             let theVue = this
-            $(theVue.$el).dropdown('setting', 'onChange', this.$_handleValue);
+            $(theVue.$el).dropdown('setting', 'onChange', this.handleValue);
         },
         methods: {
-            $_init: function () {
+            init: function () {
                 let theVue = this
                 console.log('innerHTML', $(theVue.$el).get(0).innerHTML)
-                let opts = {'onChange': this.$_handleValue}
+                let opts = {'onChange': this.handleValue}
                 $.extend(opts, theVue.opts)
                 theVue.sui = $(theVue.$el).dropdown(opts)
                 console.log('opts2>', opts)
@@ -55,14 +55,14 @@
                 // 设置更改事件
                 // theVue.sui[theVue.type]({onChange: handleValue})
                 // 初始化值
-                this.$_handleValue()
+                this.handleValue()
 
                 console.log('this.value>', theVue.value)
 
 
                 console.log('theVue.sui>', theVue.sui)
             },
-            $_handleValue(val, oval) {
+            handleValue(val, oval) {
                 let theVue = this
                 // theVue.sui[theVue.type]({values: [theVue.value]})
                 theVue.val = theVue.sui[theVue.type]('get value')

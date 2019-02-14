@@ -4,7 +4,7 @@
             <div slot="left">
                 <gl-group item=".list>.item">
                     <div class="ui middle aligned divided selection animated list">
-                        <div class="item" v-for="item in entityNames" @click="$_loadMeta(item)">
+                        <div class="item" v-for="item in entityNames" @click="loadMeta(item)">
                             <div class="description" :class="{header:currentEntityName===item}">
                                 {{item}}
                             </div>
@@ -72,12 +72,12 @@
         },
         computed: {},
         created() {
-            this.$_loadEntityNames()
-            this.$_loadMeta(this.defaultEntity)
+            this.loadEntityNames()
+            this.loadMeta(this.defaultEntity)
         },
         watch: {
             'defaultEntity': function (val, oval) {
-                this.$_loadMeta(this.defaultEntity)
+                this.loadMeta(this.defaultEntity)
             }
         },
         mounted() {
@@ -85,14 +85,14 @@
         updated() {
         },
         methods: {
-            $_loadEntityNames() {
+            loadEntityNames() {
                 let thisVue = this
                 thisVue.$gl.data.queryEntityNames().then(function (res) {
                     console.log(res)
                     thisVue.entityNames = res.data.sort()
                 })
             },
-            $_loadMeta(entityName) {
+            loadMeta(entityName) {
                 if (!entityName) {
                     return
                 }

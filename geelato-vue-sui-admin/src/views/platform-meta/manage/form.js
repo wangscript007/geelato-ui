@@ -67,6 +67,7 @@ export default {
               title: '数据类型',
               // int|bigint|varchar|datetime|date|time|timestamp|text|longText
               data: [
+                {text: '整型(tinyint)', value: 'tinyint'},
                 {text: '整型(int)', value: 'int'},
                 {text: '长整型(bigint)', value: 'bigint'},
                 {text: '可变字符(varchar)', value: 'varchar'},
@@ -116,12 +117,14 @@ export default {
             enabled: {
               control: 'checkbox',
               title: '启用',
-              value: true
+              value: true,
+              convert: 'number'
             },
             linked: {
               control: 'checkbox',
               title: '链接',
               value: false,
+              convert: 'number',
               tips: '对应的数据库表中是否已创建了对应的字段，且属性一致。'
             },
             comment: {
@@ -168,12 +171,12 @@ export default {
             {
               color: "primary",
               title: "保存",
-              click: "@:$ctx.$_save(false)"
+              click: "@:$ctx.save($ctx.$parent.close)"
             },
             {
               color: "negative",
               title: "取消",
-              click: "@:$ctx.$parent.$_cancel()"
+              click: "@:$ctx.$parent.cancel()"
             }
           ]
         }

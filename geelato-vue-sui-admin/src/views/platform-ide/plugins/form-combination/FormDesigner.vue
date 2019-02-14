@@ -169,15 +169,15 @@
             <draggable v-model="layout.data" element="table" class="gl-form gl-col-24"
                        :options="{group:{name:'layout'},chosenClass:'active'}"
                        @start="drag=true"
-                       @add="$_addRow" @change="$_updateLayout" @choose="$_onChooseRow">
+                       @add="addRow" @change="updateLayout" @choose="onChooseRow">
               <tr v-for="(row,rowIndex) in layout.data">
                 <!--行数据为分组标题-->
-                <template v-if="$_isGroupRow(row)">
+                <template v-if="isGroupRow(row)">
                   <td colspan="24" class="gl-form-group-title" :style="row[0].$style"
-                      @mouseover.self="$_onRowOver($event,rowIndex)"
-                      @mouseout.self="$_onRowOut($event,rowIndex)">
+                      @mouseover.self="onRowOver($event,rowIndex)"
+                      @mouseout.self="onRowOut($event,rowIndex)">
                     <span class="gl-designer-form-row-remove" title="删除当前行"
-                          @click="$_removeRow(rowIndex)">
+                          @click="removeRow(rowIndex)">
                       <i class="bordered inverted red remove small icon"></i>
                     </span>
                     <div v-html="row[0].$title||'&nbsp;'"></div>
@@ -186,30 +186,30 @@
                 <!--行数据非分组标题-->
                 <template v-else>
                   <template v-for="(cell,cellIndex) in row"
-                            v-if="property=$_getProperty(Object.keys(cell)[0])">
+                            v-if="property=getProperty(Object.keys(cell)[0])">
                     <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]" class="title"
-                        @mouseover.self="$_onRowOver($event,rowIndex)"
-                        @mouseout.self="$_onRowOut($event,rowIndex)">
+                        @mouseover.self="onRowOver($event,rowIndex)"
+                        @mouseout.self="onRowOut($event,rowIndex)">
                     <span v-if="cellIndex===0" class="gl-designer-form-row-remove" title="删除当前行"
-                          @click="$_removeRow(rowIndex)">
+                          @click="removeRow(rowIndex)">
                       <i class="bordered inverted red remove small icon"></i>
                     </span>
                       <!--<div class="ui red mini button gl-designer-form-row-remove">删行</div>-->
                       <span v-if="property.tips" :data-tooltip="property.tips">
                             <i class="info circle icon"></i>
                         </span>
-                      <span class="gl-required">{{$_isRequired(property)?'*':''}}</span>
+                      <span class="gl-required">{{isRequired(property)?'*':''}}</span>
                       {{property.title||Object.keys(cell)[0]}}&nbsp;
                     </td>
 
                     <td class="gl-designer-form-field" :colspan="Object.values(cell)[0][1]"
                         :rowspan="Object.values(cell)[0][2]">
                       <draggable :options="{group:{name:'field'},chosenClass:'active',sort:false}"
-                                 @start="$_onStartDragField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)"
+                                 @start="onStartDragField($event,rowIndex,cellIndex,getProperty(Object.keys(cell)[0]).field)"
                                  @end="drag=false"
-                                 @add="$_addField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)"
-                                 @choose="$_onChooseField($event,rowIndex,cellIndex,Object.keys(cell)[0])"
-                                 @clone="$_onCloneField($event,rowIndex,cellIndex,$_getProperty(Object.keys(cell)[0]).field)">
+                                 @add="addField($event,rowIndex,cellIndex,getProperty(Object.keys(cell)[0]).field)"
+                                 @choose="onChooseField($event,rowIndex,cellIndex,Object.keys(cell)[0])"
+                                 @clone="onCloneField($event,rowIndex,cellIndex,getProperty(Object.keys(cell)[0]).field)">
                         <template v-if="property.control==='input'">
                           <input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>
                           <!--:readonly="property.readonly===true" :disabled="property.disabled===true"-->
@@ -253,7 +253,7 @@
                         <!--<input type="text" :placeholder="property.placeholder" :name="Object.keys(cell)[0]" readonly>-->
                         <!--</template>-->
                         <span class="gl-designer-form-field-remove" title="清空字段"
-                              @click="$_removeField($event,rowIndex,cellIndex,Object.keys(cell)[0])">
+                              @click="removeField($event,rowIndex,cellIndex,Object.keys(cell)[0])">
                       <i class="bordered inverted red trash small icon"></i>
                     </span>
                         <!--这是一个占位元素，只有拖动到该元素上才有效-->
@@ -268,7 +268,7 @@
           </div>
           <!--<div style="position: relative;z-index: 10000" :style="hoverToolbarStyle">-->
           <!--<span v-if="hoverRowIndex>=0" title="删除当前行"-->
-          <!--@click="$_removeRow(hoverRowIndex)">-->
+          <!--@click="removeRow(hoverRowIndex)">-->
           <!--<i class="bordered inverted red remove small icon"></i>-->
           <!--</span>-->
           <!--</div>-->
@@ -622,10 +622,10 @@
         gutterSize: 4
         // minSize: 200
       })
-      this.$_initConvertData()
+      this.initConvertData()
     },
     methods: {
-      $_initConvertData() {
+      initConvertData() {
         let thisVue = this
         for (let key in this.properties) {
           // 设置一些默认值，添加默认配置等
@@ -646,7 +646,7 @@
           }
         }
       },
-      $_getProperty(name) {
+      getProperty(name) {
         if (!name || !this.properties[name]) {
           return {control: 'null', title: ' '}
         }
@@ -657,60 +657,60 @@
        * @param property 字段配置信息
        * @returns {boolean}
        */
-      $_isRequired(property) {
+      isRequired(property) {
         if (!property.rules || property.rules.length === 0) {
           return false
         } else {
           return property.rules.filter(item => item.type === 'empty' || item.type === 'checked').length > 0
         }
       },
-      $_getValue() {
+      getValue() {
       },
-      $_onFieldDrag(a, b, c, d) {
-        console.log('$_onFieldDrag>', a, 'B>', b, 'C>', c, 'D>', d)
+      onFieldDrag(a, b, c, d) {
+        console.log('onFieldDrag>', a, 'B>', b, 'C>', c, 'D>', d)
       },
-      $_addRow(evt) {
-        if (this.$_isGroupRow(this.layout.data[evt.newIndex])) {
-          this.$_editGroup(evt.newIndex)
+      addRow(evt) {
+        if (this.isGroupRow(this.layout.data[evt.newIndex])) {
+          this.editGroup(evt.newIndex)
         } else {
           this.currentGroup = ''
         }
-        console.log('$_addRow>', evt, this.layout.data[evt.newIndex], evt.newIndex)
+        console.log('addRow>', evt, this.layout.data[evt.newIndex], evt.newIndex)
       },
-      $_removeRow(rowIndex) {
+      removeRow(rowIndex) {
         this.layout.data.splice(rowIndex, 1)
-        console.log('$_removeRow>', this.layout.data)
+        console.log('removeRow>', this.layout.data)
       },
-      $_onRowOver(evt, rowIndex) {
+      onRowOver(evt, rowIndex) {
         this.hoverRowIndex = rowIndex
-        console.log('$_onRowOver', evt, rowIndex)
+        console.log('onRowOver', evt, rowIndex)
       },
-      $_onRowOut(evt, rowIndex) {
+      onRowOut(evt, rowIndex) {
         this.hoverRowIndex = -1
-        console.log('$_onRowOut', evt, rowIndex)
+        console.log('onRowOut', evt, rowIndex)
       },
       /**
        * 是否分组标题行
        * @param row
        * @returns {boolean}
        */
-      $_isGroupRow(row) {
+      isGroupRow(row) {
         // row data e.g.: [{'': [24],  $title: '',$style:''}]
         return row.length === 1 && row[0].$title !== undefined
       },
-      $_onChooseRow(evt) {
+      onChooseRow(evt) {
         let row = this.layout.data[evt.oldIndex]
-        if (this.$_isGroupRow(row)) {
-          this.$_editGroup(evt.oldIndex)
+        if (this.isGroupRow(row)) {
+          this.editGroup(evt.oldIndex)
         } else {
           this.currentGroup = ''
         }
       },
-      $_editGroup(rowIndex) {
+      editGroup(rowIndex) {
         this.currentGroup = {rowIndex: rowIndex, row: this.layout.data[rowIndex]}
-        this.$_selectSettingTab('tab-group')
+        this.selectSettingTab('tab-group')
       },
-      $_addField(evt, rowIndex, cellIndex, propertyName) {
+      addField(evt, rowIndex, cellIndex, propertyName) {
         // if (evt.oldIndex > 0) {
         //   return false
         // }
@@ -730,17 +730,17 @@
         }
         evt.item.parentElement.removeChild(evt.item)
         console.log('addField', evt, this.layout.data)
-        this.$_selectSettingTab('tab-field')
+        this.selectSettingTab('tab-field')
       },
-      $_onChooseField(evt, rowIndex, cellIndex, propertyName) {
+      onChooseField(evt, rowIndex, cellIndex, propertyName) {
         // propertyName 对于新添加的字段，propertyName对应的field为空，即这里propertyName为空
         let cell = this.layout.data[rowIndex][cellIndex]
-        console.log('$_onChooseField', evt, rowIndex, cellIndex, propertyName, this.layout.data, this.properties)
+        console.log('onChooseField', evt, rowIndex, cellIndex, propertyName, this.layout.data, this.properties)
         this.currentPropertyName = propertyName
-        this.$_selectSettingTab('tab-field')
+        this.selectSettingTab('tab-field')
       },
-      $_removeField(evt, rowIndex, cellIndex, propertyName) {
-        console.log('$_removeField>', evt, rowIndex, cellIndex, this.layout.data[rowIndex][cellIndex], propertyName)
+      removeField(evt, rowIndex, cellIndex, propertyName) {
+        console.log('removeField>', evt, rowIndex, cellIndex, this.layout.data[rowIndex][cellIndex], propertyName)
         if (propertyName === undefined || '') {
           return
         } else {
@@ -757,33 +757,33 @@
         }
         this.$forceUpdate()
       },
-      $_updateLayout(evt) {
+      updateLayout(evt) {
         this.$forceUpdate()
       },
-      $_onStartDragField(evt, rowIndex, cellIndex, propertyName) {
-        console.log('$_onStartDragField', evt, rowIndex, cellIndex, propertyName)
+      onStartDragField(evt, rowIndex, cellIndex, propertyName) {
+        console.log('onStartDragField', evt, rowIndex, cellIndex, propertyName)
         return false
       },
-      $_onCloneField(evt, rowIndex, cellIndex, propertyName) {
+      onCloneField(evt, rowIndex, cellIndex, propertyName) {
         let origEl = evt.item;
         let cloneEl = evt.clone;
-        console.log('$_onCloneField', evt, rowIndex, cellIndex, propertyName, origEl, cloneEl)
+        console.log('onCloneField', evt, rowIndex, cellIndex, propertyName, origEl, cloneEl)
       },
 
-      $_openTrSettings() {
+      openTrSettings() {
 
       },
-      $_openTdSettings() {
+      openTdSettings() {
 
       },
-      $_openControlSettings() {
+      openControlSettings() {
 
       },
-      $_getConfigText() {
+      getConfigText() {
         this.configText = JSON.stringify(this.config)
         return this.configText
       },
-      $_selectSettingTab(tabName) {
+      selectSettingTab(tabName) {
         this.$refs.settingsTabs.sui.tab('change tab', tabName);
       }
     },

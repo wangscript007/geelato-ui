@@ -4,7 +4,9 @@
 -->
 <template>
   <div>
-    <component v-if="!message.header" :is="currentView" :opts="pageCfg.opts" :query="queryString">
+    <component v-if="!message.header" :is="currentView"
+               :opts="pageCfg.opts&&pageCfg.opts.ui?pageCfg.opts.ui:pageCfg.opts"
+               :query="queryString">
       <!-- 组件在 vm.currentview 变化时改变！ -->
     </component>
     <gl-message v-if="message.header" :header="message.header" :text="message.text">
@@ -38,14 +40,14 @@
     mounted: function () {
       // 组件创建完后获取数据，
       // 此时 data 已经被 observed 了
-      this.$_getPageConfig()
+      this.getPageConfig()
     },
     watch: {
       // 如果路由有变化，会再次执行该方法
-      '$route': '$_getPageConfig'
+      '$route': 'getPageConfig'
     },
     methods: {
-      $_getPageConfig() {
+      getPageConfig() {
         let thisVue = this
         this.message = {}
         thisVue.pageCode = thisVue.opts && thisVue.opts.code ? thisVue.opts.code : thisVue.code
@@ -63,7 +65,7 @@
         thisVue.currentView = resolve => require(['./PageLoading.vue'], resolve)
         // 路由的格式：page/:moduleName/:pageCode?query
         thisVue.$gl.data.getPageCfg(thisVue.pageCode).then((res) => {
-          console.log('gl-page-loader > Index > $_getPageConfig > res: ', res)
+          console.log('gl-page-loader > Index > getPageConfig > res: ', res)
           if (res.code === '0') {
             console.log('gl-page-loader > Index > pageCfg.component: ', thisVue.pageCfg.component)
             if (res.data && res.data.length > 0) {
@@ -86,7 +88,7 @@
               thisVue.$set(thisVue.message, 'text', '通过pageCode：“' + thisVue.pageCode + '”获取不到页面配置，请确保是否已配置、注册了该页面。')
             }
           } else {
-            console.error('返回状态码code不为0。当前返回结果：', res)
+            console.error('gl-page-loader > Index > 返回状态码code不为0。当前返回结果：', res)
           }
         })
       }

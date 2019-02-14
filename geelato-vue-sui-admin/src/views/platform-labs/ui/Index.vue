@@ -176,10 +176,10 @@
             }
         },
         mounted: function () {
-            this.$_progress()
+            this.progress()
         },
         methods: {
-            $_progress() {
+            progress() {
                 $('.rapid.example .ui.button')
                     .on('click', function () {
                         var $progress = $('.rapid.example .ui.progress')

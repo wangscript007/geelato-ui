@@ -1,10 +1,10 @@
 <template>
-  <div class="ui grid" v-if="opts.ui">
+  <div class="ui grid" v-if="opts">
     <!--查询条件-->
-    <div v-if="opts.ui.query.show" class="four wide column gl-table-query" :style="{display:(isMax?'none':'')}">
-      <div v-if="opts.ui.query.tree">
+    <div v-if="opts.query.show" class="four wide column gl-table-query" :style="{display:(isMax?'none':'')}">
+      <div v-if="opts.query.tree">
         <div class="ui borderless secondary menu gl-header">
-          <div class="item">{{opts.ui.query.tree.title}}
+          <div class="item">{{opts.query.tree.title}}
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
@@ -14,11 +14,11 @@
           </div>
         </div>
         <div class="ui fitted divider"></div>
-        <table-tree :opts="opts.ui.query.tree" @click="$_clickTreeNode"></table-tree>
+        <table-tree :opts="opts.query.tree" @click="clickTreeNode"></table-tree>
       </div>
-      <div v-if="opts.ui.query.filter">
+      <div v-if="opts.query.filter">
         <div class="ui borderless secondary menu gl-header">
-          <div class="item">查询过滤
+          <div class="item">{{opts.leftTitle||'查询过滤'}}
           </div>
           <div class="ui right secondary mini menu">
             <div class="item">
@@ -32,15 +32,15 @@
           xxx
         </div>
       </div>
-      <div v-if="opts.ui.query.mix">
+      <div v-if="opts.query.mix">
         <div class="ui borderless secondary menu gl-header">
-          <div class="item" style="font-weight: bold">查询过滤
+          <div class="item" style="font-weight: bold">{{opts.leftTitle||'查询过滤'}}
           </div>
           <!-- 当查询条件多于8个时，才会在上方展示查询、重置按钮，这样页面简洁点，在内容较多，不便拖动时才在上方展示-->
           <div class="ui right secondary mini menu"
-               v-if="opts.ui.query.mix.fields&&opts.ui.query.mix.fields.length>8">
+               v-if="opts.query.mix.fields&&opts.query.mix.fields.length>8">
             <div class="item">
-              <button class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_submit">查询
+              <button class="ui mini basic button" :class="$gl.ui.color.primary" @click="submit">查询
               </button>&nbsp;
               <button class="ui mini basic button" :class="$gl.ui.color.primary" @click="reset">重置
               </button>
@@ -48,8 +48,8 @@
           </div>
         </div>
         <div class="ui fitted divider" style="margin-bottom: 0.5em"></div>
-        <table-query ref="queryForm" :opts="opts.ui.query.mix" v-model="mixQuery"
-                     @input="$_formQueryCallback"></table-query>
+        <table-query ref="queryForm" :opts="opts.query.mix" v-model="mixQuery"
+                     @input="formQueryCallback"></table-query>
       </div>
     </div>
     <!--查询列表-->
@@ -59,18 +59,18 @@
         <a class="item gl-page-sidebar-toggle" @click="toggleSidebar">
           <i class="sidebar icon"></i>
         </a>
-        <div class="item gl-title" style="font-weight: bold">{{opts.ui.title}}
+        <div class="item gl-title" style="font-weight: bold">{{opts.rightTitle||'列表'}}
         </div>
         <div class="ui right secondary  borderless mini menu">
-          <div v-if="opts.ui.toolbar.dropdown" class="item">
-            <template v-for="(item, index) in opts.ui.toolbar.dropdown.actions">
+          <div v-if="opts.toolbar.dropdown" class="item">
+            <template v-for="(item, index) in opts.toolbar.dropdown.actions">
               <!--有hidden属性，或hidden为空-->
               <!--<button class="ui mini button">新增</button>&nbsp;-->
               <!--item.click==='delete'?$gl.ui.color.negative:$gl.ui.color.primary-->
               <button class="ui mini button"
                       :key="index"
                       :class="item.color?$gl.ui.color[item.color]:$gl.ui.color.primary"
-                      @click="$_click(item,$event)"
+                      @click="click(item,$event)"
                       v-if="!item.hasOwnProperty('hidden')||$gl.utils.isEmpty(item.hidden)||$gl.utils.eval(item.hidden)">
                 {{item.title}}
               </button>&nbsp;
@@ -80,7 +80,7 @@
             <!--<div class="ui floating dropdown icon button">-->
             <!--<i class="dropdown icon"></i>-->
             <!--<div class="menu">-->
-            <!--<div v-for="(item, index) in opts.ui.toolbar.dropdown.actions" class="item">{{item.title}}</div>-->
+            <!--<div v-for="(item, index) in opts.toolbar.dropdown.actions" class="item">{{item.title}}</div>-->
             <!--</div>-->
             <!--</div>-->
             <!--</div>-->
@@ -88,22 +88,22 @@
         </div>
       </div>
       <div class="ui fitted divider"></div>
-      <div class="ui info message" v-if="showTips&&opts.ui.tips&&opts.ui.tips.html">
+      <div class="ui info message" v-if="showTips&&opts.tips&&opts.tips.html">
         <i class="close icon" @click="showTips=false"></i>
-        <div v-html="opts.ui.tips.html"></div>
+        <div v-html="opts.tips.html"></div>
       </div>
       <!--结果列表-->
       <table class="ui selectable compact table gl-compact">
         <thead>
         <tr>
-          <th style="width: 1em" v-if="opts.ui.mode!=='select'">
+          <th style="width: 1em" v-if="opts.mode!=='select'">
             <div class="ui master checkbox">
               <input type="checkbox">
               <label></label>
             </div>
           </th>
           <th style="width:5em">操作</th>
-          <th v-for="(item, index) in opts.ui.table.columns" :key="index" v-if="item.visible!==false"
+          <th v-for="(item, index) in opts.table.columns" :key="index" v-if="item.visible!==false"
               :style="{width:item.width}">
             {{item.title}}
           </th>
@@ -111,31 +111,31 @@
         </thead>
         <tbody v-if="queryResult.data&&queryResult.data.length>0">
         <tr v-for="(rowDataItem,rowIndex) in queryResult.data" :key="rowIndex">
-          <td v-if="opts.ui.mode!=='select'">
+          <td v-if="opts.mode!=='select'">
             <div class="ui child checkbox">
-              <input type="checkbox" :data-rowId="rowDataItem[opts.ui.table.select.field]">
+              <input type="checkbox" :data-rowId="rowDataItem[opts.table.select.field]">
               <label></label>
             </div>
           </td>
           <td>
-            <div v-if="opts.ui.mode==='select'">
+            <div v-if="opts.mode==='select'">
               <div class="ui mini buttons" :class="$gl.ui.color.primary">
-                <div class="ui button" @click="$_selectRow(rowDataItem)">选择</div>
+                <div class="ui button" @click="selectRow(rowDataItem)">选择</div>
               </div>
             </div>
-            <div v-if="opts.ui.mode!=='select'" class="ui mini buttons" :class="$gl.ui.color.primary">
+            <div v-if="opts.mode!=='select'" class="ui mini buttons" :class="$gl.ui.color.primary">
               <div class="ui button"
-                   v-if="opts.ui.table.dropdown.actions.length===1?item=opts.ui.table.dropdown.actions[0]:''"
-                   @click="$_click(item,$event,rowDataItem)">{{item.title}}
+                   v-if="opts.table.dropdown.actions.length===1?item=opts.table.dropdown.actions[0]:''"
+                   @click="click(item,$event,rowDataItem)">{{item.title}}
               </div>
               <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em"></div>-->
               <div class="ui floating dropdown icon button"
-                   v-else-if="opts.ui.table.dropdown.actions.length>1">
+                   v-else-if="opts.table.dropdown.actions.length>1">
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                  <template v-for="(item, index) in opts.ui.table.dropdown.actions">
-                    <div class="item" :key="index" @click="$_click(item,$event,rowDataItem)"
-                         v-if="$_eval(item.visible,rowDataItem)!==true">
+                  <template v-for="(item, index) in opts.table.dropdown.actions">
+                    <div class="item" :key="index" @click="click(item,$event,rowDataItem)"
+                         v-if="eval(item.visible,rowDataItem)!==true">
                       {{item.title}}
                     </div>
                   </template>
@@ -144,7 +144,7 @@
             </div>
           </td>
           <!--展示列数据 visible el:表达式  format：格式化-->
-          <td v-for="(item, index) in opts.ui.table.columns" :key="index" v-if="item.visible!==false"
+          <td v-for="(item, index) in opts.table.columns" :key="index" v-if="item.visible!==false"
               :style="{'text-align':item.textAlign}">
             <template v-if="item.el">
               {{$gl.utils.eval(item.el,rowDataItem)}}
@@ -157,21 +157,21 @@
         </tbody>
         <tbody v-else>
         <tr>
-          <td class="warning" :colspan="opts.ui.table.columns.length+1"
+          <td class="warning" :colspan="opts.table.columns.length+1"
               style="text-align: center;height: 2.6em">没有记录
           </td>
         </tr>
         </tbody>
       </table>
-      <div class="ui info message" v-if="showTips&&opts.ui.tips&&opts.ui.tips.display==='bottom'">
+      <div class="ui info message" v-if="showTips&&opts.tips&&opts.tips.display==='bottom'">
         <i class="close icon" @click="showTips=false"></i>
-        <div v-html="opts.ui.tips.html"></div>
+        <div v-html="opts.tips.html"></div>
       </div>
       <div class="gl-table-info">
-        <!--{{opts.ui.info}}-->
+        <!--{{opts.info}}-->
       </div>
       <div class="gl-table-stat">
-        <!--{{opts.ui.stat}}-->
+        <!--{{opts.stat}}-->
       </div>
       <!--分页-->
       <gl-pagination v-show="queryResult.data&&queryResult.data.length>0" class="center" ref="pagination"
@@ -179,8 +179,8 @@
                      :current="parseInt(queryResult.page)"
                      :showSize="pagination.showSize"
                      :showSizeChanger="true"
-                     @showSizeChange="$_showSizeChange"
-                     @navPage="$_navPage"></gl-pagination>
+                     @showSizeChange="showSizeChange"
+                     @navPage="navPage"></gl-pagination>
     </div>
   </div>
 </template>
@@ -244,17 +244,17 @@
       console.log('gl-table > Index> ooo: ', this.ooo)
     },
     mounted() {
-      this.$_resetPagination()
-      this.$_loadData()
+      this.resetPagination()
+      this.loadData()
 //      $(this.$el).find('.ui.cards')()
 //      $(this.$el).find('.ui.checkbox').checkbox()
     },
     updated() {
       $(this.$el).find('.ui.dropdown').dropdown()
-      this.$_initCheckbox()
+      this.initCheckbox()
     },
     methods: {
-      $_loadData() {
+      loadData() {
         let thisVue = this
         this.$gl.data.queryByGql(genGql(this.lastMixQueryData)).then(function (data) {
           thisVue.queryResult = data
@@ -269,18 +269,18 @@
             }
           }
           let fsAry = []
-          for (let i in thisVue.opts.ui.table.columns) {
-            let col = thisVue.opts.ui.table.columns[i]
+          for (let i in thisVue.opts.table.columns) {
+            let col = thisVue.opts.table.columns[i]
             // 过滤掉空列，或计算列
-            if (!thisVue.$_isVirtualColumn(col.field)) {
+            if (!thisVue.isVirtualColumn(col.field)) {
               fsAry.push(col.field)
             }
           }
           root['@fs'] = fsAry.join(',')
-          root['@order'] = thisVue.opts.ui.table.order
+          root['@order'] = thisVue.opts.table.order
           root['@p'] = thisVue.pagination.pageNum + ',' + thisVue.pagination.showSize
           let gql = {}
-          gql[thisVue.opts.ui.entity] = root
+          gql[thisVue.opts.entity] = root
           console.log('创建的gql > ', gql)
           return gql
         }
@@ -290,10 +290,10 @@
       toggleSidebar() {
         this.isMax = !this.isMax
       },
-      $_isVirtualColumn(field) {
+      isVirtualColumn(field) {
         return field === '' || field === '空' || field === '无'
       },
-      $_initCheckbox() {
+      initCheckbox() {
         let thisVue = this
         let $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
         let $childCheckbox = $(thisVue.$el).find('.ui.table .child.checkbox')
@@ -331,7 +331,7 @@
           }
         })
       },
-      $_resetCheckbox() {
+      resetCheckbox() {
         let thisVue = this
         thisVue.checkedIds = []
         let $masterCheckbox = $(thisVue.$el).find('.ui.table .master.checkbox')
@@ -339,59 +339,60 @@
         $masterCheckbox.checkbox('uncheck')
         $childCheckbox.checkbox('uncheck')
       },
-      $_eval(expression, ctx) {
+      eval(expression, ctx) {
         return utils.invoke(expression, ctx)
       },
-      $_navPage(pageNum) {
+      navPage(pageNum) {
         this.needResetPagination = false
         this.pagination.pageNum = pageNum
-        this.$refs.queryForm.$_submit()
+        this.$refs.queryForm.submit()
       },
-      $_showSizeChange(showSize) {
+      showSizeChange(showSize) {
         this.needResetPagination = false
         this.pagination.showSize = parseInt(showSize)
-        this.$refs.queryForm.$_submit()
+        this.$refs.queryForm.submit()
       },
-      $_refresh() {
-        this.$_submit()
+      refresh() {
+        console.log('gl-table > Index > refresh')
+        this.submit()
       },
-      $_submit() {
+      submit() {
         this.needResetPagination = true
         // 调用查询子vue的查询方法
-        this.$refs.queryForm.$_submit()
+        this.$refs.queryForm.submit()
       },
       reset() {
-        this.$refs.queryForm.$_reset()
+        this.$refs.queryForm.reset()
       },
-      $_resetPagination() {
+      resetPagination() {
         let thisVue = this
-        if (thisVue.opts.ui.table.p) {
-          let page = thisVue.opts.ui.table.p.split(',')
+        if (thisVue.opts.table.p) {
+          let page = thisVue.opts.table.p.split(',')
           thisVue.pagination.pageNum = parseInt(page[0])
           thisVue.pagination.showSize = parseInt(page[1])
         }
       },
       // 选择一条数据
-      $_selectRow(row) {
+      selectRow(row) {
         this.$emit('selectRow', row)
       },
       // query组件的查询回调，获取查询条件信息，并调用loadData查询数据，并以数据驱动刷新页面
-      $_formQueryCallback(data) {
+      formQueryCallback(data) {
         this.lastMixQueryData = data.value
         // 有e，则是来源于查询操作按钮，需重置后再查询
         if (data.e) {
           this.needResetPagination = true
         }
         if (this.needResetPagination) {
-          this.$_resetPagination()
+          this.resetPagination()
         }
-        this.$_loadData()
+        this.loadData()
         this.selectedRows = []
       },
-      $_clickTreeNode(data) {
+      clickTreeNode(data) {
         this.currentTreeNode = data
       },
-      $_click(action, event, rowDataItem) {
+      click(action, event, rowDataItem) {
         console.log('gl-table > Index > click action: ', action)
         console.log('gl-table > Index > click event: ', event)
         console.log('gl-table > Index > click rowDataItem: ', rowDataItem)
@@ -412,11 +413,11 @@
               thisVue.$gl.ui.openVueByPath(this, modal.value, modal, {
                 refreshTable: function () {
                   // 在modal中注册刷新操作
-                  thisVue.$_submit()
+                  thisVue.submit()
                 },
                 close: function () {
                   // 在modal中注册刷新操作
-                  thisVue.$_submit()
+                  thisVue.submit()
                 }
               })
             } else {
@@ -426,18 +427,18 @@
           case 'deleteOne':
             if (rowDataItem) {
               let keyValue = {'id|eq': rowDataItem.id}
-              thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
-                thisVue.$_resetCheckbox()
-                thisVue.$_submit()
+              thisVue.$gl.data.delete(thisVue.opts.entity, keyValue).then(function () {
+                thisVue.resetCheckbox()
+                thisVue.submit()
               })
             }
             break
           case 'deleteMulti':
             if (thisVue.checkedIds.length !== 0) {
               let keyValue = {'id|in': thisVue.checkedIds.join(',')}
-              thisVue.$gl.data.delete(thisVue.opts.ui.entity, keyValue).then(function () {
-                thisVue.$_resetCheckbox()
-                thisVue.$_submit()
+              thisVue.$gl.data.delete(thisVue.opts.entity, keyValue).then(function () {
+                thisVue.resetCheckbox()
+                thisVue.submit()
               })
             }
             break

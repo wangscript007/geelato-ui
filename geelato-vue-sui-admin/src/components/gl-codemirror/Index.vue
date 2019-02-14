@@ -56,23 +56,23 @@
         mounted() {
             let thisVue = this
             format.set(CodeMirror)
-            thisVue.$_setValue(this.text)
+            thisVue.setValue(this.text)
             thisVue.editor = this.$refs.cm.codemirror
             thisVue.editor.setSize('100%', this.editorMainHeight)
             thisVue.editor.on('change', function (editor, changes) {
             })
         },
         methods: {
-            $_format() {
+            format() {
                 let totalLines = this.$refs.cm.codemirror.lineCount();
                 this.$refs.cm.codemirror.autoFormatRange({line: 0, ch: 0}, {line: totalLines});
             },
-            $_setValue(contentString = '') {
+            setValue(contentString = '') {
                 this.$refs.cm.codemirror.setValue(contentString)
-                this.$_format()
+                this.format()
                 this.$refs.cm.codemirror.setCursor(0)
             },
-            $_getValue() {
+            getValue() {
                 return this.$refs.cm.codemirror.getValue()
             },
         },

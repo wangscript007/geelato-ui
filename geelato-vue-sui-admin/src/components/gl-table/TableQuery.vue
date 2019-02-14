@@ -3,12 +3,12 @@
         <div v-for="(item, index) in opts.fields" style="margin-top: 2px">
             <template v-if="item.type=='string'||item.type=='String'">
                 <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
-                <input @keyup.enter="$_submit" type="text" :placeholder="getPlaceholder(item)"
+                <input @keyup.enter="submit" type="text" :placeholder="getPlaceholder(item)"
                        v-model.trim="entity[index]"/>
             </template>
             <template v-else-if="item.type=='number'||item.type=='Number'||item.type=='int'||item.type=='Long'">
                 <label><i class="fa font-green">{{convertLop(item.lop)}}</i> &nbsp; {{item.title}}</label>
-                <input @keyup.enter="$_submit" type="text" :placeholder="getPlaceholder(item)"
+                <input @keyup.enter="submit" type="text" :placeholder="getPlaceholder(item)"
                        v-model.number="entity[index]"/>
             </template>
             <template v-else-if="item.type=='date'||item.type=='Date' || item.type=='time'||item.type=='Time'">
@@ -19,7 +19,7 @@
                 <div class="mt-checkbox-inline">
                     <label><i class="fa font-green">{{convertLop(item.lop)}} &nbsp;</i></label>
                     <label class="mt-checkbox">
-                        <input @keyup.enter="$_submit" type="checkbox" :id="'checkbox_'+index" value="false"
+                        <input @keyup.enter="submit" type="checkbox" :id="'checkbox_'+index" value="false"
                                v-model="entity[index]">
                         {{item.title}}
                         <span></span>
@@ -36,7 +36,7 @@
                 <label>{{item.title}}</label>
                 <div class="input-icon input-icon-sm">
                     <i class="fa font-green">{{convertLop(item.lop)}}</i>
-                    <input @keyup.enter="$_submit" type="text" class="form-control input-sm"
+                    <input @keyup.enter="submit" type="text" class="form-control input-sm"
                            :placeholder="getPlaceholder(item)"/>
                 </div>
             </template>
@@ -45,8 +45,8 @@
             <div class="item">
             </div>
             <div class="right item">
-                <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_submit" @keyup.enter="$_submit">查询</a>&nbsp;
-                <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="$_reset">重置</a>
+                <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="submit" @keyup.enter="submit">查询</a>&nbsp;
+                <a class="ui mini basic button" :class="$gl.ui.color.primary" @click="reset">重置</a>
             </div>
         </div>
     </form>
@@ -123,8 +123,8 @@
                     return this.convertCop(item.cop)
                 }
             },
-            $_submit(e) {
-                console.log('model $_submit>', e, this.model, this.opts.fields)
+            submit(e) {
+                console.log('model submit>', e, this.model, this.opts.fields)
                 let result = {}
                 for (let index in this.opts.fields) {
                     let item = this.opts.fields[index]
@@ -146,7 +146,7 @@
                 console.log('构建成gql查询条件为 > ', result)
                 this.$emit('input', {value: result, e: e})
             },
-            $_reset() {
+            reset() {
                 let self = this
                 for (let p in this.defaultValue) {
                     // notice:the html element can only be change by vm.$set or Vue.set after model created.

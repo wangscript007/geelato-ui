@@ -7,7 +7,7 @@ export default {
         type: 'treeForm',
         name: '菜单信息',
         opts: {
-          leftTitle: '模块菜单',
+          leftTitle: '菜单树',
           rightTitle: '菜单项',
           max: {left: 8, right: 8},
           min: {left: 6, right: 10},
@@ -16,7 +16,7 @@ export default {
           nodeEntityName: "platform_menu_item",
           nodeEntityNameField: "title",
           treeId: "@.id",
-          treeName: "模块菜单",
+          treeName: "@.title+'[模块]'",
           cards: [{
             type: 'form',
             name: '菜单项',
@@ -120,17 +120,17 @@ export default {
             {
               color: "primary",
               title: "保存并关闭",
-              click: "@:$ctx.$_save()"
+              click: "@:$ctx.save($ctx.$parent.close)"
             },
             {
               color: "primary",
               title: "保存不关闭",
-              click: "@:$ctx.$_save(false)"
+              click: "@:$ctx.save()"
             },
             {
               color: "negative",
               title: "取消",
-              click: "@:$ctx.$parent.$_cancel()"
+              click: "@:$ctx.$parent.cancel()"
             }
           ]
         }

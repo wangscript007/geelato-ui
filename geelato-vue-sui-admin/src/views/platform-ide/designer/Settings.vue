@@ -94,7 +94,7 @@
     mounted: function () {
     },
     methods: {
-      $_commit () {
+      commit () {
         if (!this.plugin.settingPanels) {
           return {code: 0, msg: ''}
         }
@@ -104,7 +104,7 @@
           // 只获取激活状态的内容，未初始化时panelComponent为[]
           if (panelComponent && panelComponent.length > 0) {
             console.log('panelComponent>', panel.name, panelComponent)
-            let result = panelComponent[0].$_commit()
+            let result = panelComponent[0].commit()
             if (result.code !== 0) {
               return result
             }

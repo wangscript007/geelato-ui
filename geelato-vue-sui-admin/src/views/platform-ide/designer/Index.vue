@@ -1,7 +1,7 @@
 <template>
   <div class="gl-designer">
-    <toolbar ref="toolbar" :editorStore="editorStore" @newProject="$_newProject" @openProject="$_openProject"
-             @itemClick="$_toolbarItemClick">
+    <toolbar ref="toolbar" :editorStore="editorStore" @newProject="newProject" @openProject="openProject"
+             @itemClick="toolbarItemClick">
     </toolbar>
     <div :style="{height:editorOuterMainHeight}">
       <div class="gl-designer-sidebar split split-horizontal">
@@ -17,7 +17,7 @@
           </div>
           <div class="ui bottom attached tab segment active" :style="{height:editorMainHeight}"
                data-tab="sidebar-project">
-            <project ref="project" @openPage="$_onOpenPage" @newPage="$_onNewPage"
+            <project ref="project" @openPage="onOpenPage" @newPage="onNewPage"
                      :editorStore="editorStore"></project>
           </div>
           <div class="ui bottom attached tab segment" :style="{height:editorMainHeight}"
@@ -71,7 +71,7 @@
   import config from './config.js'
 
   export default {
-    data () {
+    data() {
       return {
         editorStore: new EditorStore({
           // 注册的插件名称
@@ -126,7 +126,7 @@
         return (this.editorMainHeightNum + this.tabTitleHeightNum) + 'px'
       }
     },
-    created () {
+    created() {
       // 加载插件
       for (let index in this.editorStore.pluginNames) {
         let pluginName = this.editorStore.pluginNames[index]
@@ -142,45 +142,47 @@
         }
       }
     },
-    mounted () {
+    mounted() {
       this.spliter = Split(['.gl-designer-sidebar', '.gl-designer-stage', '.gl-designer-settings'], {
         sizes: [18.75, 56.25, 25],
-        gutterSize: 4
-        // minSize: 200
+        gutterSize: 4,
+        minSize: 2
       })
     },
     methods: {
-      $_newProject () {
-        this.$refs.project.$_newProject()
+      newProject() {
+        this.$refs.project.newProject()
         $(this.$el).find('.tabular.menu').tab('change tab', 'sidebar-project')
       },
-      $_openProject (project) {
-        this.$refs.project.$_openProject(project)
+      openProject(project) {
+        this.$refs.project.openProject(project)
         $(this.$el).find('.tabular.menu').tab('change tab', 'sidebar-project')
       },
-      $_onOpenPage () {},
-      $_onNewPage () {},
-      $_toolbarItemClick (methodName, param) {
+      onOpenPage() {
+      },
+      onNewPage() {
+      },
+      toolbarItemClick(methodName, param) {
         this[methodName](param)
       },
       /**
        * 获各panel的数据，并调用工程树组件的保存页面方法
        */
-      $_savePage () {
+      savePage() {
         let thisVue = this
         // 通知相应面板提交将配置信息，更新到editingPage，失败返回false，失败的提示信息在各面板中控制展示
         // commit 返回结果为 {code:0|-1,message:String,data:Object},code为0表示成功
-        let commitSettingResult = thisVue.$refs.settings.$_commit()
+        let commitSettingResult = thisVue.$refs.settings.commit()
         if (commitSettingResult.code !== 0) {
           thisVue.$gl.ui.showMsg(commitSettingResult.msg || '保存失败', 'error')
           console.log('commitSettingResult 格式为：{code:0|-1,message:String,data:Object} >', commitSettingResult)
           return
         }
-        // this.$refs.stage.$_getValue()
+        // this.$refs.stage.getValue()
 //        thisVue.editorStore.editingPage.name = props.name
 //         thisVue.editorStore.editingPage.code = props.code
 //         thisVue.editorStore.editingPage.description = props.description
-        thisVue.$refs.project.$refs.fileTree.$_savePage()
+        thisVue.$refs.project.$refs.fileTree.savePage()
       }
     },
     components: {Toolbar, Project, ToolboxElement, Stage, Settings}

@@ -43,14 +43,14 @@
             }
         },
         updated() {
-            // TODO 待观察是否需要this.$_init()，目前启用该方法时，因handleValue会重复执行
-            // this.$_init()
+            // TODO 待观察是否需要this.init()，目前启用该方法时，因handleValue会重复执行
+            // this.init()
         },
         mounted: function () {
-            this.$_init()
+            this.init()
         },
         methods: {
-            $_init: function () {
+            init: function () {
                 let valueApis = {
                     checkbox: {getValueBehavior: 'is checked', onChange: 'onChange'},
                     dropdown: {getValueBehavior: 'get value', onChange: 'onChange'},

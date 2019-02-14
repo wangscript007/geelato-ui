@@ -24,14 +24,14 @@
       }
     },
     mounted: function () {
-      this.$_init()
+      this.init()
     },
     methods: {
-      $_init () {
+      init () {
       },
-      $_setValue (contentString = '') {
+      setValue (contentString = '') {
       },
-      $_commit () {
+      commit () {
         return {code: 0, msg: ''}
       }
     },

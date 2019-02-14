@@ -3,22 +3,22 @@
         <div class="item">
             共{{total}}条
         </div>
-        <select v-if="showSizeChanger" class="ui dropdown" @change="$_showSizeChange">
+        <select v-if="showSizeChanger" class="ui dropdown" @change="showSizeChange">
             <option v-for="item in pageSizeItems" :key="item.value"
                     :value="item.value" :selected="showSize===item.value">{{item.text}}
             </option>
         </select>
         <a class="icon item" :class="{'disabled':currentPage==1}"
-           @click="$_gotoPage(currentPage==1?currentPage:currentPage-1)">
+           @click="gotoPage(currentPage==1?currentPage:currentPage-1)">
             <i class="left chevron icon"></i>
         </a>
         <a class="item" style="background-color:#fff;" v-for="(page) in selectPage"
-           :class="{'p-active':page==currentPage}" @click="$_gotoPage(page)">
+           :class="{'p-active':page==currentPage}" @click="gotoPage(page)">
             <template v-if="page">{{page}}</template>
             <template v-else>···</template>
         </a>
         <a class="icon item" :class="{'disabled':currentPage==pages}"
-           @click="$_gotoPage(currentPage==pages?currentPage:currentPage+1)">
+           @click="gotoPage(currentPage==pages?currentPage:currentPage+1)">
             <i class="right chevron icon"></i>
         </a>
     </div>
@@ -99,10 +99,10 @@
             }
         },
         methods: {
-            $_init: function () {
+            init: function () {
                 this.currentPage = 1;
             },
-            $_gotoPage: function (page) {
+            gotoPage: function (page) {
                 $(this.$el).find('.item').removeClass('active');
                 if (page == 0)
                     return;
@@ -111,7 +111,7 @@
                     this.$emit('navPage', this.currentPage);
                 }
             },
-            $_showSizeChange(e) {
+            showSizeChange(e) {
                 // this.showSize = e.target.value
                 // console.log(' e.target.value', e.target.value)
                 // this.$emit('update:showSize', e.target.value)

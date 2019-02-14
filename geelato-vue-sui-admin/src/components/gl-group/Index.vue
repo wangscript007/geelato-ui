@@ -39,13 +39,13 @@
       }
     },
     updated () {
-//      this.$_init()
+//      this.init()
     },
     mounted: function () {
-      this.$_init()
+      this.init()
     },
     methods: {
-      $_init: function () {
+      init: function () {
         let theVue = this
         let $items = $(this.$el).find(this.item)
         $items.each(function (i, domEle) {

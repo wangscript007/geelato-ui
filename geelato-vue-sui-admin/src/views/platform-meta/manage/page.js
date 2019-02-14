@@ -29,12 +29,12 @@ export default {
                   {
                     color: "primary",
                     title: "保存",
-                    click: "@:$ctx.$_save(false)"
+                    click: "@:$ctx.save()"
                   }
                   // {
                   //   color: "negative",
                   //   title: "取消",
-                  //   click: "@:$ctx.$parent.$_cancel()"
+                  //   click: "@:$ctx.$parent.cancel()"
                   // }
                 ]
               }
@@ -135,85 +135,84 @@ export default {
               component: '',
               type: 'list',
               opts: {
-                ui: {
-                  title: '字段信息',
-                  entity: 'platform_dev_column',
-                  query: {
-                    // 是否隐藏整个查询区域
-                    show: true,
-                    // null或''表示不展示tree过滤区域
-                    tree: null,
-                    // null或''表示不展示常用过滤器区域
-                    filter: null,
-                    // null或''表示不展示综合查询区域
-                    mix: {
-                      fields: [
-                        {field: 'title', title: '名称', cop: 'contains', type: 'string', lop: 'or'},
-                        {field: 'name', title: '编码', cop: 'contains', type: 'string', lop: 'or'},
-                        {field: 'comment', title: '描述', cop: 'contains', type: 'string', lop: 'or'}
-                      ]
-                    }
-                  },
-                  toolbar: {
+                title: '字段信息',
+                entity: 'platform_dev_column',
+                query: {
+                  // 是否隐藏整个查询区域
+                  show: true,
+                  // null或''表示不展示tree过滤区域
+                  tree: null,
+                  // null或''表示不展示常用过滤器区域
+                  filter: null,
+                  // null或''表示不展示综合查询区域
+                  mix: {
+                    fields: [
+                      {field: 'title', title: '名称', cop: 'contains', type: 'string', lop: 'or'},
+                      {field: 'name', title: '编码', cop: 'contains', type: 'string', lop: 'or'},
+                      {field: 'comment', title: '描述', cop: 'contains', type: 'string', lop: 'or'}
+                    ]
+                  }
+                },
+                toolbar: {
+                  title: '',
+                  dropdown: {
                     title: '',
-                    dropdown: {
-                      title: '',
-                      actions: [
-                        {
-                          title: '创建',
-                          click: 'modal',
-                          modal: {
-                            title: '模块信息',
-                            type: 'href',
-                            value: '/components/gl-form-combination/Index.vue',
-                            opts: formConfig.opts
-                          }
-                        },
-                        {title: '删除', click: 'deleteMulti', confirm: '确定删除？'}
-                        // // 弹出页面提示导出多少条记录
-                        // {title: '导出EXCEL', click: 'xls'},
-                        // // 弹出页面提示导出多少条记录
-                        // {title: '导出PDF', click: 'pdf'},
-                        // // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
-                        // {title: '打印', click: 'print'}
-                      ]
-                    }
-                  },
-                  tips: {
-                    html: ''
-                  },
-                  table: {
-                    select: {field: 'id', title: '', type: 'checkbox'},
-                    dropdown: {
-                      title: '操作',
-                      actions: [
-                        {
-                          title: '修改',
-                          click: 'modal',
-                          modal: {
-                            title: '字段信息',
-                            type: 'href',
-                            value: formConfig.component,
-                            opts: formConfig.opts,
-                            query: formConfig.query
-                          }
+                    actions: [
+                      {
+                        title: '创建',
+                        click: 'modal',
+                        modal: {
+                          title: '字段信息',
+                          type: 'href',
+                          value: '/components/gl-form-combination/Index.vue',
+                          opts: formConfig.opts
                         }
-                      ]
-                    },
-                    columns: [
-                      {field: 'id', title: '', visible: false},
-                      {field: 'title', title: '名称', type: 'string', format: ''},
-                      {field: 'name', title: '编码', type: 'string', format: ''},
-                      {field: 'linked', title: '同步状态', type: 'string', format: ''},
-                      {field: 'enabled', title: '启用', type: 'string', format: ''},
-                      {field: 'comment', title: '描述', type: 'string', format: ''}
-                    ],
-                    p: '1,20',
-                    order: 'title|+'
+                      },
+                      {title: '删除', click: 'deleteMulti', confirm: '确定删除？'}
+                      // // 弹出页面提示导出多少条记录
+                      // {title: '导出EXCEL', click: 'xls'},
+                      // // 弹出页面提示导出多少条记录
+                      // {title: '导出PDF', click: 'pdf'},
+                      // // 默认打印当前列表，若print需要特殊的内容，可以用自定义javascrpt:;来实现
+                      // {title: '打印', click: 'print'}
+                    ]
+                  }
+                },
+                tips: {
+                  html: ''
+                },
+                table: {
+                  select: {field: 'id', title: '', type: 'checkbox'},
+                  dropdown: {
+                    title: '操作',
+                    actions: [
+                      {
+                        title: '修改',
+                        click: 'modal',
+                        modal: {
+                          title: '字段信息',
+                          type: 'href',
+                          value: formConfig.component,
+                          opts: formConfig.opts,
+                          query: formConfig.query
+                        }
+                      }
+                    ]
                   },
-                  stat: ''
-                }
-              }
+                  columns: [
+                    {field: 'id', title: '', visible: false},
+                    {field: 'title', title: '名称', type: 'string', format: ''},
+                    {field: 'name', title: '编码', type: 'string', format: ''},
+                    {field: 'linked', title: '同步状态', type: 'string', format: ''},
+                    {field: 'enabled', title: '启用', type: 'string', format: ''},
+                    {field: 'comment', title: '描述', type: 'string', format: ''}
+                  ],
+                  p: '1,20',
+                  order: 'title|+'
+                },
+                stat: ''
+              },
+              query: {id: '@.id'}
             },
           ]
         }

@@ -7,7 +7,7 @@
     <table class="ui small compact form gl-form gl-col-24" style="table-layout: fixed">
         <thead></thead>
         <tbody>
-        <tr v-for="(row,index) in opts.ui.layout">
+        <tr v-for="(row,index) in opts.layout">
             <template v-for="(cell,cellIndex) in row" v-if="item=metaMap[Object.keys(cell)[0]]">
                 <td :colspan="Object.values(cell)[0][0]">{{item.title}}</td>
                 <td :colspan="Object.values(cell)[0][1]">
@@ -85,43 +85,43 @@
             // }
         },
         created: function () {
-            this.$_loadData()
-            this.$_setModal()
+            this.loadData()
+            this.setModal()
         },
         mounted: function () {
         },
         methods: {
-            $_loadData() {
+            loadData() {
                 console.log('基于以下参数，构建表单>', this.opts)
                 let theVue = this
-                let id = theVue.opts.ui.model && theVue.opts.ui.model.id ? theVue.opts.ui.model.id : -1
-                this.$gl.data.query(theVue.opts.ui.entityName, {id: id}, theVue.opts.ui.fields, true).then(function (res) {
+                let id = theVue.opts.model && theVue.opts.model.id ? theVue.opts.model.id : -1
+                this.$gl.data.query(theVue.opts.entityName, {id: id}, theVue.opts.fields, true).then(function (res) {
                     console.log('基于主键(id:' + id + ')获取表单信息及其元数据信息>', res)
                     theVue.form = res.data && res.data.length > 0 ? res.data[0] : {}
                     theVue.meta = res.meta
                 })
             },
-            $_save() {
+            save() {
                 let thisVue = this
-                if (typeof this.$parent.$_close === 'function') {
-                    this.$gl.data.save(this.opts.ui.entityName, this.form).then(function (res) {
+                if (typeof this.$parent.close === 'function') {
+                    this.$gl.data.save(this.opts.entityName, this.form).then(function (res) {
 //            console.log('save form res>', res)
-                        thisVue.$parent.$_close()
+                        thisVue.$parent.close()
                     })
                 }
             },
             /**
              * 设置弹层的操作按钮及操作事件
              */
-            $_setModal() {
+            setModal() {
                 let modal = this.$parent
-                if (!modal.$_addAction) {
+                if (!modal.addAction) {
                     return
                 }
-                modal.$_addAction({name: '$_save', title: '保存', fn: this.$_save})
-                // $_cancel是modal内容的方法，这里可以简写成：{name: '$_cancel'}
-                modal.$_addAction({name: '$_cancel', title: '取消', fn: modal.$_cancel})
-                modal.$_updateActions()
+                modal.addAction({name: 'save', title: '保存', fn: this.save})
+                // cancel是modal内容的方法，这里可以简写成：{name: 'cancel'}
+                modal.addAction({name: 'cancel', title: '取消', fn: modal.cancel})
+                modal.updateActions()
             }
         },
         components: {}

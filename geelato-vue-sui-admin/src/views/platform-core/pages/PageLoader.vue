@@ -23,13 +23,13 @@
     }
     // watch: {
     //   // 如果路由有变化，会再次执行该方法
-    //   '$route': '$_update'
+    //   '$route': 'update'
     // },
     // mounted() {
-    //   this.$_update()
+    //   this.update()
     // },
     // methods: {
-    //   $_update() {
+    //   update() {
     //     console.log('ui > PageLoader > $route: ', this.$route)
     //     console.log('ui > PageLoader > query: ', this.query)
     //   }

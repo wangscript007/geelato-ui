@@ -6,7 +6,7 @@
     <template v-for="(action, index) in actions">
       <!--有hidden属性，或hidden为空-->
       <button class="ui mini button" :class="action.color?$gl.ui.color[action.color]:$gl.ui.color.primary"
-              @click="$_click(action,$event)"
+              @click="click(action,$event)"
               v-if="!action.hasOwnProperty('hidden')||$utils.isEmpty(action.hidden)||$utils.eval(action.hidden)">
         {{action.title}}
       </button>&nbsp;
@@ -68,7 +68,7 @@
     mounted: function () {
     },
     methods: {
-      $_click(action, $event) {
+      click(action, $event) {
         let actionHandler = new ActionHandler(this.ctx)
         actionHandler.do(action)
       }

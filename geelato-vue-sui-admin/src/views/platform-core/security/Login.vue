@@ -32,7 +32,7 @@
               <input type="password" v-model="password" name="password" placeholder="密码">
             </div>
           </div>
-          <div class="ui fluid large button" @click="$_submit" :class="color">登录</div>
+          <div class="ui fluid large button" @click="submit" :class="color">登录</div>
         </div>
         <div class="ui error message"></div>
       </form>
@@ -93,9 +93,9 @@
         },
         onSuccess: thisVue.login
       })
-      thisVue.$_resize()
+      thisVue.resize()
       $(window).resize(function () {
-        thisVue.$_resize()
+        thisVue.resize()
       })
     },
     methods: {
@@ -115,11 +115,11 @@
           window.location.replace('/')
         })
       },
-      $_submit: function () {
+      submit: function () {
         $('.ui.login-form').form('validate form')
       },
 
-      $_resize: function () {
+      resize: function () {
         this.winHeightStyle = {height: (window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) + 'px'}
       }
     }

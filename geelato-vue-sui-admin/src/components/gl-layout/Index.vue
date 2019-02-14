@@ -1,6 +1,6 @@
 <template>
-  <component v-bind:is="currentView" @changeLayoutMode="$_changeLayoutModeAndReload"
-             @changeColor="$_changeColorAndReload">
+  <component v-bind:is="currentView" @changeLayoutMode="changeLayoutModeAndReload"
+             @changeColor="changeColorAndReload">
     <!-- 组件在 vm.currentview 变化时改变！ -->
   </component>
 </template>
@@ -39,14 +39,14 @@
       // let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
       // this.$gl.ui.color.primary = color && color.primary ? color.primary : this.$gl.ui.color.primary
       console.log('gl-layout > Index > profile: ', this.profile)
-      this.$gl.ui.color.primary = this.$_getConfigItem('layout_color').value || this.$gl.ui.color.primary
-      mode = this.$_getConfigItem('layout_mode').value || this.$gl.layout.mode || 0
-      this.$_changeLayoutMode(mode)
+      this.$gl.ui.color.primary = this.getConfigItem('layout_color').value || this.$gl.ui.color.primary
+      mode = this.getConfigItem('layout_mode').value || this.$gl.layout.mode || 0
+      this.changeLayoutMode(mode)
     },
     mounted() {
     },
     methods: {
-      $_changeLayoutMode(mode) {
+      changeLayoutMode(mode) {
         let thisVue = this
         if (mode == 1) {
           thisVue.currentView = resolve => require(['./LayoutLR.vue'], resolve)
@@ -58,9 +58,9 @@
         }
         this.$gl.layout.mode = mode
       },
-      $_changeLayoutModeAndReload(mode) {
-        this.$_changeLayoutMode(mode)
-        let item = this.$_getConfigItem('layout_mode')
+      changeLayoutModeAndReload(mode) {
+        this.changeLayoutMode(mode)
+        let item = this.getConfigItem('layout_mode')
         this.$gl.data.save('platform_user_config', {
           code: 'layout_mode',
           value: mode,
@@ -70,8 +70,8 @@
         this.$gl.security.profile(this.profile)
         window.location.reload()
       },
-      $_changeColorAndReload(color, oldValue) {
-        let item = this.$_getConfigItem('layout_color')
+      changeColorAndReload(color, oldValue) {
+        let item = this.getConfigItem('layout_color')
         this.$gl.data.save('platform_user_config', {
           code: 'layout_color',
           value: color,
@@ -82,7 +82,7 @@
         window.location.reload()
         // this.$router.push('/')
       },
-      $_getConfigItem(code) {
+      getConfigItem(code) {
         for (let index in this.profile.userConfig.value) {
           let item = this.profile.userConfig.value[index]
           if (item.code == code) {

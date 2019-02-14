@@ -184,7 +184,7 @@ utils.invoke = function (obj, keyValues) {
  */
 utils.compileString = function (expression, $ctx) {
   let Fn = Function
-  console.log(new Fn('$ctx', 'return "' + expression + '"'))
+  // console.log(new Fn('$ctx', 'return "' + expression + '"'))
   return new Fn('$ctx', 'return "' + expression + '"')($ctx)
 }
 
@@ -196,8 +196,8 @@ utils.compileString = function (expression, $ctx) {
  * @returns {*}
  */
 utils.eval = function (expression, $ctx, ctxName = '$ctx') {
-  console.log('utils > expression: ', expression)
-  console.log('utils > $ctx: ', $ctx)
+  // console.log('utils > expression: ', expression)
+  // console.log('utils > $ctx: ', $ctx)
   let Fn = Function
   let str = utils.trim(expression)
   let index = str.indexOf(';')

@@ -32,34 +32,34 @@
     },
     watch: {
       'editorStore.editingPage': function (val, oval) {
-        this.$_init()
-        this.$_reset()
+        this.init()
+        this.reset()
       }
     },
     mounted: function () {
-      this.$_init()
-      this.$_reset()
+      this.init()
+      this.reset()
     },
     methods: {
-      $_init () {
+      init () {
           let thisVue = this
           this.editor = thisVue.$refs.cm.editor
       },
-      $_focus () {
+      focus () {
         this.editor.focus()
       },
-      $_reset () {
+      reset () {
         if (this.editorStore.editingPage.content.opts) {
-          this.$_setValue(this.editorStore.editingPage.content.opts.mvel)
+          this.setValue(this.editorStore.editingPage.content.opts.mvel)
         } else {
-          this.$_setValue('')
+          this.setValue('')
         }
-        this.$_focus()
+        this.focus()
       },
-      $_setValue (contentString = '') {
+      setValue (contentString = '') {
         return this.editor.setValue(contentString)
       },
-      $_commit () {
+      commit () {
         this.editorStore.commitOpts('mvel', this.editor.getValue())
         return {code: 0, msg: '', data: this.editor.getValue()}
       }

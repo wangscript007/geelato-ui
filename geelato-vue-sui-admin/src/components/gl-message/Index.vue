@@ -31,12 +31,12 @@
       }
     },
     mounted() {
-      this.$_initUi()
+      this.initUi()
     },
     updated() {
     },
     methods: {
-      $_initUi() {
+      initUi() {
         $(this.$el).find('.close').on('click', function () {
           $(this).closest('.message').transition('fade')
         })

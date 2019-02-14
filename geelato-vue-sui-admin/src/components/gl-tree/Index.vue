@@ -98,14 +98,14 @@
     },
     watch: {
       'treeId': function (val, oval) {
-        this.$_loadData()
+        this.loadData()
       }
     },
     mounted: function () {
-      this.$_loadData()
+      this.loadData()
     },
     methods: {
-      $_loadData() {
+      loadData() {
         let theVue = this
         let treeData = [{
           id: theVue.treeId,
@@ -116,10 +116,10 @@
         console.log('gl-tree > Index > watch.treeId > theVue.$gl.entityNames>', theVue.$gl.entityNames)
         theVue.$gl.data.query(theVue.$gl.entityNames['platform-core'].common.treeNode, {treeId: theVue.treeId}, 'id,parent,text,type').then(function (res) {
           console.log('res>', res)
-          theVue.$_newTree(treeData.concat(res.data))
+          theVue.newTree(treeData.concat(res.data))
         })
       },
-      $_newTree(treeData) {
+      newTree(treeData) {
         console.log('treeData>', treeData)
         let theVue = this
         $.jstree.defaults.contextmenu.select_node = false
@@ -197,7 +197,7 @@
                   label: createIconLabel('重命名', 'edit'),
                   _disabled: false,
                   action: function (data) {
-                    $.jstree.reference(data.reference).edit(data.reference, undefined, theVue.$_updateNode)
+                    $.jstree.reference(data.reference).edit(data.reference, undefined, theVue.updateNode)
                   }
                 },
                 remove: {
@@ -215,7 +215,7 @@
                     // TODO 删除成功，才删除前端节点
                     let node = $.jstree.reference(data.reference).get_node(data.reference)
                     console.log('removing node>', node)
-                    theVue.$_removeEntity(node.id)
+                    theVue.removeEntity(node.id)
                     $.jstree.reference(data.reference).delete_node(data.reference)
                   }
                 },
@@ -315,7 +315,7 @@
         /**
          *  返回结果如：
          *  create_html5: createNode('普通页面', 'html5', function (nodeId) {
-         *    theVue.$_newEntity({id: nodeId, text: '普通页面', type: 'html5'})
+         *    theVue.newEntity({id: nodeId, text: '普通页面', type: 'html5'})
          *  }),
          *  create_folder: createNode('目录', 'default')
          */
@@ -324,7 +324,7 @@
           for (let fileType in theVue.fileTypes) {
             let item = theVue.fileTypes[fileType]
             items['create_' + fileType] = createNode(item.name, fileType, function (node) {
-              // theVue.$_newEntity({id: node, text: item.name, type: fileType})
+              // theVue.newEntity({id: node, text: item.name, type: fileType})
             })
           }
           items.create_folder = createNode('目录', 'default')
@@ -354,7 +354,7 @@
                 let nodeId = $ref.create_node(data.reference, treeNode, 'last')
                 $ref.deselect_all()
                 $ref.select_node(nodeId)
-                $ref.edit(nodeId, undefined, theVue.$_updateNode)
+                $ref.edit(nodeId, undefined, theVue.updateNode)
                 let nodeEntity = {
                   treeNodeId: treeNode.id,
                   [theVue.nodeEntityNameField]: treeNode.text
@@ -371,16 +371,16 @@
        * @param event
        * @param nodeId 节点树id，对应页面实体的extend_id
        */
-      $_removeEntity(nodeId) {
+      removeEntity(nodeId) {
         let theVue = this
         // 两张表的删除，合在一个事务中
         // theVue.$gl.data.delete(theVue.treeEntityName, {extendId: nodeId})
         theVue.$gl.data.delete(theVue.$gl.entityNames['platform-core'].common.treeNode, {id: nodeId})
       },
-      $_moveNode() {
+      moveNode() {
         // TODO 移动节点时，需更新node parent
       },
-      $_updateNode(node, status, cancelled) {
+      updateNode(node, status, cancelled) {
         if (cancelled) {
           return false
         }
