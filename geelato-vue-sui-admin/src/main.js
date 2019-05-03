@@ -16,6 +16,7 @@ geelato.setStore(store)
 geelato.addPlugin('platform-core')
 geelato.addPlugin('platform-monitor')
 geelato.addPlugin('platform-meta')
+geelato.addPlugin('platform-docs')
 geelato.addPlugin('platform-labs')
 geelato.addPlugin('platform-ide')
 // Set default module for login, and there is a default index href in module.

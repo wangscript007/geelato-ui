@@ -135,7 +135,7 @@ export default {
               component: '',
               type: 'list',
               opts: {
-                title: '字段信息',
+                rightTitle: '字段信息',
                 entity: 'platform_dev_column',
                 query: {
                   // 是否隐藏整个查询区域
@@ -163,7 +163,7 @@ export default {
                         click: 'modal',
                         modal: {
                           title: '字段信息',
-                          type: 'href',
+                          type: 'staticPage',
                           value: '/components/gl-form-combination/Index.vue',
                           opts: formConfig.opts
                         }
@@ -191,7 +191,7 @@ export default {
                         click: 'modal',
                         modal: {
                           title: '字段信息',
-                          type: 'href',
+                          type: 'staticPage',
                           value: formConfig.component,
                           opts: formConfig.opts,
                           query: formConfig.query

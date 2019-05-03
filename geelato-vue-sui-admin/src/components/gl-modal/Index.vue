@@ -1,7 +1,7 @@
 <template>
   <div class="ui fullscreen modal hide">
     <i class="close icon" @click="close"></i>
-    <div class="header" v-html="modalOpts?modalOpts.title:' '" @dblclick="isShowContent=!isShowContent">
+    <div class="header" v-html="modalOpts?modalOpts.title:'&nbsp;'" @dblclick="isShowContent=!isShowContent">
     </div>
     <div v-show="isShowContent" class="scrolling content" :style="contentStyle">
       <!--在component内的vue中，调用$emit('callModal', {fnName: paramObject})，以触发invokeCallbackSet-->
@@ -69,7 +69,6 @@
         return this
       },
       content() {
-        console.log('gl-modal > Index > computed modalContent: ', this.$refs.content)
         return this.$refs.content
       }
     },
@@ -81,8 +80,15 @@
       this.contentStyle = {padding: '1.5em', 'overflow-y': 'auto'}
       $.extend(this.contentStyle, this.modalOpts.contentStyle)
       $(this.$el).draggable({cancel: '.ui.modal>.content'})
+      console.log('gl-modal > Index > computed modalContent: ', this.$refs.content)
     },
     methods: {
+      resize() {
+        console.log('resize///')
+        if (this.$refs.content && this.$refs.content.resize && typeof this.$refs.content.resize === 'function') {
+          this.$refs.content.resize()
+        }
+      },
       /**
        *  设置打开modal的来源组件
        *  便于后续直接调用opener的操作，例如，在gl-table中打开modal,当modal中保存并关闭窗口时，调用opener的刷新gl-table页面

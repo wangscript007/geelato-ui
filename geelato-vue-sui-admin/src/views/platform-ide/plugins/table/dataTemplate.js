@@ -90,7 +90,7 @@ export default {
                 click: 'modal',
                 modal: {
                   title: '示例实体',
-                  type: 'href',
+                  type: 'staticPage',
                   value: '/components/gl-simple-form.vue',
                   opts: {
                     entityName: 'platform_demo_entity',

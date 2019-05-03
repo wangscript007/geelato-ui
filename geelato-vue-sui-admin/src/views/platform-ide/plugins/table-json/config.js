@@ -53,7 +53,7 @@ export const Config = {
                 click: 'modal',
                 modal: {
                   title: '示例实体管理',
-                  type: 'href',
+                  type: 'staticPage',
                   value: '/components/page/TableForm.vue',
                   opts: {
                     entityName: 'platform_demo_entity',
@@ -92,7 +92,7 @@ export const Config = {
                 click: 'modal',
                 modal: {
                   title: '示例实体',
-                  type: 'href',
+                  type: 'staticPage',
                   value: '/components/page/TableForm.vue',
                   opts: {
                     entityName: 'platform_demo_entity',

@@ -39,8 +39,8 @@
       // let color = utils.session(this.$gl.consts.SESSION_GEELATO_CONFIG_COLOR)
       // this.$gl.ui.color.primary = color && color.primary ? color.primary : this.$gl.ui.color.primary
       console.log('gl-layout > Index > profile: ', this.profile)
-      this.$gl.ui.color.primary = this.getConfigItem('layout_color').value || this.$gl.ui.color.primary
-      mode = this.getConfigItem('layout_mode').value || this.$gl.layout.mode || 0
+      this.$gl.ui.color.primary = this.profile.userConfig['layout_color'].value || this.$gl.ui.color.primary
+      mode = this.profile.userConfig['layout_mode'].value || this.$gl.layout.mode || 0
       this.changeLayoutMode(mode)
     },
     mounted() {
@@ -60,7 +60,7 @@
       },
       changeLayoutModeAndReload(mode) {
         this.changeLayoutMode(mode)
-        let item = this.getConfigItem('layout_mode')
+        let item = this.profile.userConfig['layout_mode']
         this.$gl.data.save('platform_user_config', {
           code: 'layout_mode',
           value: mode,
@@ -71,7 +71,7 @@
         window.location.reload()
       },
       changeColorAndReload(color, oldValue) {
-        let item = this.getConfigItem('layout_color')
+        let item = this.profile.userConfig['layout_color']
         this.$gl.data.save('platform_user_config', {
           code: 'layout_color',
           value: color,
@@ -79,18 +79,18 @@
         }, 'platform_user_config', '保存成功', '保存失败')
         item.value = color
         this.$gl.security.profile(this.profile)
-        window.location.reload()
+        // window.location.reload()
         // this.$router.push('/')
-      },
-      getConfigItem(code) {
-        for (let index in this.profile.userConfig.value) {
-          let item = this.profile.userConfig.value[index]
-          if (item.code == code) {
-            return item
-          }
-        }
-        return {}
       }
+      // getConfigItem(code) {
+      //   for (let index in this.profile.userConfig.value) {
+      //     let item = this.profile.userConfig.value[index]
+      //     if (item.code == code) {
+      //       return item
+      //     }
+      //   }
+      //   return {}
+      // }
     },
     components: {}
   }

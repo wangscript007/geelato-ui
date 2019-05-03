@@ -39,7 +39,7 @@
                               click: 'modal',
                               modal: {
                                 title: '参数信息',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {
@@ -77,7 +77,7 @@
                               click: 'modal',
                               modal: {
                                 title: '参数信息',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {

@@ -2,7 +2,8 @@
   工具条
  -->
 <template>
-  <h2 class="ui aligned header" :class="clazz">
+  <div class="ui aligned header" :class="clazz">
+    <!--<h2 class="ui aligned header" :class="clazz">-->
     <template v-for="(action, index) in actions">
       <!--有hidden属性，或hidden为空-->
       <button class="ui mini button" :class="action.color?$gl.ui.color[action.color]:$gl.ui.color.primary"
@@ -11,7 +12,8 @@
         {{action.title}}
       </button>&nbsp;
     </template>
-  </h2>
+    <!--</h2>-->
+  </div>
 </template>
 <script>
 
@@ -50,7 +52,7 @@
         default() {
           return {
             align: 'center', // left|right|center
-            dividing: true
+            // dividing: true
           }
         }
       }
@@ -60,8 +62,8 @@
         clazz: {
           left: this.css.align === 'left',
           right: this.css.align === 'right',
-          center: this.css.align === 'center',
-          dividing: this.css.dividing
+          center: this.css.align === 'center'
+          // dividing: this.css.dividing
         }
       }
     },

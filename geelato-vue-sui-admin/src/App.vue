@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <router-view/>
-    <!--<div id="appModals"></div>-->
-    <!--<gl-modal ref="appRootModalView" :opener="opener"></gl-modal>-->
   </div>
 </template>
 

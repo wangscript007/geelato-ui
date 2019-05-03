@@ -14,7 +14,7 @@
           code: '',
           component: '',
           opts: {
-            title: '模块信息',
+            rightTitle: '模块列表',
             entity: 'platform_module',
             query: {
               // 是否隐藏整个查询区域
@@ -34,6 +34,20 @@
             },
             toolbar: {
               title: '',
+              actions: [
+                {
+                  title: '创建',
+                  color: "primary",
+                  click: 'modal',
+                  modal: {
+                    title: '模块信息',
+                    type: 'staticPage',
+                    value: '/components/gl-form-combination/Index.vue',
+                    opts: formConfig.opts
+                  }
+                },
+                {title: '删除', color: "primary", click: 'deleteMulti', confirm: '确定删除？'}
+              ],
               dropdown: {
                 title: '',
                 actions: [
@@ -42,7 +56,7 @@
                     click: 'modal',
                     modal: {
                       title: '模块信息',
-                      type: 'href',
+                      type: 'staticPage',
                       value: '/components/gl-form-combination/Index.vue',
                       opts: formConfig.opts
                     }
@@ -70,7 +84,7 @@
                   //   click: 'modal',
                   //   modal: {
                   //     title: '模块信息',
-                  //     type: 'href',
+                  //     type: 'staticPage',
                   //     value: '/components/gl-form-simple/Index.vue',
                   //     opts: {
                   //       ui: {
@@ -92,7 +106,7 @@
                   //   click: 'modal',
                   //   modal: {
                   //     title: '详细信息',
-                  //     type: 'href',
+                  //     type: 'staticPage',
                   //     value: '/views/platform-core/settings/module/Detail.vue',
                   //     opts: {
                   //       ui: {
@@ -106,7 +120,7 @@
                   //   click: 'modal',
                   //   modal: {
                   //     title: '详细信息',
-                  //     type: 'href',
+                  //     type: 'staticPage',
                   //     value: '/components/gl-page-loader/Index.vue',
                   //     opts: {
                   //       // code: 'list_9V02AlD4',
@@ -120,7 +134,7 @@
                     click: 'modal',
                     modal: {
                       title: '模块信息',
-                      type: 'href',
+                      type: 'staticPage',
                       value: formConfig.component,
                       opts: formConfig.opts,
                       query: formConfig.query
@@ -131,7 +145,7 @@
                     click: 'modal',
                     modal: {
                       title: '菜单信息',
-                      type: 'href',
+                      type: 'staticPage',
                       value: menuConfig.component,
                       opts: menuConfig.opts,
                       query: menuConfig.query
@@ -142,7 +156,7 @@
                   //   click: 'modal',
                   //   modal: {
                   //     title: '详细信息',
-                  //     type: 'href',
+                  //     type: 'staticPage',
                   //     value: detailConfig.component,
                   //     opts: detailConfig.opts
                   //   }

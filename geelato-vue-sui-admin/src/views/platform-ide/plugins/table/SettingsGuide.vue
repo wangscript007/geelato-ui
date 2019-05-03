@@ -75,7 +75,8 @@
             </div>
           </div>
           <div class="ui fitted divider"></div>
-          <table class="ui compact  table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>序号</th>
               <th>列编码</th>
@@ -87,6 +88,7 @@
               <!--<th>小数位数（scale）</th>-->
               <th></th>
             </tr>
+            </thead>
             <tr v-for="(item,index) in selectedMeta">
               <td>{{index+1}}</td>
               <td>{{item.name}}</td>
@@ -117,37 +119,39 @@
             </div>
           </div>
           <div class="ui fitted divider"></div>
-          <table class="ui compact  table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>与或</th>
+              <th>比较符</th>
               <th>字段</th>
               <th>字段名</th>
-              <th>比较符</th>
               <th>操作</th>
             </tr>
+            </thead>
             <!--{field: 'loginName', title: '登录名', cop: 'contains', type: 'string', lop: 'or'},-->
-            <tr v-for="(item,index) in ui.query.mix.fields">
+            <tr v-for="(item,index) in ui.query.mix.fields" :key="index">
               <td style="cursor: pointer"
                   @click="item.lop=(item.lop==='or'?'and':'or')">
                 {{item.lop==='or'?'或':'且'}}
               </td>
+              <td>
+                <sui ref="copDropdown" type="dropdown" v-model="item.cop" class="cop">
+                  <select>
+                    <option v-for="(value,key) in dict.cop" :value="key">{{value}}</option>
+                  </select>
+                  <!--<div class="ui dropdown">-->
+                  <!--<div class="text">{{dict.cop[item.cop]}}</div>-->
+                  <!--<i class="dropdown icon"></i>-->
+                  <!--<div class="menu">-->
+                  <!--<div v-for="(value,key) in dict.cop" class="item" :data-value="key" :data-text="value">{{value}}-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                </sui>
+              </td>
               <td>{{item.field}}</td>
               <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
-              <td>
-                <!--<sui ref="copDropdown" type="dropdown" v-model="item.cop" class="cop">-->
-                <!--<select>-->
-                <!--<option v-for="(value,key) in dict.cop" :value="key">{{value}}</option>-->
-                <!--</select>-->
-                <!--&lt;!&ndash;<div class="ui dropdown">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="text">{{dict.cop[item.cop]}}</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<i class="dropdown icon"></i>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="menu">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div v-for="(value,key) in dict.cop" class="item" :data-value="key" :data-text="value">{{value}}&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                <!--</sui>-->
-              </td>
               <td><i class="remove red icon" style="cursor: pointer" title="删除"
                      @click="removeQueryMixItem(item,index)"></i>
                 <i class="arrow up icon" style="cursor: pointer" title="向上"
@@ -170,7 +174,8 @@
             </div>
           </div>
           <div class="ui fitted divider"></div>
-          <table class="ui compact  table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>列编码</th>
               <th>标题</th>
@@ -181,6 +186,7 @@
               <!--<th>小数位数（scale）</th>-->
               <th></th>
             </tr>
+            </thead>
             <tr v-for="(item,index) in selectedMeta">
               <td>{{item.name}}</td>
               <td>{{item.title}}</td>
@@ -213,7 +219,8 @@
             添加虚拟列：如元数据中有年、月分两个字段year、month,但没有年月组合字段，这时可以创建一个虚拟列由年、月组成。<br>
             值表表达式：以年月组合字段为例，在值表达式中可写成$ctx.year+''+$ctx.month，其中$ctx是关键字，表示当前的上下文信息，在该场景下$ctx表示一行数据
           </gl-message>
-          <table class="ui compact celled table">
+          <table class="ui compact celled table gl-compact">
+            <thead>
             <tr>
               <th>序号</th>
               <th>列编码</th>
@@ -221,6 +228,7 @@
               <th>值表达式</th>
               <th>操作</th>
             </tr>
+            </thead>
             <!--{field: 'loginName', title: '登录名', cop: 'contains', type: 'string', lop: 'or'},-->
             <template v-for="(item,index) in ui.table.columns">
               <tr :key="index">
@@ -289,12 +297,14 @@
             </div>
           </div>
           <div class="ui fitted divider"></div>
-          <table class="ui compact  table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>标题</th>
               <th>点击事件</th>
               <th></th>
             </tr>
+            </thead>
             <tr v-for="(item,index) in baseToolbarActions">
               <td>{{item.title}}</td>
               <td>{{item.click}}</td>
@@ -314,7 +324,8 @@
             </div>
           </div>
           <div class="ui fitted divider"></div>
-          <table class="ui compact table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>标题</th>
               <th>点击事件</th>
@@ -323,32 +334,33 @@
               <th style="width: 4em">颜色</th>
               <th>排序</th>
             </tr>
-            <template v-for="(item,index) in  ui.toolbar.dropdown.actions">
-              <tr :key="item.field">
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
-                <td style="margin: 0;padding: 1px">{{item.click}}
-                  <!--<sui type="dropdown" v-model="item.click">-->
+            </thead>
+            <template v-for="(action,index) in  ui.toolbar.dropdown.actions">
+              <tr :key="action.field">
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="action.title"/></td>
+                <td style="margin: 0;padding: 1px">{{action.click}}
+                  <!--<sui type="dropdown" v-model="action.click">-->
                   <!--<select>-->
-                  <!--<option v-for="(action,actionIndex) in baseToolbarActions" :selected="action.click===item.click"-->
+                  <!--<option v-for="(action,actionIndex) in baseToolbarActions" :selected="action.click===action.click"-->
                   <!--:value="action.click">{{action.click}}-->
                   <!--</option>-->
                   <!--</select>-->
                   <!--</sui>-->
-                  <!--<input type="text" v-model="item.click"/></td>-->
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.confirm"
+                  <!--<input type="text" v-model="action.click"/></td>-->
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="action.confirm"
                                                           placeholder="确定？"/></td>
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.hidden"
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="action.hidden"
                                                           placeholder="js:@.xx===yy"/>
                 </td>
                 <td style="margin: 0;padding: 1px;text-align: center">
-                  <!--<sui type="dropdown" selector=".ui.dropdown" v-model="item.color">-->
-                  <!--<select name="color" class="ui compact dropdown">-->
-                  <!--<option v-for="(value,key) in baseColors" :value="key"-->
-                  <!--:selected="item.color===key">-->
-                  <!--<div class="ui empty circular label" :class="value"></div>-->
-                  <!--</option>-->
-                  <!--</select>-->
-                  <!--</sui>-->
+                  <sui type="dropdown" selector=".ui.dropdown" v-model="action.color">
+                    <select name="color" class="ui compact dropdown">
+                      <option v-for="(value,key) in baseColors" :value="key"
+                              :selected="action.color===key">
+                        <div class="ui empty circular label" :class="value"></div>
+                      </option>
+                    </select>
+                  </sui>
                 </td>
                 <td>
                   <i class="compress icon" style="cursor: pointer" title="收缩"
@@ -365,11 +377,11 @@
                      @click="$utils.movedown(ui.toolbar.dropdown.actions, index)"
                      v-if="index!==ui.toolbar.dropdown.actions.length-1"></i>
                   <!--<div class="ui icon mini buttons">-->
-                  <!--<button class="ui button" @click="removeToolbarActionItem(item,index)" title="删除"><i-->
+                  <!--<button class="ui button" @click="removeToolbarActionItem(action,index)" title="删除"><i-->
                   <!--class="remove red icon"></i></button>-->
-                  <!--<button class="ui button" @click="upToolbarActionItem(item,index)" v-if="index!==0" title="向上"><i-->
+                  <!--<button class="ui button" @click="upToolbarActionItem(action,index)" v-if="index!==0" title="向上"><i-->
                   <!--class="arrow up icon" :class="$gl.ui.color.primary"></i></button>-->
-                  <!--<button class="ui button" @click="downToolbarActionItem(item,index)"-->
+                  <!--<button class="ui button" @click="downToolbarActionItem(action,index)"-->
                   <!--v-if="index!==ui.toolbar.dropdown.actions.length-1" title="向下"><i-->
                   <!--class="arrow down icon" :class="$gl.ui.color.primary"></i></button>-->
                   <!--<button class="ui button"-->
@@ -380,12 +392,16 @@
                 </td>
               </tr>
               <tr v-if="openedStatus.toolbarActionIndex===index">
-                <td colspan="8">
-                  <div class="ui segment info message">
-                    {{item.modal?'参数配置说明XXX':'该事件无需配置参数。'}}
+                <td colspan="8" style="padding: .1em .1em" @click="log(action)">
+                  <div class="ui segment info message" v-if="!action.modal">
+                    {{'该事件无需配置参数。'}}
+                  </div>
+                  <div class="ui secondary segment">
+                    <settings-guide-modal v-bind.sync="action.modal">
+                    </settings-guide-modal>
                   </div>
                   <!--// mode="form"-->
-                  <!--<json-editor v-if="item.click==='modal'" v-model="item.modal" :show-btns="false"-->
+                  <!--<json-editor v-if="action.click==='modal'" v-model="action.modal" :show-btns="false"-->
                   <!--mode="code"-->
                   <!--@json-change=""></json-editor>-->
                   <!--<table class="ui mini table gl-compact gl-col-24 gl-form">-->
@@ -398,7 +414,7 @@
                   <!--name: 'align_checkbox',-->
                   <!--type: 'radio',-->
                   <!--data: [{text: '左', value: 'left'}, {text: '中', value: 'middle'},{text:'右',value:'right'}]-->
-                  <!--}" v-model="item['text-align']"></checkbox>-->
+                  <!--}" v-model="action['text-align']"></checkbox>-->
                   <!--</td>-->
                   <!--</tr>-->
                   <!--</table>-->
@@ -413,12 +429,14 @@
     <div class="ui attached segment" v-show="step==='stepE'">
       <gl-layout-page title="操作按钮模板选择列表" right-title="工具栏" :min="{left:5,right:11}">
         <div slot="left">
-          <table class="ui compact  table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>标题</th>
               <th>点击事件</th>
               <th></th>
             </tr>
+            </thead>
             <tr v-for="(item,index) in baseColumnActions">
               <td>{{item.title}}</td>
               <td>{{item.click}}</td>
@@ -428,7 +446,8 @@
           </table>
         </div>
         <div slot="right">
-          <table class="ui compact table">
+          <table class="ui compact table gl-compact">
+            <thead>
             <tr>
               <th>标题</th>
               <th>点击事件</th>
@@ -437,24 +456,23 @@
               <th style="width: 4em">颜色</th>
               <th>排序</th>
             </tr>
+            </thead>
             <template v-for="(item,index) in ui.table.dropdown.actions">
               <tr :key="item.field">
                 <td style="margin: 0;padding: 1px"><input type="text" v-model="item.title"/></td>
-                <td style="margin: 0;padding: 1px">{{item.click}}
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.confirm"
-                                                          placeholder="确定？"/></td>
-                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.hidden"
-                                                          placeholder="js:@.xx===yy"/>
+                <td style="margin: 0;padding: 1px">{{item.click}}</td>
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.confirm" placeholder="确定？"/></td>
+                <td style="margin: 0;padding: 1px"><input type="text" v-model="item.hidden" placeholder="js:@.xx===yy">
                 </td>
                 <td style="margin: 0;padding: 1px;text-align: center">
-                  <!--<sui type="dropdown" selector=".ui.dropdown" v-model="item.color">-->
-                  <!--<select name="color" class="ui compact dropdown">-->
-                  <!--<option v-for="(value,key) in baseColors" :value="key"-->
-                  <!--:selected="item.color===key">-->
-                  <!--<div class="ui empty circular label" :class="value"></div>-->
-                  <!--</option>-->
-                  <!--</select>-->
-                  <!--</sui>-->
+                  <sui type="dropdown" selector=".ui.dropdown" v-model="item.color">
+                    <select name="color" class="ui compact dropdown">
+                      <option v-for="(value,key) in baseColors" :value="key"
+                              :selected="item.color===key">
+                        <div class="ui empty circular label" :class="value"></div>
+                      </option>
+                    </select>
+                  </sui>
                 </td>
                 <td>
                   <i class="compress icon" style="cursor: pointer" title="收缩"
@@ -495,6 +513,7 @@
 </template>
 <script>
   import MetaSelector from '../../../platform-meta/selector/Index.vue'
+  import SettingsGuideModal from './SettingsGuideModal'
   // import JsonEditor from 'vue-json-editor'
   export default {
     props: {
@@ -567,7 +586,7 @@
           },
           {title: '删除', click: 'deleteOne', modal: '', confirm: '是否删除？', js: '', hidden: '', color: 'primary'}
         ],
-        // baseColors: config.color,
+        baseColors: this.$gl.ui.color,
         openedStatus: {resultTableIndex: -1, toolbarActionIndex: -1, columnActionIndex: -1},
         dict: {
           cop: {
@@ -624,7 +643,7 @@
                 //   click: 'modal',
                 //   modal: {
                 //     title: '用户信息',
-                //     type: 'href',
+                //     type: 'staticPage',
                 //     value: '/components/page/TableForm.vue',
                 //     opts: {
                 //       entityName: 'sys_user',
@@ -657,7 +676,7 @@
                 //   click: 'modal',
                 //   modal: {
                 //     title: '用户信息',
-                //     type: 'href',
+                //     type: 'staticPage',
                 //     value: '/components/page/TableForm.vue',
                 //     opts: {
                 //       entityName: 'sys_user',
@@ -704,6 +723,9 @@
       }
     },
     methods: {
+      log(o) {
+        console.log(o)
+      },
       addQuery(e) {
         console.log(e)
         // js阻止事件冒泡
@@ -831,7 +853,7 @@
       //   this.opts.editorStore.editingPage.content.opts.ui = this.ui
       // }
     },
-    components: {MetaSelector}
+    components: {MetaSelector, SettingsGuideModal}
   }
 </script>
 <style>

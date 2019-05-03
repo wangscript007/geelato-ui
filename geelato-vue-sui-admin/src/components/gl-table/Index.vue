@@ -59,14 +59,12 @@
         <a class="item gl-page-sidebar-toggle" @click="toggleSidebar">
           <i class="sidebar icon"></i>
         </a>
-        <div class="item gl-title" style="font-weight: bold">{{opts.rightTitle||'列表'}}
+        <div class="item gl-title" style="font-weight: bold">{{opts.rightTitle}}
         </div>
         <div class="ui right secondary  borderless mini menu">
-          <div v-if="opts.toolbar.dropdown" class="item">
-            <template v-for="(item, index) in opts.toolbar.dropdown.actions">
+          <div v-if="opts.toolbar" class="item">
+            <template v-for="(item, index) in opts.toolbar.actions">
               <!--有hidden属性，或hidden为空-->
-              <!--<button class="ui mini button">新增</button>&nbsp;-->
-              <!--item.click==='delete'?$gl.ui.color.negative:$gl.ui.color.primary-->
               <button class="ui mini button"
                       :key="index"
                       :class="item.color?$gl.ui.color[item.color]:$gl.ui.color.primary"
@@ -75,15 +73,6 @@
                 {{item.title}}
               </button>&nbsp;
             </template>
-            <!--<div class="ui teal mini buttons">-->
-            <!--<div class="ui button" style="padding-left: 0.9em;padding-right: 0.5em">操作</div>-->
-            <!--<div class="ui floating dropdown icon button">-->
-            <!--<i class="dropdown icon"></i>-->
-            <!--<div class="menu">-->
-            <!--<div v-for="(item, index) in opts.toolbar.dropdown.actions" class="item">{{item.title}}</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
           </div>
         </div>
       </div>
@@ -254,6 +243,9 @@
       this.initCheckbox()
     },
     methods: {
+      self() {
+        return this
+      },
       loadData() {
         let thisVue = this
         this.$gl.data.queryByGql(genGql(this.lastMixQueryData)).then(function (data) {
@@ -281,7 +273,7 @@
           root['@p'] = thisVue.pagination.pageNum + ',' + thisVue.pagination.showSize
           let gql = {}
           gql[thisVue.opts.entity] = root
-          console.log('创建的gql > ', gql)
+          console.log('gl-table > Index  > 创建的gql : ', gql)
           return gql
         }
       },
@@ -409,7 +401,7 @@
             // 对modal中的变量进行变换，转换之后才可传参给模态窗口
             let modal = utils.invoke(action.modal, kvs)
             console.log('gl-table > Index > click resolved modal: ', modal)
-            if (modal.type === 'href' || modal.type === 'page') {
+            if (modal.type === 'staticPage' || modal.type === 'page') {
               thisVue.$gl.ui.openVueByPath(this, modal.value, modal, {
                 refreshTable: function () {
                   // 在modal中注册刷新操作
@@ -420,8 +412,11 @@
                   thisVue.submit()
                 }
               })
-            } else {
-              // TODO
+            } else if (modal.type === 'dynamicPage') {
+              modal.opts.code = modal.value
+              thisVue.$gl.ui.openVueByPath(this, '/components/gl-page-loader/Index', modal)
+            } else if (modal.type === 'outerHref') {
+              thisVue.$gl.ui.openOuterHref(this, modal.value, modal)
             }
             break
           case 'deleteOne':

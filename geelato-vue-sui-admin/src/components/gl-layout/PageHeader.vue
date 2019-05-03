@@ -122,10 +122,12 @@
         } else {
           return {clazz: 'ui three column divided left aligned grid', maxWidth: '390px'}
         }
+      },
+      headerClass: function () {
+        return this.mode === 1 ? '' : 'inverted ' + this.$store.state.profile.userConfig['layout_color'].value
       }
     },
     created: function () {
-      this.headerClass = this.mode === 1 ? '' : 'inverted ' + this.$gl.ui.color.primary
       // 首次加载切换到角色的默认模块
       // TODO 改从当前用户信息中获取
       let currentRole = 'admin'

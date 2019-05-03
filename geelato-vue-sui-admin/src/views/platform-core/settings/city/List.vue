@@ -38,7 +38,7 @@
                               click: 'modal',
                               modal: {
                                 title: '城市信息',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {
@@ -73,7 +73,7 @@
                               click: 'modal',
                               modal: {
                                 title: '城市信息',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {

@@ -4,7 +4,7 @@
     <div class="ui vertical small menu" :class="minSideBarClass" :style="{width:width}" v-show="size==='min'">
       <div class="ui item dropdown" :style="{width:logoWidth,height:headerHeight}" v-if="isShowLogo()">
         <div class="text">
-          <img class="ui avatar image" src="../../assets/images/logo/48x48.png">
+          <img class="ui image" src="/logo_blue.svg">
         </div>
       </div>
       <div v-for="(subMenu,subMenuIndex) in menu" class="ui left pointing dropdown link item" :key="subMenuIndex"
@@ -41,12 +41,12 @@
           {{subMenu.title}}
         </a>
         <div class="content menu" style="border: 0px;padding-left: 0.5em" :class="{active:menuItemIndex===0}">
+          <!--style="background-color:rgba(248,248,248,0.8)"-->
           <a v-for="(item,subMenuItemIndex) in subMenu.items" :key="subMenuItemIndex" class="item"
-             style="background-color:rgba(248,248,248,0.8)"
              :href="$gl.utils.addParamToPath(item.href,{_m:$store.state.platform.currentModule.code})"
              :target="item.target"
-             @click="selectMenuItem(menuItemIndex,subMenuItemIndex)"><i class="icon"
-                                                                          v-show="activeMenuItem==menuItemIndex+'_'+subMenuItemIndex">▌</i>
+             @click="selectMenuItem(menuItemIndex,subMenuItemIndex)"><i class="icon" :class="$gl.ui.color.primary"
+                                                                        v-show="activeMenuItem==menuItemIndex+'_'+subMenuItemIndex">▌</i>
             {{item.title}}</a>
         </div>
       </div>
@@ -84,6 +84,9 @@
         }
         console.error('模块未配置菜单！')
         return []
+      },
+      minSideBarClass() {
+        return this.mode === 1 ? 'inverted ' + this.$store.state.profile.userConfig['layout_color'].value : ''
       }
     },
 //    watch: {
@@ -93,7 +96,7 @@
 //    },
     created: function () {
 //      let layout = utils.session('geelato.this.$gl.layout')
-      this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$gl.ui.color.primary : ''
+//       this.minSideBarClass = this.mode === 1 ? 'inverted ' + this.$gl.ui.color.primary : ''
 
       // 从配置中读取默认active的菜单
 //      for (let i in this.$gl.modules) {

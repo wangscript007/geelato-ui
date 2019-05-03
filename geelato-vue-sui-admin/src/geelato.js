@@ -19,6 +19,8 @@ import GLDate from './components/gl-date/Index.vue'
 import GLTree from './components/gl-tree/Index.vue'
 import GLTreeForm from './components/gl-tree-form/Index.vue'
 import GLPageLoader from './components/gl-page-loader/Index.vue'
+import {types} from './store'
+
 
 /**
  *  geelato框架的配置、及工具包
@@ -48,11 +50,11 @@ class Geelato {
       // 值0即为HM[MC]F：上、中（左菜单 右内容）、下
       // 值1即为LLR[HCF]，结构为左右，即左（菜单）、右（上-头部、中-内容）、下）
       // mode变化PageSidebar的背景色也调整
-      mode: 0,
+      mode: 1,
       header: {maxHeight: '44px', minHeight: '44px'},
-      logo: {width: '170px'},
+      logo: {width: '182px'},
       // miniWidth
-      sidebar: {maxWidth: '170px', minWidth: '0px', miniWidth: '70px'},
+      sidebar: {maxWidth: '182px', minWidth: '0px', miniWidth: '70px'},
       // footer: {maxHeight: '22px', minHeight: '22px'}
       footer: {maxHeight: '0px', minHeight: '0px'}
     }
@@ -425,6 +427,39 @@ class Geelato {
           }
         })
         return df.promise()
+      },
+      /**
+       *
+       * @param path 如果为最终url为/api/cache/，则path为/cache/
+       * @returns {*}
+       */
+      queryList: function (path, data) {
+        let df = $.Deferred()
+        let url = instance.url.api + path
+        $.ajax(url, {
+          type: 'post',
+          dataType: 'json',
+          contentType: 'application/json',
+          processData: false,
+          xhrFields: {
+            withCredentials: true
+          },
+          crossDomain: true,
+          data: data,
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+            let options = this // 调用本次AJAX请求时传递的options参数
+            console.error({
+              XMLHttpRequest: XMLHttpRequest,
+              textStatus: textStatus,
+              errorThrown: errorThrown,
+              options: options
+            })
+          },
+          success: function (data) {
+            df.resolve(data)
+          }
+        })
+        return df.promise()
       }
     }
     this.ui = {
@@ -495,6 +530,16 @@ class Geelato {
         $modal.modal('show')
         return $modal
       },
+      openOuterHref: function (opener, href, config) {
+        let vueConfig = {
+          title: config.title,
+          contentStyle: {padding: '0.1em', 'overflow-y': 'auto'},
+          opts: {
+            href: href
+          }
+        }
+        instance.ui.openVueByPath(opener, '/components/gl-iframe/Index', vueConfig)
+      },
       /**
        *
        * @param msg
@@ -522,7 +567,7 @@ class Geelato {
       color: {
         primary: 'blue',
         secondary: 'teal',
-        positive: '',
+        positive: 'orange',
         negative: 'red'
       },
       colorHex: {
@@ -654,6 +699,7 @@ class Geelato {
       },
       profile(profile) {
         if (profile !== undefined) {
+          instance.$store.commit(types.CHANGE_PROFILE, profile)
           console.log('geelato > set profile>', profile)
           utils.session(CONSTS.SESSION_GEELATO_PROFILE, profile)
           console.log('geelato > get profile>', utils.session(CONSTS.SESSION_GEELATO_PROFILE))
@@ -863,6 +909,7 @@ Vue.use(VueClipboard)
 Vue.use(SuiVue)
 Vue.prototype.$gl = instance
 Vue.component('sui', Sui)
+Vue.component('gl-sui', Sui)
 Vue.component('gl-toolbar', GlToolbar)
 Vue.component('gl-modal', GlModal)
 Vue.component('gl-group', GlGroup)

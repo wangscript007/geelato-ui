@@ -56,7 +56,7 @@
                               click: 'modal',
                               modal: {
                                 title: '角色管理',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {
@@ -94,7 +94,7 @@
                               click: 'modal',
                               modal: {
                                 title: '角色管理',
-                                type: 'href',
+                                type: 'staticPage',
                                 value: '/components/gl-form-simple/Index.vue',
                                 opts: {
                                   ui: {
