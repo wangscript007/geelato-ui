@@ -4,7 +4,7 @@ module.exports = {
     '/': {
       lang: 'zh-CN',
       title: 'Geelato UI',
-      description: '基于Vue、Ant Design页面UI框架。'
+      description: '企业级后台管理页面级UI框架'
     }
     // 打开以下的注释，将会在首页的右方出来多语言的切换开关
     // ,
@@ -74,7 +74,7 @@ module.exports = {
       '/': {
         nav: [
           {text: '首页', link: '/'},
-          {text: '指南', link: '/guide/'},
+          {text: '组件', link: '/guide/'},
           {text: '配置', link: '/config/'},
           // {text: '演示', link: '/showcase/'},
           // {text: 'Github', link: 'https://github.com/geelato-projects'},
@@ -115,7 +115,9 @@ function genSidebarConfig(title) {
         'getting-started',
         'ui-gl-form',
         'ui-gl-table',
-        'ui-gl-tree-form'
+        'ui-gl-tree-form',
+        'ui-gl-card',
+        'ui-gl-card-layout',
       ]
     }
   ]

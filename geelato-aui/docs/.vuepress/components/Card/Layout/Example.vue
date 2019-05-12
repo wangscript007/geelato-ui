@@ -1,5 +1,5 @@
 <template>
-  <gl-form :opts="config"></gl-form>
+  <gl-card-layout :cardMap="config.cardMap" :layout="config.layout"></gl-card-layout>
 </template>
 
 <script>
@@ -12,7 +12,6 @@
       }
     },
     mounted() {
-      console.log(' this.$route>', this.$options)
     },
     methods: {}
   }

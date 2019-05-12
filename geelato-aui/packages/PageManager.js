@@ -3,29 +3,53 @@ import utils from './utils'
 
 let TheVue
 
-// modalConfig.body.component的值是程序包组件地址，或组件对象
-function openStaticPage(opener, modalConfig) {
-  // console.log('modalConfig.body.component>', typeof modalConfig.body.component)
-  if (typeof modalConfig.body.component === 'string' && modalConfig.body.component.startsWith('/')) {
+function loadComponent(component) {
+  if (typeof component === 'string' && component.startsWith('/')) {
     // base on url
-    let vuePath = modalConfig.body.component
-    let path = modalConfig.body.component.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
-    path = path.replace('/@/', '').substring(1)
-    // path = './views/aa/bb/cc.vue'
-    console.log('PageManager > openPage > path: ', path)
+    let vuePath = component
+    let path = component.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
+    path = path.replace('/@/', '').replace('/', '')
+    // path = 'aa/bb/cc.vue'
+    console.log('PageManager > loadComponent > path: ', path)
     // fixed :webpack 打包报 Cyclic dependency，
     // 出错的写法： let vueComponent = resolve => require(['.' + path], resolve)
     let vueComponent = (resolve) => (require['./' + path], resolve)
-    return openVue(opener, modalConfig, vueComponent)
-  } else if (typeof modalConfig.body.component === 'object') {
+    return vueComponent
+  } else if (typeof component === 'string' && !component.startsWith('dy-')) {
+    // 基于动态组件名，需从服务端获取组件配置信息
+    return {}
+  } else if (typeof component === 'object') {
     // base on component
-    return openVue(opener, modalConfig, modalConfig.body.component)
+    return component
+  } else {
+    console.error("PageManger > loadComponent > 不支持的组件格式，component: ", component)
   }
+}
+
+// modalConfig.body.component的值是程序包组件地址，或组件对象
+function openStaticPage(opener, modalConfig) {
+  // // console.log('modalConfig.body.component>', typeof modalConfig.body.component)
+  // if (typeof modalConfig.body.component === 'string' && modalConfig.body.component.startsWith('/')) {
+  //   // base on url
+  //   let vuePath = modalConfig.body.component
+  //   let path = modalConfig.body.component.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
+  //   path = path.replace('/@/', '').substring(1)
+  //   // path = './views/aa/bb/cc.vue'
+  //   console.log('PageManager > openPage > path: ', path)
+  //   // fixed :webpack 打包报 Cyclic dependency，
+  //   // 出错的写法： let vueComponent = resolve => require(['.' + path], resolve)
+  //   let vueComponent = (resolve) => (require['./' + path], resolve)
+  //   return openVue(opener, modalConfig, vueComponent)
+  // } else if (typeof modalConfig.body.component === 'object') {
+  //   // base on component
+  //   return openVue(opener, modalConfig, modalConfig.body.component)
+  // }
+  return openVue(opener, modalConfig, loadComponent(modalConfig.body.component))
 }
 
 // modalConfig.body.component的值是页面编码
 function openDynamicPage(opener, modalConfig) {
-  console.log(opener, modalConfig)
+  return openVue(opener, modalConfig, loadComponent(modalConfig.body.component))
 }
 
 /**
@@ -107,5 +131,6 @@ export default class PageManager {
       return openDynamicPage(opener, modalConfig)
     }
   }
+
 
 }

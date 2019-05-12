@@ -3,6 +3,9 @@ import GlPageLoader from './gl-page-loader'
 import GlModal from './gl-modal'
 import GlForm from './gl-form'
 import GlTable from './gl-table'
+// import GlItem from './gl-card-layout/src/Item'
+import GlCard from './gl-card'
+import GlCardLayout from './gl-card-layout'
 import STable from './gl-table/src/s-table'
 import PageManager from './PageManager'
 import Api from './Api'
@@ -13,6 +16,9 @@ const components = [
   GlModal,
   GlForm,
   GlTable,
+  GlCard,
+  // GlItem,
+  GlCardLayout,
   STable
 ]
 
@@ -50,5 +56,7 @@ export default {
   GlPageLoader,
   GlModal,
   GlForm,
-  GlTable
+  GlTable,
+  GlCard,
+  GlCardLayout
 }
