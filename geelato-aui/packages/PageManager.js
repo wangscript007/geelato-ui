@@ -1,14 +1,72 @@
 /* eslint-disable no-console */
 import utils from './utils'
 
+let TheVue
+
+// modalConfig.body.component的值是程序包组件地址，或组件对象
+function openStaticPage(opener, modalConfig) {
+  // console.log('modalConfig.body.component>', typeof modalConfig.body.component)
+  if (typeof modalConfig.body.component === 'string' && modalConfig.body.component.startsWith('/')) {
+    // base on url
+    let vuePath = modalConfig.body.component
+    let path = modalConfig.body.component.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
+    path = path.replace('/@/', '').substring(1)
+    // path = './views/aa/bb/cc.vue'
+    console.log('PageManager > openPage > path: ', path)
+    // fixed :webpack 打包报 Cyclic dependency，
+    // 出错的写法： let vueComponent = resolve => require(['.' + path], resolve)
+    let vueComponent = (resolve) => (require['./' + path], resolve)
+    return openVue(opener, modalConfig, vueComponent)
+  } else if (typeof modalConfig.body.component === 'object') {
+    // base on component
+    return openVue(opener, modalConfig, modalConfig.body.component)
+  }
+}
+
+// modalConfig.body.component的值是页面编码
+function openDynamicPage(opener, modalConfig) {
+  console.log(opener, modalConfig)
+}
+
+/**
+ * @param opener
+ * @param vueComponent
+ * @param vueConfig e.g. {title: '', actions: [], padding: '1.5em'}
+ * @param vueData
+ */
+function openVue(opener, modalConfig, vueComponent) {
+  console.log('geelato > openVue > opener >', opener)
+  console.log('geelato > openVue > modalBody >', vueComponent)
+  console.log('geelato > openVue > modalConfig >', modalConfig)
+
+  let id = utils.uuid(16)
+  let el = document.createElement('div')
+  el.setAttribute('id', id)
+  document.getElementById('app').appendChild(el)
+  const GlModal = TheVue.component('gl-modal')
+  console.log('PageManger > GlModal>', GlModal)
+  let modalView = new GlModal({
+    propsData: {
+      modalId: id,
+      opener: opener,
+      body: vueComponent,
+      modalConfig: modalConfig
+    }
+  })
+  modalView.$mount(document.getElementById(id));
+  // let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
+  // $modal.modal('show')
+  return modalView
+}
+
 export default class PageManager {
 
-  constructor(GlModal) {
-    this.GlModal = GlModal
+  constructor(Vue) {
+    TheVue = Vue
   }
 
-  setModal(GlModal) {
-    this.GlModal = GlModal
+  setModal(Vue) {
+    TheVue = Vue
   }
 
   /**
@@ -41,68 +99,13 @@ export default class PageManager {
   //     }
   //   }
   // }
-  openModal(opener, modalConfig, callbackSet) {
+  openModal(opener, modalConfig) {
     if (modalConfig.body.type === 'staticPage') {
-      return openStaticPage()
+      return openStaticPage(opener, modalConfig)
     } else {
-      return openDynamicPage()
+      // dynamicPage that has a pageCode
+      return openDynamicPage(opener, modalConfig)
     }
-
-    // modalConfig.body.component的值是程序包组件地址，或组件对象
-    function openStaticPage() {
-      // console.log('modalConfig.body.component>', typeof modalConfig.body.component)
-      if (typeof modalConfig.body.component === 'string' && modalConfig.body.component.startsWith('/')) {
-        let vuePath = modalConfig.body.component
-        let path = modalConfig.body.component.indexOf('.vue') > 0 ? vuePath : vuePath + '.vue'
-        path = path.replace('/@/', '').substring(1)
-        // path = './views/aa/bb/cc.vue'
-        console.log('PageManager > openPage > path: ', path)
-        // fixed :webpack 打包报 Cyclic dependency，
-        // 出错的写法： let vueComponent = resolve => require(['.' + path], resolve)
-        let vueComponent = (resolve) => (require['./' + path], resolve)
-        return this.openVue(opener, modalConfig, callbackSet, vueComponent)
-      } else if (typeof modalConfig.body.component === 'object') {
-        return this.openVue(opener, modalConfig, callbackSet, modalConfig.body.component)
-      }
-    }
-
-    // modalConfig.body.component的值是页面编码
-    function openDynamicPage() {
-
-    }
-  }
-
-  /**
-   * @param opener
-   * @param vueComponent
-   * @param vueConfig e.g. {title: '', actions: [], padding: '1.5em'}
-   * @param vueData
-   */
-  openVue(opener, modalConfig, callbackSet, vueComponent) {
-    console.log('geelato > openVue > opener >', opener)
-    console.log('geelato > openVue > modalBody >', vueComponent)
-    console.log('geelato > openVue > modalConfig >', modalConfig)
-    console.log('geelato > openVue > callbackSet >', callbackSet)
-
-    let id = utils.uuid(16)
-    let el = document.createElement('div')
-    el.setAttribute('id', id)
-    document.getElementById('app').appendChild(el)
-    // let GLGlModal = this.Vue.component('gl-modal')
-    console.log('GLGlModal>', this.GlModal)
-    let modalView = new this.GlModal({
-      propsData: {
-        modalId: id,
-        opener: opener,
-        body: vueComponent,
-        callbackSet: callbackSet,
-        modalConfig: modalConfig
-      }
-    })
-    modalView.$mount(document.getElementById(id));
-    // let $modal = $(modalView.$el).modal({duration: 100, closable: false, allowMultiple: true})
-    // $modal.modal('show')
-    return modalView
   }
 
 }

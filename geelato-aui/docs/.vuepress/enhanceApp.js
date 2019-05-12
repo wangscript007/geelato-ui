@@ -2,6 +2,7 @@
  * 扩展 VuePress 应用
  */
 import AntDesign from 'ant-design-vue'
+// 对于导入antd.less，注意需config.js中less的javascriptEnabled: true才可正常执行
 import 'ant-design-vue/dist/antd.less'
 
 // 导入组件库
@@ -16,7 +17,8 @@ export default ({
                   siteData // 站点元数据
                 }) => {
 
-
+  // 可以自行实现api，再调用geelatoAui.setApi(api)
+  // 这里采风对geelatoAui默认api中的axios实例（即getService()的返回结果）进行拦截的方式，不重置原有的api
   apiHelper.interceptors(geelatoAui.api.getService())
   Vue.prototype.$gl = {
     api: geelatoAui.api

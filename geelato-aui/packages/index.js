@@ -22,7 +22,7 @@ const install = function (Vue) {
   // 判断是否安装
   if (install.installed) return
   //
-  Vue.prototype.$pageManager = new PageManager(GlModal)
+  Vue.prototype.$pageManager = new PageManager(Vue)
   Vue.prototype.$api = Vue.prototype.$api || uiApi
 
   // 遍历注册全局组件
