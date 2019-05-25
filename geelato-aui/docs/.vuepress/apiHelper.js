@@ -35,14 +35,30 @@ class ApiHelper {
       return Promise.reject(error)
     }
 
+    console.log('service.interceptors>', service.defaults)
+
 // request interceptor
-// service.interceptors.request.use(config => {
-//   const token = Vue.ls.get(ACCESS_TOKEN)
-//   if (token) {
-//     config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
-//   }
-//   return config
-// }, err)
+    service.interceptors.request.use(config => {
+      // const token = Vue.ls.get(ACCESS_TOKEN)
+      // if (token) {
+      //   config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+      // }
+      // config.headers['Access-Control-Allow-Origin'] = '*'
+      // config.headers['Access-Control-Allow-Methods'] = 'PUT,POST,GET,DELETE,OPTIONS'
+      // config.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,Content-Type'
+      // config.headers['Access-Control-Max-Age'] = '86400'
+
+      // service.defaults.headers.post['xsrfCookieName'] = 'CSRFToken';
+      // service.defaults.headers.post['xsrfHeaderName'] = 'X-CSRFToken';
+      // service.defaults.headers.post['responseType'] = 'json';
+      // service.defaults.headers.post['Origin'] = '*';
+      // service.defaults.headers.post['Accept'] = 'application/json, text/javascript';
+      // service.defaults.headers.post['Content-Type'] = 'application/json';
+      // service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+      console.log('config>', config)
+      return config
+    }, err)
 
 // response interceptor
     service.interceptors.response.use((response) => {

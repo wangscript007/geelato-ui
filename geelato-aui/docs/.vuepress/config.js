@@ -4,7 +4,7 @@ module.exports = {
     '/': {
       lang: 'zh-CN',
       title: 'Geelato UI',
-      description: '企业级后台管理页面级UI框架'
+      description: '企业级后台管理页面UI框架'
     }
     // 打开以下的注释，将会在首页的右方出来多语言的切换开关
     // ,
@@ -85,15 +85,23 @@ module.exports = {
       }
     },
   },
-  plugins: {
-    '@vuepress/i18n-ui': true,
-    '@vuepress/back-to-top': true,
-    '@vuepress/pwa': {
-      serviceWorker: true,
-      updatePopup: true
-    },
-    '@vuepress/plugin-medium-zoom': true
-  },
+  plugins: [
+    '@vuepress/i18n-ui',
+    '@vuepress/last-updated',
+    '@vuepress/back-to-top',
+    '@vuepress/pwa',
+    '@vuepress/back-to-top',
+  ],
+  // plugins: {
+  //   '@vuepress/i18n-ui': true,
+  //   '@vuepress/back-to-top': true,
+  //   '@vuepress/last-updated': true,
+  //   '@vuepress/pwa': {
+  //     serviceWorker: true,
+  //     updatePopup: true
+  //   },
+  //   '@vuepress/plugin-medium-zoom': true,
+  // },
   less: {
     modifyVars: {
       /* less 变量覆盖，用于自定义 ant design 主题 */
@@ -103,6 +111,22 @@ module.exports = {
     },
     javascriptEnabled: true
   }
+  // configureWebpack: (config, isServer) => {
+  //   if (!isServer) {
+  //     // 修改客户端的 webpack 配置
+  //     return {
+  //       proxyTable: {
+  //         '/api': {
+  //           target: 'http://api.geelato.org:8080',  //目标接口域名
+  //           changeOrigin: true,  //是否跨域
+  //           pathRewrite: {
+  //             '^/api': ''   //重写接口
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 function genSidebarConfig(title) {

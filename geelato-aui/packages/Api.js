@@ -23,7 +23,10 @@ function queryByGql(gql, withMeta) {
   return service({
     url: Array.isArray(gql) ? url.metaMultiList : url.metaList,
     method: 'POST',
-    data: gql
+    data: gql,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   })
 }
 
@@ -123,12 +126,37 @@ function getPageByCode(pageCode) {
   })
 }
 
-
+// config.headers['Access-Control-Allow-Origin'] = '*'
+// config.headers['Access-Control-Allow-Methods'] = 'PUT,POST,GET,DELETE,OPTIONS'
+// config.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,Content-Type'
+// config.headers['Access-Control-Max-Age'] = '86400'
 function ApiHelper(options) {
+  // axios.all('*', function (req, res, next) {
+  //   res.header("Access-Control-Allow-Origin", "*")
+  //   res.header("Access-Control-Allow-Headers", "Authorization,Origin, X-Requested-With, Content-Type, Accept")
+  //   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
+  //   next()
+  // })
+
   service = axios.create({
     baseURL: (options && options.baseURL) || 'http://localhost:8080/api', // api base_url
-    timeout: (options && options.timeout) || 6000 // 请求超时时间
+    timeout: (options && options.timeout) || 6000, // 请求超时时间
+    headers: (options && options.headers) || {
+      //   'Request-Method': 'PUT,POST,GET,DELETE,OPTIONS',
+      //   'Request-Headers': 'Authorization,Origin, X-Requested-With, Content-Type, Accept',
+      'Access-Control-Allow-Origin': '*',
+      //   'Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
+      //   'Allow-Headers': 'Authorization,Origin, X-Requested-With, Content-Type, Accept'
+    }
+    ,
+    withCredentials: true,
+    crossDomain: true
   })
+
+  service.defaults.headers['Access-Control-Allow-Origin'] = '*';
+  // service.defaults.headers['Accept'] = 'application/json, text/javascript';
+  // service.defaults.headers['Content-Type'] = 'application/json';
+
   if (options && options.url) {
     url = options.url
   }

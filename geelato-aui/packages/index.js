@@ -1,4 +1,4 @@
-// 导入颜色选择器组件
+// 导入组件
 import GlPageLoader from './gl-page-loader'
 import GlModal from './gl-modal'
 import GlForm from './gl-form'
@@ -24,12 +24,13 @@ const components = [
 
 let uiApi = new Api()
 // 定义 install 方法，接收 Vue 作为参数。如果使用 use 注册插件，则所有的组件都将被注册
-const install = function (Vue) {
+const install = function (Vue, options) {
   // 判断是否安装
   if (install.installed) return
   //
+  console.log(' aui options > ', options)
   Vue.prototype.$pageManager = new PageManager(Vue)
-  Vue.prototype.$api = Vue.prototype.$api || uiApi
+  Vue.prototype.$api = Vue.prototype.$api || (options && options.api ? new Api(options.api) : uiApi)
 
   // 遍历注册全局组件
   components.map(component => {

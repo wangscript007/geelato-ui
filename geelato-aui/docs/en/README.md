@@ -1,22 +1,15 @@
 ---
 home: true
-heroImage: false
-actionText: Get Started →
+heroImage: logo.svg
+actionText: 快速上手 →
 actionLink: /guide/
 features:
-- title: Vue
-  details: Enjoy development experience of Vue + webpack。
-- title: SemanticUI
-  details: 基于semantic-ui，过40K star的UI框架
-- title: SpringBoot
-  details: 后端。 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。
-- title: Gql
-  details: 灵活的查询语言，不写编写后端代码，快速实现数据的查询、更新操作。
-- title: 元数据+表单自定义
-  details: 结合元数据与表单自定义功能。
+- title: 为UI Designer而生
+  details: 组件的设计更多地考虑到怎么方便实现在线的页面设计，怎么减少代码的编写。
+- title: 丰富的组件
+  details: 结合企业应用系统的使用场景，基于Vue Ant Design，扩展页面级组件，快速组合页面，实现业务需求。
+- title: GQL API
+  details: 基于自研的GQL，实现通用的CRUD，结合内置的后台常规，基本在客户端已无需再另写数据接口。
+
 footer: Copyright © geelato.org
 ---
-
-::: warning 注意
-请确保你的 Node.js 版本 >= 8。
-:::

@@ -28,6 +28,8 @@ yarn-error.log*
 *.sln
 *.sw*
 
-
+# 其它
+deploy.sh
+yarn.lock
 
 
