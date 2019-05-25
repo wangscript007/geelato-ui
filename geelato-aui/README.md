@@ -1,6 +1,6 @@
 # geelato-aui
 
-文档与示例见(https://ui.geelato.org/)[https://ui.geelato.org/]
+文档与示例见[https://ui.geelato.org/](https://ui.geelato.org/)
 
 ## Project setup
 ```
