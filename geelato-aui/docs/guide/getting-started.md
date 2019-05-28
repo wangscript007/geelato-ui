@@ -17,7 +17,7 @@ yarn add ant-design-vue
 yarn add axios
 yarn add lodash.get
 yarn add lodash.pick
-yarn add geelato-aui
+yarn add geelato-ui-ant
 
 yarn add html-webpack-plugin@4.0.0-beta.4 -D
 yarn add less -D
@@ -55,8 +55,8 @@ import AntDesign from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less'
 
 // 导入geelatoAui
-import geelatoAui from 'geelato-aui'
-import 'geelato-aui/lib/geelato-aui.css'
+import geelatoAui from 'geelato-ui-ant'
+import 'geelato-ui-ant/lib/geelato-ui-ant.css'
 
 // geelatoAui已内置了api,默认可调用http://localhost:8080/api的相关服务
 // 可以自行实现api，再调用geelatoAui.setApi(api)
