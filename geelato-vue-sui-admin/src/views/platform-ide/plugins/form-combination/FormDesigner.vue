@@ -185,7 +185,7 @@
                 </template>
                 <!--行数据非分组标题-->
                 <template v-else>
-                  <template v-for="(cell,cellIndex) in row"
+                  <template v-for="(cell ,cellIndex) in row"
                             v-if="property=getProperty(Object.keys(cell)[0])">
                     <td :colspan="Object.values(cell)[0][0]" :rowspan="Object.values(cell)[0][2]" class="title"
                         @mouseover.self="onRowOver($event,rowIndex)"
