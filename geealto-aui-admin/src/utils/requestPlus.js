@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import {
-  VueAxiosPlus
-} from './axiosPlus'
+import { VueAxiosPlus } from './axiosPlus'
 import notification from 'ant-design-vue/es/notification'
 import {
   ACCESS_TOKEN
@@ -105,14 +103,14 @@ service.interceptors.response.use((response) => {
   return response.data
 }, err)
 
-const isLogin = function (response) {
+const isLogin = function(response) {
   return response.request.responseURL.indexOf('sys/auth/loginSecurity') !== -1
 }
-const isLogout = function (response) {
+const isLogout = function(response) {
   return response.request.responseURL.indexOf('sys/auth/logout') !== -1
 }
 // 是否为分页列表数据
-const isPageResult = function (response) {
+const isPageResult = function(response) {
   return 'page' in response.data && 'size' in response.data && 'total' in response.data
 }
 
@@ -140,7 +138,7 @@ const builder = (data, message, code = 0, headers = {}) => {
 
 const installer = {
   vm: {},
-  install (Vue) {
+  install(Vue) {
     Vue.use(VueAxiosPlus, service)
   }
 }

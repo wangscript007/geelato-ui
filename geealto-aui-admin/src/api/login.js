@@ -14,16 +14,16 @@ import { axiosPlus } from '@/utils/requestPlus'
  * @returns {*}
  */
 export function login (parameter) {
-  console.log('login > ', parameter)
+  console.log('login >', parameter)
   return axiosPlus({
-    // /auth/login
+    // url: '/auth/login',
     url: '/sys/auth/loginSecurity',
     method: 'post',
     data: { loginName: parameter.username, password: parameter.password }
   })
 }
 
-export function getSmsCaptcha (parameter) {
+export function getSmsCaptcha(parameter) {
   return axios({
     url: api.SendSms,
     method: 'post',
@@ -31,7 +31,7 @@ export function getSmsCaptcha (parameter) {
   })
 }
 
-export function getInfo () {
+export function getInfo() {
   return axios({
     url: '/user/info',
     method: 'get',
@@ -41,8 +41,8 @@ export function getInfo () {
   })
 }
 
-export function logout () {
-  return axios({
+export function logout() {
+  return axiosPlus({
     // /auth/logout
     url: '/sys/auth/logout',
     method: 'post',
@@ -56,7 +56,7 @@ export function logout () {
  * get user 2step code open?
  * @param parameter {*}
  */
-export function get2step (parameter) {
+export function get2step(parameter) {
   return axios({
     url: api.twoStepCode,
     method: 'post',

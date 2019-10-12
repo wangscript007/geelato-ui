@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Geelato Pro',
+      default: 'Geelato Admin',
       required: false
     },
     showTitle: {

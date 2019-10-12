@@ -174,7 +174,6 @@ export default {
         console.log('loadData.parameter', parameter)
         return getServiceList(Object.assign(parameter, this.queryParam))
           .then(res => {
-            console.log('loadData.result', res.result)
             return res.result
           })
       },

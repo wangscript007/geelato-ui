@@ -13,11 +13,12 @@
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
+          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误（admin/123456 )" />
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="账户: super_admin"
               v-decorator="[
                 'username',
                 {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
@@ -32,7 +33,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="密码: 123456"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -131,6 +132,7 @@ export default {
       loginBtn: false,
       // login type: 0 email, 1 username, 2 telephone
       loginType: 0,
+      isLoginError: false,
       requiredTwoStepCaptcha: false,
       stepCaptchaVisible: false,
       form: this.$form.createForm(this),
@@ -189,6 +191,7 @@ export default {
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
+          // loginParams.password = md5(values.password)
           loginParams.password = values.password
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
@@ -248,7 +251,18 @@ export default {
     },
     loginSuccess (res) {
       console.log(res)
-      this.$router.push({ name: 'dashboard' })
+      // check res.homePage define, set $router.push name res.homePage
+      // Why not enter onComplete
+      /*
+      this.$router.push({ name: 'analysis' }, () => {
+        console.log('onComplete')
+        this.$notification.success({
+          message: '欢迎',
+          description: `${timeFix()}，欢迎回来`
+        })
+      })
+      */
+      this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
@@ -256,8 +270,10 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
+      this.isLoginError = false
     },
     requestFailed (err) {
+      this.isLoginError = true
       this.$notification['error']({
         message: '错误',
         description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',

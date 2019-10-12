@@ -37,7 +37,6 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          console.log('Login > ', response)
           const result = response.result
           Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', result.token)
@@ -59,15 +58,11 @@ const user = {
             role.permissions = result.role.permissions
             role.permissions.map(per => {
               if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => {
-                  return action.action
-                })
+                const action = per.actionEntitySet.map(action => { return action.action })
                 per.actionList = action
               }
             })
-            role.permissionList = role.permissions.map(permission => {
-              return permission.permissionId
-            })
+            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {
@@ -87,14 +82,14 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        Vue.ls.remove(ACCESS_TOKEN)
-
         logout(state.token).then(() => {
           resolve()
         }).catch(() => {
           resolve()
+        }).finally(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          Vue.ls.remove(ACCESS_TOKEN)
         })
       })
     }
