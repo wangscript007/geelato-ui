@@ -10,8 +10,8 @@ import {
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: 'https://api.geelato.org:8080/api',
-  // baseURL: 'http://localhost:8080/api', // api base_url
+  // baseURL: 'https://api.geelato.org:8080/api',
+  baseURL: 'http://localhost:8080/api', // api base_url
   timeout: 6000 // 请求超时时间
 })
 
