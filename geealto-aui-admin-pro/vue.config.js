@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -32,7 +33,9 @@ const vueConfig = {
     // webpack plugins
     plugins: [
       // Ignore all locale files of moment.js
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // 依赖大小分析工具
+      new BundleAnalyzerPlugin()
     ],
     // if prod, add externals
     externals: isProd ? assetsCDN.externals : {}
@@ -77,6 +80,11 @@ const vueConfig = {
           // 'primary-color': '#F5222D',
           // 'link-color': '#F5222D',
           // 'border-radius-base': '4px'
+
+          // add by geelato 2020-2-15
+          'primary-color': '#2185d0',
+          'link-color': '#2185d0',
+          'border-radius-base': '0px'
         },
         // DO NOT REMOVE THIS LINE
         javascriptEnabled: true

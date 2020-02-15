@@ -8,11 +8,12 @@ module.exports = {
     '@vue/standard'
   ],
   rules: {
+    'vue/require-default-prop': 'off',
     'indent': 'off',
     'space-before-function-paren': 'off',
     'vue/max-attributes-per-line': 'off',
-    'padded-blocks':'off',
-    'no-eval':'off',
+    'padded-blocks': 'off',
+    'no-eval': 'off',
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'generator-star-spacing': 'off',
