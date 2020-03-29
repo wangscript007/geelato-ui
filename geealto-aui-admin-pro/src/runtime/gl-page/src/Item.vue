@@ -6,20 +6,53 @@
           <a-card :title="getCardConfig(col.card).title" style="margin-top: 8px">
             <component :ref="col.card" :is="getCardComponent(col.card)"
                        :opts="getCardConfig(col.card).opts"
-                       :query="getCardConfig(col.card).query">
+                       :params="params"
+            >
               正在加载...
             </component>
           </a-card>
         </template>
         <template v-else-if="col.rows">
           <gl-page-item :rows="col.rows" :componentRefs="componentRefs" :bindEvents="bindEvents"
-                        :gutter="gutter" :treeNodes="treeNodes"></gl-page-item>
+                        :gutter="gutter" :treeNodes="treeNodes" :params="params"
+                        @doAction="$emit('doAction',$event)"></gl-page-item>
         </template>
         <template v-else>
-          <div v-for="(colItem) in col.items" :key="colItem.id" class="gl-col">
-            <component :ref="colItem.id" v-show="colItem.show" :is="$globalVue.component(colItem.component)"
-                       v-bind="colItem.bind"></component>
-          </div>
+          <!-- 卡片内的组件渲染  -->
+          <template v-if="col.displayMode==='Tabs'">
+            <!-- 卡片内的组件渲染 --采用tabs方式  -->
+            <a-tabs :defaultActiveKey="col.opts?col.opts.defaultActiveKey||0:0"
+                    :tabPosition="col.opts?col.opts.tabPosition:'top'">
+              <a-tab-pane :forceRender="true" v-for="(colItem,colItemIndex) in col.items" :tab="colItem.title"
+                          :key="colItemIndex">
+                <!--v-show="colItem.show"-->
+                <component :ref="colItem.id" :is="$globalVue.component(colItem.component)"
+                           :gid="colItem.id" v-bind="colItem.bind" :params="params"
+                           @doAction="$emit('doAction',$event)"></component>
+              </a-tab-pane>
+            </a-tabs>
+          </template>
+          <template v-else-if="col.displayMode==='Collapse'">
+            <!-- 卡片内的组件渲染 --采用Collapse方式  -->
+            <a-collapse :defaultActiveKey="col.opts?col.opts.defaultActiveKey||0:0">
+              <a-collapse-panel :forceRender="true" v-for="(colItem,colItemIndex) in col.items" :header="colItem.title" :key="colItemIndex">
+                  <component :ref="colItem.id" :is="$globalVue.component(colItem.component)"
+                             :gid="colItem.id" v-bind="colItem.bind" :params="params"
+                             @doAction="$emit('doAction',$event)"></component>
+              </a-collapse-panel>
+            </a-collapse>
+          </template>
+          <template v-else>
+            <!-- 卡片内的组件渲染 --采用默认方式  -->
+            <div v-for="(colItem) in col.items" :key="colItem.id" class="gl-col">
+              <!--v-show="colItem.show"-->
+              <!--<textarea :value="JSON.stringify(colItem.bind)" style="width: 100%"></textarea>-->
+              <!--<textarea :value="JSON.stringify(params[colItem.id])" style="width: 100%"></textarea>-->
+              <component :ref="colItem.id" :is="$globalVue.component(colItem.component)"
+                         :gid="colItem.id" v-bind="colItem.bind" :params="params[colItem.id]"
+                         @doAction="$emit('doAction',$event)"></component>
+            </div>
+          </template>
         </template>
       </a-col>
     </a-row>
@@ -63,7 +96,13 @@
         default() {
           return 8
         }
-      }
+      },
+      params: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
     },
     data() {
       return {
@@ -93,11 +132,11 @@
         that.rows.filter((row) => !!row.cols).forEach((row) => {
           row.cols.filter((col) => !!col.items).forEach((col) => {
             // ==========item为卡片内一个组件的配置信息，例如下方所示
-            // {id:'',title: '列表',icon: 'table',component: 'GlTable',bind: {opts: table, query: {}},
+            // {id:'',title: '列表',icon: 'table',component: 'GlTable',bind: {opts: table, params: {}},
             //   meta: {
             //     component: 'GlIdePluginTableDesigner',
             //       title: '列表编辑器',
-            //       objectTree: [{title: '查询栏', path: 'query.mix.properties'}, {title: '工具栏', path: 'toolbar.actions'}]
+            //       objectTree: [{title: '查询栏', path: 'params.mix.properties'}, {title: '工具栏', path: 'toolbar.actions'}]
             //   }
             // }
 
@@ -124,7 +163,7 @@
       generateComponentRef(item) {
         console.log('gl-ide > gl-ide-plugin-item > generateComponentRef() > item:', item)
         console.log('gl-ide > gl-ide-plugin-item > generateComponentRef() > this.$refs:', this, this.$refs)
-        console.log('gl-ide > gl-ide-plugin-item > generateComponentRef() > this.$refs[item.id]:', this.$refs[item.id])
+        console.log('gl-ide > gl-ide-plugin-item > generateComponentRef() > this.$refs[item.id]:', this.$refs[item.id], ' by item.id:', item.id)
         this.componentRefs[item.id] = {
           id: item.id,
           component: this.$refs[item.id][0],
@@ -180,7 +219,7 @@
                     component: controlComponent
                   }
                   if (controlComponent && that.events[childObj.gid]) {
-                    that.editingFileParser.bindEvent(that.bindEvents, control, that.events[childObj.gid])
+                    that.editingFileParser.bindEvent(that.bindEvents, control, that.events[childObj.gid], componentItem.component)
                   }
                 }
               }
@@ -194,7 +233,7 @@
               },
               children: childrenNodes
             })
-            // console.log('gl-ide > gl-ide-plugin-layout > generateTreeData() > component.$refs.query:', eval('item.bind.opts.' + treeNodeObject.path))
+            // console.log('gl-ide > gl-ide-plugin-layout > generateTreeData() > component.$refs.params:', eval('item.bind.opts.' + treeNodeObject.path))
           })
         }
 
@@ -212,12 +251,13 @@
       },
       getCardComponent(cardId) {
         const card = this.getCardConfig(cardId)
+        console.log('...................', cardId, card, Vue.component(card.type))
         return Vue.component(card.type)
       },
-      onEnd: function(e) {
+      onEnd: function (e) {
         console.log('gl-ide-plugin-layout > stage > onEnd: ', e)
       },
-      onRowAdd: function(e) {
+      onRowAdd: function (e) {
         console.log('gl-ide-plugin-layout > stage > onRowAdd: ', e)
       },
       removeRow(rowIndex) {
@@ -240,7 +280,7 @@
       onClone(e) {
         console.log('gl-ide-plugin-layout > stage > onClone: ', e)
       },
-      onAddCol: function(e) {
+      onAddCol: function (e) {
         console.log('gl-ide-plugin-layout > stage > onAddCol: ', e, this.componentRefs)
       },
       onColChange(e) {
@@ -251,9 +291,9 @@
       },
       onCardOpen(col, item, index) {
         if (typeof item.onOpen === 'function') {
-          item.onOpen({ item: item, col: col, index: index })
+          item.onOpen({item: item, col: col, index: index})
         }
-        this.$gl.bus.$emit(this.events.card_open, { col: col, item: item, index: index })
+        this.$gl.bus.$emit(this.events.card_open, {col: col, item: item, index: index})
         console.log('gl-ide-plugin-layout > stage > onCardOpen: ', col, item, index)
       },
       onColDelete(col, item, index) {
@@ -340,4 +380,5 @@
     background-color: rgba(255, 202, 17, 0.35);
     /*border: 1px dotted #a5a5a5;*/
   }
+
 </style>

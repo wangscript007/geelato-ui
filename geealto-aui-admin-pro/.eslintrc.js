@@ -10,7 +10,11 @@ module.exports = {
   rules: {
     'vue/require-default-prop': 'off',
     'indent': 'off',
+    'vue/html-indent':'off',
     'space-before-function-paren': 'off',
+    'object-curly-spacing': 'off',
+    'comma-dangle': 'off',
+    'prefer-const': 'off',
     'vue/max-attributes-per-line': 'off',
     'padded-blocks': 'off',
     'no-eval': 'off',
@@ -54,13 +58,7 @@ module.exports = {
         'beforeStatementContinuationChars': 'never'
       }
     ],
-    'no-delete-var': 2,
-    'prefer-const': [
-      2,
-      {
-        'ignoreReadBeforeAssign': false
-      }
-    ]
+    'no-delete-var': 2
   },
   parserOptions: {
     parser: 'babel-eslint'

@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.10.2",
-    "ant-design-vue": "1.4.10",
+    "ant-design-vue": "1.4.12",
     "axios": "^0.19.0",
     "core-js": "^3.1.2",
     "enquire.js": "^2.1.6",
-    "geelato-ui-ant": "^0.1.56",
+    "geelato-ui-ant": "^0.1.85",
     "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",
     "md5": "^2.2.1",

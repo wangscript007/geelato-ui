@@ -163,17 +163,22 @@ export default class EditingFileParser {
   }
 
   /**
-   * 关闭设置窗口时，绑定事件
-   * @param actions
+   * 绑定事件
+   * @param controlBindEvents 所有的控件事件引用，并在此方法中增加当前控件事件
+   * @param control 绑定的目标控件
+   * @param actions 绑定的事件配置（一到多个事件）
+   * @param controlCtx 绑定的目标控件所在的组件（上下文），如：目标控件按钮，上线文组件为表格组件
    */
-  bindEvent(controlBindEvents, control, actions) {
-    console.log('bindEvent() > controlBindEvents, control, actions>', controlBindEvents, control, actions)
+  bindEvent(controlBindEvents, control, actions, controlCtx) {
+    console.log('geelato > runtime > EditingFileParser > bindEvent() > controlBindEvents, control, actions，controlCtx>', controlBindEvents, control, actions, controlCtx)
     for (const actionIndex in actions) {
-      const action = actions[actionIndex]
-      const eventKey = control.gid + '_$_' + action.on
-      controlBindEvents[eventKey] = this.actionHandler(action)
-      control.component.$on(action.on, controlBindEvents[eventKey])
-      console.log('bindEvent() > this.controlBindEvents>', controlBindEvents, eventKey)
+      // 侦听事件配置信息，侦听事件类型为onAction.on的值。在onAction中，里面包含了执行事件(doAction)配置信息
+      const onAction = actions[actionIndex]
+      const eventKey = control.gid + '_$_' + onAction.on
+      controlBindEvents[eventKey] = this.createActionHandlerFn(onAction, controlCtx)
+      // control.component.$off(action.on, controlBindEvents[eventKey])
+      control.component.$on(onAction.on, controlBindEvents[eventKey])
+      console.log('geelato > runtime > EditingFileParser > bindEvent() > this.controlBindEvents>', controlBindEvents, eventKey)
     }
   }
 
@@ -193,17 +198,18 @@ export default class EditingFileParser {
     }
   }
 
-  actionHandler(action) {
+  createActionHandlerFn(action, controlCtx) {
     const that = this
-    return function() {
-      that.actionHandlerInstance.doAction(action)
+    return function (ctx, data) {
+      console.log('geelato > runtime > createActionHandlerFn controlCtx,ctx>', controlCtx, ctx, data)
+      return that.actionHandlerInstance.doAction(action, controlCtx || ctx, data)
     }
   }
 
   convertSourceToSave(editingFile) {
     let sourceContent = {
       component: {},
-      opts: { layout: [], params: {} },
+      opts: {layout: [], params: {}},
       events: {}
     }
     // 对于非新建的页面
