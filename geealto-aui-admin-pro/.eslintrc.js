@@ -10,7 +10,8 @@ module.exports = {
   rules: {
     'vue/require-default-prop': 'off',
     'indent': 'off',
-    'vue/html-indent':'off',
+    'semi': 0,
+    'vue/html-indent': 'off',
     'space-before-function-paren': 'off',
     'object-curly-spacing': 'off',
     'comma-dangle': 'off',

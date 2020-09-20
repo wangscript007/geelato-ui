@@ -60,7 +60,7 @@ const constantRouterComponents = {
 
 // 前端未找到页面路由（固定不用改）
 const notFoundRouter = {
-  path: '*', redirect: '/404', hidden: true
+  path: '*', redirect: '/exception/404', hidden: true
 }
 
 // 根级菜单
@@ -437,49 +437,49 @@ const localUserNav = [
   //   'component': 'ResultFail'
   // },
   //
-  // // Exception
-  // {
-  //   'name': 'exception',
-  //   'parentId': 0,
-  //   'id': 10024,
-  //   'meta': {
-  //     'title': '异常页',
-  //     'icon': 'warning',
-  //     'show': true
-  //   },
-  //   'redirect': '/exception/403',
-  //   'component': 'RouteView'
-  // },
-  // {
-  //   'name': '403',
-  //   'parentId': 10024,
-  //   'id': 10025,
-  //   'meta': {
-  //     'title': '403',
-  //     'show': true
-  //   },
-  //   'component': 'Exception403'
-  // },
-  // {
-  //   'name': '404',
-  //   'parentId': 10024,
-  //   'id': 10026,
-  //   'meta': {
-  //     'title': '404',
-  //     'show': true
-  //   },
-  //   'component': 'Exception404'
-  // },
-  // {
-  //   'name': '500',
-  //   'parentId': 10024,
-  //   'id': 10027,
-  //   'meta': {
-  //     'title': '500',
-  //     'show': true
-  //   },
-  //   'component': 'Exception500'
-  // },
+  // Exception
+  {
+    'name': 'exception',
+    'parentId': 0,
+    'id': 10024,
+    'meta': {
+      'title': '异常页',
+      'icon': 'warning',
+      'show': true
+    },
+    'redirect': '/exception/403',
+    'component': 'RouteView'
+  },
+  {
+    'name': '403',
+    'parentId': 10024,
+    'id': 10025,
+    'meta': {
+      'title': '403',
+      'show': true
+    },
+    'component': 'Exception403'
+  },
+  {
+    'name': '404',
+    'parentId': 10024,
+    'id': 10026,
+    'meta': {
+      'title': '404',
+      'show': true
+    },
+    'component': 'Exception404'
+  },
+  {
+    'name': '500',
+    'parentId': 10024,
+    'id': 10027,
+    'meta': {
+      'title': '500',
+      'show': true
+    },
+    'component': 'Exception500'
+  },
 
   // account
   {

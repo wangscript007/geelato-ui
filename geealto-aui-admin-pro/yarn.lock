@@ -5237,10 +5237,10 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-geelato-ui-ant@^0.1.85:
-  version "0.1.85"
-  resolved "https://registry.yarnpkg.com/geelato-ui-ant/-/geelato-ui-ant-0.1.85.tgz#ef00a43b05f3c50e030e08eba7eaf41641de54ce"
-  integrity sha512-yxo19Up43IYaaxjQQBu3Djnfa1gXSLb6TSHWRDA4UrUdDgdsEMsUHFVyfN9F0nOHAyeFqyvxCb5wJr681cuhrg==
+geelato-ui-ant@^0.1.90:
+  version "0.1.90"
+  resolved "https://registry.yarnpkg.com/geelato-ui-ant/-/geelato-ui-ant-0.1.90.tgz#c42608dadc9c164dca2456857e67a3a806dd57cb"
+  integrity sha512-eKvKLOkG52/CO7ke68rkdcxfU85plLfRqqnibpbcLJYXQie5X+CW2orV5cnTyf53lacMw3L81jM/PrHjQTOuCQ==
   dependencies:
     ant-design-vue "^1.4.11"
     axios "^0.19.0"
