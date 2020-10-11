@@ -1,0 +1,10 @@
+/**
+   add by geelato
+ */
+.gl-table.gl-table-as-list {
+  border: 0px !important;
+}
+
+.gl-table .table-operator {
+  margin-bottom: 1em;
+}

@@ -27,7 +27,7 @@ import VueI18n from 'vue-i18n'
 import 'geelato-ui-ant/lib/geelato-ui-ant.css'
 import geelatoAui from 'geelato-ui-ant'
 import ApiSettings from './ApiSettings'
-import GlPage from '@/runtime/gl-page/index.js'
+import GlPage from '@/runtime/components/gl-page/index.js'
 import './reset.css'
 
 Vue.prototype.$globalVue = Vue
